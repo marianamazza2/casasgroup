@@ -12,22 +12,30 @@ const services = [
   {
     icon: 'AD',
     title: 'Administracion de fincas',
-    description: 'Gestion integral de comunidades con transparencia y seguimiento cercano.',
+    description: 'Gestion integral de comunidades con transparencia y seguimiento cercano. Cuentas, mantenimiento y comunicacion con propietarios, todo en orden.',
+    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Comunidades',
   },
   {
     icon: 'HI',
     title: 'Hipotecas',
-    description: 'Te ayudamos a encontrar la financiacion que encaja con tu compra.',
+    description: 'Te ayudamos a encontrar la financiacion que mejor encaja con tu compra. Comparamos entre varias entidades para que elijas con criterio.',
+    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Financiacion',
   },
   {
     icon: 'SU',
     title: 'Cambio de suministros',
-    description: 'Luz, gas, agua y gestiones del cambio de vivienda resueltas por ti.',
+    description: 'Luz, gas y agua gestionados sin que muevas un dedo. Nos encargamos de todos los tramites del cambio para que tu solo pienses en instalarte.',
+    image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Suministros',
   },
   {
     icon: 'SE',
     title: 'Seguros',
-    description: 'Proteccion para vivienda, propietario e inquilino desde el primer dia.',
+    description: 'Proteccion para vivienda, propietario e inquilino desde el primer dia. Coberturas personalizadas con las mejores companias del mercado.',
+    image: 'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Proteccion',
   },
 ]
 
@@ -134,6 +142,8 @@ function Home() {
   const heroUiRef = useRef<HTMLDivElement>(null)
   const accessSectionRef = useRef<HTMLElement>(null)
   const [activeAccessBlock, setActiveAccessBlock] = useState<number | null>(null)
+  const [activeService, setActiveService] = useState(0)
+  const serviceItemRefs = useRef<(HTMLElement | null)[]>([])
 
   useEffect(() => {
     const smoothstep = (t: number) => t * t * (3 - 2 * t)
@@ -198,6 +208,30 @@ function Home() {
     window.addEventListener('scroll', handleAccessScroll, { passive: true })
     handleAccessScroll()
     return () => window.removeEventListener('scroll', handleAccessScroll)
+  }, [])
+
+  useEffect(() => {
+    const handleServiceScroll = () => {
+      const items = serviceItemRefs.current.filter(Boolean) as HTMLElement[]
+      if (!items.length) return
+      const viewportCenter = window.innerHeight / 2
+      let closestIdx = 0
+      let closestDist = Infinity
+      items.forEach((item, i) => {
+        const rect = item.getBoundingClientRect()
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          const dist = Math.abs(rect.top + rect.height / 2 - viewportCenter)
+          if (dist < closestDist) {
+            closestDist = dist
+            closestIdx = i
+          }
+        }
+      })
+      setActiveService(closestIdx)
+    }
+    window.addEventListener('scroll', handleServiceScroll, { passive: true })
+    handleServiceScroll()
+    return () => window.removeEventListener('scroll', handleServiceScroll)
   }, [])
 
   const currentWhy = whyItems[whyIndex]
@@ -349,17 +383,48 @@ function Home() {
       </div>
 
       <section className="section services" id="servicios">
-        <SectionHeading eyebrow="Servicios" title="Nuestros servicios" subtitle="Todo lo que necesitas en un solo lugar." />
-        <div className="service-grid">
-          {services.map((service) => (
-            <article className="service-card" key={service.title}>
-              <div className="service-icon">{service.icon}</div>
-              <div>
-                <h3>{service.title}</h3>
-                <p>{service.description}</p>
-              </div>
-            </article>
-          ))}
+        <div className="services-inner">
+          <SectionHeading eyebrow="Servicios" title="Nuestros servicios" subtitle="Todo lo que necesitas en un solo lugar." />
+          <div className="services-sticky-layout">
+            <div className="services-image-panel">
+              {services.map((svc, i) => (
+                <div
+                  key={svc.title}
+                  className={`services-image-layer${activeService === i ? ' active' : ''}`}
+                  style={{ backgroundImage: `url(${svc.image})` }}
+                />
+              ))}
+              <div className="services-image-overlay" />
+              <motion.div
+                key={`svc-tag-${activeService}`}
+                className="services-image-tag"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+              >
+                <span>{String(activeService + 1).padStart(2, '0')}</span>
+                {services[activeService].tag}
+              </motion.div>
+            </div>
+
+            <div className="services-list">
+              {services.map((svc, i) => (
+                <article
+                  key={svc.title}
+                  ref={(el) => { serviceItemRefs.current[i] = el }}
+                  className={`services-list-item${activeService === i ? ' active' : ''}`}
+                >
+                  <span className="services-list-num">{String(i + 1).padStart(2, '0')}</span>
+                  <div className="services-list-body">
+                    <div className="service-icon">{svc.icon}</div>
+                    <h3>{svc.title}</h3>
+                    <p>{svc.description}</p>
+                    <Link className="services-list-link" to="/contacto">Consultar →</Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
