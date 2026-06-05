@@ -46,6 +46,78 @@ La propuesta para la nueva web es que el usuario pueda:
 
 Angie también comentó una idea de valoraciones de inmuebles, inspirada en otras plataformas, para que el usuario pueda solicitar una valoración gratuita y que esta sea gestionada por un agente, no solo por una herramienta automática.
 
+## Mapa interactivo y búsqueda tipo Airbnb
+Para el mapa interactivo de propiedades se recomienda usar `react-map-gl` junto con `maplibre-gl`.
+
+Esta combinación es suficiente para una experiencia tipo Airbnb en la primera versión: mapa interactivo, zoom, desplazamiento, marcadores de propiedades, control del viewport y actualización de la lista según la zona visible. `maplibre-gl` permite trabajar sin depender obligatoriamente de una cuenta o token de Mapbox, y `react-map-gl` facilita la integración con React.
+
+Dependencias recomendadas:
+```bash
+npm install react-map-gl maplibre-gl
+```
+
+Funcionamiento esperado:
+- Al mover o hacer zoom en el mapa, se capturan los límites visibles del mapa mediante eventos como `onMoveEnd`.
+- Con esos límites se obtienen coordenadas norte, sur, este y oeste.
+- La lista de propiedades se filtra o consulta usando esos límites.
+- Los marcadores del mapa y la lista lateral se mantienen sincronizados.
+- Al hacer clic en una propiedad de la lista, el mapa puede centrar o resaltar su marcador.
+- Al hacer clic en un marcador, se puede destacar la propiedad correspondiente en la lista.
+
+Ejemplo conceptual:
+```tsx
+onMoveEnd={(event) => {
+  const bounds = event.target.getBounds()
+  // Usar bounds para actualizar la busqueda de propiedades visibles
+}}
+```
+
+Para que el comportamiento sea realmente como Airbnb no basta solo con instalar la librería: las propiedades deberán tener latitud y longitud, y la búsqueda deberá aceptar filtros por límites geográficos. En una primera fase se puede hacer el filtrado en frontend si el volumen de propiedades es bajo; si el catálogo crece, conviene resolverlo desde backend o CMS con una consulta geoespacial.
+
+## Gestión de imágenes con Cloudinary
+Para la gestión de imágenes de propiedades se recomienda usar Cloudinary como CDN y gestor de assets. En el código conviene separar dos responsabilidades: entrega de imágenes en la web y subida/gestión de imágenes.
+
+Dependencias recomendadas para React:
+```bash
+npm install @cloudinary/react @cloudinary/url-gen
+```
+
+Configuración pública en entorno:
+```bash
+VITE_CLOUDINARY_CLOUD_NAME=tu_cloud_name
+```
+
+El `cloud_name` puede usarse en frontend. No se debe exponer nunca `api_secret` en React/Vite. Si más adelante se necesita subida firmada desde un panel de administración, la firma debe generarse desde backend o desde un endpoint seguro.
+
+Estructura recomendada en código:
+- Crear un helper tipo `src/lib/cloudinary.ts` para inicializar Cloudinary.
+- Guardar en cada propiedad los `public_id` de Cloudinary, no URLs largas.
+- Generar las URLs o componentes de imagen desde el frontend aplicando transformaciones.
+- Usar transformaciones como `format('auto')`, `quality('auto')` y recortes/tamaños según cada card, galería o hero.
+
+Ejemplo conceptual de propiedad:
+```ts
+{
+  id: 'piso-salamanca-1',
+  title: 'Piso en Salamanca',
+  images: [
+    'casasgroup/properties/piso-salamanca-1/cover',
+    'casasgroup/properties/piso-salamanca-1/salon',
+  ],
+}
+```
+
+Ejemplo conceptual de renderizado:
+```tsx
+const image = cld
+  .image(publicId)
+  .resize(fill().width(900).height(650))
+  .delivery(format('auto'))
+  .delivery(quality('auto'))
+```
+
+Para la primera versión, si las propiedades se gestionan manualmente, se pueden subir las imágenes directamente desde el dashboard de Cloudinary y guardar los `public_id` en los datos de propiedades. Si se desarrolla un panel admin propio, entonces se debe implementar subida firmada o configurar cuidadosamente un unsigned upload preset con restricciones de carpeta, tipo de archivo y tamaño.
+
 ## Home y experiencia de usuario
 Se propuso una Home más comercial y visual, pero sin perder accesibilidad. La idea final quedó orientada a un punto intermedio: mostrar arriba accesos como comprar, vender y alquilar, y desarrollar esa información también a medida que el usuario baja por la página.
 
