@@ -106,6 +106,48 @@ const featuredProperties = [
     image:
       'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80',
   },
+  {
+    zone: 'Esplugues',
+    title: 'Piso luminoso junto al parque',
+    beds: 2,
+    baths: 1,
+    size: 68,
+    price: '245.000 EUR',
+    image:
+      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    zone: 'Sant Feliu de Llobregat',
+    title: 'Planta baja con jardin privado',
+    beds: 3,
+    baths: 2,
+    size: 112,
+    price: '390.000 EUR',
+    tag: 'Nuevo',
+    image:
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    zone: 'Cornella',
+    title: 'Estudio moderno en el centro',
+    beds: 1,
+    baths: 1,
+    size: 42,
+    price: '175.000 EUR',
+    image:
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    zone: 'Sant Just Desvern',
+    title: 'Villa con piscina y vistas',
+    beds: 5,
+    baths: 3,
+    size: 280,
+    price: '980.000 EUR',
+    tag: 'Exclusiva',
+    image:
+      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=900&q=80',
+  },
 ]
 
 const accessBlocks = [
@@ -138,6 +180,7 @@ function Home() {
   const heroWrapperRef = useRef<HTMLDivElement>(null)
   const heroBgRef = useRef<HTMLDivElement>(null)
   const heroMediaRef = useRef<HTMLDivElement>(null)
+  const heroOutlineRef = useRef<HTMLDivElement>(null)
   const heroFillRef = useRef<HTMLDivElement>(null)
   const heroUiRef = useRef<HTMLDivElement>(null)
   const accessSectionRef = useRef<HTMLElement>(null)
@@ -159,17 +202,24 @@ function Home() {
       if (scrollable <= 0) return
       const p = clamp(-top / scrollable, 0, 1)
 
-      // Phase 1 (0–35%): White luminous bg fades in, image fades out
-      const bgT = phase(p, 0, 0.35)
+      // Phase 1 (0–28%): White luminous bg fades in, image fades out
+      const bgT = phase(p, 0, 0.28)
       if (heroMediaRef.current) heroMediaRef.current.style.opacity = String(1 - bgT)
       if (heroBgRef.current) heroBgRef.current.style.opacity = String(bgT)
 
-      // Phase 2 (28–65%): Letters fill in (outline → solid gold)
-      const fillT = phase(p, 0.28, 0.65)
-      if (heroFillRef.current) heroFillRef.current.style.opacity = String(fillT)
+      // Phase 2 (0–45%): Outline fades out
+      const outlineT = phase(p, 0, 0.45)
+      if (heroOutlineRef.current) heroOutlineRef.current.style.opacity = String(1 - outlineT)
 
-      // Phase 3 (44–78%): Tagline + tabs + search fade in
-      const uiT = phase(p, 0.44, 0.78)
+      // Fill color: #dbb96e → #a47b36 across full scroll
+      const colorT = phase(p, 0, 1)
+      const r = Math.round(219 - 55 * colorT)
+      const g = Math.round(185 - 62 * colorT)
+      const b = Math.round(110 - 56 * colorT)
+      document.documentElement.style.setProperty('--hero-fill', `rgb(${r},${g},${b})`)
+
+      // Phase 3 (36–65%): Tagline + tabs + search fade in
+      const uiT = phase(p, 0.36, 0.65)
       if (heroUiRef.current) {
         heroUiRef.current.style.opacity = String(uiT)
         heroUiRef.current.style.transform = `translateY(${(1 - uiT) * 14}px)`
@@ -234,6 +284,15 @@ function Home() {
     return () => window.removeEventListener('scroll', handleServiceScroll)
   }, [])
 
+  useEffect(() => {
+    const rail = propertiesRef.current
+    if (!rail) return
+    const card = rail.querySelector<HTMLElement>('.property-card')
+    if (!card) return
+    const cardWidth = card.getBoundingClientRect().width
+    rail.scrollLeft = cardWidth + 20
+  }, [])
+
   const currentWhy = whyItems[whyIndex]
   const isSearchTab = heroTab === 'comprar' || heroTab === 'alquilar'
 
@@ -269,7 +328,11 @@ function Home() {
   }
 
   const scrollProperties = (direction: -1 | 1) => {
-    propertiesRef.current?.scrollBy({ left: direction * 320, behavior: 'smooth' })
+    const rail = propertiesRef.current
+    if (!rail) return
+    const card = rail.querySelector<HTMLElement>('.property-card')
+    const cardWidth = card ? card.getBoundingClientRect().width : 320
+    rail.scrollBy({ left: direction * (cardWidth + 20), behavior: 'smooth' })
   }
 
   return (
@@ -314,7 +377,7 @@ function Home() {
             {/* CASAS GROUP brand — visible from start, fills in on scroll */}
             <div className="hero-brand" aria-label="Casas Group">
               {/* Outline: image shows through the letters */}
-              <div className="hero-brand-outline">
+              <div className="hero-brand-outline" ref={heroOutlineRef}>
                 <span className="hero-brand-casas">CASAS</span>
                 <span className="hero-brand-group">GROUP</span>
               </div>
@@ -366,7 +429,7 @@ function Home() {
                   )}
                 </div>
                 {isSearchTab && (
-                  <div className="direct-contact">
+                  <div className="direct-contact" style={{ visibility: 'hidden' }} aria-hidden="true">
                     Prefiero hablar con alguien <Link to="/contacto">Contactar</Link>
                   </div>
                 )}
@@ -376,7 +439,7 @@ function Home() {
 
           {/* Scroll hint — fixed to hero, always visible */}
           <div className="hero-scroll-hint" aria-hidden="true">
-            <span>Descubrir</span>
+            <span>Descúbrenos</span>
             <div className="scroll-arrow" />
           </div>
         </section>
@@ -416,7 +479,6 @@ function Home() {
                 >
                   <span className="services-list-num">{String(i + 1).padStart(2, '0')}</span>
                   <div className="services-list-body">
-                    <div className="service-icon">{svc.icon}</div>
                     <h3>{svc.title}</h3>
                     <p>{svc.description}</p>
                     <Link className="services-list-link" to="/contacto">Consultar →</Link>
@@ -530,26 +592,29 @@ function Home() {
           </div>
         </div>
 
-        <div className="property-rail" ref={propertiesRef}>
-          {featuredProperties.map((property) => (
-            <article className="property-card" key={property.title}>
-              <div className="property-image">
-                <img src={property.image} alt="" />
-                {property.tag ? <span>{property.tag}</span> : null}
-              </div>
-              <div className="property-body">
-                <small>{property.zone}</small>
-                <h3>{property.title}</h3>
-                <p>
-                  {property.beds} hab · {property.baths} banos · {property.size} m2
-                </p>
-                <strong>{property.price}</strong>
-              </div>
-            </article>
-          ))}
+        <div className="property-rail-wrap">
+          <div className="property-rail" ref={propertiesRef}>
+            {featuredProperties.map((property) => (
+              <article className="property-card" key={property.title}>
+                <div className="property-image">
+                  <img src={property.image} alt="" />
+                  {property.tag ? <span>{property.tag}</span> : null}
+                </div>
+                <div className="property-body">
+                  <small>{property.zone}</small>
+                  <h3>{property.title}</h3>
+                  <p>
+                    {property.beds} hab · {property.baths} banos · {property.size} m2
+                  </p>
+                  <strong>{property.price}</strong>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
+
         <button className="text-link" type="button">
-          Ver todas las propiedades
+          Ver todas las propiedades →
         </button>
       </section>
 
