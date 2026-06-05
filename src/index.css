@@ -721,7 +721,7 @@ button {
 
 .why {
   background: var(--warm);
-  padding-bottom: 0;
+  padding-bottom: clamp(40px, 5vw, 58px);
   padding-left: 0;
   padding-right: 0;
 }
@@ -734,7 +734,7 @@ button {
 
 .why .stats {
   margin-top: clamp(40px, 5vw, 58px);
-  margin-bottom: clamp(40px, 5vw, 58px);
+  margin-bottom: 0;
   margin-left: clamp(22px, 5vw, 72px);
   margin-right: clamp(22px, 5vw, 72px);
   max-width: none;
@@ -789,7 +789,7 @@ button {
 }
 
 .why-card > div {
-  background: var(--ink);
+  background: #2e1c0b;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
