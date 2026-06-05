@@ -173,11 +173,11 @@ function Home() {
 
   const heroCopy: Record<HeroTab, { line: string; action: string }> = {
     comprar: {
-      line: 'Ciudad, provincia, barrio o zona...',
+      line: 'Ingresa ciudad, provincia, barrio o zona...',
       action: 'Buscar',
     },
     alquilar: {
-      line: 'Ciudad, provincia, barrio o zona...',
+      line: 'Ingresa ciudad, provincia, barrio o zona...',
       action: 'Buscar',
     },
     vender: {
@@ -261,7 +261,7 @@ function Home() {
 
             {/* Tagline + tabs + search — appears after brand */}
             <div className="hero-ui" ref={heroUiRef}>
-              <p>Tu hogar empieza aqui.</p>
+              <p aria-hidden="true" style={{ visibility: 'hidden' }}>Tu hogar empieza aqui.</p>
 
               <div className="hero-tabs" role="tablist" aria-label="Servicios destacados">
                 {(['comprar', 'alquilar', 'vender', 'reformas', 'hipotecas'] as HeroTab[]).map((tab) => (
@@ -279,28 +279,29 @@ function Home() {
               </div>
 
               <div className="hero-panel">
-                {isSearchTab ? (
-                  <>
-                    <div className="search-box">
-                      <input aria-label="Buscar ubicacion" placeholder={heroCopy[heroTab].line} />
-                      <button type="button">{heroCopy[heroTab].action}</button>
-                    </div>
-                    <div className="direct-contact">
-                      Prefiero hablar con alguien <Link to="/contacto">Contactar</Link>
-                    </div>
-                  </>
-                ) : (
-                  <div className="hero-cta">
-                    <span>{heroCopy[heroTab].line}</span>
-                    {heroTab === 'vender' ? (
-                      <button type="button" onClick={() => scrollTo('valoracion')}>
-                        {heroCopy[heroTab].action}
-                      </button>
-                    ) : (
-                      <Link className="button-link" to="/contacto">
-                        {heroCopy[heroTab].action}
-                      </Link>
-                    )}
+                <div className={`hero-cta${!isSearchTab ? ' hero-cta--solo' : ''}`}>
+                  {isSearchTab && (
+                    <input
+                      className="hero-search-input"
+                      aria-label="Buscar ubicacion"
+                      placeholder={heroCopy[heroTab].line}
+                    />
+                  )}
+                  {heroTab === 'vender' ? (
+                    <button type="button" onClick={() => scrollTo('valoracion')}>
+                      {heroCopy[heroTab].action}
+                    </button>
+                  ) : isSearchTab ? (
+                    <button type="button">{heroCopy[heroTab].action}</button>
+                  ) : (
+                    <Link className="button-link" to="/contacto">
+                      {heroCopy[heroTab].action}
+                    </Link>
+                  )}
+                </div>
+                {isSearchTab && (
+                  <div className="direct-contact">
+                    Prefiero hablar con alguien <Link to="/contacto">Contactar</Link>
                   </div>
                 )}
               </div>

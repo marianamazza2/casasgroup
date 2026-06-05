@@ -74,7 +74,7 @@ button {
 .text-link {
   background: transparent;
   border: 0;
-  color: #83570c;
+  color: var(--ink);
   font-size: 12px;
   letter-spacing: 0.04em;
   padding: 8px 0;
@@ -406,29 +406,21 @@ button {
 
 .hero-panel {
   min-height: 116px;
-  width: min(100%, 620px);
+  width: min(100%, 460px);
 }
 
-.search-box {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  box-shadow: 0 16px 45px rgb(0 0 0 / 0.08);
-  display: flex;
-  overflow: hidden;
-}
-
-.search-box input {
+.hero-search-input {
   background: transparent;
   border: 0;
+  border-bottom: 1px solid var(--line);
   color: var(--ink);
+  flex: 1;
+  font-size: 14px;
   min-width: 0;
   outline: 0;
-  padding: 17px 22px;
-  width: 100%;
+  padding: 8px 0;
 }
 
-.search-box button,
 .hero-cta button,
 .button-link,
 .valuation button,
@@ -446,11 +438,6 @@ button {
   transition: background 180ms ease, transform 180ms ease;
 }
 
-.search-box button {
-  border-radius: 0 999px 999px 0;
-}
-
-.search-box button:hover,
 .hero-cta button:hover,
 .valuation button:hover,
 .about-strip button:hover,
@@ -481,15 +468,15 @@ button {
 
 .hero-cta {
   align-items: center;
-  background: rgb(255 255 255 / 0.96);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  box-shadow: 0 16px 45px rgb(0 0 0 / 0.08);
   display: flex;
   gap: 18px;
   justify-content: space-between;
-  padding: 20px;
+  padding: 6px 0;
   text-align: left;
+}
+
+.hero-cta--solo {
+  justify-content: center;
 }
 
 .hero-cta span {
@@ -1348,20 +1335,11 @@ button {
     gap: 12px 18px;
   }
 
-  .search-box,
   .hero-cta,
   .section-top,
   .property-controls {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .search-box {
-    border-radius: 18px;
-  }
-
-  .search-box button {
-    border-radius: 0;
   }
 
   .section-top,
