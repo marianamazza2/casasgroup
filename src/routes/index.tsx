@@ -132,6 +132,8 @@ function Home() {
   const heroMediaRef = useRef<HTMLDivElement>(null)
   const heroFillRef = useRef<HTMLDivElement>(null)
   const heroUiRef = useRef<HTMLDivElement>(null)
+  const accessSectionRef = useRef<HTMLElement>(null)
+  const [activeAccessBlock, setActiveAccessBlock] = useState<number | null>(null)
 
   useEffect(() => {
     const smoothstep = (t: number) => t * t * (3 - 2 * t)
@@ -166,6 +168,36 @@ function Home() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const handleAccessScroll = () => {
+      const section = accessSectionRef.current
+      if (!section) return
+      const items = section.querySelectorAll<HTMLElement>('.access-block-item')
+      if (!items.length) return
+
+      const viewportCenter = window.innerHeight / 2
+      let closestIdx: number | null = null
+      let closestDist = Infinity
+
+      items.forEach((item, i) => {
+        const rect = item.getBoundingClientRect()
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          const dist = Math.abs(rect.top + rect.height / 2 - viewportCenter)
+          if (dist < closestDist) {
+            closestDist = dist
+            closestIdx = i
+          }
+        }
+      })
+
+      setActiveAccessBlock(closestIdx)
+    }
+
+    window.addEventListener('scroll', handleAccessScroll, { passive: true })
+    handleAccessScroll()
+    return () => window.removeEventListener('scroll', handleAccessScroll)
   }, [])
 
   const currentWhy = whyItems[whyIndex]
@@ -378,15 +410,18 @@ function Home() {
         </div>
       </section>
 
-      <section className="access-blocks">
-        {accessBlocks.map((item) => (
-          <article key={item.title}>
-            <img src={item.image} alt="" />
-            <div>
-              <h2>{item.title}</h2>
+      <section className="access-blocks" ref={accessSectionRef}>
+        {accessBlocks.map((item, i) => (
+          <article
+            key={item.title}
+            className={`access-block-item${activeAccessBlock === i ? ' is-active' : ''}`}
+          >
+            <div className="access-bg" style={{ backgroundImage: `url(${item.image})` }} />
+            <div className="access-desc">
               <p>{item.description}</p>
             </div>
-            <span aria-hidden="true">→</span>
+            <h2 className="access-title">{item.title}</h2>
+            <span className="access-arrow" aria-hidden="true">→</span>
           </article>
         ))}
       </section>
