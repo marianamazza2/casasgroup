@@ -98,6 +98,9 @@ function ContactPage() {
               </button>
             </div>
           </div>
+          <div className="hero-scroll-hint" aria-hidden="true">
+            <div className="scroll-arrow" />
+          </div>
         </section>
       </div>
 

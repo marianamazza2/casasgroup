@@ -14,6 +14,7 @@ export type Property = {
   category: 'piso' | 'chalet' | 'local' | 'parking'
   tag?: 'Nuevo' | 'Destacado' | 'Exclusiva'
   image: string
+  images?: string[]
   desc: string
   features: string[]
   floor?: string

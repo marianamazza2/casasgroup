@@ -1,7 +1,7 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { homeFeaturedProperties } from '../lib/propertiesData'
+import { homeFeaturedProperties, properties } from '../lib/propertiesData'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -241,6 +241,11 @@ function Home() {
 
   const currentWhy = whyItems[whyIndex]
   const isSearchTab = heroTab === 'comprar' || heroTab === 'alquilar'
+
+  const displayedProperties =
+    propertyMode === 'Venta'
+      ? homeFeaturedProperties
+      : properties.filter((p) => p.mode === 'alquiler').slice(0, 8)
 
   const heroCopy: Record<HeroTab, { line: string; action: string }> = {
     comprar: {
@@ -503,8 +508,7 @@ function Home() {
       <section className="section about-strip" id="nosotros">
         <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80" alt="" />
         <div>
-          <SectionHeading eyebrow="Casas Group" title="Una inmobiliaria pensada para superar expectativas" />
-          <blockquote>Porque entendimos que el sector no necesitaba mas de lo mismo.</blockquote>
+          <blockquote>Porque comprendimos que el sector no necesitaba mas de lo mismo.</blockquote>
           <p>Una marca construida para cuidar cada detalle con excelencia, cercania y una forma de trabajar clara.</p>
           <Link className="button-link" to="/contacto">
             Conocenos
@@ -541,8 +545,13 @@ function Home() {
 
         <div className="property-rail-wrap">
           <div className="property-rail" ref={propertiesRef}>
-            {homeFeaturedProperties.map((property) => (
-              <article className="property-card" key={property.title}>
+            {displayedProperties.map((property) => (
+              <article
+                className="property-card"
+                key={property.id}
+                style={{ cursor: 'pointer' }}
+                onClick={() => navigate({ to: '/propiedades/$id', params: { id: String(property.id) } })}
+              >
                 <div className="property-image">
                   <img src={property.image} alt="" />
                   {property.tag ? <span>{property.tag}</span> : null}
