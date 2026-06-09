@@ -89,7 +89,9 @@ El equipo edita Google Sheets + sube fotos a Cloudinary
 | Framework | React + Vite + TypeScript | ✅ Instalado | $0 |
 | Estilos | Tailwind CSS | ✅ Instalado | $0 |
 | Routing | TanStack Router | ✅ Instalado | $0 |
-| Animaciones | Motion | ✅ Instalado | $0 |
+| Animaciones | Motion (Framer Motion) | ✅ Instalado | $0 |
+| Mapa interactivo | MapLibre GL + react-map-gl | ✅ Instalado | $0 |
+| Tiles del mapa | MapTiler (free tier: 100k tiles/mes) | 🔲 API key por configurar | $0 |
 | Data fetching | TanStack Query | 🔲 Por instalar | $0 |
 | Datos de inmuebles | Google Sheets (CSV público) | 🔲 Por implementar | $0 |
 | Fotos | Cloudinary (free tier) | 🔲 Por implementar | $0 |
@@ -343,7 +345,13 @@ Estado · Precio mínimo y máximo (rango) · Baños · Superficie mínima · Pl
 
 Vista half-map estilo Airbnb / Tecnocasa: listado a la izquierda, mapa a la derecha. Al mover o hacer zoom en el mapa, el listado se actualiza mostrando solo los inmuebles visibles en esa zona. Un pin por inmueble con el precio visible. Al hacer clic en el pin aparece mini-ficha con foto, precio y habitaciones.
 
-**Tecnología:** Leaflet.js (open source) + OpenStreetMap (gratuito). Sin API key, sin costo.
+**Tecnología:** MapLibre GL + react-map-gl + tiles de MapTiler (free tier). $0/mes para el volumen de una inmobiliaria pequeña (100k tiles/mes incluidos en el plan gratuito). Requiere registrar una cuenta en maptiler.com para obtener la API key (gratuita, sin tarjeta de crédito).
+
+**Por qué MapLibre GL y no Leaflet:**
+- Renderizado WebGL (mucho más fluido en móvil al arrastrar el mapa)
+- Ya instalado en el proyecto — no hay que agregar dependencias
+- Mejor soporte para pins personalizados con precios
+- react-map-gl provee una API React limpia con hooks nativos
 
 **Coordenadas:** el equipo las obtiene haciendo clic derecho en Google Maps y pegando en el Sheets. < 1 min por inmueble.
 

@@ -1,6 +1,7 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { homeFeaturedProperties } from '../lib/propertiesData'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -63,93 +64,6 @@ const whyItems = [
   },
 ]
 
-const featuredProperties = [
-  {
-    zone: 'Esplugues',
-    title: 'Piso reformado con terraza',
-    beds: 3,
-    baths: 2,
-    size: 95,
-    price: '285.000 EUR',
-    tag: 'Nuevo',
-    image:
-      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    zone: 'Sant Just Desvern',
-    title: 'Casa adosada con jardin',
-    beds: 4,
-    baths: 2,
-    size: 180,
-    price: '520.000 EUR',
-    image:
-      'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    zone: 'Cornella',
-    title: 'Atico con vistas panoramicas',
-    beds: 2,
-    baths: 1,
-    size: 72,
-    price: '320.000 EUR',
-    image:
-      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    zone: 'Sant Joan Despi',
-    title: 'Duplex con terraza y parking',
-    beds: 4,
-    baths: 2,
-    size: 130,
-    price: '480.000 EUR',
-    tag: 'Destacado',
-    image:
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    zone: 'Esplugues',
-    title: 'Piso luminoso junto al parque',
-    beds: 2,
-    baths: 1,
-    size: 68,
-    price: '245.000 EUR',
-    image:
-      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    zone: 'Sant Feliu de Llobregat',
-    title: 'Planta baja con jardin privado',
-    beds: 3,
-    baths: 2,
-    size: 112,
-    price: '390.000 EUR',
-    tag: 'Nuevo',
-    image:
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    zone: 'Cornella',
-    title: 'Estudio moderno en el centro',
-    beds: 1,
-    baths: 1,
-    size: 42,
-    price: '175.000 EUR',
-    image:
-      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    zone: 'Sant Just Desvern',
-    title: 'Villa con piscina y vistas',
-    beds: 5,
-    baths: 3,
-    size: 280,
-    price: '980.000 EUR',
-    tag: 'Exclusiva',
-    image:
-      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=900&q=80',
-  },
-]
-
 const accessBlocks = [
   {
     title: 'Comprar',
@@ -172,7 +86,9 @@ const accessBlocks = [
 ]
 
 function Home() {
+  const navigate = useNavigate()
   const [heroTab, setHeroTab] = useState<HeroTab>('comprar')
+  const [heroSearchQuery, setHeroSearchQuery] = useState('')
   const [propertyMode, setPropertyMode] = useState<'Venta' | 'Alquiler'>('Venta')
   const [whyIndex, setWhyIndex] = useState(0)
   const propertiesRef = useRef<HTMLDivElement>(null)
@@ -337,33 +253,6 @@ function Home() {
 
   return (
     <main className="home-page">
-      <header className="site-nav">
-        <button className="logo logo-small" type="button" onClick={() => scrollTo('inicio')}>
-          <span>CASAS</span>
-          <small>GROUP</small>
-        </button>
-        <nav aria-label="Navegacion principal">
-          <button type="button" onClick={() => scrollTo('propiedades')}>
-            Comprar
-          </button>
-          <button type="button" onClick={() => scrollTo('propiedades')}>
-            Alquilar
-          </button>
-          <button type="button" onClick={() => scrollTo('valoracion')}>
-            Vender
-          </button>
-          <button type="button" onClick={() => scrollTo('nosotros')}>
-            Nosotros
-          </button>
-          <button type="button" onClick={() => scrollTo('servicios')}>
-            Servicios
-          </button>
-          <Link to="/contacto">
-            Contacto
-          </Link>
-        </nav>
-      </header>
-
       <div className="hero-scroll-wrapper" ref={heroWrapperRef}>
         <section className="hero" id="inicio">
           {/* Layer 1: White luminous water background */}
@@ -414,6 +303,13 @@ function Home() {
                       className="hero-search-input"
                       aria-label="Buscar ubicacion"
                       placeholder={heroCopy[heroTab].line}
+                      value={heroSearchQuery}
+                      onChange={(e) => setHeroSearchQuery(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && heroSearchQuery.trim()) {
+                          navigate({ to: '/propiedades', search: { query: heroSearchQuery.trim() } })
+                        }
+                      }}
                     />
                   )}
                   {heroTab === 'vender' ? (
@@ -421,7 +317,13 @@ function Home() {
                       {heroCopy[heroTab].action}
                     </button>
                   ) : isSearchTab ? (
-                    <button type="button">{heroCopy[heroTab].action}</button>
+                    <button
+                      type="button"
+                      disabled={!heroSearchQuery.trim()}
+                      onClick={() => navigate({ to: '/propiedades', search: { query: heroSearchQuery.trim() } })}
+                    >
+                      {heroCopy[heroTab].action}
+                    </button>
                   ) : (
                     <Link className="button-link" to="/contacto">
                       {heroCopy[heroTab].action}
@@ -491,12 +393,25 @@ function Home() {
       </section>
 
       <section className="valuation" id="valoracion">
-        <div>
-          <SectionHeading eyebrow="Valoracion" title="Valoracion gratuita" />
-          <p>Valoracion profesional, gratuita y sin compromiso, basada en datos reales de tu zona.</p>
-          <Link className="button-link" to="/contacto">
-            Solicitar valoracion
-          </Link>
+        <div className="valuation-content">
+          <div className="valuation-body">
+            <span className="valuation-eyebrow">Valoracion gratuita</span>
+            <h2 className="valuation-heading">
+              Conoce el valor<br />de tu vivienda
+            </h2>
+            <p className="valuation-desc">
+              Valoracion profesional, gratuita y sin compromiso, basada en datos reales de tu zona.
+            </p>
+            <Link className="button-link" to="/contacto">
+              Solicitar valoracion
+            </Link>
+            <div className="valuation-microstats">
+              <span>Sin compromiso</span>
+              <span>Datos reales de mercado</span>
+              <span>Respuesta en 24h</span>
+            </div>
+          </div>
+          <div className="valuation-deco" aria-hidden="true">0€</div>
         </div>
         <div className="valuation-media" aria-hidden="true" />
       </section>
@@ -594,7 +509,7 @@ function Home() {
 
         <div className="property-rail-wrap">
           <div className="property-rail" ref={propertiesRef}>
-            {featuredProperties.map((property) => (
+            {homeFeaturedProperties.map((property) => (
               <article className="property-card" key={property.title}>
                 <div className="property-image">
                   <img src={property.image} alt="" />
@@ -604,16 +519,16 @@ function Home() {
                   <small>{property.zone}</small>
                   <h3>{property.title}</h3>
                   <p>
-                    {property.beds} hab · {property.baths} banos · {property.size} m2
+                    {property.beds} hab · {property.baths} banos · {property.m2} m2
                   </p>
-                  <strong>{property.price}</strong>
+                  <strong>{property.priceLabel}</strong>
                 </div>
               </article>
             ))}
           </div>
         </div>
 
-        <button className="text-link" type="button">
+        <button className="text-link" type="button" onClick={() => navigate({ to: '/propiedades', search: { query: '' } })}>
           Ver todas las propiedades →
         </button>
       </section>

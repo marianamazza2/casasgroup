@@ -11,12 +11,15 @@
 | React + Vite + TypeScript | ✅ Instalado |
 | TanStack Router | ✅ Instalado |
 | Tailwind CSS | ✅ Instalado |
-| Motion | ✅ Instalado |
+| Motion (Framer Motion) | ✅ Instalado |
+| MapLibre GL | ✅ Instalado |
+| react-map-gl | ✅ Instalado |
 | Google Sheets (conexión) | 🔲 Por implementar |
 | Cloudinary (conexión) | 🔲 Por implementar |
 | Vercel (deploy) | 🔲 Por configurar |
 | Resend (emails) | 🔲 Por implementar |
 | TanStack Query | 🔲 Por instalar e implementar |
+| MapTiler API key (tiles) | 🔲 Por configurar (free tier) |
 
 > **TanStack Query** es el pairing natural con TanStack Router para data fetching. Se instala con `npm install @tanstack/react-query`. Maneja loading states, caché, refetch automático y errores sin boilerplate.
 
@@ -44,7 +47,9 @@ src/
 │   │   ├── PropertyCard.tsx       ← Tarjeta del listado
 │   │   ├── PropertyFilters.tsx    ← Panel de filtros
 │   │   ├── PropertyGallery.tsx    ← Carrusel de fotos en la ficha
-│   │   ├── PropertyMap.tsx        ← Mapa interactivo (Opción 3)
+│   │   ├── PropertyMap.tsx        ← Mapa interactivo (MapLibre GL + react-map-gl)
+│   │   ├── PropertyMapPin.tsx     ← Pin de precio personalizado sobre el mapa
+│   │   ├── PropertyMapPopup.tsx   ← Mini-ficha al hacer clic en un pin
 │   │   └── PropertyGrid.tsx       ← Grid/lista de tarjetas
 │   └── layout/
 │       ├── Header.tsx
@@ -524,7 +529,128 @@ export function useInmueblesFiltrados(
 
 ---
 
-## 9. RESEND — FORMULARIOS DE CONTACTO
+## 9. MAPA INTERACTIVO — MAPLIBRE GL
+
+### Stack del mapa
+
+| Pieza | Tecnología | Por qué |
+|---|---|---|
+| Motor de renderizado | MapLibre GL JS | WebGL, open source, sin API key propia |
+| Wrapper React | react-map-gl | Hooks nativos, integra bien con estado React |
+| Tiles vectoriales | MapTiler (free tier) | 100k tiles/mes gratis, estilo limpio y moderno |
+
+**MapTiler free tier:** registrar cuenta en [maptiler.com](https://maptiler.com) → copiar la API key → pegarla en `.env` como `VITE_MAPTILER_KEY`. Sin tarjeta de crédito.
+
+### Variable de entorno adicional
+
+```bash
+# .env
+VITE_MAPTILER_KEY=tu_api_key_aqui
+```
+
+### Cómo funciona el mapa en el listado
+
+La página `/propiedades` usa un layout dividido (split):
+- **Izquierda:** lista scrollable de tarjetas
+- **Derecha:** mapa sticky que ocupa el resto del viewport
+
+Cuando el usuario mueve o hace zoom en el mapa, se calcula el `bounds` (rectángulo visible) y se filtran las propiedades cuyos `lat/lng` caen dentro de ese rectángulo. La lista izquierda se actualiza en tiempo real.
+
+```
+usuario mueve el mapa
+        │
+        ▼
+onMoveEnd → obtener map.getBounds()
+        │
+        ▼
+filtrar inmuebles por bounds (lat/lng dentro del rectángulo)
+        │
+        ▼
+actualizar lista izquierda
+```
+
+### Componente PropertyMap
+
+```typescript
+// src/components/search/PropertyMap.tsx
+
+import Map, { Marker, Popup } from 'react-map-gl/maplibre'
+import 'maplibre-gl/dist/maplibre-gl.css'
+import type { Property } from '../../lib/types'
+
+const MAPTILER_KEY = import.meta.env.VITE_MAPTILER_KEY
+const MAP_STYLE = `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}`
+
+interface PropertyMapProps {
+  properties: Property[]
+  hoveredId: string | null
+  onBoundsChange: (bounds: maplibregl.LngLatBounds) => void
+  onPinClick: (id: string) => void
+}
+
+export function PropertyMap({ properties, hoveredId, onBoundsChange, onPinClick }: PropertyMapProps) {
+  const [popupId, setPopupId] = useState<string | null>(null)
+
+  return (
+    <Map
+      initialViewState={{ longitude: 2.154, latitude: 41.39, zoom: 12 }}  // Barcelona
+      style={{ width: '100%', height: '100%' }}
+      mapStyle={MAP_STYLE}
+      onMoveEnd={(e) => onBoundsChange(e.target.getBounds())}
+    >
+      {properties.map((p) => (
+        <Marker key={p.id} longitude={p.lng!} latitude={p.lat!} anchor="bottom">
+          <button
+            className={`map-price-pin ${hoveredId === p.id ? 'pin-active' : ''}`}
+            onClick={() => { setPopupId(p.id); onPinClick(p.id) }}
+          >
+            {formatPrice(p.precio)}
+          </button>
+        </Marker>
+      ))}
+
+      {popupId && (() => {
+        const p = properties.find(x => x.id === popupId)!
+        return (
+          <Popup longitude={p.lng!} latitude={p.lat!} onClose={() => setPopupId(null)}>
+            <PropertyMapPopup property={p} />
+          </Popup>
+        )
+      })()}
+    </Map>
+  )
+}
+```
+
+### Filtrado por bounds
+
+```typescript
+// src/hooks/usePropertyFilters.ts (extensión)
+
+function isInBounds(property: Property, bounds: maplibregl.LngLatBounds): boolean {
+  if (!property.lat || !property.lng) return true  // sin coords → siempre visible
+  return bounds.contains([property.lng, property.lat])
+}
+```
+
+### Interacción lista ↔ mapa
+
+- **Hover en tarjeta** → pin correspondiente se resalta (clase `pin-active`)
+- **Clic en pin** → scroll automático a la tarjeta en la lista izquierda + popup en el mapa
+- **Sin coordenadas** (`lat`/`lng` vacíos en el Sheets) → la propiedad aparece en la lista pero no tiene pin; no da error
+
+### Coordenadas en el Sheets
+
+Las columnas `lat` y `lng` son opcionales. El equipo las obtiene así:
+1. Buscar la dirección en Google Maps
+2. Clic derecho sobre el punto exacto → aparecen las coordenadas
+3. Copiar y pegar en el Sheets (ej: `41.3874`, `2.1686`)
+
+Tiempo: < 1 min por inmueble.
+
+---
+
+## 10. RESEND — FORMULARIOS DE CONTACTO
 
 Los formularios (contacto general + contacto por inmueble) envían emails vía Resend desde una **Vercel Serverless Function** — la API key nunca llega al navegador.
 
@@ -569,7 +695,7 @@ export default async function handler(req: Request) {
 
 ---
 
-## 10. DEPLOY EN VERCEL
+## 11. DEPLOY EN VERCEL
 
 ### Primera vez
 
@@ -586,8 +712,9 @@ Vercel detecta automáticamente que es un proyecto Vite y configura el build com
 En el panel de Vercel → **Settings → Environment Variables** agregar:
 
 ```
-VITE_SHEETS_CSV_URL       → la URL del CSV de Google Sheets
+VITE_SHEETS_CSV_URL        → la URL del CSV de Google Sheets
 VITE_CLOUDINARY_CLOUD_NAME → el cloud name de Cloudinary
+VITE_MAPTILER_KEY          → API key de MapTiler (free tier, sin tarjeta de crédito)
 RESEND_API_KEY             → la API key de Resend (solo producción)
 ```
 
@@ -597,7 +724,7 @@ Vercel hace deploy automático en cada push a `main`. Para el webhook de Sheets,
 
 ---
 
-## 11. NOTA SOBRE SEO
+## 12. NOTA SOBRE SEO
 
 Una SPA con React + Vite sirve HTML vacío por defecto — los buscadores ven una página en blanco hasta que ejecutan el JavaScript. Para mitigar esto:
 

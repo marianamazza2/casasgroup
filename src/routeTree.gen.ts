@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PropiedadesIndexRouteImport } from './routes/propiedades/index'
 
 const ContactoRoute = ContactoRouteImport.update({
   id: '/contacto',
@@ -22,31 +23,40 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PropiedadesIndexRoute = PropiedadesIndexRouteImport.update({
+  id: '/propiedades/',
+  path: '/propiedades/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/propiedades/': typeof PropiedadesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/propiedades': typeof PropiedadesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/propiedades/': typeof PropiedadesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contacto'
+  fullPaths: '/' | '/contacto' | '/propiedades/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contacto'
-  id: '__root__' | '/' | '/contacto'
+  to: '/' | '/contacto' | '/propiedades'
+  id: '__root__' | '/' | '/contacto' | '/propiedades/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactoRoute: typeof ContactoRoute
+  PropiedadesIndexRoute: typeof PropiedadesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/propiedades/': {
+      id: '/propiedades/'
+      path: '/propiedades'
+      fullPath: '/propiedades/'
+      preLoaderRoute: typeof PropiedadesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactoRoute: ContactoRoute,
+  PropiedadesIndexRoute: PropiedadesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
