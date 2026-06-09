@@ -8,8 +8,8 @@ const defaultFilters: FilterState = {
   zone: 'Todas',
 }
 
-export function usePropertyFilters(initialQuery = '') {
-  const [filters, setFilters] = useState<FilterState>({ ...defaultFilters, query: initialQuery })
+export function usePropertyFilters(initialQuery = '', initialMode: FilterState['mode'] = 'compra') {
+  const [filters, setFilters] = useState<FilterState>({ ...defaultFilters, query: initialQuery, mode: initialMode })
 
   const filteredProperties = useMemo(() => {
     return properties.filter((p) => {

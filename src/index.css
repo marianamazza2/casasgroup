@@ -2119,7 +2119,7 @@ button {
 }
 
 .property-tag {
-  background: var(--ink);
+  background: #a47b36;
   border-radius: 4px;
   color: #fff;
   font-size: 9px;

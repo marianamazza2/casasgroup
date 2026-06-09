@@ -14,18 +14,19 @@ import { usePropertyFilters } from '../../hooks/usePropertyFilters'
 export const Route = createFileRoute('/propiedades/')({
   validateSearch: (search: Record<string, unknown>) => ({
     query: typeof search.query === 'string' ? search.query : '',
+    mode: search.mode === 'alquiler' ? 'alquiler' : 'compra' as 'compra' | 'alquiler',
   }),
   component: PropiedadesPage,
 })
 
 function PropiedadesPage() {
-  const { query: initialQuery } = Route.useSearch()
+  const { query: initialQuery, mode: initialMode } = Route.useSearch()
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [showFiltersModal, setShowFiltersModal] = useState(false)
   const [activeId, setActiveId] = useState<number | undefined>()
   const [popupProperty, setPopupProperty] = useState<Property | null>(null)
   const [mapVisibleIds, setMapVisibleIds] = useState<Set<number> | null>(null)
-  const { filters, setFilter, resetFilters, filteredProperties, resultCount } = usePropertyFilters(initialQuery)
+  const { filters, setFilter, resetFilters, filteredProperties, resultCount } = usePropertyFilters(initialQuery, initialMode)
 
   const handlePinClick = useCallback((id: number) => {
     setActiveId(id)
@@ -111,6 +112,7 @@ function PropiedadesPage() {
       <FiltersModal
         open={showFiltersModal}
         onClose={() => setShowFiltersModal(false)}
+        onApply={() => { setMapVisibleIds(null); setShowFiltersModal(false) }}
         filters={filters}
         onChange={setFilter}
         onReset={resetFilters}

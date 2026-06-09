@@ -1,6 +1,6 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { homeFeaturedProperties } from '../lib/propertiesData'
 
 export const Route = createFileRoute('/')({
@@ -104,7 +104,37 @@ function Home() {
   const [activeService, setActiveService] = useState(0)
   const serviceItemRefs = useRef<(HTMLElement | null)[]>([])
 
+  const [skipAnimation] = useState(() => {
+    try { return sessionStorage.getItem('heroSeen') === 'true' } catch { return false }
+  })
+
+  // Mark hero as seen when navigating away from home
   useEffect(() => {
+    return () => {
+      try { sessionStorage.setItem('heroSeen', 'true') } catch {}
+    }
+  }, [])
+
+  // Apply final state immediately for returning visitors
+  useLayoutEffect(() => {
+    if (!skipAnimation) return
+    document.documentElement.style.setProperty('--hero-fill', 'rgb(164,123,54)')
+    if (heroMediaRef.current) {
+      heroMediaRef.current.style.animation = 'none'
+      heroMediaRef.current.style.opacity = '0'
+    }
+    if (heroBgRef.current) heroBgRef.current.style.opacity = '1'
+    if (heroOutlineRef.current) heroOutlineRef.current.style.opacity = '0'
+    if (heroUiRef.current) {
+      heroUiRef.current.style.opacity = '1'
+      heroUiRef.current.style.transform = 'translateY(0)'
+    }
+    if (heroWrapperRef.current) heroWrapperRef.current.style.height = '100vh'
+  }, [skipAnimation])
+
+  useEffect(() => {
+    if (skipAnimation) return
+
     const smoothstep = (t: number) => t * t * (3 - 2 * t)
     const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
     const phase = (p: number, start: number, end: number) =>
@@ -144,7 +174,7 @@ function Home() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [skipAnimation])
 
   useEffect(() => {
     const handleAccessScroll = () => {
@@ -307,7 +337,7 @@ function Home() {
                       onChange={(e) => setHeroSearchQuery(e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' && heroSearchQuery.trim()) {
-                          navigate({ to: '/propiedades', search: { query: heroSearchQuery.trim() } })
+                          navigate({ to: '/propiedades', search: { query: heroSearchQuery.trim(), mode: heroTab === 'alquilar' ? 'alquiler' : 'compra' } })
                         }
                       }}
                     />
@@ -320,7 +350,7 @@ function Home() {
                     <button
                       type="button"
                       disabled={!heroSearchQuery.trim()}
-                      onClick={() => navigate({ to: '/propiedades', search: { query: heroSearchQuery.trim() } })}
+                      onClick={() => navigate({ to: '/propiedades', search: { query: heroSearchQuery.trim(), mode: heroTab === 'alquilar' ? 'alquiler' : 'compra' } })}
                     >
                       {heroCopy[heroTab].action}
                     </button>
@@ -339,11 +369,13 @@ function Home() {
             </div>
           </div>
 
-          {/* Scroll hint — fixed to hero, always visible */}
-          <div className="hero-scroll-hint" aria-hidden="true">
-            <span>Descúbrenos</span>
-            <div className="scroll-arrow" />
-          </div>
+          {/* Scroll hint — only on first load */}
+          {!skipAnimation && (
+            <div className="hero-scroll-hint" aria-hidden="true">
+              <span>Descúbrenos</span>
+              <div className="scroll-arrow" />
+            </div>
+          )}
         </section>
       </div>
 

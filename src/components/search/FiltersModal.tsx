@@ -4,6 +4,7 @@ import { zones } from '../../lib/propertiesData'
 interface FiltersModalProps {
   open: boolean
   onClose: () => void
+  onApply: () => void
   filters: FilterState
   onChange: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void
   onReset: () => void
@@ -20,7 +21,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const COUNT_OPTIONS = [0, 1, 2, 3, 4]
 
-export function FiltersModal({ open, onClose, filters, onChange, onReset, resultCount }: FiltersModalProps) {
+export function FiltersModal({ open, onClose, onApply, filters, onChange, onReset, resultCount }: FiltersModalProps) {
   if (!open) return null
 
   function toggleCategory(cat: string) {
@@ -188,7 +189,7 @@ export function FiltersModal({ open, onClose, filters, onChange, onReset, result
           <button type="button" className="filters-clear" onClick={onReset}>
             Quitar filtros
           </button>
-          <button type="button" className="filters-apply" onClick={onClose}>
+          <button type="button" className="filters-apply" onClick={onApply}>
             Mostrar {resultCount} inmuebles
           </button>
         </div>
