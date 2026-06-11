@@ -3,7 +3,7 @@
 
 :root {
   --gold: #a47b36;
-  --hero-fill: #dbb96e;
+  --hero-fill: #a47b36;
   --gold-soft: #f9f4ea;
   --ink: #1a1a18;
   --muted: #7a7a74;
@@ -232,9 +232,23 @@ button {
   z-index: 1;
 }
 
-/* Real image background — fades in on scroll */
-.hero-white-bg {
-  background: url('/hero-initial.png') center / cover no-repeat;
+/* Warm dark veil between the photo layers and the text for contrast */
+.hero::after {
+  background: linear-gradient(
+    rgba(22, 16, 6, 0.38),
+    rgba(22, 16, 6, 0.2) 45%,
+    rgba(22, 16, 6, 0.32)
+  );
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 3;
+}
+
+/* Gold version of the hero photo — revealed on scroll */
+.hero-gold-bg {
+  background: linear-gradient(rgb(167 127 61 / 88%), rgb(220 154 44 / 39%)), url('/hero-building-gold.jpg') center / cover no-repeat;
   inset: 0;
   opacity: 0;
   position: absolute;
@@ -271,7 +285,7 @@ button {
 
 .hero-media {
   animation: hero-media-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-  background: url('/hero-bg.png') center / cover no-repeat;
+  background: linear-gradient(#ffffff, rgb(22 16 6 / 0%)), url('/hero-building-light.jpg') center / cover no-repeat;
   inset: 0;
   position: absolute;
   will-change: opacity;
@@ -322,57 +336,14 @@ button {
   margin-top: clamp(5px, 0.6vw, 10px);
 }
 
-/* Outline layer and fill layer shared layout */
-.hero-brand-outline,
+/* Brand letters: start in brand gold, lighten on scroll as the photo turns gold */
 .hero-brand-fill {
   align-items: center;
   display: flex;
   flex-direction: column;
+  filter: drop-shadow(0 2px 18px rgba(0, 0, 0, 0.14));
 }
 
-.hero-brand-fill {
-  inset: 0;
-  opacity: 1;
-  position: absolute;
-  will-change: opacity;
-}
-
-/* Outline layer: hero image shows through the letters */
-.hero-brand-outline {
-  filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.28));
-}
-
-.hero-brand-outline .hero-brand-casas {
-  background: url('/hero-bg.png') center / 100vw 100vh;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  paint-order: stroke fill;
-  -webkit-text-stroke: 1.5px #a47b36;
-}
-
-.hero-brand-outline .hero-brand-group {
-  background: url('/hero-bg.png') center / 100vw 100vh;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  paint-order: stroke fill;
-  -webkit-text-stroke: 1px #a47b36;
-}
-
-.hero-brand-outline .hero-brand-group::before,
-.hero-brand-outline .hero-brand-group::after {
-  background: rgba(164, 123, 54, 0.38);
-  content: '';
-  display: block;
-  flex: 1;
-  height: 1px;
-}
-
-.hero-brand-outline .hero-brand-group::before { margin-right: 8px; }
-.hero-brand-outline .hero-brand-group::after  { margin-left: 8px; }
-
-/* Fill layer: starts light, transitions to brand gold on scroll */
 .hero-brand-fill .hero-brand-casas {
   color: var(--hero-fill);
   -webkit-text-stroke: 1.5px var(--hero-fill);
@@ -424,7 +395,8 @@ button {
   align-items: center;
   animation: hero-hint-in 0.9s 1.1s ease both;
   bottom: clamp(44px, 6vw, 68px);
-  color: var(--muted);
+  color: rgba(255, 252, 245, 0.85);
+  z-index: 4;
   display: flex;
   flex-direction: column;
   font-size: 10px;
@@ -564,6 +536,46 @@ button {
 .hero-cta span {
   color: var(--text);
   line-height: 1.6;
+}
+
+/* Home hero UI appears once the photo is painted gold — invert to white */
+.home-page .hero-tabs button {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.home-page .hero-tabs button.active,
+.home-page .hero-tabs button:hover {
+  border-bottom-color: #fff;
+  color: #fff;
+}
+
+.home-page .hero-search-input {
+  border-bottom-color: rgba(255, 255, 255, 0.7);
+  color: #fff;
+}
+
+.home-page .hero-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.home-page .hero-cta button,
+.home-page .hero-cta .button-link {
+  background: #fff;
+  border-color: #fff;
+  color: #8d672d;
+}
+
+.home-page .hero-cta button:hover,
+.home-page .hero-cta .button-link:hover {
+  background: #f5eddd;
+  border-color: #f5eddd;
+  color: #8d672d;
+}
+
+.home-page .hero-cta button:disabled {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: transparent;
+  color: #8d672d;
 }
 
 .section {
@@ -1375,28 +1387,24 @@ button {
   line-height: 0.95;
 }
 
-.hero-brand-outline .hero-brand-hablemos {
-  background: url('/hero-bg.png') center / 100vw 100vh;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  paint-order: stroke fill;
-  -webkit-text-stroke: 1.5px #a47b36;
-}
-
 .hero-brand-fill .hero-brand-hablemos {
   color: var(--hero-fill);
   -webkit-text-stroke: 1.5px var(--hero-fill);
   paint-order: stroke fill;
 }
 
-/* Contact hero subtitle — matches hero search placeholder (14px, muted) */
+/* Contact hero subtitle — follows the brand color (gold → warm white on scroll) */
 .hero-ui .contact-hero-tagline {
-  color: var(--muted);
+  color: var(--hero-fill);
   font-size: 14px;
   line-height: 1.8;
   margin: 22px 0 30px;
   max-width: 520px;
+}
+
+/* Keep the CTA visible once the photo turns gold */
+.contact-page .hero-ui .button-link {
+  border-color: #fff;
 }
 
 .contact-intro {

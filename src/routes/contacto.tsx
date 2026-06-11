@@ -37,9 +37,8 @@ function ContactPage() {
   const [reason, setReason] = useState(contactReasons[0])
 
   const heroWrapperRef = useRef<HTMLDivElement>(null)
-  const heroBgRef = useRef<HTMLDivElement>(null)
+  const heroGoldRef = useRef<HTMLDivElement>(null)
   const heroMediaRef = useRef<HTMLDivElement>(null)
-  const heroOutlineRef = useRef<HTMLDivElement>(null)
   const heroFillRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -56,21 +55,20 @@ function ContactPage() {
       if (scrollable <= 0) return
       const p = clamp(-top / scrollable, 0, 1)
 
-      const bgT = phase(p, 0, 0.2)
+      const bgT = phase(p, 0, 0.35)
       if (heroMediaRef.current) heroMediaRef.current.style.opacity = String(1 - bgT)
-      if (heroBgRef.current) heroBgRef.current.style.opacity = String(bgT)
+      if (heroGoldRef.current) heroGoldRef.current.style.opacity = String(bgT)
 
-      const outlineT = phase(p, 0, 0.3)
-      if (heroOutlineRef.current) heroOutlineRef.current.style.opacity = String(1 - outlineT)
-
-      const colorT = phase(p, 0, 0.7)
-      const r = Math.round(219 - 55 * colorT)
-      const g = Math.round(185 - 62 * colorT)
-      const b = Math.round(110 - 56 * colorT)
+      // Brand lightens as the photo turns gold: rgb(164,123,54) → warm white
+      const colorT = phase(p, 0.1, 0.6)
+      const r = Math.round(164 + 86 * colorT)
+      const g = Math.round(123 + 124 * colorT)
+      const b = Math.round(54 + 187 * colorT)
       document.documentElement.style.setProperty('--hero-fill', `rgb(${r},${g},${b})`)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -78,13 +76,10 @@ function ContactPage() {
     <main className="contact-page">
       <div className="hero-scroll-wrapper" ref={heroWrapperRef}>
         <section className="hero" id="contacto-top">
-          <div className="hero-white-bg" ref={heroBgRef} />
+          <div className="hero-gold-bg" ref={heroGoldRef} />
           <div className="hero-media" ref={heroMediaRef} />
           <div className="hero-content">
             <div className="hero-brand" aria-label="Hablemos">
-              <div className="hero-brand-outline" ref={heroOutlineRef}>
-                <span className="hero-brand-hablemos">HABLEMOS</span>
-              </div>
               <div className="hero-brand-fill" ref={heroFillRef}>
                 <span className="hero-brand-hablemos">HABLEMOS</span>
               </div>

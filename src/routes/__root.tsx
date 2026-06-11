@@ -18,9 +18,9 @@ function SiteNav() {
         <small>GROUP</small>
       </Link>
       <nav aria-label="Navegacion principal">
-        <a href="/#propiedades">Comprar</a>
-        <a href="/#propiedades">Alquilar</a>
-        <a href="/#valoracion">Vender</a>
+        <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>Comprar</Link>
+        <Link to="/propiedades" search={{ query: '', mode: 'alquiler' }}>Alquilar</Link>
+        <Link to="/contacto">Vender</Link>
         <a href="/#nosotros">Nosotros</a>
         <div
           className="nav-services-wrapper"

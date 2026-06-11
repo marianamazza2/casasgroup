@@ -17,7 +17,7 @@ function PropertyDetailPage() {
     return (
       <div className="detail-notfound">
         <p>Propiedad no encontrada.</p>
-        <Link to="/propiedades">← Volver a búsqueda</Link>
+        <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>← Volver a búsqueda</Link>
       </div>
     )
   }
@@ -26,7 +26,7 @@ function PropertyDetailPage() {
 
   return (
     <div className="property-detail">
-      <Link to="/propiedades" className="detail-back">
+      <Link to="/propiedades" search={{ query: '', mode: 'compra' }} className="detail-back">
         ← Volver a búsqueda
       </Link>
 

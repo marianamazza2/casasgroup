@@ -94,9 +94,8 @@ function Home() {
   const propertiesRef = useRef<HTMLDivElement>(null)
 
   const heroWrapperRef = useRef<HTMLDivElement>(null)
-  const heroBgRef = useRef<HTMLDivElement>(null)
+  const heroGoldRef = useRef<HTMLDivElement>(null)
   const heroMediaRef = useRef<HTMLDivElement>(null)
-  const heroOutlineRef = useRef<HTMLDivElement>(null)
   const heroFillRef = useRef<HTMLDivElement>(null)
   const heroUiRef = useRef<HTMLDivElement>(null)
   const accessSectionRef = useRef<HTMLElement>(null)
@@ -118,13 +117,12 @@ function Home() {
   // Apply final state immediately for returning visitors
   useLayoutEffect(() => {
     if (!skipAnimation) return
-    document.documentElement.style.setProperty('--hero-fill', 'rgb(164,123,54)')
+    document.documentElement.style.setProperty('--hero-fill', 'rgb(250,247,241)')
     if (heroMediaRef.current) {
       heroMediaRef.current.style.animation = 'none'
       heroMediaRef.current.style.opacity = '0'
     }
-    if (heroBgRef.current) heroBgRef.current.style.opacity = '1'
-    if (heroOutlineRef.current) heroOutlineRef.current.style.opacity = '0'
+    if (heroGoldRef.current) heroGoldRef.current.style.opacity = '1'
     if (heroUiRef.current) {
       heroUiRef.current.style.opacity = '1'
       heroUiRef.current.style.transform = 'translateY(0)'
@@ -148,24 +146,20 @@ function Home() {
       if (scrollable <= 0) return
       const p = clamp(-top / scrollable, 0, 1)
 
-      // Phase 1 (0–28%): White luminous bg fades in, image fades out
-      const bgT = phase(p, 0, 0.28)
+      // Phase 1 (0–50%): the photo gets painted in brand gold
+      const bgT = phase(p, 0, 0.5)
       if (heroMediaRef.current) heroMediaRef.current.style.opacity = String(1 - bgT)
-      if (heroBgRef.current) heroBgRef.current.style.opacity = String(bgT)
+      if (heroGoldRef.current) heroGoldRef.current.style.opacity = String(bgT)
 
-      // Phase 2 (0–45%): Outline fades out
-      const outlineT = phase(p, 0, 0.45)
-      if (heroOutlineRef.current) heroOutlineRef.current.style.opacity = String(1 - outlineT)
-
-      // Fill color: #dbb96e → #a47b36 across full scroll
-      const colorT = phase(p, 0, 1)
-      const r = Math.round(219 - 55 * colorT)
-      const g = Math.round(185 - 62 * colorT)
-      const b = Math.round(110 - 56 * colorT)
+      // Phase 2 (15–80%): brand lightens, rgb(164,123,54) → warm white
+      const colorT = phase(p, 0.15, 0.8)
+      const r = Math.round(164 + 86 * colorT)
+      const g = Math.round(123 + 124 * colorT)
+      const b = Math.round(54 + 187 * colorT)
       document.documentElement.style.setProperty('--hero-fill', `rgb(${r},${g},${b})`)
 
-      // Phase 3 (36–65%): Tagline + tabs + search fade in
-      const uiT = phase(p, 0.36, 0.65)
+      // Phase 3 (42–72%): Tagline + tabs + search fade in
+      const uiT = phase(p, 0.42, 0.72)
       if (heroUiRef.current) {
         heroUiRef.current.style.opacity = String(uiT)
         heroUiRef.current.style.transform = `translateY(${(1 - uiT) * 14}px)`
@@ -173,6 +167,7 @@ function Home() {
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [skipAnimation])
 
@@ -290,22 +285,16 @@ function Home() {
     <main className="home-page">
       <div className="hero-scroll-wrapper" ref={heroWrapperRef}>
         <section className="hero" id="inicio">
-          {/* Layer 1: White luminous water background */}
-          <div className="hero-white-bg" ref={heroBgRef} />
+          {/* Layer 1: same photo painted in brand gold — revealed on scroll */}
+          <div className="hero-gold-bg" ref={heroGoldRef} />
 
-          {/* Layer 2: Property image */}
+          {/* Layer 2: light building photo, visible on load */}
           <div className="hero-media" ref={heroMediaRef} />
 
           {/* Layer 3 + 4: All hero content stacked */}
           <div className="hero-content">
-            {/* CASAS GROUP brand — visible from start, fills in on scroll */}
+            {/* CASAS GROUP brand — gold on load, lightens as the photo turns gold */}
             <div className="hero-brand" aria-label="Casas Group">
-              {/* Outline: image shows through the letters */}
-              <div className="hero-brand-outline" ref={heroOutlineRef}>
-                <span className="hero-brand-casas">CASAS</span>
-                <span className="hero-brand-group">GROUP</span>
-              </div>
-              {/* Fill: solid gold, fades in as you scroll */}
               <div className="hero-brand-fill" ref={heroFillRef}>
                 <span className="hero-brand-casas">CASAS</span>
                 <span className="hero-brand-group">GROUP</span>
@@ -348,9 +337,9 @@ function Home() {
                     />
                   )}
                   {heroTab === 'vender' ? (
-                    <button type="button" onClick={() => scrollTo('valoracion')}>
+                    <Link className="button-link" to="/contacto">
                       {heroCopy[heroTab].action}
-                    </button>
+                    </Link>
                   ) : isSearchTab ? (
                     <button
                       type="button"
@@ -569,7 +558,7 @@ function Home() {
           </div>
         </div>
 
-        <button className="text-link" type="button" onClick={() => navigate({ to: '/propiedades', search: { query: '' } })}>
+        <button className="text-link" type="button" onClick={() => navigate({ to: '/propiedades', search: { query: '', mode: 'compra' } })}>
           Ver todas las propiedades →
         </button>
       </section>
