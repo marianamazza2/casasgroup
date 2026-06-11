@@ -40,6 +40,7 @@ function ContactPage() {
   const heroGoldRef = useRef<HTMLDivElement>(null)
   const heroMediaRef = useRef<HTMLDivElement>(null)
   const heroFillRef = useRef<HTMLDivElement>(null)
+  const heroUiRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const smoothstep = (t: number) => t * t * (3 - 2 * t)
@@ -65,6 +66,13 @@ function ContactPage() {
       const g = Math.round(123 + 124 * colorT)
       const b = Math.round(54 + 187 * colorT)
       document.documentElement.style.setProperty('--hero-fill', `rgb(${r},${g},${b})`)
+
+      // Tagline + CTA fade in once the photo has turned gold
+      const uiT = phase(p, 0.3, 0.6)
+      if (heroUiRef.current) {
+        heroUiRef.current.style.opacity = String(uiT)
+        heroUiRef.current.style.transform = `translateY(${(1 - uiT) * 14}px)`
+      }
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -84,7 +92,7 @@ function ContactPage() {
                 <span className="hero-brand-hablemos">HABLEMOS</span>
               </div>
             </div>
-            <div className="hero-ui">
+            <div className="hero-ui" ref={heroUiRef}>
               <p className="contact-hero-tagline">
                 Estamos aqui para ayudarte en cada paso. Cuentanos que necesitas y te responderemos con una propuesta clara.
               </p>
