@@ -9,11 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as NosotrosRouteImport } from './routes/nosotros'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropiedadesIndexRouteImport } from './routes/propiedades/index'
+import { Route as ServiciosCambioDeSuministrosRouteImport } from './routes/servicios/cambio-de-suministros'
+import { Route as ServiciosAdministracionDeFincasRouteImport } from './routes/servicios/administracion-de-fincas'
 import { Route as PropiedadesIdRouteImport } from './routes/propiedades/$id'
 
+const NosotrosRoute = NosotrosRouteImport.update({
+  id: '/nosotros',
+  path: '/nosotros',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactoRoute = ContactoRouteImport.update({
   id: '/contacto',
   path: '/contacto',
@@ -29,6 +37,18 @@ const PropiedadesIndexRoute = PropiedadesIndexRouteImport.update({
   path: '/propiedades/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServiciosCambioDeSuministrosRoute =
+  ServiciosCambioDeSuministrosRouteImport.update({
+    id: '/servicios/cambio-de-suministros',
+    path: '/servicios/cambio-de-suministros',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ServiciosAdministracionDeFincasRoute =
+  ServiciosAdministracionDeFincasRouteImport.update({
+    id: '/servicios/administracion-de-fincas',
+    path: '/servicios/administracion-de-fincas',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const PropiedadesIdRoute = PropiedadesIdRouteImport.update({
   id: '/propiedades/$id',
   path: '/propiedades/$id',
@@ -38,39 +58,80 @@ const PropiedadesIdRoute = PropiedadesIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/nosotros': typeof NosotrosRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
+  '/servicios/administracion-de-fincas': typeof ServiciosAdministracionDeFincasRoute
+  '/servicios/cambio-de-suministros': typeof ServiciosCambioDeSuministrosRoute
   '/propiedades/': typeof PropiedadesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/nosotros': typeof NosotrosRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
+  '/servicios/administracion-de-fincas': typeof ServiciosAdministracionDeFincasRoute
+  '/servicios/cambio-de-suministros': typeof ServiciosCambioDeSuministrosRoute
   '/propiedades': typeof PropiedadesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/nosotros': typeof NosotrosRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
+  '/servicios/administracion-de-fincas': typeof ServiciosAdministracionDeFincasRoute
+  '/servicios/cambio-de-suministros': typeof ServiciosCambioDeSuministrosRoute
   '/propiedades/': typeof PropiedadesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contacto' | '/propiedades/$id' | '/propiedades/'
+  fullPaths:
+    | '/'
+    | '/contacto'
+    | '/nosotros'
+    | '/propiedades/$id'
+    | '/servicios/administracion-de-fincas'
+    | '/servicios/cambio-de-suministros'
+    | '/propiedades/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contacto' | '/propiedades/$id' | '/propiedades'
-  id: '__root__' | '/' | '/contacto' | '/propiedades/$id' | '/propiedades/'
+  to:
+    | '/'
+    | '/contacto'
+    | '/nosotros'
+    | '/propiedades/$id'
+    | '/servicios/administracion-de-fincas'
+    | '/servicios/cambio-de-suministros'
+    | '/propiedades'
+  id:
+    | '__root__'
+    | '/'
+    | '/contacto'
+    | '/nosotros'
+    | '/propiedades/$id'
+    | '/servicios/administracion-de-fincas'
+    | '/servicios/cambio-de-suministros'
+    | '/propiedades/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactoRoute: typeof ContactoRoute
+  NosotrosRoute: typeof NosotrosRoute
   PropiedadesIdRoute: typeof PropiedadesIdRoute
+  ServiciosAdministracionDeFincasRoute: typeof ServiciosAdministracionDeFincasRoute
+  ServiciosCambioDeSuministrosRoute: typeof ServiciosCambioDeSuministrosRoute
   PropiedadesIndexRoute: typeof PropiedadesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/nosotros': {
+      id: '/nosotros'
+      path: '/nosotros'
+      fullPath: '/nosotros'
+      preLoaderRoute: typeof NosotrosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contacto': {
       id: '/contacto'
       path: '/contacto'
@@ -92,6 +153,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropiedadesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/servicios/cambio-de-suministros': {
+      id: '/servicios/cambio-de-suministros'
+      path: '/servicios/cambio-de-suministros'
+      fullPath: '/servicios/cambio-de-suministros'
+      preLoaderRoute: typeof ServiciosCambioDeSuministrosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servicios/administracion-de-fincas': {
+      id: '/servicios/administracion-de-fincas'
+      path: '/servicios/administracion-de-fincas'
+      fullPath: '/servicios/administracion-de-fincas'
+      preLoaderRoute: typeof ServiciosAdministracionDeFincasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/propiedades/$id': {
       id: '/propiedades/$id'
       path: '/propiedades/$id'
@@ -105,7 +180,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactoRoute: ContactoRoute,
+  NosotrosRoute: NosotrosRoute,
   PropiedadesIdRoute: PropiedadesIdRoute,
+  ServiciosAdministracionDeFincasRoute: ServiciosAdministracionDeFincasRoute,
+  ServiciosCambioDeSuministrosRoute: ServiciosCambioDeSuministrosRoute,
   PropiedadesIndexRoute: PropiedadesIndexRoute,
 }
 export const routeTree = rootRouteImport

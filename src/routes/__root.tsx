@@ -2,8 +2,8 @@ import { Link, Outlet, createRootRoute, useRouterState } from '@tanstack/react-r
 import { useEffect, useState } from 'react'
 
 const subMenuServices = [
-  { label: 'Administracion de fincas', gold: false },
-  { label: 'Cambio de suministros', gold: false },
+  { label: 'Administracion de fincas', gold: false, to: '/servicios/administracion-de-fincas' },
+  { label: 'Cambio de suministros', gold: false, to: '/servicios/cambio-de-suministros' },
   { label: 'Hipotecas', gold: false },
   { label: 'Seguros', gold: true },
 ]
@@ -64,7 +64,7 @@ function SiteNav() {
         <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>Comprar</Link>
         <Link to="/propiedades" search={{ query: '', mode: 'alquiler' }}>Alquilar</Link>
         <Link to="/contacto" className="nav-link--quiet">Vender</Link>
-        <a href="/#nosotros">Nosotros</a>
+        <Link to="/nosotros">Nosotros</Link>
         <div
           className="nav-services-wrapper"
           onMouseEnter={() => setServicesOpen(true)}
@@ -79,16 +79,27 @@ function SiteNav() {
           </button>
           {servicesOpen && (
             <div className="nav-services-menu">
-              {subMenuServices.map((item) => (
-                <a
-                  key={item.label}
-                  href="/#servicios"
-                  className={item.gold ? 'nav-services-item--gold' : ''}
-                  onClick={() => setServicesOpen(false)}
-                >
-                  {item.label}
-                </a>
-              ))}
+              {subMenuServices.map((item) =>
+                item.to ? (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    className={item.gold ? 'nav-services-item--gold' : ''}
+                    onClick={() => setServicesOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={item.label}
+                    href="/#servicios"
+                    className={item.gold ? 'nav-services-item--gold' : ''}
+                    onClick={() => setServicesOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                ),
+              )}
             </div>
           )}
         </div>

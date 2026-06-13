@@ -16,6 +16,7 @@ const services = [
     description: 'Gestion integral de comunidades con transparencia y seguimiento cercano. Cuentas, mantenimiento y comunicacion con propietarios, todo en orden.',
     image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
     tag: 'Comunidades',
+    to: '/servicios/administracion-de-fincas',
   },
   {
     icon: 'HI',
@@ -27,6 +28,7 @@ const services = [
   {
     icon: 'SU',
     title: 'Cambio de suministros',
+    to: '/servicios/cambio-de-suministros',
     description: 'Luz, gas y agua gestionados sin que muevas un dedo. Nos encargamos de todos los tramites del cambio para que tu solo pienses en instalarte.',
     image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
     tag: 'Suministros',
@@ -409,7 +411,7 @@ function Home() {
                   <div className="services-list-body">
                     <h3>{svc.title}</h3>
                     <p>{svc.description}</p>
-                    <Link className="services-list-link" to="/contacto">Consultar →</Link>
+                    <Link className="services-list-link" to={svc.to ?? '/contacto'}>Consultar →</Link>
                   </div>
                 </article>
               ))}
@@ -499,7 +501,7 @@ function Home() {
         <div>
           <blockquote>Porque comprendimos que el sector no necesitaba mas de lo mismo.</blockquote>
           <p>Una marca construida para cuidar cada detalle con excelencia, cercania y una forma de trabajar clara.</p>
-          <Link className="button-link" to="/contacto">
+          <Link className="button-link" to="/nosotros">
             Conocenos
           </Link>
         </div>
