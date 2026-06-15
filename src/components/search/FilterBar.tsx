@@ -1,15 +1,21 @@
 import type { FilterState, ViewMode } from '../../lib/types'
-import { zones } from '../../lib/propertiesData'
+import { ZoneSelect } from './ZoneSelect'
 
 interface FilterBarProps {
   filters: FilterState
+  /** Zonas disponibles según la búsqueda (en cascada). Incluye "Todas". */
+  zones: string[]
   viewMode: ViewMode
   onOpenFilters: () => void
   onZoneChange: (zone: string) => void
   onViewModeChange: (mode: ViewMode) => void
 }
 
-export function FilterBar({ filters, viewMode, onOpenFilters, onZoneChange, onViewModeChange }: FilterBarProps) {
+export function FilterBar({ filters, zones, viewMode, onOpenFilters, onZoneChange, onViewModeChange }: FilterBarProps) {
+  // Si dentro del ámbito buscado solo hay una zona ("Todas" + una), el
+  // desplegable no aporta nada → lo ocultamos.
+  const showZones = zones.length > 2
+
   return (
     <div className="filter-bar">
       <button type="button" className="filter-btn" onClick={onOpenFilters}>
@@ -21,18 +27,14 @@ export function FilterBar({ filters, viewMode, onOpenFilters, onZoneChange, onVi
         Filtros
       </button>
 
-      <div className="zone-chip-wrap">
-        <select
-          className="zone-select"
+      {showZones && (
+        <ZoneSelect
           value={filters.zone}
-          onChange={(e) => onZoneChange(e.target.value)}
-        >
-          {zones.map((z) => (
-            <option key={z} value={z}>{z}</option>
-          ))}
-        </select>
-        {filters.zone !== 'Todas' && <span className="zone-badge" />}
-      </div>
+          options={zones}
+          onChange={onZoneChange}
+          variant="pill"
+        />
+      )}
 
       <div className="filter-bar-spacer" />
 

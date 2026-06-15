@@ -2,6 +2,8 @@ import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { homeFeaturedProperties, properties } from '../lib/propertiesData'
+import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
+import type { Location } from '../lib/locationSearch'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -24,6 +26,7 @@ const services = [
     description: 'Te ayudamos a encontrar la financiacion que mejor encaja con tu compra. Comparamos entre varias entidades para que elijas con criterio.',
     image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
     tag: 'Financiacion',
+    to: '/servicios/hipotecas',
   },
   {
     icon: 'SU',
@@ -91,6 +94,7 @@ function Home() {
   const navigate = useNavigate()
   const [heroTab, setHeroTab] = useState<HeroTab>('comprar')
   const [heroSearchQuery, setHeroSearchQuery] = useState('')
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
   const [propertyMode, setPropertyMode] = useState<'Venta' | 'Alquiler'>('Venta')
   const [whyIndex, setWhyIndex] = useState(0)
   const propertiesRef = useRef<HTMLDivElement>(null)
@@ -267,6 +271,19 @@ function Home() {
     },
   }
 
+  const goToResults = (query: string, loc?: Location) => {
+    navigate({
+      to: '/propiedades',
+      search: {
+        query,
+        mode: heroTab === 'alquilar' ? 'alquiler' : 'compra',
+        locType: loc?.type,
+        province:
+          loc?.province ?? (loc?.type === 'provincia' ? loc.name : undefined),
+      },
+    })
+  }
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
@@ -325,17 +342,19 @@ function Home() {
               <div className="hero-panel">
                 <div className={`hero-cta${!isSearchTab ? ' hero-cta--solo' : ''}`}>
                   {isSearchTab && (
-                    <input
-                      className="hero-search-input"
-                      aria-label="Buscar ubicacion"
+                    <LocationAutocomplete
+                      className="hero-search-ac"
+                      inputClassName="hero-search-input"
+                      ariaLabel="Buscar ubicacion"
                       placeholder={heroCopy[heroTab].line}
                       value={heroSearchQuery}
-                      onChange={(e) => setHeroSearchQuery(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && heroSearchQuery.trim()) {
-                          navigate({ to: '/propiedades', search: { query: heroSearchQuery.trim(), mode: heroTab === 'alquilar' ? 'alquiler' : 'compra' } })
-                        }
+                      onChange={(v) => {
+                        setHeroSearchQuery(v)
+                        // Texto escrito a mano → ya no corresponde a la sugerencia elegida
+                        setSelectedLocation(null)
                       }}
+                      onSelect={(loc) => setSelectedLocation(loc)}
+                      onSubmit={(q) => goToResults(q, selectedLocation ?? undefined)}
                     />
                   )}
                   {heroTab === 'vender' ? (
@@ -346,7 +365,7 @@ function Home() {
                     <button
                       type="button"
                       disabled={!heroSearchQuery.trim()}
-                      onClick={() => navigate({ to: '/propiedades', search: { query: heroSearchQuery.trim(), mode: heroTab === 'alquilar' ? 'alquiler' : 'compra' } })}
+                      onClick={() => goToResults(heroSearchQuery.trim(), selectedLocation ?? undefined)}
                     >
                       {heroCopy[heroTab].action}
                     </button>

@@ -1,11 +1,13 @@
 import type { FilterState } from '../../lib/types'
-import { zones } from '../../lib/propertiesData'
+import { ZoneSelect } from './ZoneSelect'
 
 interface FiltersModalProps {
   open: boolean
   onClose: () => void
   onApply: () => void
   filters: FilterState
+  /** Zonas disponibles según la búsqueda (en cascada). Incluye "Todas". */
+  zones: string[]
   onChange: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void
   onReset: () => void
   resultCount: number
@@ -21,7 +23,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const COUNT_OPTIONS = [0, 1, 2, 3, 4]
 
-export function FiltersModal({ open, onClose, onApply, filters, onChange, onReset, resultCount }: FiltersModalProps) {
+export function FiltersModal({ open, onClose, onApply, filters, zones, onChange, onReset, resultCount }: FiltersModalProps) {
   if (!open) return null
 
   function toggleCategory(cat: string) {
@@ -83,19 +85,18 @@ export function FiltersModal({ open, onClose, onApply, filters, onChange, onRese
             </div>
           </div>
 
-          {/* Zona */}
-          <div className="filters-section">
-            <p className="filters-section-title">Zona</p>
-            <select
-              className="filters-zone-select"
-              value={filters.zone}
-              onChange={(e) => onChange('zone', e.target.value)}
-            >
-              {zones.map((z) => (
-                <option key={z} value={z}>{z}</option>
-              ))}
-            </select>
-          </div>
+          {/* Zona — solo si hay más de una opción dentro del ámbito buscado */}
+          {zones.length > 2 && (
+            <div className="filters-section">
+              <p className="filters-section-title">Zona</p>
+              <ZoneSelect
+                value={filters.zone}
+                options={zones}
+                onChange={(z) => onChange('zone', z)}
+                variant="block"
+              />
+            </div>
+          )}
 
           {/* Categoría */}
           <div className="filters-section">

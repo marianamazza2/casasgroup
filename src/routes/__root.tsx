@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 const subMenuServices = [
   { label: 'Administracion de fincas', gold: false, to: '/servicios/administracion-de-fincas' },
   { label: 'Cambio de suministros', gold: false, to: '/servicios/cambio-de-suministros' },
-  { label: 'Hipotecas', gold: false },
+  { label: 'Hipotecas', gold: false, to: '/servicios/hipotecas' },
   { label: 'Seguros', gold: true },
 ]
 
@@ -109,11 +109,20 @@ function SiteNav() {
   )
 }
 
-export const Route = createRootRoute({
-  component: () => (
+function RootLayout() {
+  // Remontar el contenedor en cada cambio de ruta vuelve a disparar la
+  // animación de entrada → transición suave entre pantallas.
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  return (
     <>
       <SiteNav />
-      <Outlet />
+      <div key={pathname} className="route-transition">
+        <Outlet />
+      </div>
     </>
-  ),
+  )
+}
+
+export const Route = createRootRoute({
+  component: RootLayout,
 })

@@ -20,7 +20,7 @@ const SERVICES: Service[] = [
     icon: '▣',
     to: '/servicios/administracion-de-fincas',
   },
-  { id: 'hipotecas', label: 'Hipotecas', icon: '◆', to: undefined },
+  { id: 'hipotecas', label: 'Hipotecas', icon: '◆', to: '/servicios/hipotecas' },
   {
     id: 'cambio-de-suministros',
     label: 'Cambio de suministros',

@@ -1,4 +1,5 @@
 import type { FilterState } from '../../lib/types'
+import { LocationAutocomplete } from './LocationAutocomplete'
 
 interface SearchBarProps {
   mode: FilterState['mode']
@@ -23,12 +24,14 @@ export function SearchBar({ mode, query, onModeChange, onQueryChange }: SearchBa
         ))}
       </div>
       <div className="search-input-wrap">
-        <input
-          className="search-input"
-          type="text"
+        <LocationAutocomplete
+          className="search-ac"
+          inputClassName="search-input"
           placeholder="Ciudad, barrio, zona..."
+          ariaLabel="Buscar ubicacion"
           value={query}
-          onChange={(e) => onQueryChange(e.target.value)}
+          onChange={onQueryChange}
+          onSelect={(loc) => onQueryChange(loc.name)}
         />
         <button type="button" className="search-btn" aria-label="Buscar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

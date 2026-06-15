@@ -11,22 +11,39 @@ import { ResultsHeader } from '../../components/search/ResultsHeader'
 import { FiltersModal } from '../../components/search/FiltersModal'
 import { usePropertyFilters } from '../../hooks/usePropertyFilters'
 
+type PropiedadesSearch = {
+  query: string
+  mode: 'compra' | 'alquiler'
+  locType?: 'provincia' | 'municipio'
+  province?: string
+}
+
 export const Route = createFileRoute('/propiedades/')({
-  validateSearch: (search: Record<string, unknown>) => ({
-    query: typeof search.query === 'string' ? search.query : '',
-    mode: search.mode === 'alquiler' ? 'alquiler' : 'compra' as 'compra' | 'alquiler',
-  }),
+  validateSearch: (search: Record<string, unknown>): PropiedadesSearch => {
+    const out: PropiedadesSearch = {
+      query: typeof search.query === 'string' ? search.query : '',
+      mode: search.mode === 'alquiler' ? 'alquiler' : 'compra',
+    }
+    if (search.locType === 'provincia' || search.locType === 'municipio') {
+      out.locType = search.locType
+    }
+    if (typeof search.province === 'string' && search.province) {
+      out.province = search.province
+    }
+    return out
+  },
   component: PropiedadesPage,
 })
 
 function PropiedadesPage() {
-  const { query: initialQuery, mode: initialMode } = Route.useSearch()
+  const { query, mode, locType, province } = Route.useSearch()
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [showFiltersModal, setShowFiltersModal] = useState(false)
   const [activeId, setActiveId] = useState<number | undefined>()
   const [popupProperty, setPopupProperty] = useState<Property | null>(null)
   const [mapVisibleIds, setMapVisibleIds] = useState<Set<number> | null>(null)
-  const { filters, setFilter, resetFilters, filteredProperties, resultCount } = usePropertyFilters(initialQuery, initialMode)
+  const { filters, setFilter, resetFilters, filteredProperties, availableZones, resultCount } =
+    usePropertyFilters({ query, mode, locType, province })
 
   const handlePinClick = useCallback((id: number) => {
     setActiveId(id)
@@ -66,6 +83,7 @@ function PropiedadesPage() {
 
           <FilterBar
             filters={filters}
+            zones={availableZones}
             viewMode={viewMode}
             onOpenFilters={() => setShowFiltersModal(true)}
             onZoneChange={(z) => setFilter('zone', z)}
@@ -114,6 +132,7 @@ function PropiedadesPage() {
         onClose={() => setShowFiltersModal(false)}
         onApply={() => { setMapVisibleIds(null); setShowFiltersModal(false) }}
         filters={filters}
+        zones={availableZones}
         onChange={setFilter}
         onReset={resetFilters}
         resultCount={resultCount}
