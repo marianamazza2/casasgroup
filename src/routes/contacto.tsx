@@ -11,7 +11,15 @@ export const Route = createFileRoute('/contacto')({
 
 const contactReasons = ['Comprar', 'Alquilar', 'Vender', 'Reformas', 'Hipotecas', 'Administracion', 'Otro']
 
-const contactCards = [
+type ContactCard = {
+  label: string
+  value: string
+  href?: string
+  detail?: string
+  icon: string
+}
+
+const contactCards: ContactCard[] = [
   {
     label: 'Email',
     value: 'info@casasgroup.es',
@@ -36,7 +44,7 @@ const contactCards = [
     detail: 'Sab: 10:00 - 14:00',
     icon: 'clock',
   },
-] as const
+]
 
 const cardIcons: Record<string, ReactElement> = {
   mail: (
