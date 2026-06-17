@@ -93,7 +93,7 @@ const accessBlocks = [
     description: 'Descubre el valor real de tu vivienda con una valoracion profesional.',
     image:
       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1000&q=80',
-    to: '/contacto' as const,
+    to: '/vender' as const,
   },
 ]
 
@@ -361,8 +361,8 @@ function Home() {
                     />
                   )}
                   {heroTab === 'vender' ? (
-                    <Link className="button-link" to="/contacto">
-                      {heroCopy[heroTab].action}
+                    <Link className="button-link" to="/vender">
+                      {heroCopy[heroTab].action} <span aria-hidden="true">→</span>
                     </Link>
                   ) : isSearchTab ? (
                     <button
@@ -374,7 +374,7 @@ function Home() {
                     </button>
                   ) : (
                     <Link className="button-link" to="/contacto">
-                      {heroCopy[heroTab].action}
+                      {heroCopy[heroTab].action} <span aria-hidden="true">→</span>
                     </Link>
                   )}
                 </div>
@@ -452,7 +452,7 @@ function Home() {
             <p className="valuation-desc">
               Valoracion profesional, gratuita y sin compromiso, basada en datos reales de tu zona.
             </p>
-            <Link className="button-link" to="/contacto">
+            <Link className="button-link" to="/vender">
               Solicitar valoracion
             </Link>
             <div className="valuation-microstats">

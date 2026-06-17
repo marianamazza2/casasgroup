@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VenderRouteImport } from './routes/vender'
 import { Route as NosotrosRouteImport } from './routes/nosotros'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as IndexRouteImport } from './routes/index'
@@ -19,6 +20,11 @@ import { Route as ServiciosCambioDeSuministrosRouteImport } from './routes/servi
 import { Route as ServiciosAdministracionDeFincasRouteImport } from './routes/servicios/administracion-de-fincas'
 import { Route as PropiedadesIdRouteImport } from './routes/propiedades/$id'
 
+const VenderRoute = VenderRouteImport.update({
+  id: '/vender',
+  path: '/vender',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NosotrosRoute = NosotrosRouteImport.update({
   id: '/nosotros',
   path: '/nosotros',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
   '/nosotros': typeof NosotrosRoute
+  '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
   '/servicios/administracion-de-fincas': typeof ServiciosAdministracionDeFincasRoute
   '/servicios/cambio-de-suministros': typeof ServiciosCambioDeSuministrosRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
   '/nosotros': typeof NosotrosRoute
+  '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
   '/servicios/administracion-de-fincas': typeof ServiciosAdministracionDeFincasRoute
   '/servicios/cambio-de-suministros': typeof ServiciosCambioDeSuministrosRoute
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
   '/nosotros': typeof NosotrosRoute
+  '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
   '/servicios/administracion-de-fincas': typeof ServiciosAdministracionDeFincasRoute
   '/servicios/cambio-de-suministros': typeof ServiciosCambioDeSuministrosRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contacto'
     | '/nosotros'
+    | '/vender'
     | '/propiedades/$id'
     | '/servicios/administracion-de-fincas'
     | '/servicios/cambio-de-suministros'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contacto'
     | '/nosotros'
+    | '/vender'
     | '/propiedades/$id'
     | '/servicios/administracion-de-fincas'
     | '/servicios/cambio-de-suministros'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contacto'
     | '/nosotros'
+    | '/vender'
     | '/propiedades/$id'
     | '/servicios/administracion-de-fincas'
     | '/servicios/cambio-de-suministros'
@@ -141,6 +153,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactoRoute: typeof ContactoRoute
   NosotrosRoute: typeof NosotrosRoute
+  VenderRoute: typeof VenderRoute
   PropiedadesIdRoute: typeof PropiedadesIdRoute
   ServiciosAdministracionDeFincasRoute: typeof ServiciosAdministracionDeFincasRoute
   ServiciosCambioDeSuministrosRoute: typeof ServiciosCambioDeSuministrosRoute
@@ -151,6 +164,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vender': {
+      id: '/vender'
+      path: '/vender'
+      fullPath: '/vender'
+      preLoaderRoute: typeof VenderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/nosotros': {
       id: '/nosotros'
       path: '/nosotros'
@@ -221,6 +241,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactoRoute: ContactoRoute,
   NosotrosRoute: NosotrosRoute,
+  VenderRoute: VenderRoute,
   PropiedadesIdRoute: PropiedadesIdRoute,
   ServiciosAdministracionDeFincasRoute: ServiciosAdministracionDeFincasRoute,
   ServiciosCambioDeSuministrosRoute: ServiciosCambioDeSuministrosRoute,

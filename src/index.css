@@ -2185,10 +2185,16 @@ a.contact-card:hover .contact-card-icon {
     grid-template-columns: 1fr;
   }
 
+  .why-card {
+    height: auto;
+  }
+
+  .why-card img {
+    display: none;
+  }
+
   .why-nav {
     height: 42px;
-    top: clamp(160px, 28vh, 300px);
-    transform: none;
     width: 42px;
   }
 
@@ -2235,23 +2241,30 @@ a.contact-card:hover .contact-card-icon {
     flex-direction: column;
   }
 
+  /* Solo CTA (vender/reformas/hipotecas): drop the button to the bottom of the
+     panel so it lands at the same height as the "Buscar" button, avoiding the
+     jump when switching tabs */
+  .hero-cta--solo {
+    justify-content: flex-end;
+    min-height: 116px;
+  }
+
   .section-top,
   .properties-top {
     align-items: flex-start;
   }
 
   .stats,
+  .valuation-media {
+    display: none;
+  }
+
   .footer-grid {
     grid-template-columns: 1fr;
   }
 
   .services-image-panel {
     height: min(56vw, 300px);
-  }
-
-  .stats div + div {
-    border-left: 0;
-    border-top: 1px solid var(--line);
   }
 
   .valuation-content {
@@ -2328,6 +2341,17 @@ a.contact-card:hover .contact-card-icon {
   height: calc(100vh - var(--nav-h));
   align-self: flex-start;
   overflow: hidden;
+}
+
+/* En desktop el contenedor es transparente: búsqueda + filtros se comportan
+   como hijos directos de .search-left. En mobile se convierte en barra fija. */
+.search-controls {
+  display: contents;
+}
+
+/* Botón flotante "Mapa" — solo mobile (ver media query) */
+.map-fab {
+  display: none;
 }
 
 /* ── Search topbar ────────────────────────────────────────────────────────── */
@@ -2757,6 +2781,131 @@ a.contact-card:hover .contact-card-icon {
 .property-map {
   width: 100%;
   height: 100%;
+}
+
+/* ── Mobile: vista estilo Airbnb ──────────────────────────────────────────────
+   El mapa queda detrás como "ventana" y la lista de resultados sube por encima
+   tapándolo. La búsqueda + filtros quedan fijos arriba. El layout 2-columnas se
+   aplana en un único scroller (display: contents) y se reordena con `order`. */
+@media (max-width: 900px) {
+  .search-page {
+    height: calc(100svh - var(--nav-h));
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  /* Aplanar las columnas en el scroller de la página */
+  .search-split,
+  .search-left,
+  .search-right {
+    display: contents;
+  }
+
+  /* En un flex-column scrollable los items no deben encogerse */
+  .search-controls,
+  .property-map,
+  .results-header,
+  .property-results {
+    flex-shrink: 0;
+  }
+
+  /* Franja fija: búsqueda + filtros, siempre visible */
+  .search-controls {
+    display: block;
+    order: 0;
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    background: var(--warm);
+    box-shadow: 0 1px 0 var(--line);
+  }
+
+  /* Mapa = ventana de fondo */
+  .property-map {
+    order: 1;
+    height: 56svh;
+    width: 100%;
+    z-index: 1;
+  }
+
+  /* Cabecera de resultados = "asa" de la hoja que sube sobre el mapa */
+  .results-header {
+    order: 2;
+    position: relative;
+    z-index: 2;
+    margin-top: -22px;
+    padding-top: 26px;
+    background: var(--paper);
+    border-radius: 22px 22px 0 0;
+    box-shadow: 0 -10px 28px -12px rgb(0 0 0 / 0.18);
+  }
+
+  .results-header::before {
+    content: '';
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line);
+  }
+
+  /* Cuerpo de la hoja: fondo sólido y alto suficiente para tapar el mapa */
+  .property-results {
+    order: 3;
+    position: relative;
+    z-index: 2;
+    background: var(--paper);
+    min-height: 100svh;
+  }
+
+  /* Una sola columna, cards grandes (como Airbnb) */
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* El toggle cuadrícula/lista no aplica con una sola columna */
+  .view-toggle {
+    display: none;
+  }
+
+  /* Popup del pin: fijo al viewport, sobre el mapa */
+  .map-popup {
+    position: fixed;
+    bottom: 88px;
+    z-index: 30;
+  }
+
+  /* Botón flotante "Mapa" */
+  .map-fab.is-visible {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    background: var(--ink);
+    color: var(--paper);
+    border: 0;
+    border-radius: 24px;
+    padding: 11px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    box-shadow: 0 6px 20px -4px rgb(0 0 0 / 0.4);
+    animation: map-fab-in 200ms ease;
+  }
+
+  @keyframes map-fab-in {
+    from { opacity: 0; transform: translate(-50%, 8px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+  }
 }
 
 /* ── Map pins ─────────────────────────────────────────────────────────────── */
@@ -6046,5 +6195,335 @@ a.contact-card:hover .contact-card-icon {
   .seguros-preview {
     aspect-ratio: 16 / 11;
     order: -1;
+  }
+}
+
+/* ── Vender / valoración ─────────────────────────────────────────────────── */
+.vender-eyebrow {
+  color: var(--gold);
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.vender-line {
+  background: var(--gold);
+  display: block;
+  height: 1px;
+  width: 36px;
+}
+
+.vender-form-section {
+  align-items: stretch;
+  background: var(--warm);
+  display: grid;
+  gap: clamp(28px, 5vw, 64px);
+  grid-template-columns: 1fr min(420px, 42%);
+  padding: clamp(56px, 8vw, 96px) clamp(22px, 6vw, 80px);
+}
+
+.vender-form-intro {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vender-form-heading {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.vender-form-lead {
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.8;
+  margin: 0;
+  max-width: 46ch;
+}
+
+.vender-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.vender-checklist li {
+  align-items: center;
+  color: var(--text);
+  display: flex;
+  font-size: 14px;
+  gap: 12px;
+}
+
+.vender-checklist span {
+  align-items: center;
+  background: var(--gold-soft);
+  border-radius: 50%;
+  color: var(--gold);
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 12px;
+  height: 24px;
+  justify-content: center;
+  width: 24px;
+}
+
+.vender-form-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgb(26 26 24 / 8%);
+  padding: clamp(24px, 3vw, 34px);
+}
+
+.vender-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.vender-form-head {
+  margin-bottom: 4px;
+}
+
+.vender-form-head h3 {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+
+.vender-form-head p {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0;
+}
+
+.vender-form label {
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  font-weight: 500;
+  gap: 6px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.vender-form input,
+.vender-form select {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  letter-spacing: 0;
+  outline: 0;
+  padding: 11px 13px;
+  text-transform: none;
+  transition: border-color 160ms ease;
+  width: 100%;
+}
+
+.vender-form input:focus,
+.vender-form select:focus {
+  border-color: var(--gold);
+}
+
+.vender-form button[type='submit'] {
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 6px;
+  padding: 13px 24px;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.vender-form button[type='submit']:hover {
+  background: #8d672d;
+  transform: translateY(-1px);
+}
+
+.vender-form-fine {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 4px 0 0;
+  text-align: center;
+}
+
+.vender-form-done {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 32px 8px;
+  text-align: center;
+}
+
+.vender-form-done-icon {
+  align-items: center;
+  background: var(--gold-soft);
+  border-radius: 50%;
+  color: var(--gold);
+  display: inline-flex;
+  font-size: 26px;
+  height: 56px;
+  justify-content: center;
+  width: 56px;
+}
+
+.vender-form-done h3 {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.vender-form-done p {
+  color: var(--text);
+  font-size: 14px;
+  margin: 0;
+  max-width: 30ch;
+}
+
+.vender-stats {
+  border-block: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.vender-stat {
+  padding: clamp(28px, 4vw, 44px) 12px;
+  text-align: center;
+}
+
+.vender-stat + .vender-stat {
+  border-left: 1px solid var(--line);
+}
+
+.vender-stat strong {
+  color: var(--gold);
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.vender-stat span {
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.vender-why {
+  padding: clamp(56px, 8vw, 96px) clamp(22px, 6vw, 80px);
+}
+
+.vender-why-head {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: clamp(32px, 5vw, 52px);
+  text-align: center;
+}
+
+.vender-why-title {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 500;
+  margin: 0;
+}
+
+.vender-why-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0 auto;
+  max-width: 1040px;
+}
+
+.vender-why-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: clamp(22px, 2.6vw, 30px);
+  transition: border-color 200ms ease, transform 200ms ease;
+}
+
+.vender-why-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-3px);
+}
+
+.vender-why-icon {
+  align-items: center;
+  background: var(--gold-soft);
+  border-radius: 12px;
+  color: var(--gold);
+  display: inline-flex;
+  font-size: 20px;
+  height: 46px;
+  justify-content: center;
+  margin-bottom: 16px;
+  width: 46px;
+}
+
+.vender-why-card h3 {
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.vender-why-card p {
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .vender-form-section {
+    grid-template-columns: 1fr;
+  }
+
+  .vender-why-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .vender-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .vender-stat:nth-child(3),
+  .vender-stat:nth-child(4) {
+    border-top: 1px solid var(--line);
+  }
+
+  .vender-stat:nth-child(3) {
+    border-left: 0;
   }
 }
