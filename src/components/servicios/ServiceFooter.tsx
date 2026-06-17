@@ -1,4 +1,6 @@
 import { Link } from '@tanstack/react-router'
+import { motion } from 'framer-motion'
+import { Footer } from '../Footer'
 
 type ServiceId =
   | 'administracion-de-fincas'
@@ -9,7 +11,8 @@ type ServiceId =
 type Service = {
   id: ServiceId
   label: string
-  icon: string
+  tag: string
+  image: string
   to?: string
 }
 
@@ -17,18 +20,50 @@ const SERVICES: Service[] = [
   {
     id: 'administracion-de-fincas',
     label: 'Administración de fincas',
-    icon: '▣',
+    tag: 'Comunidades',
+    image:
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80',
     to: '/servicios/administracion-de-fincas',
   },
-  { id: 'hipotecas', label: 'Hipotecas', icon: '◆', to: '/servicios/hipotecas' },
+  {
+    id: 'hipotecas',
+    label: 'Hipotecas',
+    tag: 'Financiación',
+    image:
+      'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1000&q=80',
+    to: '/servicios/hipotecas',
+  },
   {
     id: 'cambio-de-suministros',
     label: 'Cambio de suministros',
-    icon: '⚡',
+    tag: 'Suministros',
+    image:
+      'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80',
     to: '/servicios/cambio-de-suministros',
   },
-  { id: 'seguros', label: 'Seguros', icon: '◉', to: undefined },
+  {
+    id: 'seguros',
+    label: 'Seguros',
+    tag: 'Protección',
+    image:
+      'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1000&q=80',
+    to: '/servicios/seguros',
+  },
 ]
+
+const gridVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+  },
+}
 
 export function ServiceFooter({ currentId }: { currentId: ServiceId }) {
   const otherServices = SERVICES.filter((svc) => svc.id !== currentId)
@@ -37,54 +72,47 @@ export function ServiceFooter({ currentId }: { currentId: ServiceId }) {
     <>
       <section className="otros-servicios">
         <span className="otros-servicios-eyebrow">Otros servicios</span>
-        <div className="otros-servicios-grid">
-          {otherServices.map((svc) =>
-            svc.to ? (
-              <Link key={svc.id} className="otros-servicio-card" to={svc.to}>
-                <span className="otros-servicio-icon" aria-hidden="true">
-                  {svc.icon}
-                </span>
-                <span className="otros-servicio-label">{svc.label}</span>
-              </Link>
-            ) : (
-              <a key={svc.id} className="otros-servicio-card" href="/#servicios">
-                <span className="otros-servicio-icon" aria-hidden="true">
-                  {svc.icon}
-                </span>
-                <span className="otros-servicio-label">{svc.label}</span>
-              </a>
-            ),
-          )}
-        </div>
+        <h2 className="otros-servicios-title">Seguimos a tu lado</h2>
+        <motion.div
+          className="otros-servicios-grid"
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          {otherServices.map((svc) => {
+            const inner = (
+              <>
+                <div className="otros-servicio-media">
+                  <img src={svc.image} alt="" loading="lazy" />
+                  <span className="otros-servicio-tag">{svc.tag}</span>
+                </div>
+                <div className="otros-servicio-foot">
+                  <span className="otros-servicio-label">{svc.label}</span>
+                  <span className="otros-servicio-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </div>
+              </>
+            )
+            return (
+              <motion.div key={svc.id} variants={cardVariants}>
+                {svc.to ? (
+                  <Link className="otros-servicio-card" to={svc.to}>
+                    {inner}
+                  </Link>
+                ) : (
+                  <a className="otros-servicio-card" href="/#servicios">
+                    {inner}
+                  </a>
+                )}
+              </motion.div>
+            )
+          })}
+        </motion.div>
       </section>
 
-      <footer className="footer">
-        <div>
-          <div className="logo footer-logo">
-            <span>CASAS</span>
-            <small>GROUP</small>
-          </div>
-          <p>Tu hogar empieza aqui.</p>
-        </div>
-        <div>
-          <h3>Inmuebles</h3>
-          <a href="/#propiedades">Comprar</a>
-          <a href="/#propiedades">Alquilar</a>
-          <a href="/#valoracion">Vender</a>
-        </div>
-        <div>
-          <h3>Contacto</h3>
-          <a href="mailto:info@casasgroup.es">info@casasgroup.es</a>
-          <a href="tel:+34123456789">+34 123 456 789</a>
-          <span>Esplugues de Llobregat</span>
-        </div>
-      </footer>
-
-      <div className="volver-home">
-        <Link className="button-link button-link--ghost" to="/">
-          ← Volver a la Home
-        </Link>
-      </div>
+      <Footer />
     </>
   )
 }

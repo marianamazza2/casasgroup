@@ -1,4 +1,6 @@
+import { useEffect, useRef, useState } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 
 export const Route = createFileRoute('/servicios/hipotecas')({
@@ -14,17 +16,11 @@ export const BENEFICIOS = [
   'Sin costes ocultos ni letra pequeña',
 ]
 
-export const STATS = [
-  { n: '95%', l: 'Hipotecas aprobadas' },
-  { n: '0,3%', l: 'Mejor diferencial medio' },
-  { n: '48h', l: 'Respuesta de los bancos' },
-]
-
 export const PROCESO = [
   {
     num: '1',
     title: 'Primera consulta',
-    desc: 'Analizamos tu situación y el inmueble.',
+    desc: 'Analizamos tu situación.',
   },
   {
     num: '2',
@@ -44,68 +40,257 @@ export const PROCESO = [
 ]
 
 function HipotecasPage() {
+  const ctaRef = useRef<HTMLElement>(null)
+  const [ctaActive, setCtaActive] = useState(false)
+
+  useEffect(() => {
+    const el = ctaRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setCtaActive(entry.isIntersecting),
+      { threshold: 0.45 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <main className="servicio-page">
-      <section className="servicio-split servicio-split--reverse">
-        <div className="servicio-hero-split-content">
-          <span className="servicio-hero-eyebrow">Hipotecas</span>
-          <h1 className="servicio-hero-title">Te ayudamos a encontrar la mejor financiación</h1>
-          <div className="nosotros-gold-line" />
-          <p className="servicio-hero-subtitle servicio-hero-subtitle--left">
-            Trabajamos con los principales bancos para conseguirte las mejores condiciones
-            hipotecarias.
+      <HipotecasHero />
+
+      <QueHacemos />
+
+      <section className="cf">
+        <div className="cf-glow" aria-hidden="true" />
+        <div className="cf-head">
+          <span className="cf-eyebrow">Cómo funciona</span>
+          <h2 className="cf-title">En cuatro pasos</h2>
+          <p className="cf-intro">
+            Un proceso claro y acompañado, desde la primera consulta hasta la firma.
           </p>
+        </div>
+
+        <motion.ol
+          className="cf-steps"
+          variants={cfGrid}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <div className="cf-rail" aria-hidden="true">
+            <motion.div className="cf-rail-fill" variants={cfRail} />
+          </div>
+
+          {PROCESO.map((step) => (
+            <motion.li key={step.num} className="cf-step" variants={cfCard}>
+              <span className="cf-node" aria-hidden="true">
+                <span className="cf-node-num">{step.num}</span>
+              </span>
+              <div className="cf-step-body">
+                <h3 className="cf-step-title">{step.title}</h3>
+                <p className="cf-step-desc">{step.desc}</p>
+              </div>
+            </motion.li>
+          ))}
+        </motion.ol>
+      </section>
+
+      <section ref={ctaRef} className={`adm-cta${ctaActive ? ' is-active' : ''}`}>
+        <div
+          className="adm-cta-bg"
+          aria-hidden="true"
+          style={{
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1600&q=80)',
+          }}
+        />
+        <div className="adm-cta-inner">
+          <span className="adm-cta-eyebrow">Consulta gratuita</span>
+          <h2 className="adm-cta-title">¿Quieres saber cuánto puedes financiar?</h2>
+          <p className="adm-cta-text">Primera consulta gratuita y sin compromiso.</p>
           <Link className="button-link" to="/contacto">
             Hablar con un asesor →
           </Link>
         </div>
-        <div className="servicio-photo">Foto firma / asesoría</div>
-      </section>
-
-      <section className="beneficios">
-        <span className="beneficios-eyebrow">Qué hacemos por ti</span>
-        <div className="beneficios-list">
-          {BENEFICIOS.map((texto, i) => (
-            <div key={texto} className="beneficio-item">
-              <span className="beneficio-num">0{i + 1}</span>
-              <p className="beneficio-text">{texto}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="stats stats--3">
-        {STATS.map((stat) => (
-          <div key={stat.l}>
-            <strong>{stat.n}</strong>
-            <span>{stat.l}</span>
-          </div>
-        ))}
-      </section>
-
-      <section className="proceso">
-        <span className="proceso-eyebrow">Cómo funciona</span>
-        <div className="proceso-grid">
-          <div className="proceso-line" aria-hidden="true" />
-          {PROCESO.map((step) => (
-            <div key={step.num} className="proceso-step">
-              <span className="proceso-num">{step.num}</span>
-              <h3 className="proceso-title">{step.title}</h3>
-              <p className="proceso-desc">{step.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="servicio-cta">
-        <h2>¿Quieres saber cuánto puedes financiar?</h2>
-        <p>Primera consulta gratuita y sin compromiso.</p>
-        <Link className="button-link" to="/contacto">
-          Hablar con un asesor →
-        </Link>
       </section>
 
       <ServiceFooter currentId="hipotecas" />
     </main>
+  )
+}
+
+const cfGrid = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+}
+
+const cfCard = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+  },
+}
+
+// Línea dorada que "avanza" conectando los cuatro pasos al entrar en viewport
+const cfRail = {
+  hidden: { scaleX: 0 },
+  show: {
+    scaleX: 1,
+    transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] as const },
+  },
+}
+
+const heroContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.16, delayChildren: 0.1 } },
+}
+
+// Aparición suave como el brand "CASAS GROUP" de la home: solo opacidad,
+// 2.8s con la misma curva `ease` de CSS, nada brusca
+const heroItem = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { duration: 2.8, ease: [0.25, 0.1, 0.25, 1] as const },
+  },
+}
+
+function HipotecasHero() {
+  const ref = useRef<HTMLElement>(null)
+  // Parallax: el fondo se mueve más lento y el contenido se eleva/desvanece al salir
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  })
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '34%'])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0])
+
+  return (
+    <section className="sum-hero" ref={ref}>
+      <motion.div className="sum-hero-bg" style={{ y: bgY }} aria-hidden="true">
+        <div
+          className="sum-hero-bg-img"
+          style={{
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=1920&q=80)',
+          }}
+        />
+      </motion.div>
+      <div className="sum-hero-overlay" aria-hidden="true" />
+
+      <motion.div
+        className="sum-hero-content"
+        style={{ y: contentY, opacity: contentOpacity }}
+        variants={heroContainer}
+        initial="hidden"
+        animate="show"
+      >
+        <motion.span className="sum-hero-eyebrow" variants={heroItem}>
+          Hipotecas
+        </motion.span>
+        <motion.h1 className="sum-hero-title" variants={heroItem}>
+          Conseguimos tu mejor hipoteca
+        </motion.h1>
+        <motion.div className="sum-hero-line" variants={heroItem} />
+        <motion.p className="sum-hero-subtitle" variants={heroItem}>
+          Trabajamos con los principales bancos para conseguirte las mejores condiciones
+          hipotecarias.
+        </motion.p>
+        <motion.div variants={heroItem}>
+          <Link className="button-link" to="/contacto">
+            Hablar con un asesor →
+          </Link>
+        </motion.div>
+      </motion.div>
+
+      <div className="sum-hero-scroll" aria-hidden="true">
+        <span>Descúbrelo</span>
+        <span className="sum-hero-scroll-line" />
+      </div>
+    </section>
+  )
+}
+
+// "Qué hacemos por ti" — timeline horizontal con scroll pinned:
+// la sección se fija a pantalla completa y el track avanza en horizontal
+// a medida que el usuario hace scroll vertical; al llegar al último punto
+// se libera y continúa hacia la siguiente sección.
+function QueHacemos() {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [range, setRange] = useState(0)
+  const [pinned, setPinned] = useState(false)
+
+  const { scrollYProgress } = useScroll({
+    target: wrapRef,
+    offset: ['start start', 'end end'],
+  })
+  const x = useTransform(scrollYProgress, [0, 1], [0, -range])
+  const fill = useTransform(scrollYProgress, [0, 1], [0, 1])
+
+  // 1) Decidir si pinnamos según el ancho de pantalla.
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)')
+    const update = () => setPinned(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
+  // 2) Medir el recorrido SOLO una vez aplicada la clase .is-pinned, para que
+  // el track ya esté en layout horizontal (si no, mide el layout vertical y da 0).
+  useEffect(() => {
+    if (!pinned) {
+      setRange(0)
+      return
+    }
+    const measure = () => {
+      if (trackRef.current) {
+        setRange(Math.max(0, trackRef.current.scrollWidth - window.innerWidth))
+      }
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [pinned])
+
+  return (
+    <section
+      className="qh"
+      ref={wrapRef}
+      style={pinned ? { height: `calc(100vh + ${range}px)` } : undefined}
+    >
+      <div className={`qh-sticky${pinned ? ' is-pinned' : ''}`}>
+        <div className="qh-head">
+          <span className="qh-eyebrow">Qué hacemos por ti</span>
+          <h2 className="qh-title">Te acompañamos en cada paso</h2>
+        </div>
+
+        <div className="qh-viewport">
+          <motion.div className="qh-track" ref={trackRef} style={pinned ? { x } : undefined}>
+            <div className="qh-rail" aria-hidden="true">
+              <motion.div
+                className="qh-rail-fill"
+                style={pinned ? { scaleX: fill } : undefined}
+              />
+            </div>
+
+            {BENEFICIOS.map((texto, i) => (
+              <div key={texto} className={`qh-item qh-item--${i % 2 === 0 ? 'up' : 'down'}`}>
+                <span className="qh-stem" aria-hidden="true" />
+                <span className="qh-dot" aria-hidden="true" />
+                <div className="qh-card">
+                  <span className="qh-num">{String(i + 1).padStart(2, '0')}</span>
+                  <p className="qh-text">{texto}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+    </section>
   )
 }

@@ -1,7 +1,8 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
+import { animate, motion, useInView } from 'framer-motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { homeFeaturedProperties, properties } from '../lib/propertiesData'
+import { Footer } from '../components/Footer'
 import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
 import type { Location } from '../lib/locationSearch'
 
@@ -42,6 +43,7 @@ const services = [
     description: 'Proteccion para vivienda, propietario e inquilino desde el primer dia. Coberturas personalizadas con las mejores companias del mercado.',
     image: 'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1200&q=80',
     tag: 'Proteccion',
+    to: '/servicios/seguros',
   },
 ]
 
@@ -75,18 +77,23 @@ const accessBlocks = [
     description: 'Encuentra tu proximo hogar entre una seleccion cuidada de inmuebles.',
     image:
       'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=80',
+    to: '/propiedades' as const,
+    search: { query: '', mode: 'compra' as const },
   },
   {
     title: 'Alquilar',
     description: 'Pisos y casas listos para entrar a vivir con una gestion agil.',
     image:
       'https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=1000&q=80',
+    to: '/propiedades' as const,
+    search: { query: '', mode: 'alquiler' as const },
   },
   {
     title: 'Vender',
     description: 'Descubre el valor real de tu vivienda con una valoracion profesional.',
     image:
       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1000&q=80',
+    to: '/contacto' as const,
   },
 ]
 
@@ -284,10 +291,6 @@ function Home() {
     })
   }
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   const nextWhy = (direction: -1 | 1) => {
     setWhyIndex((current) => (current + direction + whyItems.length) % whyItems.length)
   }
@@ -466,31 +469,41 @@ function Home() {
       <section className="section why">
         <div className="section-top">
           <SectionHeading eyebrow="Confianza" title="Por que elegirnos" />
-          <div className="round-actions">
-            <button type="button" aria-label="Anterior" onClick={() => nextWhy(-1)}>
-              <span aria-hidden="true">←</span>
-            </button>
-            <button type="button" aria-label="Siguiente" onClick={() => nextWhy(1)}>
-              <span aria-hidden="true">→</span>
-            </button>
-          </div>
         </div>
-        <motion.article
-          className="why-card"
-          key={currentWhy.title}
-          initial={{ opacity: 0.3 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.35 }}
-        >
-          <img src={currentWhy.image} alt="" />
-          <div>
-            <span>
-              {whyIndex + 1} / {whyItems.length}
-            </span>
-            <h3>{currentWhy.title}</h3>
-            <p>{currentWhy.description}</p>
-          </div>
-        </motion.article>
+        <div className="why-slider">
+          <button
+            type="button"
+            className="why-nav why-nav-prev"
+            aria-label="Anterior"
+            onClick={() => nextWhy(-1)}
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <motion.article
+            className="why-card"
+            key={currentWhy.title}
+            initial={{ opacity: 0.3 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35 }}
+          >
+            <img src={currentWhy.image} alt="" />
+            <div>
+              <span>
+                {whyIndex + 1} / {whyItems.length}
+              </span>
+              <h3>{currentWhy.title}</h3>
+              <p>{currentWhy.description}</p>
+            </div>
+          </motion.article>
+          <button
+            type="button"
+            className="why-nav why-nav-next"
+            aria-label="Siguiente"
+            onClick={() => nextWhy(1)}
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
         <div className="stats">
           <Stat value="+150" label="Operaciones" />
           <Stat value="98%" label="Satisfaccion" />
@@ -501,8 +514,10 @@ function Home() {
 
       <section className="access-blocks" ref={accessSectionRef}>
         {accessBlocks.map((item, i) => (
-          <article
+          <Link
             key={item.title}
+            to={item.to}
+            search={item.search}
             className={`access-block-item${activeAccessBlock === i ? ' is-active' : ''}`}
           >
             <div className="access-bg" style={{ backgroundImage: `url(${item.image})` }} />
@@ -511,7 +526,7 @@ function Home() {
             </div>
             <h2 className="access-title">{item.title}</h2>
             <span className="access-arrow" aria-hidden="true">→</span>
-          </article>
+          </Link>
         ))}
       </section>
 
@@ -542,18 +557,18 @@ function Home() {
                 </button>
               ))}
             </div>
-            <div className="round-actions">
-              <button type="button" aria-label="Propiedad anterior" onClick={() => scrollProperties(-1)}>
-                <span aria-hidden="true">←</span>
-              </button>
-              <button type="button" aria-label="Propiedad siguiente" onClick={() => scrollProperties(1)}>
-                <span aria-hidden="true">→</span>
-              </button>
-            </div>
           </div>
         </div>
 
         <div className="property-rail-wrap">
+          <button
+            type="button"
+            className="rail-nav rail-nav-prev"
+            aria-label="Propiedad anterior"
+            onClick={() => scrollProperties(-1)}
+          >
+            <span aria-hidden="true">←</span>
+          </button>
           <div className="property-rail" ref={propertiesRef}>
             {displayedProperties.map((property) => (
               <article
@@ -577,6 +592,14 @@ function Home() {
               </article>
             ))}
           </div>
+          <button
+            type="button"
+            className="rail-nav rail-nav-next"
+            aria-label="Propiedad siguiente"
+            onClick={() => scrollProperties(1)}
+          >
+            <span aria-hidden="true">→</span>
+          </button>
         </div>
 
         <button className="text-link" type="button" onClick={() => navigate({ to: '/propiedades', search: { query: '', mode: 'compra' } })}>
@@ -584,27 +607,7 @@ function Home() {
         </button>
       </section>
 
-      <footer className="footer" id="contacto">
-        <div>
-          <div className="logo footer-logo">
-            <span>CASAS</span>
-            <small>GROUP</small>
-          </div>
-          <p>Tu hogar empieza aqui.</p>
-        </div>
-        <div>
-          <h3>Inmuebles</h3>
-          <button type="button" onClick={() => scrollTo('propiedades')}>Comprar</button>
-          <button type="button" onClick={() => scrollTo('propiedades')}>Alquilar</button>
-          <button type="button" onClick={() => scrollTo('valoracion')}>Vender</button>
-        </div>
-        <div>
-          <h3>Contacto</h3>
-          <a href="mailto:info@casasgroup.es">info@casasgroup.es</a>
-          <a href="tel:+34123456789">+34 123 456 789</a>
-          <span>Esplugues de Llobregat</span>
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }
@@ -628,9 +631,31 @@ function SectionHeading({
 }
 
 function Stat({ value, label }: { value: string; label: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const [display, setDisplay] = useState(0)
+
+  const match = value.match(/^(\D*)(\d+)(\D*)$/)
+  const prefix = match ? match[1] : ''
+  const target = match ? parseInt(match[2], 10) : 0
+  const suffix = match ? match[3] : ''
+  const hasNumber = match !== null
+
+  useEffect(() => {
+    if (!inView || !hasNumber) return
+    const controls = animate(0, target, {
+      duration: 2,
+      ease: 'easeOut',
+      onUpdate: (latest) => setDisplay(Math.round(latest)),
+    })
+    return () => controls.stop()
+  }, [inView, hasNumber, target])
+
   return (
-    <div>
-      <strong>{value}</strong>
+    <div ref={ref}>
+      <strong>
+        {hasNumber ? `${prefix}${display}${suffix}` : value}
+      </strong>
       <span>{label}</span>
     </div>
   )

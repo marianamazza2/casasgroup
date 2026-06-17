@@ -5,14 +5,26 @@ const subMenuServices = [
   { label: 'Administracion de fincas', gold: false, to: '/servicios/administracion-de-fincas' },
   { label: 'Cambio de suministros', gold: false, to: '/servicios/cambio-de-suministros' },
   { label: 'Hipotecas', gold: false, to: '/servicios/hipotecas' },
-  { label: 'Seguros', gold: true },
+  { label: 'Seguros', gold: true, to: '/servicios/seguros' },
 ]
 
 function SiteNav() {
   const [servicesOpen, setServicesOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const [scrolled, setScrolled] = useState(false)
   const [goldBehind, setGoldBehind] = useState(false)
+  // En desktop (> 1024px) Servicios se abre con hover; en movil/iPad solo con click
+  const [isDesktop, setIsDesktop] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(min-width: 1025px)').matches,
+  )
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1025px)')
+    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,6 +54,23 @@ function SiteNav() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [pathname])
 
+  // Cerrar el menu movil y el submenu al navegar a otra ruta
+  useEffect(() => {
+    setMenuOpen(false)
+    setServicesOpen(false)
+  }, [pathname])
+
+  // Bloquear el scroll del body mientras el panel movil esta abierto
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen])
+
+  // Marca Servicios como activo en cualquier subpagina de /servicios
+  const onServices = pathname.startsWith('/servicios')
+
   // Pages whose hero sits behind the nav; elsewhere the nav is always solid
   const isHeroPage = pathname === '/' || pathname === '/contacto'
   const transparent = isHeroPage && !scrolled
@@ -52,6 +81,7 @@ function SiteNav() {
     isHeroPage ? 'site-nav--over-hero' : '',
     transparent ? 'site-nav--transparent' : '',
     overGold ? 'site-nav--on-gold' : '',
+    menuOpen ? 'site-nav--menu-open' : '',
   ].filter(Boolean).join(' ')
 
   return (
@@ -60,25 +90,47 @@ function SiteNav() {
         <span>CASAS</span>
         <small>GROUP</small>
       </Link>
-      <nav aria-label="Navegacion principal">
+      <button
+        type="button"
+        className="nav-burger"
+        aria-label={menuOpen ? 'Cerrar menu' : 'Abrir menu'}
+        aria-expanded={menuOpen}
+        aria-controls="site-nav-menu"
+        onClick={() => setMenuOpen((v) => !v)}
+      >
+        <span className="nav-burger-box" aria-hidden="true">
+          <span className="nav-burger-line" />
+          <span className="nav-burger-line" />
+          <span className="nav-burger-line" />
+        </span>
+      </button>
+      <button
+        type="button"
+        className="nav-overlay"
+        aria-hidden="true"
+        tabIndex={-1}
+        onClick={() => setMenuOpen(false)}
+      />
+      <nav id="site-nav-menu" aria-label="Navegacion principal">
         <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>Comprar</Link>
         <Link to="/propiedades" search={{ query: '', mode: 'alquiler' }}>Alquilar</Link>
         <Link to="/contacto" className="nav-link--quiet">Vender</Link>
         <Link to="/nosotros">Nosotros</Link>
         <div
           className="nav-services-wrapper"
-          onMouseEnter={() => setServicesOpen(true)}
-          onMouseLeave={() => setServicesOpen(false)}
+          onMouseEnter={isDesktop ? () => setServicesOpen(true) : undefined}
+          onMouseLeave={isDesktop ? () => setServicesOpen(false) : undefined}
         >
           <button
             type="button"
-            className={servicesOpen ? 'active' : ''}
+            className={servicesOpen || onServices ? 'active' : ''}
             onClick={() => setServicesOpen((v) => !v)}
           >
-            Servicios <span className="nav-services-arrow" aria-hidden="true">{servicesOpen ? '▲' : '▼'}</span>
+            <span className="nav-services-label">Servicios</span> <span className="nav-services-arrow" aria-hidden="true">{servicesOpen ? '▲' : '▼'}</span>
           </button>
           {servicesOpen && (
             <div className="nav-services-menu">
+              <div className="nav-services-card">
               {subMenuServices.map((item) =>
                 item.to ? (
                   <Link
@@ -100,6 +152,7 @@ function SiteNav() {
                   </a>
                 ),
               )}
+              </div>
             </div>
           )}
         </div>

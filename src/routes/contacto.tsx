@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
+import type { ReactElement } from 'react'
+import { Footer } from '../components/Footer'
 import Map, { Marker } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -14,23 +16,53 @@ const contactCards = [
     label: 'Email',
     value: 'info@casasgroup.es',
     href: 'mailto:info@casasgroup.es',
+    icon: 'mail',
   },
   {
     label: 'Telefono',
     value: '+34 123 456 789',
     href: 'tel:+34123456789',
+    icon: 'phone',
   },
   {
     label: 'WhatsApp',
     value: '+34 600 000 000',
     href: 'https://wa.me/34600000000',
+    icon: 'whatsapp',
   },
   {
     label: 'Horario',
     value: 'Lun - Vie: 9:00 - 19:00',
     detail: 'Sab: 10:00 - 14:00',
+    icon: 'clock',
   },
-]
+] as const
+
+const cardIcons: Record<string, ReactElement> = {
+  mail: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  ),
+  phone: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+    </svg>
+  ),
+  whatsapp: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.6A8.38 8.38 0 0 1 4 11.5 8.5 8.5 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z" />
+      <path d="M9 9.2c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.4.2.5.7 1.6.7 1.7.1.1.1.3 0 .4l-.3.4-.3.3c-.1.1-.2.3 0 .5.2.4.7 1.1 1.4 1.5.9.6 1.3.7 1.5.6l.5-.5c.2-.2.3-.2.5-.1l1.4.7c.2.1.3.2.4.3 0 .2 0 .8-.3 1.2-.3.4-1 .8-1.5.8-.5.1-1.1.1-2.3-.4-2-.8-3.2-2.9-3.3-3-.1-.2-.8-1.1-.8-2.1 0-1 .5-1.5.7-1.7z" />
+    </svg>
+  ),
+  clock: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3.5 2" />
+    </svg>
+  ),
+}
 
 function ContactPage() {
   const [isPanelOpen, setIsPanelOpen] = useState(false)
@@ -109,15 +141,41 @@ function ContactPage() {
 
       <section className="contact-intro">
         <div className="contact-direct">
+          <span className="contact-direct-eyebrow">Contacto directo</span>
           <h2>Si lo prefieres, contactanos directamente.</h2>
           <div className="contact-card-grid">
-            {contactCards.map((card) => (
-              <article key={card.label}>
-                <span>{card.label}</span>
-                {card.href ? <a href={card.href}>{card.value}</a> : <strong>{card.value}</strong>}
-                {card.detail ? <small>{card.detail}</small> : null}
-              </article>
-            ))}
+            {contactCards.map((card) => {
+              const inner = (
+                <>
+                  <span className="contact-card-icon" aria-hidden="true">
+                    {cardIcons[card.icon]}
+                  </span>
+                  <span className="contact-card-text">
+                    <span className="contact-card-label">{card.label}</span>
+                    <span className="contact-card-value">{card.value}</span>
+                    {card.detail ? <span className="contact-card-detail">{card.detail}</span> : null}
+                  </span>
+                </>
+              )
+              if (!card.href) {
+                return (
+                  <article className="contact-card" key={card.label}>
+                    {inner}
+                  </article>
+                )
+              }
+              const isExternal = card.href.startsWith('http')
+              return (
+                <a
+                  className="contact-card"
+                  key={card.label}
+                  href={card.href}
+                  {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >
+                  {inner}
+                </a>
+              )
+            })}
           </div>
           <div className="social-row" aria-label="Redes sociales">
             <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
@@ -167,27 +225,7 @@ function ContactPage() {
         </div>
       </section>
 
-      <footer className="footer">
-        <div>
-          <div className="logo footer-logo">
-            <span>CASAS</span>
-            <small>GROUP</small>
-          </div>
-          <p>Tu hogar empieza aqui.</p>
-        </div>
-        <div>
-          <h3>Inmuebles</h3>
-          <a href="/#propiedades">Comprar</a>
-          <a href="/#propiedades">Alquilar</a>
-          <a href="/#valoracion">Vender</a>
-        </div>
-        <div>
-          <h3>Contacto</h3>
-          <a href="mailto:info@casasgroup.es">info@casasgroup.es</a>
-          <a href="tel:+34123456789">+34 123 456 789</a>
-          <span>Esplugues de Llobregat</span>
-        </div>
-      </footer>
+      <Footer />
 
       {isPanelOpen ? (
         <div className="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="contact-form-title">

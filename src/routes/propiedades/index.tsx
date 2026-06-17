@@ -14,9 +14,11 @@ import { usePropertyFilters } from '../../hooks/usePropertyFilters'
 type PropiedadesSearch = {
   query: string
   mode: 'compra' | 'alquiler'
-  locType?: 'provincia' | 'municipio'
+  locType?: 'provincia' | 'municipio' | 'distrito' | 'barrio'
   province?: string
 }
+
+const LOC_TYPES = ['provincia', 'municipio', 'distrito', 'barrio'] as const
 
 export const Route = createFileRoute('/propiedades/')({
   validateSearch: (search: Record<string, unknown>): PropiedadesSearch => {
@@ -24,8 +26,8 @@ export const Route = createFileRoute('/propiedades/')({
       query: typeof search.query === 'string' ? search.query : '',
       mode: search.mode === 'alquiler' ? 'alquiler' : 'compra',
     }
-    if (search.locType === 'provincia' || search.locType === 'municipio') {
-      out.locType = search.locType
+    if (LOC_TYPES.includes(search.locType as (typeof LOC_TYPES)[number])) {
+      out.locType = search.locType as PropiedadesSearch['locType']
     }
     if (typeof search.province === 'string' && search.province) {
       out.province = search.province

@@ -3,7 +3,7 @@ import { properties } from '../lib/propertiesData'
 import { normalize } from '../lib/locationSearch'
 import type { FilterState } from '../lib/types'
 
-export type LocType = 'provincia' | 'municipio' | undefined
+export type LocType = 'provincia' | 'municipio' | 'distrito' | 'barrio' | undefined
 
 const defaultFilters: FilterState = {
   mode: 'compra',

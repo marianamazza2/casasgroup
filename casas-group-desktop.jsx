@@ -113,8 +113,8 @@ function Footer() {
       <div style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr 1fr 1fr", gap: 24, marginBottom: 32 }}>
         <div>
           <div style={{ fontFamily: serif, lineHeight: 1.2, marginBottom: 12 }}>
-            <div style={{ fontSize: 16, letterSpacing: 6, fontWeight: 500 }}>CASAS</div>
             <div style={{ fontSize: 10, letterSpacing: 4, color: "rgba(255,255,255,0.4)", marginTop: 3 }}>GROUP</div>
+            <div style={{ fontSize: 16, letterSpacing: 6, fontWeight: 500 }}>CASAS</div>
           </div>
           <GoldLine width={30} margin="0 0 16px 0" />
           <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>Tu hogar empieza aqui.</p>
@@ -1001,7 +1001,7 @@ function NosotrosPage({ onHome, onContact }) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 }}>
           {[
             { name: "Angie Caballero", role: "Fundadora & CEO" },
-            { name: "Javi Gallego", role: "Director Comercial" },
+            { name: "Nombre Apellido", role: "Director Comercial" },
             { name: "Nombre Apellido", role: "Agente Inmobiliario" },
             { name: "Nombre Apellido", role: "Administracion" },
           ].map((m, i) => (

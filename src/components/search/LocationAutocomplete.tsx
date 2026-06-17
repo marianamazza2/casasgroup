@@ -19,6 +19,20 @@ interface LocationAutocompleteProps {
   autoFocus?: boolean
 }
 
+/** Texto secundario de cada sugerencia, según el tipo de ubicación. */
+function metaLabel(loc: Location): string {
+  switch (loc.type) {
+    case 'provincia':
+      return 'Provincia'
+    case 'distrito':
+      return `Distrito · ${loc.city}`
+    case 'barrio':
+      return `Barrio · ${loc.city}`
+    default:
+      return loc.province ?? ''
+  }
+}
+
 export function LocationAutocomplete({
   value,
   onChange,
@@ -133,9 +147,7 @@ export function LocationAutocomplete({
               }}
             >
               <span className="location-ac-name">{loc.name}</span>
-              <span className="location-ac-meta">
-                {loc.type === 'provincia' ? 'Provincia' : loc.province}
-              </span>
+              <span className="location-ac-meta">{metaLabel(loc)}</span>
             </li>
           ))}
         </ul>
