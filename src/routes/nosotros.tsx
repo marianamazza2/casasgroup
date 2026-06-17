@@ -143,6 +143,7 @@ function NosotrosPage() {
       </section>
 
       <motion.section
+        id="trabaja"
         className="trabaja"
         initial={{ opacity: 0, y: 28 }}
         whileInView={{ opacity: 1, y: 0 }}

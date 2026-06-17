@@ -30,7 +30,7 @@ export function Footer() {
           <h3>Contacto</h3>
           <a href="mailto:info@casasgroup.es">info@casasgroup.es</a>
           <a href="tel:+34123456789">+34 123 456 789</a>
-          <span>Esplugues de Llobregat</span>
+          <Link to="/nosotros" hash="trabaja">Trabaja con nosotros</Link>
         </div>
       </div>
       <div className="footer-legal">
