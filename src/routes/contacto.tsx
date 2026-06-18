@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { ReactElement } from 'react'
 import { Footer } from '../components/Footer'
 import Map, { Marker } from 'react-map-gl/maplibre'
@@ -266,8 +267,9 @@ function ContactPage() {
 
       <Footer />
 
-      {isPanelOpen ? (
-        <div className="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="contact-form-title">
+      {isPanelOpen
+        ? createPortal(
+            <div className="contact-drawer" role="dialog" aria-modal="true" aria-labelledby="contact-form-title">
           <button className="drawer-backdrop" type="button" aria-label="Cerrar formulario" onClick={() => setIsPanelOpen(false)} />
           <aside>
             <div className="drawer-header">
@@ -312,8 +314,10 @@ function ContactPage() {
               <button type="submit">Enviar mensaje</button>
             </form>
           </aside>
-        </div>
-      ) : null}
+            </div>,
+            document.body,
+          )
+        : null}
     </main>
   )
 }

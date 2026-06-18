@@ -598,6 +598,14 @@ button {
   padding: 8px 0;
 }
 
+/* iOS Safari hace zoom al enfocar un input con font-size < 16px (y eso
+   desborda el ancho de la página). En móvil forzamos 16px para evitarlo. */
+@media (max-width: 768px) {
+  .hero-search-input {
+    font-size: 16px;
+  }
+}
+
 .hero-cta button,
 .button-link,
 .valuation button,
@@ -1130,6 +1138,10 @@ button {
 
 .why-slider {
   position: relative;
+}
+
+.why-dots {
+  display: none;
 }
 
 .why-nav,
@@ -1993,9 +2005,12 @@ a.contact-card:hover .contact-card-icon {
 /* === Menu hamburguesa: movil e iPad (<= 1024px) === */
 @media (max-width: 1024px) {
   /* backdrop-filter crea un containing block que atraparia al panel/overlay
-     position:fixed dentro del header; se desactiva para anclarlos al viewport */
+     position:fixed dentro del header; se desactiva para anclarlos al viewport.
+     Sin blur, el 0.92 de opacidad dejaba ver la pagina por detras del header al
+     scrollear (sobre todo con el menu abierto), asi que lo hacemos solido. */
   .site-nav {
     backdrop-filter: none;
+    background: #fff;
   }
 
   /* El sector no necesitaba mas de lo mismo: ocultamos el strip en mobile */
@@ -2189,7 +2204,7 @@ a.contact-card:hover .contact-card-icon {
 
   .site-nav--transparent {
     backdrop-filter: none;
-    background: rgb(255 255 255 / 0.92);
+    background: #fff;
     border-bottom-color: var(--line);
   }
 
@@ -2247,9 +2262,14 @@ a.contact-card:hover .contact-card-icon {
     border: 1px solid var(--line);
     border-radius: 6px;
     flex: 0 0 86%;
+    grid-template-columns: 1fr;
     min-height: 0;
     padding: clamp(24px, 6vw, 32px);
     scroll-snap-align: center;
+  }
+
+  .services-list-num {
+    display: none;
   }
 
   .services-list-item::before,
@@ -2300,9 +2320,39 @@ a.contact-card:hover .contact-card-icon {
     display: none;
   }
 
+  /* En mobile el slider se navega con dots: ocultamos las flechas y centramos
+     verticalmente el contenido de la card */
   .why-nav {
-    height: 42px;
-    width: 42px;
+    display: none;
+  }
+
+  .why-card > div {
+    justify-content: center;
+    min-height: clamp(340px, 56vh, 500px);
+    padding: clamp(40px, 9vw, 72px) clamp(28px, 6vw, 48px);
+  }
+
+  .why-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  .why-dot {
+    background: var(--line);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    height: 6px;
+    padding: 0;
+    transition: width 300ms ease, background 300ms ease;
+    width: 6px;
+  }
+
+  .why-dot.active {
+    background: var(--ink);
+    width: 22px;
   }
 
   .valuation-media {
@@ -2366,6 +2416,15 @@ a.contact-card:hover .contact-card-icon {
   .section-top,
   .properties-top {
     align-items: flex-start;
+  }
+
+  /* Mobile propiedades: separa el toggle del titulo y lo alinea a la derecha */
+  .properties-top {
+    gap: 20px;
+  }
+
+  .properties-top .property-controls {
+    align-self: flex-end;
   }
 
   .stats,
@@ -2603,6 +2662,15 @@ a.contact-card:hover .contact-card-icon {
 
 .search-input::placeholder {
   color: var(--muted);
+}
+
+/* iOS Safari hace zoom al enfocar un input con font-size < 16px y luego no
+   restaura el ancho. En móvil forzamos 16px en el buscador y los filtros. */
+@media (max-width: 768px) {
+  .search-input,
+  .filters-input {
+    font-size: 16px;
+  }
 }
 
 .search-btn {
@@ -4509,7 +4577,7 @@ a.contact-card:hover .contact-card-icon {
   left: 0;
   position: absolute;
   top: 0;
-  transition: width 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   width: var(--p, 0%);
 }
 
@@ -6011,6 +6079,11 @@ a.contact-card:hover .contact-card-icon {
   transition: color 0.5s ease;
 }
 
+/* El número grande pintado solo aparece en móvil (ver media query) */
+.cf-index {
+  display: none;
+}
+
 .cf-step:hover .cf-node {
   background: var(--gold);
   box-shadow:
@@ -6408,19 +6481,21 @@ a.contact-card:hover .contact-card-icon {
     max-width: 46ch;
   }
 
-  /* Stepper vertical: línea a la izquierda conectando los nodos */
+  /* Móvil: timeline estilo "En cuatro simples pasos" (suministros) — riel a la
+     izquierda con dots y número grande en serif que se pinta con el scroll. */
   .cf-steps {
-    gap: clamp(28px, 7vw, 40px);
+    gap: clamp(30px, 7vw, 44px);
     grid-template-columns: 1fr;
     max-width: 440px;
+    padding-left: 38px;
   }
 
   .cf-rail {
-    bottom: 27px;
+    bottom: 34px;
     height: auto;
-    left: 27px;
+    left: 10px;
     right: auto;
-    top: 27px;
+    top: 34px;
     width: 2px;
   }
 
@@ -6431,19 +6506,62 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .cf-step {
-    align-items: flex-start;
+    align-items: center;
     display: grid;
-    gap: 18px;
-    grid-template-columns: 56px 1fr;
+    gap: 0 clamp(16px, 4vw, 24px);
+    grid-template-columns: auto 1fr;
     text-align: left;
   }
 
+  /* Punto sobre el riel, alineado con el centro del número */
+  .cf-step::before {
+    background: var(--warm);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 0 5px var(--warm);
+    content: '';
+    height: 14px;
+    left: -35px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+  }
+
+  /* Ocultamos el nodo circular; el número pasa a ser el grande pintado */
   .cf-node {
-    margin-bottom: 0;
+    display: none;
+  }
+
+  .cf-index {
+    display: inline-block;
+    font-family: var(--serif);
+    font-size: clamp(44px, 13vw, 62px);
+    font-weight: 500;
+    line-height: 0.85;
+    position: relative;
+  }
+
+  .cf-index-outline {
+    color: transparent;
+    display: block;
+    -webkit-text-stroke: 1px rgba(164, 123, 54, 0.45);
+  }
+
+  .cf-index-fill {
+    bottom: 0;
+    color: var(--gold);
+    display: block;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    -webkit-text-stroke: 1px var(--gold);
+    will-change: clip-path;
   }
 
   .cf-step-body {
-    padding-top: 6px;
+    padding-top: 0;
   }
 
   .cf-step-desc {

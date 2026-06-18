@@ -598,6 +598,18 @@ function Home() {
             <span aria-hidden="true">→</span>
           </button>
         </div>
+        <div className="why-dots" role="tablist" aria-label="Por que elegirnos">
+          {whyItems.map((item, i) => (
+            <button
+              type="button"
+              key={item.title}
+              className={i === whyIndex ? 'why-dot active' : 'why-dot'}
+              aria-label={`Ir a ${item.title}`}
+              aria-selected={i === whyIndex}
+              onClick={() => setWhyIndex(i)}
+            />
+          ))}
+        </div>
         <div className="stats">
           <Stat value="+150" label="Operaciones" />
           <Stat value="98%" label="Satisfaccion" />

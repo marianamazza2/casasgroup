@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 
 export const Route = createFileRoute('/servicios/hipotecas')({
@@ -82,15 +82,7 @@ function HipotecasPage() {
           </div>
 
           {PROCESO.map((step) => (
-            <motion.li key={step.num} className="cf-step" variants={cfCard}>
-              <span className="cf-node" aria-hidden="true">
-                <span className="cf-node-num">{step.num}</span>
-              </span>
-              <div className="cf-step-body">
-                <h3 className="cf-step-title">{step.title}</h3>
-                <p className="cf-step-desc">{step.desc}</p>
-              </div>
-            </motion.li>
+            <CfStep key={step.num} step={step} />
           ))}
         </motion.ol>
       </section>
@@ -131,6 +123,38 @@ const cfCard = {
     y: 0,
     transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
   },
+}
+
+// Cada paso: en desktop el número va en su nodo circular; en móvil mostramos el
+// número grande en serif que se "pinta" de dorado conforme el scroll lo alcanza,
+// igual que la sección "En cuatro simples pasos" de suministros.
+function CfStep({ step }: { step: (typeof PROCESO)[number] }) {
+  const ref = useRef<HTMLLIElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start 80%', 'center 55%'],
+  })
+  const reveal = useTransform(scrollYProgress, [0, 1], [100, 0])
+  const clipPath = useMotionTemplate`inset(0 0 ${reveal}% 0)`
+  const num = step.num.padStart(2, '0')
+
+  return (
+    <motion.li ref={ref} className="cf-step" variants={cfCard}>
+      <span className="cf-node" aria-hidden="true">
+        <span className="cf-node-num">{step.num}</span>
+      </span>
+      <span className="cf-index" aria-hidden="true">
+        <span className="cf-index-outline">{num}</span>
+        <motion.span className="cf-index-fill" style={{ clipPath }}>
+          {num}
+        </motion.span>
+      </span>
+      <div className="cf-step-body">
+        <h3 className="cf-step-title">{step.title}</h3>
+        <p className="cf-step-desc">{step.desc}</p>
+      </div>
+    </motion.li>
+  )
 }
 
 // Línea dorada que "avanza" conectando los cuatro pasos al entrar en viewport

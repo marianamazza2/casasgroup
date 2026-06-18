@@ -88,6 +88,17 @@ function CambioDeSuministrosPage() {
   const cardsRef = useRef<HTMLDivElement>(null)
   const [activeCard, setActiveCard] = useState(0)
 
+  // En móvil las tarjetas son un slider horizontal con scroll-snap, así que
+  // desactivamos la animación de entrada lateral (interfiere con el scroll).
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
   const onCardsScroll = () => {
     const el = cardsRef.current
     if (!el || el.clientWidth === 0) return
@@ -121,12 +132,12 @@ function CambioDeSuministrosPage() {
                 <motion.article
                   key={item.title}
                   className="suministro-card"
-                  initial={{ opacity: 0, x: -36, y: 36 }}
+                  initial={isMobile ? { opacity: 0, y: 24 } : { opacity: 0, x: -36, y: 36 }}
                   whileInView={{ opacity: 1, x: 0, y: 0 }}
                   viewport={{ once: true, margin: '-60px' }}
                   transition={{
-                    duration: 0.6,
-                    delay: (col + row) * 0.1,
+                    duration: isMobile ? 0.45 : 0.6,
+                    delay: isMobile ? 0 : (col + row) * 0.1,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
