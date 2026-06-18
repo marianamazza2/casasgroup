@@ -150,6 +150,22 @@ export function MisionTabs({ tabs }: { tabs: Tab[] }) {
             </span>
             <span className="mision-progress-total">{total}</span>
           </div>
+
+          {/* En móvil, los dots reemplazan la barra 01–03 e indican que se
+              puede cambiar de pestaña. */}
+          <div className="mision-dots" role="tablist" aria-label="Cambiar de pestaña">
+            {tabs.map((t, i) => (
+              <button
+                key={t.label}
+                type="button"
+                role="tab"
+                aria-selected={i === active}
+                aria-label={t.label}
+                className={`mision-dot${i === active ? ' is-active' : ''}`}
+                onClick={() => setActive(i)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

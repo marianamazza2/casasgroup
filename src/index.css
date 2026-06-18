@@ -38,25 +38,36 @@ input {
   font: inherit;
 }
 
-/* ── Transición de entrada entre rutas ─────────────────────────────────── */
-/* Solo opacidad (sin transform) para no romper position: sticky/fixed de
-   los heros ni del mapa de propiedades. Se reanima al cambiar de ruta. */
-@keyframes routeFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* ── Transición (crossfade) entre rutas ────────────────────────────────── */
+/* La opacidad la controla framer-motion (ver AnimatedOutlet). Solo opacidad,
+   sin transform, para no romper position: sticky/fixed de los heros ni del
+   mapa de propiedades. */
+.route-transition {
+  will-change: opacity;
 }
 
-.route-transition {
-  animation: routeFadeIn 0.5s ease both;
+/* ── Barra de carga superior (estilo NProgress) ────────────────────────── */
+.route-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.route-progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--gold), #d9b86a);
+  box-shadow: 0 0 8px rgba(164, 123, 54, 0.6);
+  transition: width 0.3s ease, opacity 0.25s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .route-transition {
-    animation: none;
+  .route-progress-bar {
+    transition: opacity 0.2s ease;
   }
 }
 
@@ -603,6 +614,9 @@ button {
 @media (max-width: 768px) {
   .hero-search-input {
     font-size: 16px;
+  }
+  .hero-search-input::placeholder {
+    font-size: 14px;
   }
 }
 
@@ -2189,8 +2203,13 @@ a.contact-card:hover .contact-card-icon {
 
   .site-nav .nav-services-menu a,
   .site-nav .nav-services-menu button {
-    background: var(--gold-soft);
+    background: #fff;
     padding-left: 40px;
+  }
+
+  /* Solo el servicio activo queda resaltado, no todos */
+  .site-nav .nav-services-menu a[data-status='active'] {
+    background: var(--gold-soft);
   }
 
   /* El panel siempre es claro, sin importar el estado del hero */
@@ -2239,6 +2258,7 @@ a.contact-card:hover .contact-card-icon {
 
   .services-sticky-layout {
     grid-template-columns: 1fr;
+    margin-top: 0;
   }
 
   .services-image-panel {
@@ -2250,10 +2270,13 @@ a.contact-card:hover .contact-card-icon {
   .services-list {
     display: flex;
     gap: 14px;
-    margin-top: 32px;
+    margin-top: 24px;
+    /* Rompe el padding de la seccion para alinear el slider con el de
+       propiedades: card a clamp(20px, 5vw, 72px) del borde de pantalla. */
+    margin-inline: calc(-1 * clamp(22px, 5vw, 72px));
     overflow-x: auto;
-    padding-inline: 7%;
-    scroll-padding-inline: 7%;
+    padding-inline: clamp(20px, 5vw, 72px);
+    scroll-padding-inline: clamp(20px, 5vw, 72px);
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -2270,7 +2293,7 @@ a.contact-card:hover .contact-card-icon {
     border: 1px solid var(--line);
     border-radius: 16px;
     display: flex;
-    flex: 0 0 86%;
+    flex: 0 0 100%;
     flex-direction: column;
     justify-content: center;
     min-height: 0;
@@ -2601,6 +2624,36 @@ a.contact-card:hover .contact-card-icon {
   .drawer-header,
   .contact-form {
     padding-inline: 22px;
+  }
+
+  /* En mobile el form llenaba mas de 100vh: compactamos los espacios
+     verticales (gaps, paddings y tamano de inputs) sin reducir la
+     legibilidad para que entre en una pantalla. */
+  .drawer-header {
+    padding-block: 20px;
+  }
+
+  .drawer-header h2 {
+    font-size: 24px;
+  }
+
+  .contact-form {
+    gap: 12px;
+    padding-block: 20px 24px;
+  }
+
+  .contact-form label {
+    gap: 5px;
+  }
+
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea {
+    padding: 5px 0 7px;
+  }
+
+  .contact-form textarea {
+    min-height: 64px;
   }
 }
 
@@ -3611,6 +3664,66 @@ a.contact-card:hover .contact-card-icon {
   color: var(--muted);
 }
 
+/* Asa de arrastre — solo visible en mobile (full-screen sheet). */
+.filters-modal-grab {
+  display: none;
+}
+
+/* ── Filters modal: mobile full-screen sheet (Airbnb style) ──────────────── */
+@media (max-width: 768px) {
+  .filters-modal {
+    border-radius: 16px 16px 0 0;
+    bottom: 0;
+    left: 0;
+    max-height: 100dvh;
+    height: 100dvh;
+    top: auto;
+    transform: none;
+    width: 100%;
+    transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .filters-modal-grab {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 2px;
+    flex-shrink: 0;
+    touch-action: none;
+  }
+
+  .filters-modal-handle {
+    background: var(--line);
+    border-radius: 3px;
+    height: 4px;
+    width: 36px;
+  }
+
+  .filters-modal-header {
+    padding: 8px 20px 14px;
+    touch-action: none;
+  }
+
+  /* Botón cerrar más prominente y táctil. */
+  .filters-modal-header button {
+    color: var(--ink);
+    padding: 6px;
+  }
+
+  .filters-modal-body {
+    padding: 4px 20px;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+  }
+
+  .filters-modal-footer {
+    padding: 14px 20px calc(env(safe-area-inset-bottom) + 14px);
+  }
+
+  .filters-apply {
+    padding: 14px 24px;
+    font-size: 14px;
+  }
+}
+
 /* ── Property card link wrapper ────────────────────────────────────────── */
 .property-card-link {
   display: block;
@@ -4349,6 +4462,11 @@ a.contact-card:hover .contact-card-icon {
   transform-origin: left;
 }
 
+/* Dots: solo se muestran en móvil (ver media query 767px). */
+.mision-dots {
+  display: none;
+}
+
 /* ============================================================
    Nuestros valores — scroll pinned (01 → 02 → 03 → 04)
    ============================================================ */
@@ -4902,6 +5020,34 @@ a.contact-card:hover .contact-card-icon {
    horizontal con swipe + dots. Se oculta la columna lateral de índices y los
    dots de progreso del header. */
 @media (max-width: 767px) {
+  /* En móvil, la barra 01–03 se reemplaza por dots tipo "pill activo". */
+  .mision-progress {
+    display: none;
+  }
+
+  .mision-dots {
+    align-items: center;
+    display: flex;
+    gap: 9px;
+    margin-top: clamp(38px, 5vw, 60px);
+  }
+
+  .mision-dot {
+    background: rgba(248, 242, 231, 0.25);
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    height: 8px;
+    padding: 0;
+    transition: background 0.3s ease, width 0.3s ease;
+    width: 8px;
+  }
+
+  .mision-dot.is-active {
+    background: var(--gold);
+    width: 30px;
+  }
+
   .valores-progress {
     display: none;
   }

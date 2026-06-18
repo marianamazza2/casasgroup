@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import type { FilterState } from '../../lib/types'
 import { ZoneSelect } from './ZoneSelect'
 
@@ -24,6 +25,21 @@ const CATEGORY_LABELS: Record<string, string> = {
 const COUNT_OPTIONS = [0, 1, 2, 3, 4]
 
 export function FiltersModal({ open, onClose, onApply, filters, zones, onChange, onReset, resultCount }: FiltersModalProps) {
+  // Swipe-down-to-close (mobile). Drag offset in px; null = not dragging.
+  const [dragY, setDragY] = useState(0)
+  const dragStartRef = useRef<number | null>(null)
+  const draggingRef = useRef(false)
+
+  // Bloquea el scroll del body mientras el modal está abierto.
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [open])
+
   if (!open) return null
 
   function toggleCategory(cat: string) {
@@ -34,11 +50,50 @@ export function FiltersModal({ open, onClose, onApply, filters, zones, onChange,
     )
   }
 
+  function handleTouchStart(e: React.TouchEvent) {
+    dragStartRef.current = e.touches[0].clientY
+    draggingRef.current = true
+  }
+
+  function handleTouchMove(e: React.TouchEvent) {
+    if (!draggingRef.current || dragStartRef.current === null) return
+    const delta = e.touches[0].clientY - dragStartRef.current
+    // Solo permite arrastrar hacia abajo.
+    setDragY(delta > 0 ? delta : 0)
+  }
+
+  function handleTouchEnd() {
+    if (dragY > 120) {
+      onClose()
+    }
+    dragStartRef.current = null
+    draggingRef.current = false
+    setDragY(0)
+  }
+
   return (
     <div className="filters-modal-backdrop" onClick={onClose}>
-      <div className="filters-modal" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="filters-modal"
+        onClick={(e) => e.stopPropagation()}
+        style={dragY ? { transform: `translateY(${dragY}px)`, transition: 'none' } : undefined}
+      >
 
-        <div className="filters-modal-header">
+        <div
+          className="filters-modal-grab"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <span className="filters-modal-handle" aria-hidden="true" />
+        </div>
+
+        <div
+          className="filters-modal-header"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <h2>Filtros</h2>
           <button type="button" onClick={onClose} aria-label="Cerrar">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
