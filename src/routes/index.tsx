@@ -1,6 +1,7 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { animate, motion, useInView } from 'framer-motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import type { TouchEvent as ReactTouchEvent } from 'react'
 import { homeFeaturedProperties, properties } from '../lib/propertiesData'
 import { Footer } from '../components/Footer'
 import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
@@ -367,6 +368,22 @@ function Home() {
     setWhyIndex((current) => (current + direction + whyItems.length) % whyItems.length)
   }
 
+  // Mobile: las flechas estan ocultas, asi que permitimos navegar el slider
+  // con swipe horizontal sobre la card.
+  const whyTouchStartX = useRef<number | null>(null)
+
+  const handleWhyTouchStart = (e: ReactTouchEvent) => {
+    whyTouchStartX.current = e.touches[0].clientX
+  }
+
+  const handleWhyTouchEnd = (e: ReactTouchEvent) => {
+    if (whyTouchStartX.current === null) return
+    const delta = e.changedTouches[0].clientX - whyTouchStartX.current
+    whyTouchStartX.current = null
+    if (Math.abs(delta) < 40) return
+    nextWhy(delta < 0 ? 1 : -1)
+  }
+
   const scrollToProperty = (i: number) => {
     const rail = propertiesRef.current
     if (!rail) return
@@ -579,6 +596,8 @@ function Home() {
             initial={{ opacity: 0.3 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.35 }}
+            onTouchStart={handleWhyTouchStart}
+            onTouchEnd={handleWhyTouchEnd}
           >
             <img src={currentWhy.image} alt="" />
             <div>
@@ -663,6 +682,13 @@ function Home() {
                 </button>
               ))}
             </div>
+            <button
+              type="button"
+              className="text-link properties-see-all-mobile"
+              onClick={() => navigate({ to: '/propiedades', search: { query: '', mode: 'compra' } })}
+            >
+              Ver todas →
+            </button>
           </div>
         </div>
 

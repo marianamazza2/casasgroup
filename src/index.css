@@ -1413,6 +1413,12 @@ button {
   display: none;
 }
 
+/* El enlace "Ver todas" junto al toggle es solo para móvil (ver media query);
+   en desktop se usa el enlace de ancho completo al pie de la sección */
+.property-controls .properties-see-all-mobile {
+  display: none;
+}
+
 .property-controls {
   align-items: center;
   display: flex;
@@ -2257,19 +2263,54 @@ a.contact-card:hover .contact-card-icon {
     display: none;
   }
 
+  /* Cards con el mismo formato que "Nuestros valores" (nosotros), pero sin
+     imagen: numero dorado serif, titulo oscuro y descripcion legible. */
   .services-list-item {
-    background: var(--warm);
+    background: #fff;
     border: 1px solid var(--line);
-    border-radius: 6px;
+    border-radius: 16px;
+    display: flex;
     flex: 0 0 86%;
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    justify-content: center;
     min-height: 0;
-    padding: clamp(24px, 6vw, 32px);
+    padding: clamp(28px, 7vw, 40px) clamp(24px, 6vw, 32px);
     scroll-snap-align: center;
   }
 
-  .services-list-num {
-    display: none;
+  .services-list-num,
+  .services-list-item.active .services-list-num {
+    color: var(--gold);
+    display: block;
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    padding-top: 0;
+  }
+
+  .services-list-body h3,
+  .services-list-item.active .services-list-body h3 {
+    color: var(--ink);
+    font-size: 24px;
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+
+  .services-list-body p,
+  .services-list-item.active .services-list-body p {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 18px;
+    max-width: none;
+    opacity: 1;
+  }
+
+  .services-list-link,
+  .services-list-item.active .services-list-link {
+    font-size: 13px;
+    opacity: 1;
   }
 
   .services-list-item::before,
@@ -2334,23 +2375,36 @@ a.contact-card:hover .contact-card-icon {
 
   .why-dots {
     display: flex;
-    gap: 8px;
+    gap: 4px;
     justify-content: center;
-    margin-top: 28px;
+    margin-top: 20px;
   }
 
+  /* El boton es un area de toque comoda (32x32) con el "punto" pintado como
+     pseudo-elemento, para que sea facil de tocar sin agrandar el indicador. */
   .why-dot {
-    background: var(--line);
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: none;
     border: none;
-    border-radius: 999px;
     cursor: pointer;
-    height: 6px;
+    display: flex;
+    height: 32px;
+    justify-content: center;
     padding: 0;
+    width: 32px;
+  }
+
+  .why-dot::before {
+    background: var(--line);
+    border-radius: 999px;
+    content: '';
+    height: 6px;
     transition: width 300ms ease, background 300ms ease;
     width: 6px;
   }
 
-  .why-dot.active {
+  .why-dot.active::before {
     background: var(--ink);
     width: 22px;
   }
@@ -2418,13 +2472,27 @@ a.contact-card:hover .contact-card-icon {
     align-items: flex-start;
   }
 
-  /* Mobile propiedades: separa el toggle del titulo y lo alinea a la derecha */
+  /* Mobile propiedades: separa el toggle del titulo. El toggle queda a la
+     izquierda y el enlace "Ver todas" a su misma altura, a la derecha. */
   .properties-top {
     gap: 20px;
   }
 
   .properties-top .property-controls {
-    align-self: flex-end;
+    align-items: center;
+    align-self: stretch;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .property-controls .properties-see-all-mobile {
+    display: inline-flex;
+    white-space: nowrap;
+  }
+
+  /* El enlace de ancho completo al pie sobra en móvil */
+  .properties > .text-link {
+    display: none;
   }
 
   .stats,
@@ -3882,11 +3950,14 @@ a.contact-card:hover .contact-card-icon {
   align-items: center;
   justify-content: center;
   padding: 20px;
+  /* Leave a black gap below the sticky navbar so the image never runs
+     under it; the image then centers within the remaining space. */
+  padding-top: calc(var(--nav-h) + 24px);
 }
 
 .lightbox-close {
   position: absolute;
-  top: 16px;
+  top: calc(var(--nav-h) + 16px);
   right: 16px;
   z-index: 10;
   background: rgba(255, 255, 255, 0.12);
@@ -3915,7 +3986,7 @@ a.contact-card:hover .contact-card-icon {
   width: 100%;
 }
 .lightbox-img-wrap img {
-  max-height: calc(100vh - 200px);
+  max-height: calc(100vh - 200px - var(--nav-h));
   max-width: 100%;
   object-fit: contain;
   border-radius: 8px;
@@ -3987,12 +4058,12 @@ a.contact-card:hover .contact-card-icon {
 }
 
 @media (max-width: 768px) {
-  .lightbox-overlay { padding: 0; }
+  .lightbox-overlay { padding: 0; padding-top: calc(var(--nav-h) + 16px); }
   .lightbox-img-wrap {
     padding: 0 8px;
     touch-action: pan-y;
   }
-  .lightbox-img-wrap img { max-height: calc(100vh - 150px); }
+  .lightbox-img-wrap img { max-height: calc(100vh - 150px - var(--nav-h)); }
   .lightbox-arrow {
     width: 40px;
     height: 40px;
