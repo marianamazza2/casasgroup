@@ -76,6 +76,25 @@ function ContactPage() {
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const [reason, setReason] = useState(contactReasons[0])
 
+  // En mobile las tarjetas de contacto se muestran de a una en un slider
+  // horizontal; la card activa se deduce de la posicion de scroll y los dots
+  // permiten saltar a cada una.
+  const cardGridRef = useRef<HTMLDivElement>(null)
+  const [activeCard, setActiveCard] = useState(0)
+
+  const onCardGridScroll = () => {
+    const el = cardGridRef.current
+    if (!el || el.clientWidth === 0) return
+    const idx = Math.round(el.scrollLeft / el.clientWidth)
+    setActiveCard(Math.max(0, Math.min(contactCards.length - 1, idx)))
+  }
+
+  const goToCard = (i: number) => {
+    const el = cardGridRef.current
+    if (!el) return
+    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
+  }
+
   const heroWrapperRef = useRef<HTMLDivElement>(null)
   const heroGoldRef = useRef<HTMLDivElement>(null)
   const heroMediaRef = useRef<HTMLDivElement>(null)
@@ -151,7 +170,7 @@ function ContactPage() {
         <div className="contact-direct">
           <span className="contact-direct-eyebrow">Contacto directo</span>
           <h2>Si lo prefieres, contactanos directamente.</h2>
-          <div className="contact-card-grid">
+          <div className="contact-card-grid" ref={cardGridRef} onScroll={onCardGridScroll}>
             {contactCards.map((card) => {
               const inner = (
                 <>
@@ -184,6 +203,18 @@ function ContactPage() {
                 </a>
               )
             })}
+          </div>
+          <div className="contact-card-dots" role="tablist" aria-label="Datos de contacto">
+            {contactCards.map((card, i) => (
+              <button
+                key={card.label}
+                type="button"
+                className={`contact-card-dot${activeCard === i ? ' active' : ''}`}
+                aria-label={`Ver ${card.label}`}
+                aria-selected={activeCard === i}
+                onClick={() => goToCard(i)}
+              />
+            ))}
           </div>
           <div className="social-row" aria-label="Redes sociales">
             <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer">

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { properties } from '../../lib/propertiesData'
 import type { Property } from '../../lib/types'
 import { ContactCard } from '../../components/property/ContactCard'
@@ -50,13 +50,23 @@ function PropertyDetailPage() {
 
 function PhotoGallery({ images, title }: { images: string[]; title: string }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [carouselIndex, setCarouselIndex] = useState(0)
+  const carouselRef = useRef<HTMLDivElement>(null)
 
   const main = images[0]
   const thumbs = images.slice(1, 5)
   const slots = Array.from({ length: 4 }, (_, i) => thumbs[i] ?? null)
 
+  const onCarouselScroll = () => {
+    const el = carouselRef.current
+    if (!el) return
+    const i = Math.round(el.scrollLeft / el.clientWidth)
+    setCarouselIndex(i)
+  }
+
   return (
     <>
+      {/* Desktop / tablet grid */}
       <div className="detail-gallery">
         <div
           className="detail-photo detail-photo--main"
@@ -85,6 +95,37 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
             </div>
           )
         })}
+      </div>
+
+      {/* Mobile swipeable carousel */}
+      <div className="detail-carousel">
+        <div
+          className="detail-carousel-track"
+          ref={carouselRef}
+          onScroll={onCarouselScroll}
+        >
+          {images.map((src, i) => (
+            <div
+              key={i}
+              className="detail-carousel-slide"
+              onClick={() => setLightboxIndex(i)}
+            >
+              <img src={src} alt={`${title} ${i + 1}`} />
+            </div>
+          ))}
+        </div>
+        {images.length > 1 && (
+          <div className="detail-carousel-counter">
+            {carouselIndex + 1} / {images.length}
+          </div>
+        )}
+        <button
+          className="detail-carousel-btn"
+          onClick={() => setLightboxIndex(0)}
+        >
+          <span className="detail-gallery-btn-grid">⊞</span>
+          Mostrar todas las fotos
+        </button>
       </div>
 
       {lightboxIndex !== null && (
@@ -116,6 +157,21 @@ function Lightbox({
   const prev = useCallback(() => setCurrent((c) => (c - 1 + total) % total), [total])
   const next = useCallback(() => setCurrent((c) => (c + 1) % total), [total])
 
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+  }
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart.current) return
+    const dx = e.changedTouches[0].clientX - touchStart.current.x
+    const dy = e.changedTouches[0].clientY - touchStart.current.y
+    touchStart.current = null
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) next()
+      else prev()
+    }
+  }
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -141,7 +197,12 @@ function Lightbox({
         ‹
       </button>
 
-      <div className="lightbox-img-wrap" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="lightbox-img-wrap"
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
         <img src={images[current]} alt={`${title} ${current + 1}`} />
       </div>
 

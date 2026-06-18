@@ -221,8 +221,10 @@ function HipotecasHero() {
 function QueHacemos() {
   const wrapRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
+  const viewportRef = useRef<HTMLDivElement>(null)
   const [range, setRange] = useState(0)
   const [pinned, setPinned] = useState(false)
+  const [active, setActive] = useState(0)
 
   const { scrollYProgress } = useScroll({
     target: wrapRef,
@@ -230,6 +232,22 @@ function QueHacemos() {
   })
   const x = useTransform(scrollYProgress, [0, 1], [0, -range])
   const fill = useTransform(scrollYProgress, [0, 1], [0, 1])
+
+  // En móvil (sin pin) el viewport es un slider horizontal con scroll-snap:
+  // el paso activo se deduce de la posición de scroll y los dots saltan a cada uno.
+  const onViewportScroll = () => {
+    if (pinned) return
+    const el = viewportRef.current
+    if (!el || el.clientWidth === 0) return
+    const idx = Math.round(el.scrollLeft / el.clientWidth)
+    setActive(Math.max(0, Math.min(BENEFICIOS.length - 1, idx)))
+  }
+
+  const goTo = (i: number) => {
+    const el = viewportRef.current
+    if (!el) return
+    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
+  }
 
   // 1) Decidir si pinnamos según el ancho de pantalla.
   useEffect(() => {
@@ -269,7 +287,7 @@ function QueHacemos() {
           <h2 className="qh-title">Te acompañamos en cada paso</h2>
         </div>
 
-        <div className="qh-viewport">
+        <div className="qh-viewport" ref={viewportRef} onScroll={onViewportScroll}>
           <motion.div className="qh-track" ref={trackRef} style={pinned ? { x } : undefined}>
             <div className="qh-rail" aria-hidden="true">
               <motion.div
@@ -289,6 +307,19 @@ function QueHacemos() {
               </div>
             ))}
           </motion.div>
+        </div>
+
+        <div className="qh-dots" role="tablist" aria-label="Pasos">
+          {BENEFICIOS.map((texto, i) => (
+            <button
+              key={texto}
+              type="button"
+              className={`qh-dot-btn${active === i ? ' is-active' : ''}`}
+              aria-label={`Ver paso ${i + 1}`}
+              aria-selected={active === i}
+              onClick={() => goTo(i)}
+            />
+          ))}
         </div>
       </div>
     </section>

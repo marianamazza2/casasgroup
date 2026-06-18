@@ -79,6 +79,31 @@ function AdministracionDeFincasPage() {
   const ctaRef = useRef<HTMLElement>(null)
   const [ctaActive, setCtaActive] = useState(false)
 
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [active, setActive] = useState(0)
+
+  // Paso de scroll = ancho de una card + el gap del track. Se mide del DOM para
+  // que funcione con los anchos responsive (clamp) sin duplicar valores en JS.
+  const stepFor = (el: HTMLDivElement) => {
+    const first = el.firstElementChild as HTMLElement | null
+    if (!first) return el.clientWidth
+    const gap = parseFloat(getComputedStyle(el).columnGap || '0') || 0
+    return first.offsetWidth + gap
+  }
+
+  const onTrackScroll = () => {
+    const el = trackRef.current
+    if (!el) return
+    const idx = Math.round(el.scrollLeft / stepFor(el))
+    setActive(Math.max(0, Math.min(FEATURES.length - 1, idx)))
+  }
+
+  const goTo = (i: number) => {
+    const el = trackRef.current
+    if (!el) return
+    el.scrollTo({ left: i * stepFor(el), behavior: 'smooth' })
+  }
+
   useEffect(() => {
     const el = ctaRef.current
     if (!el) return
@@ -102,7 +127,9 @@ function AdministracionDeFincasPage() {
         </div>
 
         <motion.div
-          className="adm-feature-grid"
+          className="adm-feature-track"
+          ref={trackRef}
+          onScroll={onTrackScroll}
           variants={gridVariants}
           initial="hidden"
           whileInView="show"
@@ -120,6 +147,19 @@ function AdministracionDeFincasPage() {
             </motion.article>
           ))}
         </motion.div>
+
+        <div className="adm-feature-dots" role="tablist" aria-label="Servicios incluidos">
+          {FEATURES.map((item, i) => (
+            <button
+              key={item.title}
+              type="button"
+              className={`adm-feature-dot${active === i ? ' is-active' : ''}`}
+              aria-label={`Ver ${item.title}`}
+              aria-selected={active === i}
+              onClick={() => goTo(i)}
+            />
+          ))}
+        </div>
       </section>
 
       <section ref={ctaRef} className={`adm-cta${ctaActive ? ' is-active' : ''}`}>

@@ -18,6 +18,7 @@ const SCROLL_PER_VALUE = 0.55
 
 export function ValoresSlider({ values }: { values: Value[] }) {
   const wrapRef = useRef<HTMLDivElement>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
   const [pinned, setPinned] = useState(false)
 
@@ -31,6 +32,22 @@ export function ValoresSlider({ values }: { values: Value[] }) {
     const idx = Math.floor(p * values.length)
     setActive(Math.max(0, Math.min(values.length - 1, idx)))
   })
+
+  // En móvil el escenario es un slider horizontal: el valor activo se deduce
+  // de la posición de scroll y los dots permiten saltar a cada uno.
+  const onStageScroll = () => {
+    if (pinned) return
+    const el = stageRef.current
+    if (!el || el.clientWidth === 0) return
+    const idx = Math.round(el.scrollLeft / el.clientWidth)
+    setActive(Math.max(0, Math.min(values.length - 1, idx)))
+  }
+
+  const goTo = (i: number) => {
+    const el = stageRef.current
+    if (!el) return
+    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
+  }
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
@@ -83,7 +100,7 @@ export function ValoresSlider({ values }: { values: Value[] }) {
             ))}
           </div>
 
-          <div className="valores-stage">
+          <div className="valores-stage" ref={stageRef} onScroll={onStageScroll}>
             {values.map((value, i) => (
               <motion.div
                 key={value.title}
@@ -105,6 +122,19 @@ export function ValoresSlider({ values }: { values: Value[] }) {
               </motion.div>
             ))}
           </div>
+        </div>
+
+        <div className="valores-dots" role="tablist" aria-label="Valores">
+          {values.map((value, i) => (
+            <button
+              key={value.title}
+              type="button"
+              className={`valores-dot${active === i ? ' is-active' : ''}`}
+              aria-label={`Ver ${value.title}`}
+              aria-selected={active === i}
+              onClick={() => goTo(i)}
+            />
+          ))}
         </div>
       </div>
     </section>

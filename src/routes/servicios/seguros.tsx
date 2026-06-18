@@ -7,6 +7,7 @@ import {
   useTransform,
 } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import type { TouchEvent } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 
 export const Route = createFileRoute('/servicios/seguros')({
@@ -153,13 +154,26 @@ const showcaseReveal = {
 
 function TiposSeguro() {
   const [active, setActive] = useState(0)
+  // En móvil la sección es un slider: ocultamos la lista y navegamos con
+  // los dots o deslizando sobre la imagen. En desktop sigue la lógica de scroll.
+  const [isMobile, setIsMobile] = useState(false)
   const itemRefs = useRef<(HTMLLIElement | null)[]>([])
+  const touchStartX = useRef<number | null>(null)
   const item = TIPOS_SEGURO[active]
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 860px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
 
   // Igual que la sección de servicios de la home: además del hover, el item
   // activo se actualiza con el scroll (el más cercano al centro del viewport),
-  // aunque el ratón no esté encima.
+  // aunque el ratón no esté encima. Solo en desktop (en móvil manda el slider).
   useEffect(() => {
+    if (isMobile) return
     const handleScroll = () => {
       const items = itemRefs.current.filter(Boolean) as HTMLLIElement[]
       if (!items.length) return
@@ -181,7 +195,20 @@ function TiposSeguro() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [isMobile])
+
+  const goTo = (i: number) =>
+    setActive((i + TIPOS_SEGURO.length) % TIPOS_SEGURO.length)
+
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (touchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 40) goTo(active + (dx < 0 ? 1 : -1))
+    touchStartX.current = null
+  }
 
   return (
     <section className="section seguros-tipos-section">
@@ -226,7 +253,11 @@ function TiposSeguro() {
             ))}
           </ul>
 
-          <div className="seguros-preview">
+          <div
+            className="seguros-preview"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             <AnimatePresence mode="wait">
               <motion.article
                 key={item.title}
@@ -249,6 +280,21 @@ function TiposSeguro() {
                 </div>
               </motion.article>
             </AnimatePresence>
+          </div>
+
+          {/* Dots de navegación: solo visibles en móvil (slider) */}
+          <div className="seguros-dots" role="tablist" aria-label="Tipos de seguro">
+            {TIPOS_SEGURO.map((tipo, i) => (
+              <button
+                key={tipo.title}
+                type="button"
+                role="tab"
+                aria-selected={i === active}
+                aria-label={tipo.title}
+                className={`seguros-dot${i === active ? ' is-active' : ''}`}
+                onClick={() => goTo(i)}
+              />
+            ))}
           </div>
         </motion.div>
       </div>

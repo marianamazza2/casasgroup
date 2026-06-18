@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="footer-grid">
-        <div>
+        <div className="footer-brand">
           <Link className="logo logo-small footer-logo" to="/" aria-label="Casas Group">
             <small>GROUP</small>
             <span>CASAS</span>

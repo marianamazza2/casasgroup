@@ -83,6 +83,24 @@ function CambioDeSuministrosPage() {
   })
   const lineFill = useTransform(scrollYProgress, [0, 1], [0, 1])
 
+  // En móvil las tarjetas se convierten en un slider horizontal con dots:
+  // el activo se deduce de la posición de scroll y los dots saltan a cada uno.
+  const cardsRef = useRef<HTMLDivElement>(null)
+  const [activeCard, setActiveCard] = useState(0)
+
+  const onCardsScroll = () => {
+    const el = cardsRef.current
+    if (!el || el.clientWidth === 0) return
+    const idx = Math.round(el.scrollLeft / el.clientWidth)
+    setActiveCard(Math.max(0, Math.min(SUMINISTROS.length - 1, idx)))
+  }
+
+  const goToCard = (i: number) => {
+    const el = cardsRef.current
+    if (!el) return
+    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
+  }
+
   return (
     <main className="servicio-page">
       <SumHero />
@@ -95,7 +113,7 @@ function CambioDeSuministrosPage() {
             <p>Nos ocupamos de cada suministro para que tú solo pienses en instalarte.</p>
           </div>
 
-          <div className="suministros-cards">
+          <div className="suministros-cards" ref={cardsRef} onScroll={onCardsScroll}>
             {SUMINISTROS.map((item, i) => {
               const col = i % 3
               const row = Math.floor(i / 3)
@@ -126,6 +144,19 @@ function CambioDeSuministrosPage() {
                 </motion.article>
               )
             })}
+          </div>
+
+          <div className="suministros-dots" role="tablist" aria-label="Suministros">
+            {SUMINISTROS.map((item, i) => (
+              <button
+                key={item.title}
+                type="button"
+                className={`suministros-dot${activeCard === i ? ' is-active' : ''}`}
+                aria-label={`Ver ${item.title}`}
+                aria-selected={activeCard === i}
+                onClick={() => goToCard(i)}
+              />
+            ))}
           </div>
         </div>
       </section>

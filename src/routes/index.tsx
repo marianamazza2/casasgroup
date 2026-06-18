@@ -104,6 +104,7 @@ function Home() {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
   const [propertyMode, setPropertyMode] = useState<'Venta' | 'Alquiler'>('Venta')
   const [whyIndex, setWhyIndex] = useState(0)
+  const [activeProperty, setActiveProperty] = useState(0)
   const propertiesRef = useRef<HTMLDivElement>(null)
 
   const heroWrapperRef = useRef<HTMLDivElement>(null)
@@ -115,6 +116,7 @@ function Home() {
   const [activeAccessBlock, setActiveAccessBlock] = useState<number | null>(null)
   const [activeService, setActiveService] = useState(0)
   const serviceItemRefs = useRef<(HTMLElement | null)[]>([])
+  const servicesListRef = useRef<HTMLDivElement | null>(null)
 
   const [skipAnimation] = useState(() => {
     try { return sessionStorage.getItem('heroSeen') === 'true' } catch { return false }
@@ -216,6 +218,7 @@ function Home() {
 
   useEffect(() => {
     const handleServiceScroll = () => {
+      if (window.innerWidth <= 1024) return
       const items = serviceItemRefs.current.filter(Boolean) as HTMLElement[]
       if (!items.length) return
       const viewportCenter = window.innerHeight / 2
@@ -238,7 +241,35 @@ function Home() {
     return () => window.removeEventListener('scroll', handleServiceScroll)
   }, [])
 
+  // Mobile: el listado de servicios es un slider horizontal; detectamos la card
+  // centrada por la posicion de scroll del propio contenedor.
   useEffect(() => {
+    const list = servicesListRef.current
+    if (!list) return
+    const handleServiceSwipe = () => {
+      if (window.innerWidth > 1024) return
+      const items = serviceItemRefs.current.filter(Boolean) as HTMLElement[]
+      if (!items.length) return
+      const center = list.scrollLeft + list.clientWidth / 2
+      let closestIdx = 0
+      let closestDist = Infinity
+      items.forEach((item, i) => {
+        const itemCenter = item.offsetLeft + item.offsetWidth / 2
+        const dist = Math.abs(itemCenter - center)
+        if (dist < closestDist) {
+          closestDist = dist
+          closestIdx = i
+        }
+      })
+      setActiveService(closestIdx)
+    }
+    list.addEventListener('scroll', handleServiceSwipe, { passive: true })
+    handleServiceSwipe()
+    return () => list.removeEventListener('scroll', handleServiceSwipe)
+  }, [])
+
+  useEffect(() => {
+    if (window.innerWidth <= 1024) return
     const rail = propertiesRef.current
     if (!rail) return
     const card = rail.querySelector<HTMLElement>('.property-card')
@@ -246,6 +277,47 @@ function Home() {
     const cardWidth = card.getBoundingClientRect().width
     rail.scrollLeft = cardWidth + 20
   }, [])
+
+  // Mobile: el rail de propiedades es un slider horizontal; detectamos la card
+  // centrada por la posicion de scroll para iluminar el dot correspondiente.
+  useEffect(() => {
+    const rail = propertiesRef.current
+    if (!rail) return
+    const handlePropertySwipe = () => {
+      if (window.innerWidth > 1024) return
+      const cards = Array.from(rail.querySelectorAll<HTMLElement>('.property-card'))
+      if (!cards.length) return
+      const center = rail.scrollLeft + rail.clientWidth / 2
+      let closestIdx = 0
+      let closestDist = Infinity
+      cards.forEach((card, i) => {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2
+        const dist = Math.abs(cardCenter - center)
+        if (dist < closestDist) {
+          closestDist = dist
+          closestIdx = i
+        }
+      })
+      setActiveProperty(closestIdx)
+    }
+    if (window.innerWidth <= 1024) {
+      rail.scrollLeft = 0
+      setActiveProperty(0)
+    }
+    rail.addEventListener('scroll', handlePropertySwipe, { passive: true })
+    handlePropertySwipe()
+    return () => rail.removeEventListener('scroll', handlePropertySwipe)
+  }, [propertyMode])
+
+  const scrollToService = (i: number) => {
+    const list = servicesListRef.current
+    const item = serviceItemRefs.current[i]
+    if (!list || !item) return
+    list.scrollTo({
+      left: item.offsetLeft + item.offsetWidth / 2 - list.clientWidth / 2,
+      behavior: 'smooth',
+    })
+  }
 
   const currentWhy = whyItems[whyIndex]
   const isSearchTab = heroTab === 'comprar' || heroTab === 'alquilar'
@@ -293,6 +365,17 @@ function Home() {
 
   const nextWhy = (direction: -1 | 1) => {
     setWhyIndex((current) => (current + direction + whyItems.length) % whyItems.length)
+  }
+
+  const scrollToProperty = (i: number) => {
+    const rail = propertiesRef.current
+    if (!rail) return
+    const card = rail.querySelectorAll<HTMLElement>('.property-card')[i]
+    if (!card) return
+    rail.scrollTo({
+      left: card.offsetLeft + card.offsetWidth / 2 - rail.clientWidth / 2,
+      behavior: 'smooth',
+    })
   }
 
   const scrollProperties = (direction: -1 | 1) => {
@@ -422,7 +505,7 @@ function Home() {
               </motion.div>
             </div>
 
-            <div className="services-list">
+            <div className="services-list" ref={servicesListRef}>
               {services.map((svc, i) => (
                 <article
                   key={svc.title}
@@ -438,6 +521,17 @@ function Home() {
                 </article>
               ))}
             </div>
+          </div>
+          <div className="services-dots">
+            {services.map((svc, i) => (
+              <button
+                key={svc.title}
+                type="button"
+                className={`services-dot${activeService === i ? ' active' : ''}`}
+                onClick={() => scrollToService(i)}
+                aria-label={`Ver ${svc.title}`}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -543,7 +637,7 @@ function Home() {
 
       <section className="section properties" id="propiedades">
         <div className="section-top properties-top">
-          <SectionHeading eyebrow="Inmuebles" title="Propiedades" subtitle="Seleccion de inmuebles disponibles." />
+          <SectionHeading eyebrow="Inmuebles" title="Propiedades" />
           <div className="property-controls">
             <div className="pills" aria-label="Tipo de operacion">
               {(['Venta', 'Alquiler'] as const).map((mode) => (
@@ -600,6 +694,19 @@ function Home() {
           >
             <span aria-hidden="true">→</span>
           </button>
+        </div>
+
+        <div className="property-dots" role="tablist" aria-label="Propiedades">
+          {displayedProperties.map((property, i) => (
+            <button
+              type="button"
+              key={property.id}
+              className={i === activeProperty ? 'property-dot active' : 'property-dot'}
+              aria-label={`Ir a la propiedad ${i + 1}`}
+              aria-selected={i === activeProperty}
+              onClick={() => scrollToProperty(i)}
+            />
+          ))}
         </div>
 
         <button className="text-link" type="button" onClick={() => navigate({ to: '/propiedades', search: { query: '', mode: 'compra' } })}>
