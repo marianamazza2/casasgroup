@@ -26,10 +26,6 @@ function PropertyDetailPage() {
 
   return (
     <div className="property-detail">
-      <Link to="/propiedades" search={{ query: '', mode: 'compra' }} className="detail-back">
-        ← Volver a búsqueda
-      </Link>
-
       <PhotoGallery images={p.images ?? [p.image]} title={p.title} />
 
       <div className="detail-content">
@@ -105,20 +101,29 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
 
       {/* Mobile swipeable carousel */}
       <div className="detail-carousel">
-        <div
-          className="detail-carousel-track"
-          ref={carouselRef}
-          onScroll={onCarouselScroll}
-        >
-          {images.map((src, i) => (
-            <div
-              key={i}
-              className="detail-carousel-slide"
-              onClick={() => setLightboxIndex(i)}
-            >
-              <img src={src} alt={`${title} ${i + 1}`} />
-            </div>
-          ))}
+        <div className="detail-carousel-stage">
+          <div
+            className="detail-carousel-track"
+            ref={carouselRef}
+            onScroll={onCarouselScroll}
+          >
+            {images.map((src, i) => (
+              <div
+                key={i}
+                className="detail-carousel-slide"
+                onClick={() => setLightboxIndex(i)}
+              >
+                <img src={src} alt={`${title} ${i + 1}`} />
+              </div>
+            ))}
+          </div>
+          <button
+            className="detail-carousel-btn"
+            onClick={() => setLightboxIndex(0)}
+          >
+            <span className="detail-gallery-btn-grid">⊞</span>
+            Mostrar todas
+          </button>
         </div>
         {images.length > 1 && (
           <div className="detail-carousel-dots" role="tablist" aria-label="Fotos">
@@ -134,13 +139,6 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
             ))}
           </div>
         )}
-        <button
-          className="detail-carousel-btn"
-          onClick={() => setLightboxIndex(0)}
-        >
-          <span className="detail-gallery-btn-grid">⊞</span>
-          Mostrar todas las fotos
-        </button>
       </div>
 
       {lightboxIndex !== null && (

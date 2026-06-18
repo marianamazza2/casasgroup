@@ -313,7 +313,7 @@ button {
   width: 34px;
   height: 34px;
   margin-left: -6px;
-  color: var(--text);
+  color: var(--gold);
   font-size: 30px;
   line-height: 1;
   text-decoration: none;
@@ -3841,16 +3841,6 @@ a.contact-card:hover .contact-card-icon {
   text-decoration: none;
 }
 
-.detail-back {
-  display: block;
-  padding: 12px 32px;
-  border-bottom: 0.5px solid var(--line);
-  font-size: 12px;
-  color: var(--text);
-  text-decoration: none;
-}
-.detail-back:hover { color: var(--gold); }
-
 /* Gallery — Airbnb style */
 .detail-gallery {
   display: grid;
@@ -3902,6 +3892,7 @@ a.contact-card:hover .contact-card-icon {
 
 /* Mobile swipeable carousel (hidden on desktop) */
 .detail-carousel { display: none; }
+.detail-carousel-stage { position: relative; }
 .detail-carousel-track {
   display: flex;
   overflow-x: auto;
@@ -3925,17 +3916,11 @@ a.contact-card:hover .contact-card-icon {
   display: block;
 }
 .detail-carousel-dots {
-  position: absolute;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 7px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(2px);
+  padding: 14px 0 4px;
 }
 .detail-carousel-dot {
   width: 7px;
@@ -3943,18 +3928,18 @@ a.contact-card:hover .contact-card-icon {
   padding: 0;
   border: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.55);
+  background: var(--line);
   cursor: pointer;
   transition: background 200ms ease, transform 200ms ease;
 }
 .detail-carousel-dot.active {
-  background: #fff;
-  transform: scale(1.25);
+  background: var(--gold);
+  transform: scale(1.3);
 }
 .detail-carousel-btn {
   position: absolute;
   bottom: 12px;
-  left: 12px;
+  right: 12px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -4040,7 +4025,7 @@ a.contact-card:hover .contact-card-icon {
 /* Description */
 .detail-description { margin-bottom: 28px; }
 .detail-description p {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.8;
   color: var(--text);
   margin: 8px 0 0;
@@ -4049,8 +4034,8 @@ a.contact-card:hover .contact-card-icon {
 /* Section titles */
 .detail-section-title {
   font-family: var(--serif);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   color: var(--ink);
   margin: 0 0 12px;
   letter-spacing: 0.02em;
@@ -4136,37 +4121,42 @@ a.contact-card:hover .contact-card-icon {
   line-height: 1.6;
   margin: 0 0 18px;
 }
+/* Opciones de contacto: filas estilo lista "Otros servicios" — label serif a la
+   izquierda, flecha dorada a la derecha y línea divisoria, sin imágenes. */
 .detail-btn {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   width: 100%;
-  padding: 11px 16px;
-  border-radius: 8px;
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  text-align: center;
-  margin-bottom: 8px;
+  padding: 16px 2px;
+  margin: 0;
+  background: none;
   border: none;
+  border-bottom: 0.5px solid var(--line);
+  border-radius: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 350ms ease;
 }
-.detail-btn--gold {
-  background: transparent;
+.detail-btn:first-child {
+  border-top: 0.5px solid var(--line);
+}
+.detail-btn:hover { border-bottom-color: var(--gold); }
+.detail-btn-label {
+  font-family: var(--serif);
+  font-size: clamp(17px, 2vw, 22px);
+  font-weight: 500;
+  color: var(--ink);
+  transition: color 350ms ease;
+}
+.detail-btn:hover .detail-btn-label { color: var(--gold); }
+.detail-btn-arrow {
   color: var(--gold);
-  border: 0.5px solid var(--gold);
+  font-size: 18px;
+  transition: transform 350ms ease;
 }
-.detail-btn--gold:hover { opacity: 0.9; }
-.detail-btn--whatsapp {
-  background: transparent;
-  color: var(--gold);
-  border: 0.5px solid var(--gold);
-}
-.detail-btn--whatsapp:hover { opacity: 0.9; }
-.detail-btn--outline {
-  background: transparent;
-  color: var(--gold);
-  border: 0.5px solid var(--gold);
-}
-.detail-btn--outline:hover { opacity: 0.9; }
+.detail-btn:hover .detail-btn-arrow { transform: translateX(6px); }
 .detail-ref {
   font-size: 10px;
   color: var(--muted);
@@ -4210,23 +4200,9 @@ a.contact-card:hover .contact-card-icon {
     padding-top: 6px;
   }
 
-  /* Options stacked one below the other, serif like "Seguimos a tu lado" */
+  /* Filas de contacto en una sola columna, como "Seguimos a tu lado" */
   .detail-contact-options { display: flex; flex-direction: column; }
-  .detail-contact-options .detail-btn {
-    font-family: var(--serif);
-    font-size: 19px;
-    font-weight: 500;
-    text-align: left;
-    color: var(--ink);
-    background: none;
-    border: none;
-    border-bottom: 0.5px solid var(--line);
-    border-radius: 0;
-    padding: 16px 2px;
-    margin: 0;
-    transition: color 300ms ease;
-  }
-  .detail-contact-options .detail-btn:hover { color: var(--gold); }
+  .detail-btn-label { font-size: 17px; }
   .detail-ref { text-align: left; margin-top: 16px; }
 }
 
@@ -4253,7 +4229,7 @@ a.contact-card:hover .contact-card-icon {
   z-index: 10;
   background: transparent;
   border: none;
-  color: rgba(34, 34, 34, 0.55);
+  color: var(--gold);
   font-size: 20px;
   cursor: pointer;
   line-height: 1;
@@ -4267,7 +4243,7 @@ a.contact-card:hover .contact-card-icon {
 }
 .lightbox-close:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: #222;
+  color: var(--gold);
 }
 
 .lightbox-img-wrap {
@@ -4357,6 +4333,7 @@ a.contact-card:hover .contact-card-icon {
 
 @media (max-width: 768px) {
   .lightbox-overlay {
+    background: #efede8eb;
     /* deja aire bajo la tira de miniaturas (+ safe-area del navegador iOS) */
     padding: 0 0 calc(16px + env(safe-area-inset-bottom));
     padding-top: calc(var(--nav-h) + 16px);

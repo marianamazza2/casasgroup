@@ -24,11 +24,18 @@ export function ContactCard({ propertyRef }: Props) {
           Contáctanos y te ayudamos con todos los detalles.
         </p>
         <div className="detail-contact-options">
-          <Link to="/contacto" className="detail-btn detail-btn--gold">
-            Contactar →
+          <Link to="/contacto" className="detail-btn">
+            <span className="detail-btn-label">Contactar</span>
+            <span className="detail-btn-arrow" aria-hidden="true">→</span>
           </Link>
-          <button className="detail-btn detail-btn--whatsapp">WhatsApp</button>
-          <button className="detail-btn detail-btn--outline">Enviar email</button>
+          <button className="detail-btn">
+            <span className="detail-btn-label">WhatsApp</span>
+            <span className="detail-btn-arrow" aria-hidden="true">→</span>
+          </button>
+          <button className="detail-btn">
+            <span className="detail-btn-label">Enviar email</span>
+            <span className="detail-btn-arrow" aria-hidden="true">→</span>
+          </button>
         </div>
         <p className="detail-ref">Ref. {propertyRef}</p>
       </div>
