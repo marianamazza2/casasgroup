@@ -107,6 +107,8 @@ function Home() {
   const [whyIndex, setWhyIndex] = useState(0)
   const [activeProperty, setActiveProperty] = useState(0)
   const propertiesRef = useRef<HTMLDivElement>(null)
+  const whyRailRef = useRef<HTMLDivElement>(null)
+  const whyItemRefs = useRef<(HTMLElement | null)[]>([])
 
   const heroWrapperRef = useRef<HTMLDivElement>(null)
   const heroGoldRef = useRef<HTMLDivElement>(null)
@@ -309,6 +311,43 @@ function Home() {
     handlePropertySwipe()
     return () => rail.removeEventListener('scroll', handlePropertySwipe)
   }, [propertyMode])
+
+  // Mobile: "Por que elegirnos" es un slider horizontal de cards (mismo
+  // formato que servicios); detectamos la card centrada por el scroll del rail.
+  useEffect(() => {
+    const list = whyRailRef.current
+    if (!list) return
+    const handleWhySwipe = () => {
+      if (window.innerWidth > 1024) return
+      const items = whyItemRefs.current.filter(Boolean) as HTMLElement[]
+      if (!items.length) return
+      const center = list.scrollLeft + list.clientWidth / 2
+      let closestIdx = 0
+      let closestDist = Infinity
+      items.forEach((item, i) => {
+        const itemCenter = item.offsetLeft + item.offsetWidth / 2
+        const dist = Math.abs(itemCenter - center)
+        if (dist < closestDist) {
+          closestDist = dist
+          closestIdx = i
+        }
+      })
+      setWhyIndex(closestIdx)
+    }
+    list.addEventListener('scroll', handleWhySwipe, { passive: true })
+    handleWhySwipe()
+    return () => list.removeEventListener('scroll', handleWhySwipe)
+  }, [])
+
+  const scrollToWhyRail = (i: number) => {
+    const list = whyRailRef.current
+    const item = whyItemRefs.current[i]
+    if (!list || !item) return
+    list.scrollTo({
+      left: item.offsetLeft + item.offsetWidth / 2 - list.clientWidth / 2,
+      behavior: 'smooth',
+    })
+  }
 
   const scrollToService = (i: number) => {
     const list = servicesListRef.current
@@ -617,6 +656,24 @@ function Home() {
             <span aria-hidden="true">→</span>
           </button>
         </div>
+
+        {/* Mobile: slider horizontal de cards, mismo formato que "Nuestros servicios" */}
+        <div className="why-rail-wrap">
+          <div className="why-rail" ref={whyRailRef}>
+            {whyItems.map((item, i) => (
+              <article
+                key={item.title}
+                ref={(el) => { whyItemRefs.current[i] = el }}
+                className="why-rail-card"
+              >
+                <span className="why-rail-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
         <div className="why-dots" role="tablist" aria-label="Por que elegirnos">
           {whyItems.map((item, i) => (
             <button
@@ -625,7 +682,7 @@ function Home() {
               className={i === whyIndex ? 'why-dot active' : 'why-dot'}
               aria-label={`Ir a ${item.title}`}
               aria-selected={i === whyIndex}
-              onClick={() => setWhyIndex(i)}
+              onClick={() => scrollToWhyRail(i)}
             />
           ))}
         </div>

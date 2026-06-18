@@ -64,6 +64,12 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
     setCarouselIndex(i)
   }
 
+  const scrollToImage = (i: number) => {
+    const el = carouselRef.current
+    if (!el) return
+    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
+  }
+
   return (
     <>
       {/* Desktop / tablet grid */}
@@ -115,8 +121,17 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
           ))}
         </div>
         {images.length > 1 && (
-          <div className="detail-carousel-counter">
-            {carouselIndex + 1} / {images.length}
+          <div className="detail-carousel-dots" role="tablist" aria-label="Fotos">
+            {images.map((_, i) => (
+              <button
+                type="button"
+                key={i}
+                className={`detail-carousel-dot${i === carouselIndex ? ' active' : ''}`}
+                aria-label={`Ir a la foto ${i + 1}`}
+                aria-selected={i === carouselIndex}
+                onClick={() => scrollToImage(i)}
+              />
+            ))}
           </div>
         )}
         <button

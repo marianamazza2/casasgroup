@@ -299,6 +299,31 @@ button {
   background: var(--gold-soft);
 }
 
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Flecha de volver junto al logo (estilo Tecnocasa) — solo movil */
+.nav-back {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-left: -6px;
+  color: var(--text);
+  font-size: 30px;
+  line-height: 1;
+  text-decoration: none;
+  border-radius: 50%;
+  transition: background 150ms ease, color 150ms ease;
+}
+.nav-back span { display: block; transform: translateY(-1px); }
+.nav-back:hover { color: var(--gold); }
+.site-nav--transparent .nav-back { color: #fff; }
+
 .logo {
   background: transparent;
   border: 0;
@@ -1152,6 +1177,11 @@ button {
 
 .why-slider {
   position: relative;
+}
+
+/* El rail de cards es exclusivo de mobile; en desktop se usa .why-slider */
+.why-rail-wrap {
+  display: none;
 }
 
 .why-dots {
@@ -2033,6 +2063,15 @@ a.contact-card:hover .contact-card-icon {
     background: #fff;
   }
 
+  /* Flecha de volver junto al logo dentro de una propiedad; en su lugar
+     ocultamos la barra "Volver a busqueda" del cuerpo, ya redundante. */
+  .nav-back {
+    display: inline-flex;
+  }
+  .detail-back {
+    display: none;
+  }
+
   /* El sector no necesitaba mas de lo mismo: ocultamos el strip en mobile */
   .about-strip {
     display: none;
@@ -2371,29 +2410,73 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .valuation,
-  .why-card,
   .location-band {
     grid-template-columns: 1fr;
   }
 
-  .why-card {
-    height: auto;
-  }
-
-  .why-card img {
+  /* Mobile: el slider desktop (card grande con imagen) se reemplaza por un
+     rail horizontal de cards con el mismo formato que "Nuestros servicios". */
+  .why-slider {
     display: none;
   }
 
-  /* En mobile el slider se navega con dots: ocultamos las flechas y centramos
-     verticalmente el contenido de la card */
-  .why-nav {
+  .why-rail-wrap {
+    display: block;
+  }
+
+  .why-rail {
+    display: flex;
+    gap: 14px;
+    /* Rompe el padding de la seccion para alinear con servicios/propiedades */
+    margin-inline: calc(-1 * clamp(22px, 5vw, 72px));
+    overflow-x: auto;
+    padding-inline: clamp(20px, 5vw, 72px);
+    scroll-padding-inline: clamp(20px, 5vw, 72px);
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .why-rail::-webkit-scrollbar {
     display: none;
   }
 
-  .why-card > div {
+  .why-rail-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    display: flex;
+    flex: 0 0 100%;
+    flex-direction: column;
     justify-content: center;
-    min-height: clamp(340px, 56vh, 500px);
-    padding: clamp(40px, 9vw, 72px) clamp(28px, 6vw, 48px);
+    padding: clamp(28px, 7vw, 40px) clamp(24px, 6vw, 32px);
+    scroll-snap-align: center;
+  }
+
+  .why-rail-num {
+    color: var(--gold);
+    display: block;
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .why-rail-card h3 {
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 0 0 16px;
+  }
+
+  .why-rail-card p {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 0;
+    max-width: none;
   }
 
   .why-dots {
@@ -2509,7 +2592,13 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .property-controls .properties-see-all-mobile {
+    align-items: center;
     display: inline-flex;
+    /* hereda padding horizontal de `.properties .text-link`; lo anulamos para
+       que el borde derecho del enlace caiga sobre el padding de la seccion y
+       el margen derecho iguale al izquierdo del toggle */
+    padding-left: 0;
+    padding-right: 0;
     white-space: nowrap;
   }
 
@@ -3835,17 +3924,32 @@ a.contact-card:hover .contact-card-icon {
   object-position: center;
   display: block;
 }
-.detail-carousel-counter {
+.detail-carousel-dots {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  font-family: var(--sans);
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  padding: 4px 10px;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
   border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(2px);
+}
+.detail-carousel-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: background 200ms ease, transform 200ms ease;
+}
+.detail-carousel-dot.active {
+  background: #fff;
+  transform: scale(1.25);
 }
 .detail-carousel-btn {
   position: absolute;
@@ -3994,12 +4098,31 @@ a.contact-card:hover .contact-card-icon {
   border-radius: 16px;
   padding: 24px;
 }
+.detail-contact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  margin: 0 0 10px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: default;
+}
 .detail-contact-title {
   font-family: var(--serif);
   font-size: 16px;
   font-weight: 500;
   color: var(--ink);
-  margin: 0 0 10px;
+}
+.detail-contact-chevron {
+  display: none;
+  color: var(--gold);
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 300ms ease;
 }
 .detail-gold-line {
   width: 20px;
@@ -4052,12 +4175,67 @@ a.contact-card:hover .contact-card-icon {
   letter-spacing: 0.04em;
 }
 
+/* Mobile detail layout — stack content + contact accordion at the bottom */
+@media (max-width: 768px) {
+  .detail-content {
+    flex-direction: column;
+    gap: 0;
+    padding: 24px 20px;
+  }
+  .detail-title { font-size: 28px; }
+  .detail-sidebar { width: 100%; }
+
+  /* Contact card becomes a full-width accordion under everything */
+  .detail-contact-card {
+    position: static;
+    border: none;
+    border-top: 0.5px solid var(--line);
+    border-radius: 0;
+    padding: 22px 0 0;
+    margin-top: 12px;
+  }
+  .detail-contact-header {
+    cursor: pointer;
+    padding: 6px 0;
+    margin: 0;
+  }
+  .detail-contact-title { font-size: 19px; }
+  .detail-contact-chevron { display: block; }
+  .detail-contact-card--open .detail-contact-chevron { transform: rotate(180deg); }
+
+  /* Collapsed by default; reveal on open */
+  .detail-contact-body { display: none; }
+  .detail-contact-card--open .detail-contact-body {
+    display: block;
+    padding-top: 6px;
+  }
+
+  /* Options stacked one below the other, serif like "Seguimos a tu lado" */
+  .detail-contact-options { display: flex; flex-direction: column; }
+  .detail-contact-options .detail-btn {
+    font-family: var(--serif);
+    font-size: 19px;
+    font-weight: 500;
+    text-align: left;
+    color: var(--ink);
+    background: none;
+    border: none;
+    border-bottom: 0.5px solid var(--line);
+    border-radius: 0;
+    padding: 16px 2px;
+    margin: 0;
+    transition: color 300ms ease;
+  }
+  .detail-contact-options .detail-btn:hover { color: var(--gold); }
+  .detail-ref { text-align: left; margin-top: 16px; }
+}
+
 /* ── Lightbox ──────────────────────────────────────────────────────────── */
 .lightbox-overlay {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.92);
+  background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -4073,21 +4251,24 @@ a.contact-card:hover .contact-card-icon {
   top: calc(var(--nav-h) + 16px);
   right: 16px;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.12);
+  background: transparent;
   border: none;
-  color: #fff;
-  font-size: 22px;
+  color: rgba(34, 34, 34, 0.55);
+  font-size: 20px;
   cursor: pointer;
   line-height: 1;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 150ms ease;
+  transition: background 150ms ease, color 150ms ease;
 }
-.lightbox-close:hover { background: rgba(255, 255, 255, 0.25); }
+.lightbox-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #222;
+}
 
 .lightbox-img-wrap {
   flex: 1;
@@ -4110,27 +4291,31 @@ a.contact-card:hover .contact-card-icon {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.12);
-  border: none;
-  color: #fff;
-  font-size: 48px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  color: #222;
+  font-size: 36px;
   line-height: 1;
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-bottom: 4px;
-  transition: background 150ms ease;
+  transition: background 150ms ease, box-shadow 150ms ease;
 }
-.lightbox-arrow:hover { background: rgba(255, 255, 255, 0.25); }
+.lightbox-arrow:hover {
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+}
 .lightbox-arrow--prev { left: 20px; }
 .lightbox-arrow--next { right: 20px; }
 
 .lightbox-counter {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(34, 34, 34, 0.55);
   font-size: 12px;
   margin: 12px 0 16px;
   letter-spacing: 0.06em;
@@ -4171,7 +4356,11 @@ a.contact-card:hover .contact-card-icon {
 }
 
 @media (max-width: 768px) {
-  .lightbox-overlay { padding: 0; padding-top: calc(var(--nav-h) + 16px); }
+  .lightbox-overlay {
+    /* deja aire bajo la tira de miniaturas (+ safe-area del navegador iOS) */
+    padding: 0 0 calc(16px + env(safe-area-inset-bottom));
+    padding-top: calc(var(--nav-h) + 16px);
+  }
   .lightbox-img-wrap {
     padding: 0 8px;
     touch-action: pan-y;
@@ -4180,8 +4369,8 @@ a.contact-card:hover .contact-card-icon {
   .lightbox-arrow {
     width: 40px;
     height: 40px;
-    font-size: 34px;
-    background: rgba(255, 255, 255, 0.08);
+    font-size: 28px;
+    background: #fff;
   }
   .lightbox-arrow--prev { left: 8px; }
   .lightbox-arrow--next { right: 8px; }

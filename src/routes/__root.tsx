@@ -73,6 +73,10 @@ function SiteNav() {
   // Marca Servicios como activo en cualquier subpagina de /servicios
   const onServices = pathname.startsWith('/servicios')
 
+  // Dentro de una propiedad (/propiedades/<id>) mostramos una flecha de
+  // volver junto al logo en movil, al estilo Tecnocasa.
+  const onPropertyDetail = /^\/propiedades\/.+/.test(pathname)
+
   // Pages whose hero sits behind the nav; elsewhere the nav is always solid
   const isHeroPage = pathname === '/' || pathname === '/contacto'
   const transparent = isHeroPage && !scrolled
@@ -88,10 +92,22 @@ function SiteNav() {
 
   return (
     <header className={navClass}>
-      <Link className="logo logo-small" to="/" aria-label="Casas Group">
-        <span>CASAS</span>
-        <small>GROUP</small>
-      </Link>
+      <div className="nav-brand">
+        {onPropertyDetail && (
+          <Link
+            to="/propiedades"
+            search={{ query: '', mode: 'compra' }}
+            className="nav-back"
+            aria-label="Volver a búsqueda"
+          >
+            <span aria-hidden="true">‹</span>
+          </Link>
+        )}
+        <Link className="logo logo-small" to="/" aria-label="Casas Group">
+          <span>CASAS</span>
+          <small>GROUP</small>
+        </Link>
+      </div>
       <button
         type="button"
         className="nav-burger"
