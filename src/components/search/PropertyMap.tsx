@@ -96,13 +96,19 @@ export function PropertyMap({ properties, activeId, focusZones, onPinClick, onBo
       properties.forEach((p) => {
         if (!p.coords || markersRef.current.has(p.id)) return
 
+        // Wrapper posicionado por MapLibre (su transform de translate). El botón
+        // interior lleva los estilos/animaciones: así sus transiciones no se
+        // aplican al transform de posición y los pines no quedan rezagados al
+        // hacer pan del mapa.
+        const wrapper = document.createElement('div')
         const el = document.createElement('button')
         el.type = 'button'
         el.className = 'map-pin'
         el.textContent = formatPin(p)
         el.addEventListener('click', () => callbackRef.current(p.id))
+        wrapper.appendChild(el)
 
-        const marker = new maplibregl.Marker({ element: el, anchor: 'center' })
+        const marker = new maplibregl.Marker({ element: wrapper, anchor: 'center' })
           .setLngLat([p.coords.lng, p.coords.lat])
           .addTo(map)
 

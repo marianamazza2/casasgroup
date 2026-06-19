@@ -1,4 +1,26 @@
+import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
+
+// Sección de enlaces del footer. En desktop se muestra siempre expandida; en
+// mobile el <h3> se vuelve un botón que despliega/colapsa los enlaces (acordeón)
+// para que el footer no ocupe casi toda la pantalla.
+function FooterSection({ title, children }: { title: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className={`footer-col${open ? ' is-open' : ''}`}>
+      <button
+        type="button"
+        className="footer-col-toggle"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <h3>{title}</h3>
+        <span className="footer-chevron" aria-hidden="true" />
+      </button>
+      <div className="footer-col-links">{children}</div>
+    </div>
+  )
+}
 
 // Footer único reutilizado en todas las páginas. El logo va con GROUP arriba y
 // CASAS abajo (orden del marcado: <small> antes que <span>).
@@ -13,25 +35,22 @@ export function Footer() {
           </Link>
           <p>Tu hogar empieza aqui.</p>
         </div>
-        <div>
-          <h3>Inmuebles</h3>
+        <FooterSection title="Inmuebles">
           <a href="/#propiedades">Alquilar</a>
           <a href="/#propiedades">Comprar</a>
           <a href="/#valoracion">Vender</a>
-        </div>
-        <div>
-          <h3>Servicios</h3>
+        </FooterSection>
+        <FooterSection title="Servicios">
           <Link to="/servicios/administracion-de-fincas">Administración de fincas</Link>
           <Link to="/servicios/cambio-de-suministros">Cambio de suministros</Link>
           <Link to="/servicios/hipotecas">Hipotecas</Link>
           <Link to="/servicios/seguros">Seguros</Link>
-        </div>
-        <div>
-          <h3>Contacto</h3>
+        </FooterSection>
+        <FooterSection title="Contacto">
           <a href="mailto:info@casasgroup.es">info@casasgroup.es</a>
           <a href="tel:+34123456789">+34 123 456 789</a>
           <Link to="/nosotros" hash="trabaja">Trabaja con nosotros</Link>
-        </div>
+        </FooterSection>
       </div>
       <div className="footer-legal">
         <span className="footer-copyright">

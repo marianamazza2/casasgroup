@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { properties } from '../lib/propertiesData'
 import { normalize } from '../lib/locationSearch'
 import {
@@ -65,6 +65,29 @@ interface InitialSearch {
 }
 
 /**
+ * Estado inicial de filtros derivado de la búsqueda de la URL.
+ * Zona inicial: si el usuario buscó una zona/municipio concreto (no una
+ * provincia) y coincide con la taxonomía, la dejamos preseleccionada tanto
+ * en el dropdown de escritorio (`zone`) como en el picker móvil (`zones`).
+ */
+function filtersFromSearch(
+  query: string,
+  mode: FilterState['mode'],
+  locType?: LocType,
+): FilterState {
+  let zone = 'Todas'
+  let zones: string[] = []
+  if (locType !== 'provincia' && query) {
+    const q = normalize(query)
+    const exact = properties.find((p) => p.mode === mode && normalize(p.zone) === q)
+    if (exact) zone = exact.zone
+    else if (locType === 'municipio') zone = query
+    zones = initialZoneTokens(query, locType)
+  }
+  return { ...defaultFilters, query, mode, zone, zones }
+}
+
+/**
  * ¿El inmueble cae dentro del *ámbito de ubicación* buscado (modo + texto)?
  * Se usa para acotar resultados y para derivar qué zonas ofrecer en cascada,
  * antes de aplicar el filtro de zona y el resto.
@@ -87,23 +110,21 @@ function matchesLocation(
 export function usePropertyFilters(initial: InitialSearch = {}) {
   const { query = '', mode = 'compra', locType, province = '' } = initial
 
-  // Zona inicial: si el usuario buscó una zona/municipio concreto (no una
-  // provincia) y coincide con la taxonomía, la dejamos preseleccionada tanto
-  // en el dropdown de escritorio (`zone`) como en el picker móvil (`zones`).
-  const [filters, setFilters] = useState<FilterState>(() => {
-    let zone = 'Todas'
-    let zones: string[] = []
-    if (locType !== 'provincia' && query) {
-      const q = normalize(query)
-      const exact = properties.find(
-        (p) => p.mode === mode && normalize(p.zone) === q,
-      )
-      if (exact) zone = exact.zone
-      else if (locType === 'municipio') zone = query
-      zones = initialZoneTokens(query, locType)
-    }
-    return { ...defaultFilters, query, mode, zone, zones }
-  })
+  const [filters, setFilters] = useState<FilterState>(() =>
+    filtersFromSearch(query, mode, locType),
+  )
+
+  // Resincroniza cuando la búsqueda de la URL cambia desde fuera de la página.
+  // P.ej. el menú móvil: ir de Comprar a Alquilar dentro de /propiedades no
+  // remonta la ruta (sólo cambian los search params), así que sin esto el pill
+  // de modo se quedaría en el valor con el que se montó la página.
+  const lastSearch = useRef({ query, mode, locType })
+  useEffect(() => {
+    const prev = lastSearch.current
+    if (prev.query === query && prev.mode === mode && prev.locType === locType) return
+    lastSearch.current = { query, mode, locType }
+    setFilters(filtersFromSearch(query, mode, locType))
+  }, [query, mode, locType])
 
   // Inmuebles dentro del ámbito de la búsqueda (modo + texto), en vivo: si el
   // usuario edita el buscador de la página, el ámbito y las zonas se recalculan.

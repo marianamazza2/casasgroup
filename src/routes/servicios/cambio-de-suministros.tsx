@@ -75,6 +75,25 @@ export const PASOS = [
   },
 ]
 
+// La animación de entrada vive en el contenedor del track y se dispara una sola
+// vez (igual que el slider de administración de fincas). Así el scroll horizontal
+// no vuelve a animar cada tarjeta (que daba el efecto de "aparecer desde abajo").
+const cardsVariants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.08 },
+  },
+}
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+  },
+}
+
 function CambioDeSuministrosPage() {
   const pasosRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
@@ -88,30 +107,36 @@ function CambioDeSuministrosPage() {
   const cardsRef = useRef<HTMLDivElement>(null)
   const [activeCard, setActiveCard] = useState(0)
 
-  // En móvil las tarjetas son un slider horizontal con scroll-snap, así que
-  // desactivamos la animación de entrada lateral (interfiere con el scroll).
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches,
-  )
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 640px)')
-    const update = () => setIsMobile(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
-
+  // El dot activo refleja la card centrada en el viewport del track (mismo
+  // criterio que el slider de administración de fincas).
   const onCardsScroll = () => {
     const el = cardsRef.current
-    if (!el || el.clientWidth === 0) return
-    const idx = Math.round(el.scrollLeft / el.clientWidth)
-    setActiveCard(Math.max(0, Math.min(SUMINISTROS.length - 1, idx)))
+    if (!el) return
+    const cards = Array.from(el.querySelectorAll<HTMLElement>('.suministro-card'))
+    if (!cards.length) return
+    const center = el.scrollLeft + el.clientWidth / 2
+    let closestIdx = 0
+    let closestDist = Infinity
+    cards.forEach((card, i) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2
+      const dist = Math.abs(cardCenter - center)
+      if (dist < closestDist) {
+        closestDist = dist
+        closestIdx = i
+      }
+    })
+    setActiveCard(closestIdx)
   }
 
   const goToCard = (i: number) => {
     const el = cardsRef.current
     if (!el) return
-    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
+    const card = el.querySelectorAll<HTMLElement>('.suministro-card')[i]
+    if (!card) return
+    el.scrollTo({
+      left: card.offsetLeft + card.offsetWidth / 2 - el.clientWidth / 2,
+      behavior: 'smooth',
+    })
   }
 
   return (
@@ -126,38 +151,31 @@ function CambioDeSuministrosPage() {
             <p>Nos ocupamos de cada suministro para que tú solo pienses en instalarte.</p>
           </div>
 
-          <div className="suministros-cards" ref={cardsRef} onScroll={onCardsScroll}>
-            {SUMINISTROS.map((item, i) => {
-              const col = i % 3
-              const row = Math.floor(i / 3)
-              return (
-                <motion.article
-                  key={item.title}
-                  className="suministro-card"
-                  initial={isMobile ? { opacity: 0, y: 24 } : { opacity: 0, x: -36, y: 36 }}
-                  whileInView={{ opacity: 1, x: 0, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{
-                    duration: isMobile ? 0.45 : 0.6,
-                    delay: isMobile ? 0 : (col + row) * 0.1,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
+          <motion.div
+            className="suministros-cards"
+            ref={cardsRef}
+            onScroll={onCardsScroll}
+            variants={cardsVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {SUMINISTROS.map((item, i) => (
+              <motion.article key={item.title} className="suministro-card" variants={cardVariants}>
+                <div
+                  className="suministro-card-media"
+                  style={{ backgroundImage: `url(${item.image})` }}
                 >
-                  <div
-                    className="suministro-card-media"
-                    style={{ backgroundImage: `url(${item.image})` }}
-                  >
-                    <span className="suministro-card-num">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="suministro-card-tag">{item.tag}</span>
-                  </div>
-                  <div className="suministro-card-body">
-                    <h3>{item.title}</h3>
-                    <p>{item.desc}</p>
-                  </div>
-                </motion.article>
-              )
-            })}
-          </div>
+                  <span className="suministro-card-num">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="suministro-card-tag">{item.tag}</span>
+                </div>
+                <div className="suministro-card-body">
+                  <h3>{item.title}</h3>
+                  <p>{item.desc}</p>
+                </div>
+              </motion.article>
+            ))}
+          </motion.div>
 
           <div className="suministros-dots" role="tablist" aria-label="Suministros">
             {SUMINISTROS.map((item, i) => (

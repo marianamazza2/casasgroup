@@ -1608,7 +1608,7 @@ button {
 }
 
 .footer-copyright {
-  color: rgb(255 255 255 / 0.5);
+  color: rgb(255 255 255 / 0.32);
   font-size: 12px;
 }
 
@@ -1619,7 +1619,7 @@ button {
 }
 
 .footer-legal-links a {
-  color: rgb(255 255 255 / 0.5);
+  color: rgb(255 255 255 / 0.32);
   font-size: 12px;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -1636,6 +1636,19 @@ button {
 .footer a.footer-logo {
   color: white;
   display: inline-flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.footer-logo span {
+  letter-spacing: 0.18em;
+  padding: 0;
+}
+
+.footer-logo small {
+  color: rgb(255 255 255 / 0.58);
+  letter-spacing: 0.16em;
+  margin-bottom: 0;
 }
 
 .footer p,
@@ -1663,6 +1676,28 @@ button {
   margin-bottom: 4px;
   text-align: left;
   text-decoration: none;
+}
+
+/* El <h3> de cada columna es un botón (acordeón en mobile). En desktop no debe
+   parecer botón ni dejar espacio para el chevron. */
+.footer .footer-col-toggle {
+  align-items: center;
+  background: none;
+  border: 0;
+  cursor: default;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.footer-col-toggle h3 {
+  margin: 0 0 14px;
+}
+
+.footer .footer-chevron {
+  display: none;
 }
 
 .contact-page {
@@ -2208,12 +2243,10 @@ a.contact-card:hover .contact-card-icon {
     color: #8d672d;
   }
 
-  /* La pagina activa se resalta claramente (incluye Vender, que es quiet) */
+  /* La pagina activa se marca solo con un peso de fuente mas fuerte,
+     sin fondo pintado (incluye Vender, que es quiet) */
   .site-nav nav > a[data-status='active'],
   .site-nav nav > .nav-services-wrapper > button.active {
-    background: var(--gold-soft);
-    border-bottom-color: var(--line);
-    box-shadow: inset 3px 0 0 var(--gold);
     color: #6f4e1f;
     font-weight: 700;
   }
@@ -2244,9 +2277,10 @@ a.contact-card:hover .contact-card-icon {
     padding-left: 40px;
   }
 
-  /* Solo el servicio activo queda resaltado, no todos */
+  /* Solo el servicio activo queda resaltado (peso, sin fondo) */
   .site-nav .nav-services-menu a[data-status='active'] {
-    background: var(--gold-soft);
+    color: #6f4e1f;
+    font-weight: 700;
   }
 
   /* El panel siempre es claro, sin importar el estado del hero */
@@ -2576,6 +2610,15 @@ a.contact-card:hover .contact-card-icon {
     display: block;
   }
 
+  /* En mobile el CTA ocupa todo el ancho: ocultamos la flecha y centramos el texto */
+  .hero-cta--solo .button-link {
+    text-align: center;
+  }
+
+  .hero-cta--solo .button-link span {
+    display: none;
+  }
+
   .section-top,
   .properties-top {
     align-items: flex-start;
@@ -2623,26 +2666,95 @@ a.contact-card:hover .contact-card-icon {
     padding: 28px 22px 18px;
   }
 
-  /* Mobile: el bloque de marca ocupa toda la fila y los tres grupos de
-     enlaces se reparten en dos columnas, para no apilar todo en vertical
-     y que el footer no supere ~una pantalla. */
+  /* Mobile: marca arriba a ancho completo y cada grupo de enlaces colapsado
+     en un acordeón (solo el título visible) para que el footer no ocupe casi
+     toda la pantalla. */
   .footer-grid {
-    column-gap: 24px;
-    grid-template-columns: 1fr 1fr;
-    row-gap: 24px;
+    display: block;
   }
 
   .footer-brand {
-    grid-column: 1 / -1;
-    margin-bottom: 4px;
+    align-items: center;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 18px;
   }
 
   .footer-brand p {
-    margin: 8px 0 0;
+    display: none;
   }
 
-  .footer h3 {
-    margin-bottom: 10px;
+  /* Cada columna es una fila de acordeón con separador. */
+  .footer-col {
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+  }
+
+  .footer-col-toggle {
+    cursor: pointer;
+    min-height: 52px;
+    padding: 0;
+  }
+
+  .footer-col-toggle h3 {
+    line-height: 1;
+    margin: 0;
+  }
+
+  /* Chevron de desplegable (flecha hacia abajo) que rota al abrir. Dibujado con
+     un SVG para que la forma sea inequívoca, en el mismo tono tenue del título. */
+  .footer .footer-chevron {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='9' viewBox='0 0 13 9'%3E%3Cpath d='M1.5 1.5L6.5 6.5L11.5 1.5' fill='none' stroke='%23ffffff' stroke-opacity='0.32' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 13px 9px;
+    border: 0;
+    display: block;
+    flex: none;
+    height: 9px;
+    margin: 0 2px 0 0;
+    transition: transform 0.2s ease;
+    width: 13px;
+  }
+
+  .footer-col.is-open .footer-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Panel colapsable: oculto por defecto, visible al abrir. */
+  .footer-col-links {
+    display: none;
+    padding: 0 0 14px;
+  }
+
+  .footer-col.is-open .footer-col-links {
+    display: block;
+  }
+
+  .footer-col-links a {
+    margin-bottom: 12px;
+  }
+
+  .footer-col-links a:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Sin margen extra arriba para que la línea quede a la misma distancia de
+     CONTACTO que la de las otras filas (si no, CONTACTO se ve descentrado). */
+  .footer-legal {
+    margin-top: 0;
+  }
+
+  /* Las tres páginas legales caben en una sola línea. */
+  .footer-legal-links {
+    flex-wrap: nowrap;
+    gap: 12px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .footer-legal-links a {
+    font-size: 12px;
+    white-space: nowrap;
   }
 
   .valuation-content {
@@ -5433,7 +5545,7 @@ a.contact-card:hover .contact-card-icon {
   left: 0;
   position: absolute;
   top: 0;
-  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: width 0.22s cubic-bezier(0.22, 1, 0.36, 1);
   width: var(--p, 0%);
 }
 
@@ -5687,6 +5799,34 @@ a.contact-card:hover .contact-card-icon {
    horizontal con swipe + dots. Se oculta la columna lateral de índices y los
    dots de progreso del header. */
 @media (max-width: 767px) {
+  /* El equipo pasa a un slider horizontal de una sola fila: swipe con
+     scroll-snap y las fotos asoman parcialmente para invitar a deslizar. */
+  .team-grid {
+    --team-pad: clamp(22px, 5vw, 72px);
+    display: flex;
+    grid-template-columns: none;
+    gap: 14px;
+    max-width: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Sangra hasta el borde de la pantalla anulando el padding de .section
+       y reaplicándolo como padding interno para alinear la primera card. */
+    margin-inline: calc(var(--team-pad) * -1);
+    padding-inline: var(--team-pad);
+    scroll-padding-left: var(--team-pad);
+  }
+
+  .team-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .team-card {
+    flex: 0 0 64%;
+    scroll-snap-align: start;
+  }
+
   /* En móvil, la barra 01–03 se reemplaza por dots tipo "pill activo". */
   .mision-progress {
     display: none;
@@ -5732,6 +5872,7 @@ a.contact-card:hover .contact-card-icon {
   /* Pista del slider: cada slide ocupa el ancho completo y hace scroll-snap. */
   .valores-stage {
     display: flex;
+    gap: 16px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
@@ -6372,10 +6513,11 @@ a.contact-card:hover .contact-card-icon {
   .suministros-cards {
     display: flex;
     grid-template-columns: none;
-    gap: 0;
+    gap: 16px;
     margin-inline: calc(clamp(22px, 5vw, 56px) * -1);
     overflow-x: auto;
     padding-inline: clamp(22px, 5vw, 56px);
+    scroll-padding-inline-start: clamp(22px, 5vw, 56px);
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -6386,13 +6528,8 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .suministro-card {
-    flex: 0 0 85%;
-    margin-right: 16px;
-    scroll-snap-align: center;
-  }
-
-  .suministro-card:last-child {
-    margin-right: 0;
+    flex: 0 0 82%;
+    scroll-snap-align: start;
   }
 
   .suministros-dots {

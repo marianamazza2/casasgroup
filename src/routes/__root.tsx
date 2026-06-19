@@ -99,7 +99,16 @@ function SiteNav() {
   return (
     <header className={navClass}>
       <div className="nav-brand">
-        <Link className="logo logo-small" to="/" aria-label="Casas Group">
+        <Link
+          className="logo logo-small"
+          to="/"
+          aria-label="Casas Group"
+          onClick={() => {
+            if (pathname === '/') {
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }
+          }}
+        >
           <span>CASAS</span>
           <small>GROUP</small>
         </Link>

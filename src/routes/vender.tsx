@@ -40,12 +40,12 @@ const PROCESO = [
 ]
 
 const VENTAJAS = [
-  { icon: '★', title: 'Valoración profesional', desc: 'Estudio de mercado exhaustivo para determinar el precio óptimo.' },
-  { icon: '⌂', title: 'Marketing premium', desc: 'Fotografía profesional, tours virtuales y difusión en portales.' },
-  { icon: '♡', title: 'Gestión de visitas', desc: 'Filtramos y gestionamos visitas con compradores cualificados.' },
-  { icon: '⚖', title: 'Asesoría legal', desc: 'Te acompañamos hasta la firma en notaría.' },
-  { icon: '✦', title: 'Negociación experta', desc: 'Conseguimos las mejores condiciones para tu venta.' },
-  { icon: '⚡', title: 'Rapidez', desc: 'Vendemos tu inmueble en el menor tiempo posible al mejor precio.' },
+  { icon: '★', title: 'Valoración profesional', desc: 'Estudio de mercado exhaustivo para determinar el precio óptimo.', img: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80' },
+  { icon: '⌂', title: 'Marketing premium', desc: 'Fotografía profesional, tours virtuales y difusión en portales.', img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80' },
+  { icon: '♡', title: 'Gestión de visitas', desc: 'Filtramos y gestionamos visitas con compradores cualificados.', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80' },
+  { icon: '⚖', title: 'Asesoría legal', desc: 'Te acompañamos hasta la firma en notaría.', img: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=80' },
+  { icon: '✦', title: 'Negociación experta', desc: 'Conseguimos las mejores condiciones para tu venta.', img: 'https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=1200&q=80' },
+  { icon: '⚡', title: 'Rapidez', desc: 'Vendemos tu inmueble en el menor tiempo posible al mejor precio.', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1200&q=80' },
 ]
 
 function VenderPage() {
@@ -296,7 +296,7 @@ function PorQueVender() {
           <article
             key={item.title}
             className="vw2-slide"
-            style={{ backgroundImage: `url(${VW2_IMG})` }}
+            style={{ backgroundImage: `url(${item.img})` }}
           >
             <div className="vw2-slide-overlay">
               <span className="vw2-overlay-num">

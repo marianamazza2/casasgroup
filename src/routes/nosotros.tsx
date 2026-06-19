@@ -231,7 +231,7 @@ function TrayectoriaTimeline({ items }: { items: typeof TIMELINE }) {
     if (!inView || paused) return
     const id = setInterval(() => {
       setActive((prev) => (prev + 1) % items.length)
-    }, 1800)
+    }, 1000)
     return () => clearInterval(id)
   }, [inView, paused, items.length])
 
