@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import type { FilterState } from '../../lib/types'
-import { ZoneSelect } from './ZoneSelect'
+import { ZonePicker } from './ZonePicker'
 
 interface FiltersModalProps {
   open: boolean
   onClose: () => void
   onApply: () => void
   filters: FilterState
-  /** Zonas disponibles según la búsqueda (en cascada). Incluye "Todas". */
-  zones: string[]
+  /** Municipios presentes en el ámbito buscado (alimenta el árbol de zonas). */
+  availableMunicipios: Set<string>
   onChange: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void
   onReset: () => void
   resultCount: number
@@ -24,7 +25,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const COUNT_OPTIONS = [0, 1, 2, 3, 4]
 
-export function FiltersModal({ open, onClose, onApply, filters, zones, onChange, onReset, resultCount }: FiltersModalProps) {
+export function FiltersModal({ open, onClose, onApply, filters, availableMunicipios, onChange, onReset, resultCount }: FiltersModalProps) {
   // Swipe-down-to-close (mobile). Drag offset in px; null = not dragging.
   const [dragY, setDragY] = useState(0)
   const dragStartRef = useRef<number | null>(null)
@@ -71,7 +72,7 @@ export function FiltersModal({ open, onClose, onApply, filters, zones, onChange,
     setDragY(0)
   }
 
-  return (
+  return createPortal(
     <div className="filters-modal-backdrop" onClick={onClose}>
       <div
         className="filters-modal"
@@ -104,6 +105,17 @@ export function FiltersModal({ open, onClose, onApply, filters, zones, onChange,
         </div>
 
         <div className="filters-modal-body">
+
+          {/* Zona — selector anidado provincia → municipio / distrito → barrio.
+              Solo móvil: en escritorio se usa el dropdown de la FilterBar. */}
+          <div className="filters-section filters-section--zone-mobile">
+            <p className="filters-section-title">Zona</p>
+            <ZonePicker
+              value={filters.zones}
+              onChange={(z) => onChange('zones', z)}
+              availableMunicipios={availableMunicipios}
+            />
+          </div>
 
           {/* Precio */}
           <div className="filters-section">
@@ -139,19 +151,6 @@ export function FiltersModal({ open, onClose, onApply, filters, zones, onChange,
               </div>
             </div>
           </div>
-
-          {/* Zona — solo si hay más de una opción dentro del ámbito buscado */}
-          {zones.length > 2 && (
-            <div className="filters-section">
-              <p className="filters-section-title">Zona</p>
-              <ZoneSelect
-                value={filters.zone}
-                options={zones}
-                onChange={(z) => onChange('zone', z)}
-                variant="block"
-              />
-            </div>
-          )}
 
           {/* Categoría */}
           <div className="filters-section">
@@ -251,6 +250,7 @@ export function FiltersModal({ open, onClose, onApply, filters, zones, onChange,
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

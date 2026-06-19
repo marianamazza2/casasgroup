@@ -48,7 +48,7 @@ function PropiedadesPage() {
   // "Mapa" una vez que la lista ha empezado a tapar el mapa.
   const scrollRef = useRef<HTMLDivElement>(null)
   const [scrolledIntoList, setScrolledIntoList] = useState(false)
-  const { filters, setFilter, resetFilters, filteredProperties, availableZones, resultCount } =
+  const { filters, setFilter, resetFilters, filteredProperties, availableMunicipios, resultCount, activeFilterCount } =
     usePropertyFilters({ query, mode, locType, province })
 
   const handlePinClick = useCallback((id: number) => {
@@ -100,10 +100,11 @@ function PropiedadesPage() {
 
             <FilterBar
               filters={filters}
-              zones={availableZones}
+              availableMunicipios={availableMunicipios}
               viewMode={viewMode}
+              activeFilterCount={activeFilterCount}
               onOpenFilters={() => setShowFiltersModal(true)}
-              onZoneChange={(z) => setFilter('zone', z)}
+              onZonesChange={(z) => setFilter('zones', z)}
               onViewModeChange={setViewMode}
             />
           </div>
@@ -136,6 +137,7 @@ function PropiedadesPage() {
           <PropertyMap
             properties={filteredProperties}
             activeId={activeId}
+            focusZones={filters.zones}
             onPinClick={handlePinClick}
             onBoundsChange={handleBoundsChange}
           />
@@ -164,7 +166,7 @@ function PropiedadesPage() {
         onClose={() => setShowFiltersModal(false)}
         onApply={() => { setMapVisibleIds(null); setShowFiltersModal(false) }}
         filters={filters}
-        zones={availableZones}
+        availableMunicipios={availableMunicipios}
         onChange={setFilter}
         onReset={resetFilters}
         resultCount={resultCount}

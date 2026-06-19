@@ -161,6 +161,13 @@ button {
   transition: border-color 180ms ease, color 180ms ease;
 }
 
+/* El boton de Servicios usa la misma caja que los <a>: la etiqueta interna ya
+   aporta el padding-bottom de 3px, asi que quitamos el extra del boton para
+   que no quede mas arriba que el resto de opciones. */
+.site-nav nav > .nav-services-wrapper > button {
+  padding-bottom: 0;
+}
+
 /* The underline sits on the text only, so the Servicios arrow is excluded */
 .site-nav nav > a,
 .nav-services-label {
@@ -305,24 +312,6 @@ button {
   gap: 8px;
 }
 
-/* Flecha de volver junto al logo (estilo Tecnocasa) — solo movil */
-.nav-back {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  margin-left: -6px;
-  color: var(--gold);
-  font-size: 30px;
-  line-height: 1;
-  text-decoration: none;
-  border-radius: 50%;
-  transition: background 150ms ease, color 150ms ease;
-}
-.nav-back span { display: block; transform: translateY(-1px); }
-.nav-back:hover { color: var(--gold); }
-.site-nav--transparent .nav-back { color: #fff; }
 
 .logo {
   background: transparent;
@@ -518,7 +507,9 @@ button {
 }
 
 .hero-brand-fill .hero-brand-group {
+  align-self: stretch;
   color: var(--hero-fill);
+  justify-content: center;
   -webkit-text-stroke: 1px var(--hero-fill);
   paint-order: stroke fill;
 }
@@ -528,12 +519,13 @@ button {
   background: var(--hero-fill);
   content: '';
   display: block;
-  flex: 1;
+  flex: 1 1 0;
   height: 1px;
+  max-width: clamp(40px, 12vw, 130px);
 }
 
-.hero-brand-fill .hero-brand-group::before { margin-right: 8px; }
-.hero-brand-fill .hero-brand-group::after  { margin-left: 8px; }
+.hero-brand-fill .hero-brand-group::before { margin-right: clamp(12px, 1.6vw, 24px); }
+.hero-brand-fill .hero-brand-group::after  { margin-left: clamp(12px, 1.6vw, 24px); }
 
 /* Hero UI — tagline, tabs, search (fades in after brand) */
 .hero-ui {
@@ -1493,6 +1485,7 @@ button {
 }
 
 .property-rail {
+  cursor: grab;
   display: flex;
   gap: 20px;
   overflow-x: auto;
@@ -1500,6 +1493,14 @@ button {
   scroll-padding-inline-start: clamp(20px, 5vw, 72px);
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+}
+
+/* Mientras se arrastra con el ratón: sin snap (no pelea con scrollLeft) ni
+   selección de texto, y cursor de agarre. */
+.property-rail.is-grabbing {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
 }
 
 .property-rail::-webkit-scrollbar {
@@ -2063,15 +2064,6 @@ a.contact-card:hover .contact-card-icon {
     background: #fff;
   }
 
-  /* Flecha de volver junto al logo dentro de una propiedad; en su lugar
-     ocultamos la barra "Volver a busqueda" del cuerpo, ya redundante. */
-  .nav-back {
-    display: inline-flex;
-  }
-  .detail-back {
-    display: none;
-  }
-
   /* El sector no necesitaba mas de lo mismo: ocultamos el strip en mobile */
   .about-strip {
     display: none;
@@ -2427,8 +2419,9 @@ a.contact-card:hover .contact-card-icon {
   .why-rail {
     display: flex;
     gap: 14px;
-    /* Rompe el padding de la seccion para alinear con servicios/propiedades */
-    margin-inline: calc(-1 * clamp(22px, 5vw, 72px));
+    /* .why ya tiene padding lateral 0, asi que el rail no rompe ningun padding;
+       el inset lateral lo da padding-inline para igualar a "Nuestros servicios". */
+    margin-inline: 0;
     overflow-x: auto;
     padding-inline: clamp(20px, 5vw, 72px);
     scroll-padding-inline: clamp(20px, 5vw, 72px);
@@ -2783,10 +2776,48 @@ a.contact-card:hover .contact-card-icon {
   overflow: hidden;
 }
 
-/* En desktop el contenedor es transparente: búsqueda + filtros se comportan
-   como hijos directos de .search-left. En mobile se convierte en barra fija. */
+/* Escritorio: una sola barra horizontal. Aplanamos .search-topbar y .filter-bar
+   con display:contents para poder intercalar sus hijos en un único flex y
+   ordenarlos: buscador + zona · Compra/Alquiler · toggle vista · Filtros.
+   En mobile (media query) vuelve a ser la barra compacta de antes. */
 .search-controls {
+  align-items: center;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-shrink: 0;
+  gap: 12px;
+  padding: 10px 24px;
+}
+
+.search-topbar,
+.filter-bar {
   display: contents;
+}
+
+/* Orden de los controles dentro de la barra (izq → der). El spacer empuja el
+   grupo de la derecha; los márgenes extra dan aire entre Compra/Alquiler,
+   el toggle de vista y Filtros. */
+.search-input-wrap {
+  order: 1;
+}
+.zone-dd-wrap {
+  order: 2;
+}
+.filter-bar-spacer {
+  order: 3;
+  flex: 1;
+}
+.mode-pills {
+  order: 4;
+}
+.view-toggle {
+  order: 5;
+  margin-left: 16px;
+}
+.filter-btn {
+  order: 6;
+  margin-left: 16px;
 }
 
 /* Botón flotante "Mapa" — solo mobile (ver media query) */
@@ -2796,15 +2827,8 @@ a.contact-card:hover .contact-card-icon {
 
 /* ── Search topbar ────────────────────────────────────────────────────────── */
 
-.search-topbar {
-  background: var(--warm);
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 24px;
-  flex-shrink: 0;
-}
+/* En escritorio queda aplanado (display:contents arriba). El estilo de barra lo
+   pone .search-controls; en mobile la media query lo devuelve a flex. */
 
 .mode-pills {
   display: flex;
@@ -2824,9 +2848,9 @@ a.contact-card:hover .contact-card-icon {
 }
 
 .mode-pill.active {
-  background: var(--gold-soft);
+  background: transparent;
   border-color: var(--gold);
-  color: var(--gold);
+  color: #1a1a18;
   font-weight: 500;
 }
 
@@ -2841,8 +2865,9 @@ a.contact-card:hover .contact-card-icon {
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 8px;
-  flex: 1;
-  min-width: 0;
+  /* Compacto: no ocupa todo el ancho (el spacer empuja el resto a la derecha). */
+  flex: 0 1 340px;
+  min-width: 200px;
   position: relative;
   transition: border-color 160ms ease;
 }
@@ -2900,15 +2925,9 @@ a.contact-card:hover .contact-card-icon {
 
 /* ── Filter bar ───────────────────────────────────────────────────────────── */
 
-.filter-bar {
-  align-items: center;
-  background: var(--paper);
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  gap: 8px;
-  padding: 10px 24px;
-  flex-shrink: 0;
-}
+/* En escritorio queda aplanado (display:contents arriba): sus hijos (Filtros,
+   Zona, spacer, toggle) son items directos de la barra. En mobile la media
+   query lo devuelve a flex y lo ancla a la derecha. */
 
 .filter-btn {
   align-items: center;
@@ -2921,6 +2940,7 @@ a.contact-card:hover .contact-card-icon {
   gap: 6px;
   letter-spacing: 0.04em;
   padding: 6px 14px;
+  position: relative;
   transition: all 160ms ease;
   white-space: nowrap;
 }
@@ -2928,6 +2948,28 @@ a.contact-card:hover .contact-card-icon {
 .filter-btn:hover {
   border-color: var(--gold);
   color: var(--gold);
+}
+
+/* Con filtros activos: borde dorado + badge con el número. */
+.filter-btn.has-filters {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.filter-badge {
+  align-items: center;
+  background: var(--gold);
+  border-radius: 50%;
+  color: var(--paper);
+  display: flex;
+  font-size: 10px;
+  font-weight: 600;
+  height: 16px;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: 1;
+  min-width: 16px;
+  padding: 0 4px;
 }
 
 /* ── Zone dropdown (custom, reusable) ──────────────────────────────────── */
@@ -3038,15 +3080,13 @@ a.contact-card:hover .contact-card-icon {
 
 .view-toggle {
   display: flex;
-  background: var(--warm);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  overflow: hidden;
+  gap: 6px;
 }
 
 .view-btn {
-  background: transparent;
-  border: 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
   color: var(--muted);
   display: flex;
   align-items: center;
@@ -3055,13 +3095,14 @@ a.contact-card:hover .contact-card-icon {
   transition: all 160ms ease;
 }
 
+/* Seleccionado = borde dorado (mismo lenguaje que Compra/Alquiler), sin relleno. */
 .view-btn.active {
-  background: var(--paper);
+  border-color: var(--gold);
   color: var(--gold);
-  box-shadow: 0 1px 4px rgb(0 0 0 / 0.08);
 }
 
 .view-btn:hover:not(.active) {
+  border-color: var(--gold);
   color: var(--ink);
 }
 
@@ -3215,14 +3256,14 @@ a.contact-card:hover .contact-card-icon {
 
 .property-price {
   color: var(--charcoal);
-  font-family: var(--serif);
-  font-size: 18px;
+  font-family: var(--sans);
+  font-size: 16px;
   font-weight: 500;
   margin: 0;
 }
 
 .property-card-list .property-price {
-  font-size: 20px;
+  font-size: 15px;
 }
 
 /* ── Map ──────────────────────────────────────────────────────────────────── */
@@ -3270,38 +3311,54 @@ a.contact-card:hover .contact-card-icon {
     position: sticky;
     top: 0;
     z-index: 6;
-    background: var(--warm);
+    background: var(--paper);
     box-shadow: 0 1px 0 var(--line);
     padding: 10px 16px;
   }
 
-  /* El topbar (modo + buscador) deja de ser una fila propia: pasa a ser un
-     grupo transparente que ocupa el espacio disponible. */
+  /* El topbar pasa a contener solo los modos (Compra/Alquiler), centrados.
+     El buscador se oculta en móvil: la ubicación se elige desde Filtros.
+     (En escritorio es display:contents; aquí vuelve a ser una fila flex.) */
   .search-topbar {
+    display: flex;
+    align-items: center;
     flex: 1;
     min-width: 0;
     gap: 8px;
     padding: 0;
     background: transparent;
     border: 0;
+    justify-content: flex-start;
+  }
+
+  .search-input-wrap {
+    display: none;
   }
 
   .mode-pill {
     padding: 6px 12px;
   }
 
-  /* La barra de filtros se reduce al botón Filtros (zona y vista viven dentro
-     del modal de filtros, así que aquí sobran). */
+  /* Botón Filtros anclado a la derecha; los modos quedan alineados a la izquierda.
+     (En escritorio es display:contents; aquí vuelve a ser flex.) */
   .filter-bar {
-    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
     gap: 0;
     padding: 0;
     background: transparent;
     border: 0;
   }
 
+  /* El selector de zona (dropdown) es solo escritorio: en móvil se elige
+     desde el modal de Filtros (ZonePicker en modo sheet). */
   .filter-bar-spacer,
   .filter-bar .zone-dd,
+  .zone-dd-wrap,
   .view-toggle {
     display: none;
   }
@@ -3310,13 +3367,31 @@ a.contact-card:hover .contact-card-icon {
      conserva su tamaño fijo). */
   .filter-btn {
     font-size: 0;
+    gap: 0;
+    margin-left: 0;
     padding: 9px;
     border-radius: 50%;
+    justify-content: center;
+    /* Sin filtros: sin círculo. El borde solo aparece con .has-filters. */
+    border-color: transparent;
   }
 
-  /* Mapa = ventana de fondo */
+  /* Badge flotante en la esquina del botón circular, estilo Airbnb. */
+  .filter-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+  }
+
+  /* Mapa = ventana FIJA de fondo. Al ser sticky queda pinneado en la parte
+     superior mientras la página scrollea, de modo que la hoja de resultados
+     (que va después en el flujo, con z-index mayor y fondo sólido) sube por
+     encima y lo va tapando — el efecto Airbnb. Sin sticky el mapa se iría
+     hacia arriba con el resto del scroll. */
   .property-map {
     order: 1;
+    position: sticky;
+    top: 0;
     height: 56svh;
     width: 100%;
     z-index: 1;
@@ -3358,6 +3433,11 @@ a.contact-card:hover .contact-card-icon {
   /* Una sola columna, cards grandes (como Airbnb) */
   .results-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Precio más discreto en móvil */
+  .property-price {
+    font-size: 15px;
   }
 
   /* El toggle cuadrícula/lista no aplica con una sola columna */
@@ -3548,7 +3628,7 @@ a.contact-card:hover .contact-card-icon {
 
 .map-popup-price {
   color: var(--charcoal);
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: 17px;
   font-weight: 500;
   margin: 0;
@@ -3764,12 +3844,23 @@ a.contact-card:hover .contact-card-icon {
     border-radius: 16px 16px 0 0;
     bottom: 0;
     left: 0;
-    max-height: 100dvh;
-    height: 100dvh;
+    /* Deja un pequeño hueco arriba para ver la página detrás (estilo Airbnb) */
+    max-height: calc(100dvh - env(safe-area-inset-top) - 24px);
+    height: calc(100dvh - env(safe-area-inset-top) - 24px);
     top: auto;
     transform: none;
     width: 100%;
     transition: transform 280ms cubic-bezier(0.32, 0.72, 0, 1);
+    animation: filters-sheet-up 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @keyframes filters-sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
   }
 
   .filters-modal-grab {
@@ -3811,6 +3902,368 @@ a.contact-card:hover .contact-card-icon {
     padding: 14px 24px;
     font-size: 14px;
   }
+}
+
+/* ── Zone picker (selector anidado distrito → barrio, estilo Tecnocasa) ──── */
+
+/* El picker anidado es solo para móvil; en escritorio manda el dropdown simple. */
+@media (min-width: 769px) {
+  .filters-section--zone-mobile {
+    display: none;
+  }
+}
+
+/* Resumen dentro del modal de filtros (fila tocable que abre el overlay). */
+.zonepicker-summary {
+  align-items: center;
+  background: var(--warm);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  display: flex;
+  font-family: var(--sans);
+  font-size: 14px;
+  justify-content: space-between;
+  padding: 13px 14px;
+  transition: border-color 160ms ease;
+  width: 100%;
+}
+
+.zonepicker-summary:hover {
+  border-color: var(--gold);
+}
+
+.zonepicker-summary svg {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.zonepicker-summary-label {
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Overlay full-screen del árbol (portal sobre el modal). */
+.zonepicker-overlay {
+  background: var(--paper);
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 60;
+  animation: filters-sheet-up 280ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.zonepicker-head {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-shrink: 0;
+  justify-content: space-between;
+  padding: 18px 20px;
+  padding-top: calc(env(safe-area-inset-top) + 14px);
+}
+
+.zonepicker-head h3 {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.zonepicker-head button {
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  display: flex;
+  padding: 4px;
+}
+
+/* Buscador interno (filtra todo el árbol de la provincia). */
+.zonepicker-search {
+  align-items: center;
+  background: var(--warm);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+  margin: 12px 16px;
+  padding: 0 12px;
+}
+
+.zonepicker-search input {
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  flex: 1;
+  font-family: var(--sans);
+  font-size: 14px;
+  min-width: 0;
+  outline: none;
+  padding: 11px 0;
+}
+
+.zonepicker-search input::placeholder {
+  color: var(--muted);
+}
+
+.zonepicker-search-clear {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  display: flex;
+  flex-shrink: 0;
+  padding: 2px;
+}
+
+/* En móvil 16px evita el zoom de iOS al enfocar. */
+@media (max-width: 768px) {
+  .zonepicker-search input {
+    font-size: 16px;
+  }
+}
+
+.zonepicker-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Punto dorado: la zona tiene inmuebles disponibles. */
+.zonepicker-row-dot {
+  background: var(--gold);
+  border-radius: 50%;
+  flex-shrink: 0;
+  height: 7px;
+  margin-left: 8px;
+  width: 7px;
+}
+
+.zonepicker-empty {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+  padding: 18px 16px;
+  text-align: center;
+}
+
+.zonepicker-row {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  padding: 0 12px;
+}
+
+.zonepicker-check-btn {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
+  display: flex;
+  flex: 1;
+  font-family: var(--sans);
+  gap: 14px;
+  min-width: 0;
+  padding: 13px 4px;
+  text-align: left;
+}
+
+.zonepicker-row.is-indent .zonepicker-check-btn {
+  padding-left: 24px;
+}
+
+.zonepicker-row-label {
+  font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zonepicker-row-label.is-bold {
+  font-weight: 600;
+}
+
+/* Checkbox tri-estado */
+.zp-check {
+  align-items: center;
+  border: 2px solid var(--line);
+  border-radius: 5px;
+  color: #fff;
+  display: flex;
+  flex-shrink: 0;
+  height: 22px;
+  justify-content: center;
+  transition: background 140ms ease, border-color 140ms ease;
+  width: 22px;
+}
+
+.zp-check--on,
+.zp-check--partial {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.zonepicker-expand {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  display: flex;
+  flex-shrink: 0;
+  padding: 10px;
+  transition: transform 200ms ease;
+}
+
+.zonepicker-expand.is-open {
+  transform: rotate(180deg);
+}
+
+.zonepicker-barrios {
+  border-bottom: 1px solid var(--line);
+}
+
+.zonepicker-footer {
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-shrink: 0;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 14px 20px calc(env(safe-area-inset-bottom) + 14px);
+}
+
+.zonepicker-clear {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.zonepicker-apply {
+  background: var(--gold);
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  max-width: 60%;
+  padding: 13px 24px;
+}
+
+/* ── Zone dropdown (escritorio): pastilla + panel anclado ─────────────────── */
+.zone-dd-wrap {
+  position: relative;
+}
+
+/* Pastilla disparadora, en línea con .filter-btn / .mode-pill. */
+.zonepicker-trigger {
+  align-items: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  font-family: var(--sans);
+  font-size: 12px;
+  gap: 6px;
+  justify-content: space-between;
+  letter-spacing: 0.04em;
+  /* Mantiene el ancho del estado "Todas las zonas": al seleccionar (texto más
+     corto) no se achica; si es más largo, elipsa hasta max-width. */
+  min-width: 152px;
+  max-width: 220px;
+  padding: 6px 12px 6px 14px;
+  transition: border-color 160ms ease;
+  white-space: nowrap;
+}
+
+.zonepicker-trigger:hover,
+.zonepicker-trigger[aria-expanded='true'] {
+  border-color: var(--gold);
+}
+
+.zonepicker-trigger-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zonepicker-trigger-chevron {
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: transform 180ms ease;
+}
+
+.zonepicker-trigger[aria-expanded='true'] .zonepicker-trigger-chevron {
+  transform: rotate(180deg);
+}
+
+/* Panel anclado bajo el botón (no tapa mapa ni lista). */
+.zonepicker-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 40;
+  width: 320px;
+  max-width: 86vw;
+  display: flex;
+  flex-direction: column;
+  max-height: min(440px, 70vh);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px -18px rgba(26, 26, 24, 0.35);
+  animation: zone-dd-in 160ms ease;
+}
+
+@keyframes zone-dd-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* En el panel anclado, la lista scrollea dentro (no es full-screen). */
+.zonepicker-dropdown .zonepicker-list {
+  flex: 1 1 auto;
+  padding: 6px 0;
+}
+
+.zonepicker-dropdown .zonepicker-check-btn {
+  gap: 12px;
+  padding: 10px 4px;
+}
+
+.zonepicker-dropdown .zonepicker-row-label {
+  font-size: 14px;
+}
+
+.zonepicker-dropdown .zp-check {
+  height: 20px;
+  width: 20px;
+}
+
+.zonepicker-dropdown .zonepicker-footer {
+  padding: 12px 16px;
+}
+
+.zonepicker-dropdown .zonepicker-apply {
+  padding: 10px 20px;
 }
 
 /* ── Property card link wrapper ────────────────────────────────────────── */
@@ -3906,7 +4359,6 @@ a.contact-card:hover .contact-card-icon {
   scroll-snap-align: center;
   aspect-ratio: 4 / 3;
   background: var(--warm);
-  cursor: pointer;
 }
 .detail-carousel-slide img {
   width: 100%;
@@ -3915,49 +4367,64 @@ a.contact-card:hover .contact-card-icon {
   object-position: center;
   display: block;
 }
-.detail-carousel-dots {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 7px;
-  padding: 14px 0 4px;
-}
-.detail-carousel-dot {
-  width: 7px;
-  height: 7px;
-  padding: 0;
-  border: none;
-  border-radius: 999px;
-  background: var(--line);
-  cursor: pointer;
-  transition: background 200ms ease, transform 200ms ease;
-}
-.detail-carousel-dot.active {
-  background: var(--gold);
-  transform: scale(1.3);
-}
-.detail-carousel-btn {
+/* Contador de fotos (estilo Airbnb) — mismos colores que el boton flotante */
+.detail-carousel-count {
   position: absolute;
   bottom: 12px;
   right: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 8px 14px;
+  padding: 4px 11px;
+  border-radius: 999px;
   font-family: var(--sans);
   font-size: 12px;
-  font-weight: 500;
-  color: var(--ink);
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--gold);
+  background: rgb(255 255 255 / 0.6);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.18);
+  pointer-events: none;
 }
+
+/* Boton flotante de volver (estilo Airbnb) — solo mobile, ver $id.tsx */
+.detail-back-fab { display: none; }
+
+/* Barra fija de contacto (estilo Airbnb) — solo mobile, ver $id.tsx */
+.detail-cta-bar { display: none; }
 
 @media (max-width: 768px) {
   .detail-gallery { display: none; }
   .detail-carousel { display: block; position: relative; }
+
+  /* En la ficha de propiedad ocultamos la cabecera: la foto va a sangre y se
+     navega con la flecha flotante. */
+  .site-nav--property { display: none; }
+
+  .detail-back-fab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 14px);
+    left: 16px;
+    z-index: 30;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    color: var(--gold);
+    background: rgb(255 255 255 / 0.6);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.18);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 120ms ease, background-color 150ms ease;
+  }
+  .detail-back-fab:active {
+    transform: scale(0.92);
+    background: rgb(255 255 255 / 0.85);
+  }
 }
 
 /* Content layout */
@@ -3986,9 +4453,10 @@ a.contact-card:hover .contact-card-icon {
   line-height: 1.2;
 }
 .detail-price {
-  font-family: var(--serif);
-  font-size: 32px;
+  font-family: var(--sans);
+  font-size: 22px;
   font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--charcoal);
   margin: 0;
 }
@@ -4058,7 +4526,9 @@ a.contact-card:hover .contact-card-icon {
 }
 
 /* Map */
-.detail-map-section { margin-bottom: 8px; }
+/* isolation: aisla los z-index internos de Leaflet (paneles 200-700) para que
+   no se monten sobre la barra fija de contacto en mobile. */
+.detail-map-section { margin-bottom: 8px; isolation: isolate; }
 .detail-map-placeholder {
   height: 200px;
   background: var(--warm);
@@ -4098,7 +4568,7 @@ a.contact-card:hover .contact-card-icon {
 }
 .detail-contact-title {
   font-family: var(--serif);
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 500;
   color: var(--ink);
 }
@@ -4145,7 +4615,7 @@ a.contact-card:hover .contact-card-icon {
 .detail-btn:hover { border-bottom-color: var(--gold); }
 .detail-btn-label {
   font-family: var(--serif);
-  font-size: clamp(17px, 2vw, 22px);
+  font-size: 16px;
   font-weight: 500;
   color: var(--ink);
   transition: color 350ms ease;
@@ -4173,37 +4643,52 @@ a.contact-card:hover .contact-card-icon {
     padding: 24px 20px;
   }
   .detail-title { font-size: 28px; }
-  .detail-sidebar { width: 100%; }
 
-  /* Contact card becomes a full-width accordion under everything */
-  .detail-contact-card {
-    position: static;
-    border: none;
-    border-top: 0.5px solid var(--line);
-    border-radius: 0;
-    padding: 22px 0 0;
-    margin-top: 12px;
-  }
-  .detail-contact-header {
-    cursor: pointer;
-    padding: 6px 0;
-    margin: 0;
-  }
-  .detail-contact-title { font-size: 19px; }
-  .detail-contact-chevron { display: block; }
-  .detail-contact-card--open .detail-contact-chevron { transform: rotate(180deg); }
+  /* La tarjeta-acordeon del cuerpo se reemplaza por la barra fija de contacto;
+     dejamos hueco abajo para que la barra no tape la ultima seccion. */
+  .detail-sidebar { display: none; }
+  .property-detail { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 76px); }
 
-  /* Collapsed by default; reveal on open */
-  .detail-contact-body { display: none; }
-  .detail-contact-card--open .detail-contact-body {
-    display: block;
-    padding-top: 6px;
+  .detail-cta-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    padding: 12px 16px calc(env(safe-area-inset-bottom, 0px) + 12px);
+    background: rgb(255 255 255 / 0.96);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -2px 14px rgb(0 0 0 / 0.08);
   }
-
-  /* Filas de contacto en una sola columna, como "Seguimos a tu lado" */
-  .detail-contact-options { display: flex; flex-direction: column; }
-  .detail-btn-label { font-size: 17px; }
-  .detail-ref { text-align: left; margin-top: 16px; }
+  .detail-cta-price {
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .detail-cta-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 32px;
+    border-radius: 999px;
+    background: var(--gold);
+    color: #fff;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgb(164 123 54 / 0.35);
+    transition: transform 120ms ease;
+  }
+  .detail-cta-btn:active { transform: scale(0.97); }
 }
 
 /* ── Lightbox ──────────────────────────────────────────────────────────── */
@@ -4333,7 +4818,9 @@ a.contact-card:hover .contact-card-icon {
 
 @media (max-width: 768px) {
   .lightbox-overlay {
-    background: #efede8eb;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     /* deja aire bajo la tira de miniaturas (+ safe-area del navegador iOS) */
     padding: 0 0 calc(16px + env(safe-area-inset-bottom));
     padding-top: calc(var(--nav-h) + 16px);
@@ -6164,23 +6651,56 @@ a.contact-card:hover .contact-card-icon {
   color: rgb(255 255 255 / 82%);
 }
 
-/* Administración de fincas — grilla de features con reveal escalonado */
-.adm-features {
-  margin-inline: auto;
-  max-width: 1180px;
+/* CTA de vender: el texto entra en una sola línea en desktop */
+@media (min-width: 720px) {
+  .vender-cta .adm-cta-text {
+    max-width: none;
+    white-space: nowrap;
+  }
 }
 
-/* Slider horizontal con scroll-snap: 3 cards visibles en desktop, con dots
-   debajo para navegar. El gap se mide en JS para calcular el paso de scroll. */
-.adm-feature-track {
-  display: flex;
-  gap: clamp(14px, 2vw, 22px);
+/* Administración de fincas — slider de features full-bleed: 3 cards en desktop
+   con flechas, y navegación por swipe + dots en mobile (igual que el rail de
+   propiedades de la home). La sección pierde el padding lateral para que el
+   track sangre a todo el ancho; el heading lo recupera. */
+.adm-features {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.adm-features .section-heading {
+  padding-inline: clamp(22px, 5vw, 72px);
+}
+
+.adm-feature-wrap {
   margin-top: clamp(36px, 4vw, 52px);
+  position: relative;
+}
+
+/* Flechas centradas sobre la imagen (no sobre la card completa, que incluye el
+   texto). --adm-arrow-y lo fija el JS midiendo la altura del media. */
+.adm-feature-wrap .rail-nav {
+  top: var(--adm-arrow-y, 38%);
+}
+
+.adm-feature-track {
+  cursor: grab;
+  display: flex;
+  gap: 20px;
   overflow-x: auto;
+  padding: 0 clamp(22px, 5vw, 72px) 8px;
+  scroll-padding-inline-start: clamp(22px, 5vw, 72px);
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  scroll-padding-left: 1px;
+}
+
+/* Mientras se arrastra con el ratón: sin snap (no pelea con scrollLeft) ni
+   selección de texto, y cursor de agarre. */
+.adm-feature-track.is-grabbing {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
 }
 
 .adm-feature-track::-webkit-scrollbar {
@@ -6192,7 +6712,7 @@ a.contact-card:hover .contact-card-icon {
   border: 1px solid var(--line);
   border-radius: 2px;
   display: flex;
-  flex: 0 0 calc((100% - 2 * clamp(14px, 2vw, 22px)) / 3);
+  flex: 0 0 calc((100vw - 2 * clamp(22px, 5vw, 72px) - 2 * 20px) / 3);
   flex-direction: column;
   overflow: hidden;
   scroll-snap-align: start;
@@ -6241,9 +6761,10 @@ a.contact-card:hover .contact-card-icon {
   margin: 0;
 }
 
+/* Dots solo en mobile (desktop usa flechas), igual que el rail de la home. */
 .adm-feature-dots {
   align-items: center;
-  display: flex;
+  display: none;
   gap: 9px;
   justify-content: center;
   margin-top: clamp(24px, 3vw, 34px);
@@ -6514,7 +7035,7 @@ a.contact-card:hover .contact-card-icon {
 .qh-sticky.is-pinned {
   height: 100vh;
   overflow: hidden;
-  padding: clamp(72px, 13vh, 156px) 0 clamp(40px, 6vh, 80px);
+  padding: clamp(56px, 9vh, 110px) 0 clamp(32px, 5vh, 64px);
   position: sticky;
   top: 0;
 }
@@ -6692,7 +7213,7 @@ a.contact-card:hover .contact-card-icon {
 .is-pinned .qh-stem {
   background: rgba(216, 176, 87, 0.45);
   display: block;
-  height: clamp(26px, 5vh, 48px);
+  height: clamp(14px, 2.5vh, 28px);
   left: 0;
   position: absolute;
   width: 2px;
@@ -6731,22 +7252,24 @@ a.contact-card:hover .contact-card-icon {
 
 .is-pinned .qh-card {
   display: block;
+  min-height: 0;
+  padding: clamp(20px, 2.4vh, 28px) 26px;
   position: absolute;
   width: min(78vw, 320px);
 }
 
 .is-pinned .qh-item--up .qh-card {
-  bottom: calc(50% + clamp(44px, 8vh, 78px));
+  bottom: calc(50% + clamp(24px, 4vh, 48px));
 }
 
 .is-pinned .qh-item--down .qh-card {
-  top: calc(50% + clamp(44px, 8vh, 78px));
+  top: calc(50% + clamp(24px, 4vh, 48px));
 }
 
 .is-pinned .qh-num {
   display: block;
-  font-size: clamp(44px, 5vw, 72px);
-  margin-bottom: 12px;
+  font-size: clamp(38px, 4vw, 60px);
+  margin-bottom: 8px;
 }
 
 .is-pinned .qh-text {
@@ -6794,9 +7317,17 @@ a.contact-card:hover .contact-card-icon {
   .paso-step--left .paso-desc {
     margin-left: 0;
   }
+}
 
-  .adm-feature-card {
-    flex-basis: calc((100% - clamp(14px, 2vw, 22px)) / 2);
+/* Mobile/tablet: como el rail de la home — sin flechas, navegación por swipe
+   con dots de paginación. */
+@media (max-width: 1024px) {
+  .adm-feature-wrap .rail-nav {
+    display: none;
+  }
+
+  .adm-feature-dots {
+    display: flex;
   }
 }
 
@@ -6856,7 +7387,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .adm-feature-card {
-    flex-basis: 86%;
+    flex-basis: min(82vw, 320px);
   }
 
   .cf-intro {
@@ -7276,8 +7807,9 @@ a.contact-card:hover .contact-card-icon {
   align-items: stretch;
   background: var(--warm);
   display: grid;
-  gap: clamp(28px, 5vw, 64px);
-  grid-template-columns: 1fr min(420px, 42%);
+  gap: clamp(28px, 5vw, 80px);
+  grid-template-columns: minmax(0, 560px) minmax(0, 540px);
+  justify-content: center;
   padding: clamp(56px, 8vw, 96px) clamp(22px, 6vw, 80px);
 }
 
@@ -7399,6 +7931,115 @@ a.contact-card:hover .contact-card-icon {
   border-color: var(--gold);
 }
 
+/* Dropdown custom (reemplaza el <select> nativo) */
+.form-select {
+  position: relative;
+  width: 100%;
+}
+
+.form-select-trigger {
+  align-items: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  font-family: var(--sans);
+  font-size: 14px;
+  justify-content: space-between;
+  letter-spacing: 0;
+  outline: 0;
+  padding: 11px 13px;
+  text-align: left;
+  text-transform: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+  width: 100%;
+}
+
+.form-select-trigger:hover {
+  border-color: color-mix(in srgb, var(--gold) 55%, var(--line));
+}
+
+.form-select-trigger.is-open {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 16%, transparent);
+}
+
+.form-select-trigger .is-placeholder {
+  color: var(--muted);
+}
+
+.form-select-chevron {
+  color: var(--muted);
+  flex-shrink: 0;
+  margin-left: 10px;
+  transition: transform 180ms ease, color 160ms ease;
+}
+
+.form-select-trigger.is-open .form-select-chevron {
+  color: var(--gold);
+  transform: rotate(180deg);
+}
+
+.form-select-list {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 14px 34px -12px rgba(20, 16, 10, 0.28);
+  left: 0;
+  list-style: none;
+  margin: 6px 0 0;
+  max-height: 248px;
+  overflow-y: auto;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 30;
+  animation: form-select-in 140ms ease;
+}
+
+@keyframes form-select-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-select-item {
+  align-items: center;
+  border-radius: 7px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  font-size: 14px;
+  justify-content: space-between;
+  letter-spacing: 0;
+  padding: 10px 12px;
+  text-transform: none;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.form-select-item.is-highlight {
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+}
+
+.form-select-item.is-selected {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.form-select-item svg {
+  color: var(--gold);
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
 .vender-form button[type='submit'] {
   background: var(--gold);
   border: 1px solid var(--gold);
@@ -7492,7 +8133,11 @@ a.contact-card:hover .contact-card-icon {
 }
 
 .vender-why {
-  padding: clamp(56px, 8vw, 96px) clamp(22px, 6vw, 80px);
+  background:
+    radial-gradient(115% 60% at 50% -8%, rgba(164, 123, 54, 0.1) 0%, transparent 55%),
+    var(--warm);
+  padding: clamp(56px, 8vw, 104px) clamp(22px, 6vw, 80px);
+  position: relative;
 }
 
 .vender-why-head {
@@ -7500,7 +8145,7 @@ a.contact-card:hover .contact-card-icon {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin-bottom: clamp(32px, 5vw, 52px);
+  margin-bottom: clamp(40px, 6vw, 68px);
   text-align: center;
 }
 
@@ -7512,52 +8157,119 @@ a.contact-card:hover .contact-card-icon {
   margin: 0;
 }
 
-.vender-why-grid {
+/* --- "Por qué vender con nosotros": split editorial (imagen sticky + lista) --- */
+.vw2-grid {
   display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(28px, 5vw, 72px);
+  grid-template-columns: 0.9fr 1fr;
   margin: 0 auto;
-  max-width: 1040px;
+  max-width: 1100px;
 }
 
-.vender-why-card {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: clamp(22px, 2.6vw, 30px);
-  transition: border-color 200ms ease, transform 200ms ease;
+.vw2-media-sticky {
+  position: sticky;
+  top: calc(var(--nav-h) + 28px);
 }
 
-.vender-why-card:hover {
-  border-color: var(--gold);
-  transform: translateY(-3px);
+.vw2-img {
+  background-position: center;
+  background-size: cover;
+  border-radius: 18px;
+  box-shadow: 0 30px 60px -34px rgba(20, 16, 10, 0.55);
+  height: min(74vh, 640px);
+  overflow: hidden;
+  position: relative;
 }
 
-.vender-why-icon {
-  align-items: center;
-  background: var(--gold-soft);
-  border-radius: 12px;
+/* Degradado inferior para que el número/título resalten sobre la foto */
+.vw2-img::after {
+  background: linear-gradient(to top, rgba(20, 16, 10, 0.74) 0%, transparent 52%);
+  content: '';
+  inset: 0;
+  position: absolute;
+}
+
+.vw2-overlay {
+  bottom: clamp(20px, 3vw, 34px);
+  left: clamp(20px, 3vw, 34px);
+  position: absolute;
+  right: clamp(20px, 3vw, 34px);
+  z-index: 1;
+}
+
+.vw2-overlay-num {
+  color: #d8b057;
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(48px, 6vw, 84px);
+  font-weight: 500;
+  line-height: 0.9;
+}
+
+.vw2-overlay-title {
+  color: #f7f1e6;
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(18px, 2vw, 24px);
+  margin-top: 8px;
+  opacity: 0.92;
+}
+
+.vw2-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vw2-item {
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: clamp(14px, 1.6vw, 22px);
+  opacity: 0.34;
+  padding: clamp(28px, 5vh, 56px) 0;
+  transition: opacity 400ms ease;
+}
+
+.vw2-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.vw2-item.is-active {
+  opacity: 1;
+}
+
+.vw2-num {
+  -webkit-text-stroke: 1px rgba(164, 123, 54, 0.55);
+  color: transparent;
+  flex-shrink: 0;
+  font-family: var(--serif);
+  font-size: clamp(24px, 2.8vw, 34px);
+  font-weight: 500;
+  line-height: 1;
+  transition: color 400ms ease, -webkit-text-stroke-color 400ms ease;
+  width: clamp(38px, 4vw, 52px);
+}
+
+.vw2-item.is-active .vw2-num {
+  -webkit-text-stroke-color: var(--gold);
   color: var(--gold);
-  display: inline-flex;
-  font-size: 20px;
-  height: 46px;
-  justify-content: center;
-  margin-bottom: 16px;
-  width: 46px;
 }
 
-.vender-why-card h3 {
+.vw2-title {
   color: var(--ink);
-  font-size: 16px;
-  font-weight: 600;
+  font-family: var(--serif);
+  font-size: clamp(21px, 2.4vw, 30px);
+  font-weight: 500;
+  line-height: 1.2;
   margin: 0 0 8px;
 }
 
-.vender-why-card p {
+.vw2-desc {
   color: var(--text);
-  font-size: 14px;
+  font-size: clamp(14px, 1.3vw, 16px);
   line-height: 1.7;
   margin: 0;
+  max-width: 46ch;
 }
 
 @media (max-width: 860px) {
@@ -7565,8 +8277,21 @@ a.contact-card:hover .contact-card-icon {
     grid-template-columns: 1fr;
   }
 
-  .vender-why-grid {
+  .vw2-grid {
     grid-template-columns: 1fr;
+  }
+
+  .vw2-media-sticky {
+    position: static;
+  }
+
+  .vw2-img {
+    height: clamp(220px, 42vh, 360px);
+  }
+
+  /* En móvil, sin foco sticky, todas las ventajas legibles */
+  .vw2-item {
+    opacity: 1;
   }
 }
 

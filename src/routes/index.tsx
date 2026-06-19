@@ -442,6 +442,44 @@ function Home() {
     rail.scrollBy({ left: direction * (cardWidth + 20), behavior: 'smooth' })
   }
 
+  // Arrastre con el mouse (desktop): click-and-drag para mover el rail. En
+  // mobile el scroll táctil ya funciona, así que solo lo activamos con ratón.
+  const propertyDrag = useRef({ active: false, startX: 0, startScroll: 0, moved: false })
+
+  const onPropertyPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'mouse') return
+    const rail = propertiesRef.current
+    if (!rail) return
+    propertyDrag.current = {
+      active: true,
+      startX: e.clientX,
+      startScroll: rail.scrollLeft,
+      moved: false,
+    }
+    rail.classList.add('is-grabbing')
+    rail.setPointerCapture(e.pointerId)
+  }
+
+  const onPropertyPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const rail = propertiesRef.current
+    if (!rail || !propertyDrag.current.active) return
+    const dx = e.clientX - propertyDrag.current.startX
+    if (Math.abs(dx) > 4) propertyDrag.current.moved = true
+    rail.scrollLeft = propertyDrag.current.startScroll - dx
+  }
+
+  const endPropertyDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    const rail = propertiesRef.current
+    if (!rail || !propertyDrag.current.active) return
+    propertyDrag.current.active = false
+    rail.classList.remove('is-grabbing')
+    try {
+      rail.releasePointerCapture(e.pointerId)
+    } catch {
+      // pointer ya liberado
+    }
+  }
+
   return (
     <main className="home-page">
       <div className="hero-scroll-wrapper" ref={heroWrapperRef}>
@@ -758,16 +796,26 @@ function Home() {
           >
             <span aria-hidden="true">←</span>
           </button>
-          <div className="property-rail" ref={propertiesRef}>
+          <div
+            className="property-rail"
+            ref={propertiesRef}
+            onPointerDown={onPropertyPointerDown}
+            onPointerMove={onPropertyPointerMove}
+            onPointerUp={endPropertyDrag}
+            onPointerCancel={endPropertyDrag}
+          >
             {displayedProperties.map((property) => (
               <article
                 className="property-card"
                 key={property.id}
                 style={{ cursor: 'pointer' }}
-                onClick={() => navigate({ to: '/propiedades/$id', params: { id: String(property.id) } })}
+                onClick={() => {
+                  if (propertyDrag.current.moved) return
+                  navigate({ to: '/propiedades/$id', params: { id: String(property.id) } })
+                }}
               >
                 <div className="property-image">
-                  <img src={property.image} alt="" />
+                  <img src={property.image} alt="" draggable={false} />
                   {property.tag ? <span>{property.tag}</span> : null}
                 </div>
                 <div className="property-body">

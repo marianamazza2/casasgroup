@@ -308,7 +308,7 @@ function QueHacemos() {
       <div className={`qh-sticky${pinned ? ' is-pinned' : ''}`}>
         <div className="qh-head">
           <span className="qh-eyebrow">Qué hacemos por ti</span>
-          <h2 className="qh-title">Te acompañamos en cada paso</h2>
+          <h2 className="qh-title">Te acompañamos</h2>
         </div>
 
         <div className="qh-viewport" ref={viewportRef} onScroll={onViewportScroll}>

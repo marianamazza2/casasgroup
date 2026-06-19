@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { AnimatePresence, motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
 import { Footer } from '../components/Footer'
+import { FormSelect } from '../components/vender/FormSelect'
 
 export const Route = createFileRoute('/vender')({
   component: VenderPage,
@@ -14,13 +15,6 @@ const BENEFICIOS = [
 ]
 
 const PROPERTY_TYPES = ['Piso', 'Casa o chalet', 'Ático', 'Local comercial', 'Otro']
-
-const STATS = [
-  { n: '+500', l: 'Pisos vendidos' },
-  { n: '30', l: 'Días de venta media' },
-  { n: '98%', l: 'Clientes satisfechos' },
-  { n: '+10', l: 'Años de experiencia' },
-]
 
 const PROCESO = [
   {
@@ -54,25 +48,21 @@ const VENTAJAS = [
   { icon: '⚡', title: 'Rapidez', desc: 'Vendemos tu inmueble en el menor tiempo posible al mejor precio.' },
 ]
 
-const gridVariants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 28 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
-  },
-}
-
 function VenderPage() {
   const formRef = useRef<HTMLDivElement>(null)
   const ctaRef = useRef<HTMLElement>(null)
   const [ctaActive, setCtaActive] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [propertyType, setPropertyType] = useState(PROPERTY_TYPES[0])
+
+  // Timeline "Cómo funciona": el riel dorado se "dibuja" con el scroll, igual
+  // que la sección "En cuatro simples pasos" de cambio de suministros.
+  const pasosRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: pasosRef,
+    offset: ['start 75%', 'end 65%'],
+  })
+  const lineFill = useTransform(scrollYProgress, [0, 1], [0, 1])
 
   useEffect(() => {
     const el = ctaRef.current
@@ -97,7 +87,7 @@ function VenderPage() {
       <section className="vender-form-section" ref={formRef} id="valoracion-form">
         <div className="vender-form-intro">
           <span className="vender-eyebrow">Valoración gratuita</span>
-          <h2 className="vender-form-heading">Descubre cuánto vale tu piso o casa</h2>
+          <h2 className="vender-form-heading">Descubre cuánto vale tu vivienda</h2>
           <span className="vender-line" aria-hidden="true" />
           <p className="vender-form-lead">
             Obtén una valoración inmobiliaria gratuita y sin compromiso, basada en precios reales
@@ -148,13 +138,13 @@ function VenderPage() {
               </label>
               <label>
                 Tipo de inmueble *
-                <select name="type" defaultValue={PROPERTY_TYPES[0]} required>
-                  {PROPERTY_TYPES.map((type) => (
-                    <option value={type} key={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
+                <FormSelect
+                  name="type"
+                  ariaLabel="Tipo de inmueble"
+                  value={propertyType}
+                  options={PROPERTY_TYPES}
+                  onChange={setPropertyType}
+                />
               </label>
               <label>
                 Dirección del inmueble *
@@ -167,83 +157,29 @@ function VenderPage() {
         </div>
       </section>
 
-      {/* Estadísticas */}
-      <section className="vender-stats" aria-label="Resultados">
-        {STATS.map((stat) => (
-          <div key={stat.l} className="vender-stat">
-            <strong>{stat.n}</strong>
-            <span>{stat.l}</span>
-          </div>
-        ))}
-      </section>
-
-      {/* Cómo funciona — reutiliza la timeline de los servicios */}
-      <section className="cf">
-        <div className="cf-glow" aria-hidden="true" />
-        <div className="cf-head">
-          <span className="cf-eyebrow">Proceso simple</span>
-          <h2 className="cf-title">Cómo funciona</h2>
-          <p className="cf-intro">
-            Desde la primera solicitud hasta la valoración, te acompañamos en cada paso.
-          </p>
+      {/* Cómo funciona — timeline "En cuatro simples pasos" (cambio de suministros) */}
+      <section className="pasos">
+        <div className="pasos-head">
+          <span className="pasos-eyebrow">Proceso simple</span>
+          <h2 className="pasos-title">Cómo funciona</h2>
         </div>
 
-        <motion.ol
-          className="cf-steps"
-          variants={gridVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          <div className="cf-rail" aria-hidden="true">
-            <motion.div
-              className="cf-rail-fill"
-              variants={{ hidden: { scaleX: 0 }, show: { scaleX: 1, transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] as const } } }}
-            />
+        <div className="pasos-timeline" ref={pasosRef}>
+          <div className="pasos-line" aria-hidden="true">
+            <motion.div className="pasos-line-fill" style={{ scaleY: lineFill }} />
           </div>
 
-          {PROCESO.map((step) => (
-            <motion.li key={step.num} className="cf-step" variants={cardVariants}>
-              <span className="cf-node" aria-hidden="true">
-                <span className="cf-node-num">{step.num}</span>
-              </span>
-              <div className="cf-step-body">
-                <h3 className="cf-step-title">{step.title}</h3>
-                <p className="cf-step-desc">{step.desc}</p>
-              </div>
-            </motion.li>
+          {PROCESO.map((paso, i) => (
+            <PasoStep key={paso.num} paso={paso} index={i} />
           ))}
-        </motion.ol>
+        </div>
       </section>
 
-      {/* Por qué vender con nosotros */}
-      <section className="vender-why">
-        <div className="vender-why-head">
-          <span className="vender-eyebrow">Confianza</span>
-          <h2 className="vender-why-title">Por qué vender con nosotros</h2>
-          <span className="vender-line" aria-hidden="true" />
-        </div>
-        <motion.div
-          className="vender-why-grid"
-          variants={gridVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {VENTAJAS.map((item) => (
-            <motion.article key={item.title} className="vender-why-card" variants={cardVariants}>
-              <span className="vender-why-icon" aria-hidden="true">
-                {item.icon}
-              </span>
-              <h3>{item.title}</h3>
-              <p>{item.desc}</p>
-            </motion.article>
-          ))}
-        </motion.div>
-      </section>
+      {/* Por qué vender con nosotros — acordeón fijado que avanza con el scroll */}
+      <PorQueVender />
 
       {/* CTA final */}
-      <section ref={ctaRef} className={`adm-cta${ctaActive ? ' is-active' : ''}`}>
+      <section ref={ctaRef} className={`adm-cta vender-cta${ctaActive ? ' is-active' : ''}`}>
         <div
           className="adm-cta-bg"
           aria-hidden="true"
@@ -266,6 +202,133 @@ function VenderPage() {
 
       <Footer />
     </main>
+  )
+}
+
+// "Por qué vender con nosotros": split editorial. La foto queda fija (sticky)
+// mientras la lista scrollea; la ventaja que cruza el centro del viewport se
+// resalta y el resto se atenúa. El número/título sobre la foto acompañan.
+function PorQueVender() {
+  const [active, setActive] = useState(0)
+  const itemRefs = useRef<Array<HTMLLIElement | null>>([])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(Number((entry.target as HTMLElement).dataset.index))
+          }
+        }
+      },
+      // Banda de detección estrecha en el centro: solo una ventaja activa.
+      { rootMargin: '-45% 0px -45% 0px', threshold: 0 },
+    )
+    for (const el of itemRefs.current) {
+      if (el) observer.observe(el)
+    }
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <section className="vender-why">
+      <div className="vender-why-head">
+        <span className="vender-eyebrow">Confianza</span>
+        <h2 className="vender-why-title">Por qué vender con nosotros</h2>
+        <span className="vender-line" aria-hidden="true" />
+      </div>
+
+      <div className="vw2-grid">
+        <div className="vw2-media" aria-hidden="true">
+          <div className="vw2-media-sticky">
+            <div
+              className="vw2-img"
+              style={{
+                backgroundImage:
+                  'url(https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80)',
+              }}
+            >
+              <div className="vw2-overlay">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <span className="vw2-overlay-num">
+                      {String(active + 1).padStart(2, '0')}
+                    </span>
+                    <span className="vw2-overlay-title">{VENTAJAS[active].title}</span>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ol className="vw2-list">
+          {VENTAJAS.map((item, i) => (
+            <li
+              key={item.title}
+              data-index={i}
+              ref={(el) => {
+                itemRefs.current[i] = el
+              }}
+              className={`vw2-item${active === i ? ' is-active' : ''}`}
+            >
+              <span className="vw2-num" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div className="vw2-body">
+                <h3 className="vw2-title">{item.title}</h3>
+                <p className="vw2-desc">{item.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )
+}
+
+function PasoStep({ paso, index }: { paso: (typeof PROCESO)[number]; index: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  // Progreso propio de cada paso: el número se rellena cuando el scroll lo alcanza
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start 72%', 'center 52%'],
+  })
+  const reveal = useTransform(scrollYProgress, [0, 1], [100, 0])
+  const clipPath = useMotionTemplate`inset(0 0 ${reveal}% 0)`
+  const num = paso.num.padStart(2, '0')
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`paso-step paso-step--${index % 2 === 0 ? 'left' : 'right'}`}
+      initial={{ opacity: 0, y: 48 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-90px' }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="paso-marker" aria-hidden="true">
+        <span className="paso-dot" />
+      </div>
+      <div className="paso-card">
+        <span className="paso-index" aria-hidden="true">
+          <span className="paso-index-outline">{num}</span>
+          <motion.span className="paso-index-fill" style={{ clipPath }}>
+            {num}
+          </motion.span>
+        </span>
+        <div className="paso-text">
+          <h3 className="paso-card-title">{paso.title}</h3>
+          <p className="paso-desc">{paso.desc}</p>
+        </div>
+      </div>
+    </motion.div>
   )
 }
 

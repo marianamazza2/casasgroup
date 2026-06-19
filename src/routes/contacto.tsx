@@ -7,6 +7,9 @@ import Map, { Marker } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 export const Route = createFileRoute('/contacto')({
+  validateSearch: (search: Record<string, unknown>): { ref?: string } => ({
+    ref: typeof search.ref === 'string' ? search.ref : undefined,
+  }),
   component: ContactPage,
 })
 
@@ -74,8 +77,26 @@ const cardIcons: Record<string, ReactElement> = {
 }
 
 function ContactPage() {
-  const [isPanelOpen, setIsPanelOpen] = useState(false)
+  // Referencia del inmueble si se llega desde una ficha (/contacto?ref=CG-0001):
+  // abrimos el formulario ya prellenado y la sumamos a los canales directos.
+  const { ref } = Route.useSearch()
+  const refMessage = ref ? `Hola, me interesa el inmueble con referencia ${ref}.` : ''
+
+  const [isPanelOpen, setIsPanelOpen] = useState(() => Boolean(ref))
   const [reason, setReason] = useState(contactReasons[0])
+
+  // Devuelve el href del canal directo con la referencia incluida en el mensaje.
+  const hrefWithRef = (card: ContactCard) => {
+    if (!card.href || !ref) return card.href
+    if (card.icon === 'whatsapp') {
+      return `${card.href}?text=${encodeURIComponent(refMessage)}`
+    }
+    if (card.icon === 'mail') {
+      const subject = encodeURIComponent(`Consulta inmueble ${ref}`)
+      return `${card.href}?subject=${subject}&body=${encodeURIComponent(refMessage)}`
+    }
+    return card.href
+  }
 
   // En mobile las tarjetas de contacto se muestran de a una en un slider
   // horizontal; la card activa se deduce de la posicion de scroll y los dots
@@ -197,7 +218,7 @@ function ContactPage() {
                 <a
                   className="contact-card"
                   key={card.label}
-                  href={card.href}
+                  href={hrefWithRef(card)}
                   {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
                   {inner}
@@ -305,11 +326,11 @@ function ContactPage() {
               </label>
               <label>
                 Referencia de inmueble
-                <input name="reference" placeholder="Ej: CG-0001" />
+                <input name="reference" placeholder="Ej: CG-0001" defaultValue={ref ?? ''} />
               </label>
               <label>
                 Mensaje
-                <textarea name="message" placeholder="Escribe tu mensaje..." rows={5} />
+                <textarea name="message" placeholder="Escribe tu mensaje..." rows={5} defaultValue={refMessage} />
               </label>
               <button type="submit">Enviar mensaje</button>
             </form>

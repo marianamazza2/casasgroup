@@ -118,7 +118,7 @@ function SegurosHero() {
           Seguros
         </motion.span>
         <motion.h1 className="sum-hero-title" variants={heroItem}>
-          Protege tu vivienda con las mejores opciones
+          Protege tu vivienda
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>

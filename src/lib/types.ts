@@ -33,7 +33,10 @@ export type ViewMode = 'grid' | 'list'
 export type FilterState = {
   mode: 'compra' | 'alquiler'
   query: string
+  /** Selección simple (dropdown de escritorio). 'Todas' = sin filtro. */
   zone: string
+  /** Selección múltiple anidada (picker móvil). Tokens prefijados m:/d:/b:. */
+  zones: string[]
   priceMin?: number
   priceMax?: number
   category?: string[]

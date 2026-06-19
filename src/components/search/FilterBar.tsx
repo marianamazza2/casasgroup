@@ -1,40 +1,51 @@
 import type { FilterState, ViewMode } from '../../lib/types'
-import { ZoneSelect } from './ZoneSelect'
+import { ZonePicker } from './ZonePicker'
 
 interface FilterBarProps {
   filters: FilterState
-  /** Zonas disponibles según la búsqueda (en cascada). Incluye "Todas". */
-  zones: string[]
+  /** Municipios con inmuebles en el ámbito (marcan con un punto el árbol). */
+  availableMunicipios: Set<string>
   viewMode: ViewMode
+  /** Nº de filtros activos; muestra un badge sobre el botón si > 0. */
+  activeFilterCount: number
   onOpenFilters: () => void
-  onZoneChange: (zone: string) => void
+  onZonesChange: (zones: string[]) => void
   onViewModeChange: (mode: ViewMode) => void
 }
 
-export function FilterBar({ filters, zones, viewMode, onOpenFilters, onZoneChange, onViewModeChange }: FilterBarProps) {
-  // Si dentro del ámbito buscado solo hay una zona ("Todas" + una), el
-  // desplegable no aporta nada → lo ocultamos.
-  const showZones = zones.length > 2
-
+export function FilterBar({ filters, availableMunicipios, viewMode, activeFilterCount, onOpenFilters, onZonesChange, onViewModeChange }: FilterBarProps) {
   return (
     <div className="filter-bar">
-      <button type="button" className="filter-btn" onClick={onOpenFilters}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="4" y1="6" x2="20" y2="6" />
-          <line x1="8" y1="12" x2="16" y2="12" />
-          <line x1="11" y1="18" x2="13" y2="18" />
+      <button
+        type="button"
+        className={`filter-btn${activeFilterCount > 0 ? ' has-filters' : ''}`}
+        onClick={onOpenFilters}
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="21" y1="5" x2="14" y2="5" />
+          <line x1="10" y1="5" x2="3" y2="5" />
+          <line x1="21" y1="12" x2="12" y2="12" />
+          <line x1="8" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="19" x2="16" y2="19" />
+          <line x1="12" y1="19" x2="3" y2="19" />
+          <line x1="14" y1="3" x2="14" y2="7" />
+          <line x1="8" y1="10" x2="8" y2="14" />
+          <line x1="16" y1="17" x2="16" y2="21" />
         </svg>
         Filtros
+        {activeFilterCount > 0 && (
+          <span className="filter-badge" aria-label={`${activeFilterCount} filtros activos`}>
+            {activeFilterCount}
+          </span>
+        )}
       </button>
 
-      {showZones && (
-        <ZoneSelect
-          value={filters.zone}
-          options={zones}
-          onChange={onZoneChange}
-          variant="pill"
-        />
-      )}
+      <ZonePicker
+        value={filters.zones}
+        onChange={onZonesChange}
+        availableMunicipios={availableMunicipios}
+        variant="dropdown"
+      />
 
       <div className="filter-bar-spacer" />
 

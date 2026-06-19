@@ -11,6 +11,8 @@ type MarkerEntry = { marker: maplibregl.Marker; el: HTMLButtonElement }
 type Props = {
   properties: Property[]
   activeId?: number
+  /** Tokens de zona seleccionados; al cambiar, el mapa reencuadra a esa zona. */
+  focusZones?: string[]
   onPinClick: (id: number) => void
   onBoundsChange?: (ids: number[]) => void
 }
@@ -31,13 +33,14 @@ function formatPin(p: Property): string {
     : `${Math.round(p.price / 1000)}k`
 }
 
-export function PropertyMap({ properties, activeId, onPinClick, onBoundsChange }: Props) {
+export function PropertyMap({ properties, activeId, focusZones, onPinClick, onBoundsChange }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const markersRef = useRef<Map<number, MarkerEntry>>(new Map())
   const callbackRef = useRef(onPinClick)
   const boundsCallbackRef = useRef(onBoundsChange)
   const propertiesRef = useRef(properties)
+  const prevFocusRef = useRef<string | null>(null)
 
   useEffect(() => { callbackRef.current = onPinClick })
   useEffect(() => { boundsCallbackRef.current = onBoundsChange })
@@ -118,6 +121,34 @@ export function PropertyMap({ properties, activeId, onPinClick, onBoundsChange }
       map.once('load', sync)
     }
   }, [properties])
+
+  // Reencuadrar el mapa según la zona seleccionada. Al cambiar `focusZones`,
+  // ajustamos la vista a los inmuebles del ámbito (los pines ya filtrados).
+  // Si una zona no tiene inmuebles con coordenadas, no movemos (no hay a dónde).
+  const focusKey = (focusZones ?? []).join('|')
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+
+    // En el primer render con "Todas las zonas" (sin selección) conservamos el
+    // encuadre inicial de Barcelona; solo reencuadramos ante cambios reales.
+    if (prevFocusRef.current === null && focusKey === '') {
+      prevFocusRef.current = focusKey
+      return
+    }
+    prevFocusRef.current = focusKey
+
+    const fit = () => {
+      const withCoords = propertiesRef.current.filter((p) => p.coords)
+      if (withCoords.length === 0) return
+      const bounds = new maplibregl.LngLatBounds()
+      withCoords.forEach((p) => bounds.extend([p.coords!.lng, p.coords!.lat]))
+      map.fitBounds(bounds, { padding: 60, maxZoom: 15, duration: 600 })
+    }
+
+    if (map.isStyleLoaded()) fit()
+    else map.once('load', fit)
+  }, [focusKey])
 
   // Sync active highlight
   useEffect(() => {

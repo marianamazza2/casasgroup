@@ -1,6 +1,12 @@
 import { useMemo, useState } from 'react'
 import { properties } from '../lib/propertiesData'
 import { normalize } from '../lib/locationSearch'
+import {
+  BARCELONA_DISTRICTS,
+  matchesZoneSelection,
+  taxonomyForZone,
+  tok,
+} from '../lib/barcelonaZones'
 import type { FilterState } from '../lib/types'
 
 export type LocType = 'provincia' | 'municipio' | 'distrito' | 'barrio' | undefined
@@ -9,6 +15,33 @@ const defaultFilters: FilterState = {
   mode: 'compra',
   query: '',
   zone: 'Todas',
+  zones: [],
+}
+
+// Índice para resolver el texto de búsqueda a un barrio oficial (normalizado → nombre canónico).
+const BARRIO_BY_NORM = new Map<string, string>()
+for (const d of BARCELONA_DISTRICTS) {
+  for (const b of d.barrios) BARRIO_BY_NORM.set(normalize(b), b)
+}
+
+/** Convierte una búsqueda libre en un token de zona si coincide con la taxonomía. */
+function initialZoneTokens(query: string): string[] {
+  if (!query) return []
+  const q = normalize(query)
+  // ¿Coincide con la zona informal de algún inmueble? Usamos su taxonomía.
+  const sample = properties.find((p) => normalize(p.zone) === q)
+  if (sample) {
+    const tax = taxonomyForZone(sample.zone, sample.city)
+    if (tax.barrio) return [tok.barrio(tax.barrio)]
+    if (tax.distrito) return [tok.distrito(tax.distrito)]
+    return [tok.municipio(tax.municipio)]
+  }
+  // ¿Es un distrito o barrio oficial escrito directamente?
+  const district = BARCELONA_DISTRICTS.find((d) => normalize(d.name) === q)
+  if (district) return [tok.distrito(district.name)]
+  const barrio = BARRIO_BY_NORM.get(q)
+  if (barrio) return [tok.barrio(barrio)]
+  return []
 }
 
 interface InitialSearch {
@@ -42,17 +75,20 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
   const { query = '', mode = 'compra', locType, province = '' } = initial
 
   // Zona inicial: si el usuario buscó una zona/municipio concreto (no una
-  // provincia) y coincide con una zona existente, la dejamos preseleccionada.
+  // provincia) y coincide con la taxonomía, la dejamos preseleccionada tanto
+  // en el dropdown de escritorio (`zone`) como en el picker móvil (`zones`).
   const [filters, setFilters] = useState<FilterState>(() => {
     let zone = 'Todas'
+    let zones: string[] = []
     if (locType !== 'provincia' && query) {
       const q = normalize(query)
       const exact = properties.find(
         (p) => p.mode === mode && normalize(p.zone) === q,
       )
       if (exact) zone = exact.zone
+      zones = initialZoneTokens(query)
     }
-    return { ...defaultFilters, query, mode, zone }
+    return { ...defaultFilters, query, mode, zone, zones }
   })
 
   // Inmuebles dentro del ámbito de la búsqueda (modo + texto), en vivo: si el
@@ -68,11 +104,23 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
     return ['Todas', ...Array.from(set).sort((a, b) => a.localeCompare(b, 'es'))]
   }, [scopedProperties])
 
+  // Municipios presentes en el ámbito (para acotar el árbol del picker).
+  const availableMunicipios = useMemo(() => {
+    const set = new Set(
+      scopedProperties.map((p) => taxonomyForZone(p.zone, p.city).municipio),
+    )
+    return set
+  }, [scopedProperties])
+
   const filteredProperties = useMemo(() => {
-    // Si la zona seleccionada ya no existe en el ámbito actual (p. ej. tras
-    // editar la búsqueda), se ignora y se comporta como "Todas".
-    const zoneActive = filters.zone !== 'Todas' && availableZones.includes(filters.zone)
+    // Picker móvil (multi-selección anidada): tiene prioridad si hay tokens.
+    const zoneSet = new Set(filters.zones)
+    const useTokens = zoneSet.size > 0
+    // Dropdown simple de escritorio: si la zona ya no existe en el ámbito, se ignora.
+    const zoneActive =
+      !useTokens && filters.zone !== 'Todas' && availableZones.includes(filters.zone)
     return scopedProperties.filter((p) => {
+      if (useTokens && !matchesZoneSelection(taxonomyForZone(p.zone, p.city), zoneSet)) return false
       if (zoneActive && p.zone !== filters.zone) return false
 
       if (filters.priceMin != null && p.price < filters.priceMin) return false
@@ -92,6 +140,22 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
     })
   }, [scopedProperties, availableZones, filters])
 
+  // Nº de grupos de filtros activos (los del modal "Filtros"), para el badge.
+  const activeFilterCount = useMemo(() => {
+    let n = 0
+    // Zona: tokens del picker móvil, o el dropdown simple (si sigue siendo válido).
+    const useTokens = filters.zones.length > 0
+    const zoneActive =
+      !useTokens && filters.zone !== 'Todas' && availableZones.includes(filters.zone)
+    if (useTokens || zoneActive) n++
+    if (filters.priceMin != null || filters.priceMax != null) n++
+    if (filters.category && filters.category.length > 0) n++
+    if (filters.bedrooms != null && filters.bedrooms > 0) n++
+    if (filters.bathrooms != null && filters.bathrooms > 0) n++
+    if (filters.surfaceMin != null || filters.surfaceMax != null) n++
+    return n
+  }, [filters, availableZones])
+
   function setFilter<K extends keyof FilterState>(key: K, value: FilterState[K]) {
     setFilters((prev) => ({ ...prev, [key]: value }))
   }
@@ -106,7 +170,9 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
     resetFilters,
     filteredProperties,
     availableZones,
+    availableMunicipios,
     province,
     resultCount: filteredProperties.length,
+    activeFilterCount,
   }
 }

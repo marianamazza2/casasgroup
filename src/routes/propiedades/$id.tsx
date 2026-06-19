@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { properties } from '../../lib/propertiesData'
 import type { Property } from '../../lib/types'
@@ -11,7 +11,19 @@ export const Route = createFileRoute('/propiedades/$id')({
 
 function PropertyDetailPage() {
   const { id } = Route.useParams()
+  const router = useRouter()
   const p = properties.find((x) => x.id === Number(id))
+
+  // Boton flotante de volver (mobile, estilo Airbnb): vuelve a la pantalla
+  // anterior real; si se entro por un link directo (sin historial en el sitio)
+  // cae en la busqueda para no salir de la web.
+  const goBack = () => {
+    if (window.history.length > 1) {
+      router.history.back()
+    } else {
+      router.navigate({ to: '/propiedades', search: { query: '', mode: 'compra' } })
+    }
+  }
 
   if (!p) {
     return (
@@ -26,6 +38,27 @@ function PropertyDetailPage() {
 
   return (
     <div className="property-detail">
+      <button
+        type="button"
+        className="detail-back-fab"
+        onClick={goBack}
+        aria-label="Volver"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="22"
+          height="22"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+      </button>
+
       <PhotoGallery images={p.images ?? [p.image]} title={p.title} />
 
       <div className="detail-content">
@@ -39,6 +72,19 @@ function PropertyDetailPage() {
         <aside className="detail-sidebar">
           <ContactCard propertyRef={propertyRef} />
         </aside>
+      </div>
+
+      {/* Barra fija de contacto (solo mobile, estilo Airbnb): un unico CTA que
+          lleva a /contacto pasando la referencia del inmueble. */}
+      <div className="detail-cta-bar">
+        <span className="detail-cta-price">{p.priceLabel}</span>
+        <Link
+          to="/contacto"
+          search={{ ref: propertyRef }}
+          className="detail-cta-btn"
+        >
+          Contactar
+        </Link>
       </div>
     </div>
   )
@@ -58,12 +104,6 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
     if (!el) return
     const i = Math.round(el.scrollLeft / el.clientWidth)
     setCarouselIndex(i)
-  }
-
-  const scrollToImage = (i: number) => {
-    const el = carouselRef.current
-    if (!el) return
-    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
   }
 
   return (
@@ -108,37 +148,22 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
             onScroll={onCarouselScroll}
           >
             {images.map((src, i) => (
-              <div
-                key={i}
-                className="detail-carousel-slide"
-                onClick={() => setLightboxIndex(i)}
-              >
+              <div key={i} className="detail-carousel-slide">
                 <img src={src} alt={`${title} ${i + 1}`} />
               </div>
             ))}
           </div>
-          <button
-            className="detail-carousel-btn"
-            onClick={() => setLightboxIndex(0)}
-          >
-            <span className="detail-gallery-btn-grid">⊞</span>
-            Mostrar todas
-          </button>
+          {images.length > 1 && (
+            <div
+              className="detail-carousel-count"
+              role="status"
+              aria-live="polite"
+              aria-label={`Foto ${carouselIndex + 1} de ${images.length}`}
+            >
+              {carouselIndex + 1} / {images.length}
+            </div>
+          )}
         </div>
-        {images.length > 1 && (
-          <div className="detail-carousel-dots" role="tablist" aria-label="Fotos">
-            {images.map((_, i) => (
-              <button
-                type="button"
-                key={i}
-                className={`detail-carousel-dot${i === carouselIndex ? ' active' : ''}`}
-                aria-label={`Ir a la foto ${i + 1}`}
-                aria-selected={i === carouselIndex}
-                onClick={() => scrollToImage(i)}
-              />
-            ))}
-          </div>
-        )}
       </div>
 
       {lightboxIndex !== null && (

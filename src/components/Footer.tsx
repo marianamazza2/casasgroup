@@ -15,15 +15,15 @@ export function Footer() {
         </div>
         <div>
           <h3>Inmuebles</h3>
-          <a href="/#propiedades">Comprar</a>
           <a href="/#propiedades">Alquilar</a>
+          <a href="/#propiedades">Comprar</a>
           <a href="/#valoracion">Vender</a>
         </div>
         <div>
           <h3>Servicios</h3>
           <Link to="/servicios/administracion-de-fincas">Administración de fincas</Link>
-          <Link to="/servicios/hipotecas">Hipotecas</Link>
           <Link to="/servicios/cambio-de-suministros">Cambio de suministros</Link>
+          <Link to="/servicios/hipotecas">Hipotecas</Link>
           <Link to="/servicios/seguros">Seguros</Link>
         </div>
         <div>
@@ -39,8 +39,8 @@ export function Footer() {
         </span>
         <nav className="footer-legal-links" aria-label="Páginas legales">
           <a href="/aviso-legal">Aviso legal</a>
-          <a href="/politica-de-privacidad">Política de privacidad</a>
           <a href="/politica-de-cookies">Política de cookies</a>
+          <a href="/politica-de-privacidad">Política de privacidad</a>
         </nav>
       </div>
     </footer>

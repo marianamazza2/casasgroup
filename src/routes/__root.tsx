@@ -73,8 +73,9 @@ function SiteNav() {
   // Marca Servicios como activo en cualquier subpagina de /servicios
   const onServices = pathname.startsWith('/servicios')
 
-  // Dentro de una propiedad (/propiedades/<id>) mostramos una flecha de
-  // volver junto al logo en movil, al estilo Tecnocasa.
+  // Dentro de una propiedad (/propiedades/<id>) ocultamos la cabecera en
+  // movil: la foto va a sangre y se navega con un boton flotante de volver
+  // (estilo Airbnb). Ver .site-nav--property y .detail-back-fab.
   const onPropertyDetail = /^\/propiedades\/.+/.test(pathname)
 
   // Pages whose hero sits behind the nav; elsewhere the nav is always solid
@@ -88,21 +89,12 @@ function SiteNav() {
     transparent ? 'site-nav--transparent' : '',
     overGold ? 'site-nav--on-gold' : '',
     menuOpen ? 'site-nav--menu-open' : '',
+    onPropertyDetail ? 'site-nav--property' : '',
   ].filter(Boolean).join(' ')
 
   return (
     <header className={navClass}>
       <div className="nav-brand">
-        {onPropertyDetail && (
-          <Link
-            to="/propiedades"
-            search={{ query: '', mode: 'compra' }}
-            className="nav-back"
-            aria-label="Volver a búsqueda"
-          >
-            <span aria-hidden="true">‹</span>
-          </Link>
-        )}
         <Link className="logo logo-small" to="/" aria-label="Casas Group">
           <span>CASAS</span>
           <small>GROUP</small>
@@ -132,7 +124,7 @@ function SiteNav() {
       <nav id="site-nav-menu" aria-label="Navegacion principal">
         <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>Comprar</Link>
         <Link to="/propiedades" search={{ query: '', mode: 'alquiler' }}>Alquilar</Link>
-        <Link to="/contacto" className="nav-link--quiet">Vender</Link>
+        <Link to="/vender" className="nav-link--quiet">Vender</Link>
         <Link to="/nosotros">Nosotros</Link>
         <div
           className="nav-services-wrapper"

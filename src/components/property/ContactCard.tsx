@@ -33,7 +33,7 @@ export function ContactCard({ propertyRef }: Props) {
             <span className="detail-btn-arrow" aria-hidden="true">→</span>
           </button>
           <button className="detail-btn">
-            <span className="detail-btn-label">Enviar email</span>
+            <span className="detail-btn-label">Email</span>
             <span className="detail-btn-arrow" aria-hidden="true">→</span>
           </button>
         </div>

@@ -79,30 +79,109 @@ function AdministracionDeFincasPage() {
   const ctaRef = useRef<HTMLElement>(null)
   const [ctaActive, setCtaActive] = useState(false)
 
+  const wrapRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
 
-  // Paso de scroll = ancho de una card + el gap del track. Se mide del DOM para
-  // que funcione con los anchos responsive (clamp) sin duplicar valores en JS.
-  const stepFor = (el: HTMLDivElement) => {
-    const first = el.firstElementChild as HTMLElement | null
-    if (!first) return el.clientWidth
-    const gap = parseFloat(getComputedStyle(el).columnGap || '0') || 0
-    return first.offsetWidth + gap
-  }
-
+  // El dot activo refleja la card centrada en el viewport del track (mismo
+  // criterio que el rail de propiedades de la home).
   const onTrackScroll = () => {
     const el = trackRef.current
     if (!el) return
-    const idx = Math.round(el.scrollLeft / stepFor(el))
-    setActive(Math.max(0, Math.min(FEATURES.length - 1, idx)))
+    const cards = Array.from(el.querySelectorAll<HTMLElement>('.adm-feature-card'))
+    if (!cards.length) return
+    const center = el.scrollLeft + el.clientWidth / 2
+    let closestIdx = 0
+    let closestDist = Infinity
+    cards.forEach((card, i) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2
+      const dist = Math.abs(cardCenter - center)
+      if (dist < closestDist) {
+        closestDist = dist
+        closestIdx = i
+      }
+    })
+    setActive(closestIdx)
   }
 
+  // Dots (mobile): centra la card pulsada.
   const goTo = (i: number) => {
     const el = trackRef.current
     if (!el) return
-    el.scrollTo({ left: i * stepFor(el), behavior: 'smooth' })
+    const card = el.querySelectorAll<HTMLElement>('.adm-feature-card')[i]
+    if (!card) return
+    el.scrollTo({
+      left: card.offsetLeft + card.offsetWidth / 2 - el.clientWidth / 2,
+      behavior: 'smooth',
+    })
   }
+
+  // Arrastre con el mouse (desktop): click-and-drag para mover las cards. En
+  // mobile el scroll táctil ya funciona, así que solo lo activamos con ratón.
+  const drag = useRef({ active: false, startX: 0, startScroll: 0 })
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== 'mouse') return
+    const el = trackRef.current
+    if (!el) return
+    drag.current = { active: true, startX: e.clientX, startScroll: el.scrollLeft }
+    el.classList.add('is-grabbing')
+    el.setPointerCapture(e.pointerId)
+  }
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = trackRef.current
+    if (!el || !drag.current.active) return
+    el.scrollLeft = drag.current.startScroll - (e.clientX - drag.current.startX)
+  }
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = trackRef.current
+    if (!el || !drag.current.active) return
+    drag.current.active = false
+    el.classList.remove('is-grabbing')
+    try {
+      el.releasePointerCapture(e.pointerId)
+    } catch {
+      // pointer ya liberado
+    }
+  }
+
+  // Flechas (desktop): avanza/retrocede una card (ancho + gap, medido del DOM).
+  const scrollAdm = (direction: -1 | 1) => {
+    const el = trackRef.current
+    if (!el) return
+    const card = el.querySelector<HTMLElement>('.adm-feature-card')
+    const gap = parseFloat(getComputedStyle(el).columnGap || '0') || 0
+    const cardWidth = card ? card.getBoundingClientRect().width : 320
+    el.scrollBy({ left: direction * (cardWidth + gap), behavior: 'smooth' })
+  }
+
+  // Desktop: arranca desplazado una card, así el padding lateral deja asomar un
+  // "pedacito" de la card anterior a la izquierda (igual que el rail de la home).
+  useEffect(() => {
+    if (window.innerWidth <= 1024) return
+    const el = trackRef.current
+    if (!el) return
+    const card = el.querySelector<HTMLElement>('.adm-feature-card')
+    if (!card) return
+    const gap = parseFloat(getComputedStyle(el).columnGap || '0') || 0
+    el.scrollLeft = card.getBoundingClientRect().width + gap
+  }, [])
+
+  // Centra las flechas verticalmente sobre la imagen de la card (no sobre toda
+  // la altura, que incluye el texto). Se recalcula al cambiar el tamaño.
+  useEffect(() => {
+    const setArrowY = () => {
+      const wrap = wrapRef.current
+      const media = wrap?.querySelector<HTMLElement>('.adm-feature-media')
+      if (!wrap || !media) return
+      wrap.style.setProperty('--adm-arrow-y', `${media.offsetHeight / 2}px`)
+    }
+    setArrowY()
+    window.addEventListener('resize', setArrowY)
+    return () => window.removeEventListener('resize', setArrowY)
+  }, [])
 
   useEffect(() => {
     const el = ctaRef.current
@@ -126,27 +205,49 @@ function AdministracionDeFincasPage() {
           <p>Todo lo que tu comunidad necesita, gestionado de principio a fin.</p>
         </div>
 
-        <motion.div
-          className="adm-feature-track"
-          ref={trackRef}
-          onScroll={onTrackScroll}
-          variants={gridVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {FEATURES.map((item) => (
-            <motion.article key={item.title} className="adm-feature-card" variants={cardVariants}>
-              <div className="adm-feature-media">
-                <img src={item.image} alt="" loading="lazy" />
-              </div>
-              <div className="adm-feature-body">
-                <h3 className="adm-feature-title">{item.title}</h3>
-                <p className="adm-feature-desc">{item.desc}</p>
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
+        <div className="adm-feature-wrap" ref={wrapRef}>
+          <button
+            type="button"
+            className="rail-nav rail-nav-prev"
+            aria-label="Anterior"
+            onClick={() => scrollAdm(-1)}
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <motion.div
+            className="adm-feature-track"
+            ref={trackRef}
+            onScroll={onTrackScroll}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            variants={gridVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {FEATURES.map((item) => (
+              <motion.article key={item.title} className="adm-feature-card" variants={cardVariants}>
+                <div className="adm-feature-media">
+                  <img src={item.image} alt="" loading="lazy" draggable={false} />
+                </div>
+                <div className="adm-feature-body">
+                  <h3 className="adm-feature-title">{item.title}</h3>
+                  <p className="adm-feature-desc">{item.desc}</p>
+                </div>
+              </motion.article>
+            ))}
+          </motion.div>
+          <button
+            type="button"
+            className="rail-nav rail-nav-next"
+            aria-label="Siguiente"
+            onClick={() => scrollAdm(1)}
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
 
         <div className="adm-feature-dots" role="tablist" aria-label="Servicios incluidos">
           {FEATURES.map((item, i) => (
