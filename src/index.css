@@ -2741,6 +2741,7 @@ a.contact-card:hover .contact-card-icon {
   /* Sin margen extra arriba para que la línea quede a la misma distancia de
      CONTACTO que la de las otras filas (si no, CONTACTO se ve descentrado). */
   .footer-legal {
+    gap: 6px;
     margin-top: 0;
   }
 
