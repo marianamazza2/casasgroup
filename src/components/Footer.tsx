@@ -48,7 +48,7 @@ export function Footer() {
         </FooterSection>
         <FooterSection title="Contacto">
           <a href="mailto:info@casasgroup.es">info@casasgroup.es</a>
-          <a href="tel:+34123456789">+34 123 456 789</a>
+          <a href="tel:+34930110056">+34 930 110 056</a>
           <Link to="/nosotros" hash="trabaja">Trabaja con nosotros</Link>
         </FooterSection>
       </div>

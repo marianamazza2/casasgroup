@@ -62,6 +62,22 @@ function SiteNav() {
   // Cerrar el menu movil y el submenu al navegar (incluso si solo cambian
   // los search params, p.ej. Comprar -> Alquilar dentro de /propiedades)
   useEffect(() => {
+    // Si la navegacion viene del menu movil (estaba abierto), forzamos scroll
+    // al top: en movil el burger se abre estando scrolleado abajo y la
+    // restauracion de scroll de TanStack no resetea de forma fiable por el
+    // remontaje animado del AnimatedOutlet, dejando la nueva pantalla en el
+    // footer. Solo afecta a la navegacion hacia delante desde el menu (en
+    // "atras" el menu esta cerrado, asi que la restauracion sigue intacta).
+    // La restauracion de TanStack puede correr en un frame posterior y volver
+    // a empujar abajo, asi que re-aseguramos el top en el siguiente frame.
+    if (menuOpen) {
+      const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
+      toTop()
+      const raf = requestAnimationFrame(toTop)
+      setMenuOpen(false)
+      setServicesOpen(false)
+      return () => cancelAnimationFrame(raf)
+    }
     setMenuOpen(false)
     setServicesOpen(false)
   }, [locationKey])

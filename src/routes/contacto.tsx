@@ -32,14 +32,14 @@ const contactCards: ContactCard[] = [
   },
   {
     label: 'Telefono',
-    value: '+34 123 456 789',
-    href: 'tel:+34123456789',
+    value: '+34 930 110 056',
+    href: 'tel:+34930110056',
     icon: 'phone',
   },
   {
     label: 'WhatsApp',
-    value: '+34 600 000 000',
-    href: 'https://wa.me/34600000000',
+    value: '+34 601 391 778',
+    href: 'https://wa.me/34601391778',
     icon: 'whatsapp',
   },
   {

@@ -196,7 +196,7 @@ function NosotrosPage() {
           <Link className="button-link" to="/contacto">
             Contáctanos →
           </Link>
-          <a className="button-link button-link--ghost" href="tel:+34123456789">
+          <a className="button-link button-link--ghost" href="tel:+34930110056">
             Llámanos
           </a>
         </div>
