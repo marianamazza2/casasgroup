@@ -208,6 +208,9 @@ function VenderPage() {
 // "Por qué vender con nosotros": split editorial. La foto queda fija (sticky)
 // mientras la lista scrollea; la ventaja que cruza el centro del viewport se
 // resalta y el resto se atenúa. El número/título sobre la foto acompañan.
+const VW2_IMG =
+  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80'
+
 function PorQueVender() {
   const [active, setActive] = useState(0)
   const itemRefs = useRef<Array<HTMLLIElement | null>>([])
@@ -243,10 +246,7 @@ function PorQueVender() {
           <div className="vw2-media-sticky">
             <div
               className="vw2-img"
-              style={{
-                backgroundImage:
-                  'url(https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80)',
-              }}
+              style={{ backgroundImage: `url(${VW2_IMG})` }}
             >
               <div className="vw2-overlay">
                 <AnimatePresence mode="wait">
@@ -288,6 +288,25 @@ function PorQueVender() {
             </li>
           ))}
         </ol>
+      </div>
+
+      {/* Móvil: slider horizontal de tarjetas (imagen + número/título/desc) */}
+      <div className="vw2-slider">
+        {VENTAJAS.map((item, i) => (
+          <article
+            key={item.title}
+            className="vw2-slide"
+            style={{ backgroundImage: `url(${VW2_IMG})` }}
+          >
+            <div className="vw2-slide-overlay">
+              <span className="vw2-overlay-num">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span className="vw2-overlay-title">{item.title}</span>
+              <p className="vw2-slide-desc">{item.desc}</p>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   )

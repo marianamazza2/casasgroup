@@ -507,25 +507,10 @@ button {
 }
 
 .hero-brand-fill .hero-brand-group {
-  align-self: stretch;
   color: var(--hero-fill);
-  justify-content: center;
   -webkit-text-stroke: 1px var(--hero-fill);
   paint-order: stroke fill;
 }
-
-.hero-brand-fill .hero-brand-group::before,
-.hero-brand-fill .hero-brand-group::after {
-  background: var(--hero-fill);
-  content: '';
-  display: block;
-  flex: 1 1 0;
-  height: 1px;
-  max-width: clamp(40px, 12vw, 130px);
-}
-
-.hero-brand-fill .hero-brand-group::before { margin-right: clamp(12px, 1.6vw, 24px); }
-.hero-brand-fill .hero-brand-group::after  { margin-left: clamp(12px, 1.6vw, 24px); }
 
 /* Hero UI — tagline, tabs, search (fades in after brand) */
 .hero-ui {
@@ -2083,7 +2068,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .property-dot {
-    background: var(--line);
+    background: rgba(164, 123, 54, 0.35);
     border: none;
     border-radius: 999px;
     cursor: pointer;
@@ -2094,7 +2079,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .property-dot.active {
-    background: var(--ink);
+    background: var(--gold);
     width: 22px;
   }
 
@@ -2386,7 +2371,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .services-dot {
-    background: var(--line);
+    background: rgba(164, 123, 54, 0.35);
     border: none;
     border-radius: 999px;
     cursor: pointer;
@@ -2397,7 +2382,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .services-dot.active {
-    background: var(--ink);
+    background: var(--gold);
     width: 22px;
   }
 
@@ -2495,7 +2480,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .why-dot::before {
-    background: var(--line);
+    background: rgba(164, 123, 54, 0.35);
     border-radius: 999px;
     content: '';
     height: 6px;
@@ -2504,7 +2489,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .why-dot.active::before {
-    background: var(--ink);
+    background: var(--gold);
     width: 22px;
   }
 
@@ -2587,6 +2572,10 @@ a.contact-card:hover .contact-card-icon {
   .property-controls .properties-see-all-mobile {
     align-items: center;
     display: inline-flex;
+    /* `.text-link` trae `margin: 24px auto 0`; el `auto` horizontal centraba el
+       enlace e impedia que `space-between` lo pegara a la derecha, y el `24px`
+       superior rompia el centrado vertical respecto al toggle. Lo anulamos. */
+    margin: 0;
     /* hereda padding horizontal de `.properties .text-link`; lo anulamos para
        que el borde derecho del enlace caiga sobre el padding de la seccion y
        el margen derecho iguale al izquierdo del toggle */
@@ -2680,7 +2669,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .contact-card-dot {
-    background: var(--line);
+    background: rgba(164, 123, 54, 0.35);
     border: none;
     border-radius: 999px;
     cursor: pointer;
@@ -2691,7 +2680,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .contact-card-dot.active {
-    background: var(--ink);
+    background: var(--gold);
     width: 22px;
   }
 
@@ -5686,7 +5675,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .mision-dot {
-    background: rgba(248, 242, 231, 0.25);
+    background: rgba(164, 123, 54, 0.5);
     border: 0;
     border-radius: 999px;
     cursor: pointer;
@@ -5753,7 +5742,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .valores-dot {
-    background: var(--line);
+    background: rgba(164, 123, 54, 0.35);
     border: 0;
     border-radius: 999px;
     cursor: pointer;
@@ -5764,7 +5753,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .valores-dot.is-active {
-    background: var(--ink);
+    background: var(--gold);
     width: 30px;
   }
 }
@@ -6389,7 +6378,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .suministros-dot {
-    background: var(--line);
+    background: rgba(164, 123, 54, 0.35);
     border: none;
     border-radius: 999px;
     cursor: pointer;
@@ -6771,7 +6760,7 @@ a.contact-card:hover .contact-card-icon {
 }
 
 .adm-feature-dot {
-  background: var(--line);
+  background: rgba(164, 123, 54, 0.35);
   border: 0;
   border-radius: 999px;
   cursor: pointer;
@@ -6782,7 +6771,7 @@ a.contact-card:hover .contact-card-icon {
 }
 
 .adm-feature-dot.is-active {
-  background: var(--ink);
+  background: var(--gold);
   width: 30px;
 }
 
@@ -7142,7 +7131,7 @@ a.contact-card:hover .contact-card-icon {
 }
 
 .qh-dot-btn {
-  background: rgba(247, 241, 230, 0.22);
+  background: rgba(164, 123, 54, 0.5);
   border: 0;
   border-radius: 50%;
   cursor: pointer;
@@ -7770,7 +7759,7 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .seguros-dot {
-    background: rgba(20, 15, 7, 0.2);
+    background: rgba(164, 123, 54, 0.35);
     border: none;
     border-radius: 100px;
     cursor: pointer;
@@ -8272,26 +8261,69 @@ a.contact-card:hover .contact-card-icon {
   max-width: 46ch;
 }
 
+/* Slider móvil: oculto en desktop (ahí manda el split sticky + lista) */
+.vw2-slider {
+  display: none;
+}
+
+.vw2-slide {
+  background-position: center;
+  background-size: cover;
+  border-radius: 18px;
+  box-shadow: 0 30px 60px -34px rgba(20, 16, 10, 0.55);
+  flex: 0 0 82%;
+  height: clamp(320px, 62vh, 460px);
+  overflow: hidden;
+  position: relative;
+  scroll-snap-align: center;
+}
+
+.vw2-slide::after {
+  background: linear-gradient(to top, rgba(20, 16, 10, 0.78) 0%, transparent 56%);
+  content: '';
+  inset: 0;
+  position: absolute;
+}
+
+.vw2-slide-overlay {
+  bottom: clamp(20px, 5vw, 30px);
+  left: clamp(20px, 5vw, 28px);
+  position: absolute;
+  right: clamp(20px, 5vw, 28px);
+  z-index: 1;
+}
+
+.vw2-slide-desc {
+  color: #f0e8da;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 10px 0 0;
+  opacity: 0.88;
+}
+
 @media (max-width: 860px) {
   .vender-form-section {
     grid-template-columns: 1fr;
   }
 
+  /* En móvil ocultamos el split (imagen + lista) y mostramos el slider */
   .vw2-grid {
-    grid-template-columns: 1fr;
+    display: none;
   }
 
-  .vw2-media-sticky {
-    position: static;
+  .vw2-slider {
+    display: flex;
+    gap: 16px;
+    margin: 0 -20px;
+    overflow-x: auto;
+    padding: 4px 20px 16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .vw2-img {
-    height: clamp(220px, 42vh, 360px);
-  }
-
-  /* En móvil, sin foco sticky, todas las ventajas legibles */
-  .vw2-item {
-    opacity: 1;
+  /* Ocultar la barra de scroll manteniendo el desplazamiento táctil */
+  .vw2-slider::-webkit-scrollbar {
+    display: none;
   }
 }
 

@@ -3,6 +3,8 @@ import { properties } from '../lib/propertiesData'
 import { normalize } from '../lib/locationSearch'
 import {
   BARCELONA_DISTRICTS,
+  BARCELONA_MUNICIPIO,
+  BARCELONA_PROVINCE_MUNICIPIOS,
   matchesZoneSelection,
   taxonomyForZone,
   tok,
@@ -25,9 +27,20 @@ for (const d of BARCELONA_DISTRICTS) {
 }
 
 /** Convierte una búsqueda libre en un token de zona si coincide con la taxonomía. */
-function initialZoneTokens(query: string): string[] {
+function initialZoneTokens(query: string, locType?: LocType): string[] {
   if (!query) return []
   const q = normalize(query)
+  // Municipio entero: Barcelona ciudad no tiene token `m:` (la capital queda
+  // fuera de la lista de municipios de la provincia y el picker la representa
+  // con sus 10 distritos), así que la preseleccionamos como "todo el municipio".
+  // Cualquier otro municipio de la provincia sí usa su token `m:`.
+  if (locType === 'municipio') {
+    if (q === normalize(BARCELONA_MUNICIPIO)) {
+      return BARCELONA_DISTRICTS.map((d) => tok.distrito(d.name))
+    }
+    const muni = BARCELONA_PROVINCE_MUNICIPIOS.find((m) => normalize(m) === q)
+    if (muni) return [tok.municipio(muni)]
+  }
   // ¿Coincide con la zona informal de algún inmueble? Usamos su taxonomía.
   const sample = properties.find((p) => normalize(p.zone) === q)
   if (sample) {
@@ -86,7 +99,8 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
         (p) => p.mode === mode && normalize(p.zone) === q,
       )
       if (exact) zone = exact.zone
-      zones = initialZoneTokens(query)
+      else if (locType === 'municipio') zone = query
+      zones = initialZoneTokens(query, locType)
     }
     return { ...defaultFilters, query, mode, zone, zones }
   })
