@@ -90,7 +90,9 @@ function CambioDeSuministrosPage() {
 
   // En móvil las tarjetas son un slider horizontal con scroll-snap, así que
   // desactivamos la animación de entrada lateral (interfiere con el scroll).
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches,
+  )
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)')
     const update = () => setIsMobile(mq.matches)

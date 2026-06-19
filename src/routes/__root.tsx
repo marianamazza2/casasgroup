@@ -14,6 +14,9 @@ function SiteNav() {
   const [servicesOpen, setServicesOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = useRouterState({ select: (s) => s.location.pathname })
+  // Incluye los search params: navegar a la misma ruta cambiando el modo
+  // (Comprar -> Alquilar) no altera el pathname pero si esta clave.
+  const locationKey = useRouterState({ select: (s) => s.location.href })
   const [scrolled, setScrolled] = useState(false)
   const [goldBehind, setGoldBehind] = useState(false)
   // En desktop (> 1024px) Servicios se abre con hover; en movil/iPad solo con click
@@ -56,11 +59,12 @@ function SiteNav() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [pathname])
 
-  // Cerrar el menu movil y el submenu al navegar a otra ruta
+  // Cerrar el menu movil y el submenu al navegar (incluso si solo cambian
+  // los search params, p.ej. Comprar -> Alquilar dentro de /propiedades)
   useEffect(() => {
     setMenuOpen(false)
     setServicesOpen(false)
-  }, [pathname])
+  }, [locationKey])
 
   // Bloquear el scroll del body mientras el panel movil esta abierto
   useEffect(() => {

@@ -688,6 +688,19 @@ button {
   justify-content: center;
 }
 
+/* Espaciador que ocupa el lugar del buscador en las pestañas con CTA único
+   (vender/reformas/hipotecas). Oculto por defecto: en desktop el CTA va
+   centrado. En mobile (ver @media 640) se muestra para que el panel mida
+   igual que en comprar/alquilar y el hero no se desplace al cambiar de tab. */
+.hero-search-placeholder {
+  display: none;
+  visibility: hidden;
+}
+
+.hero-search-placeholder::before {
+  content: '\00a0';
+}
+
 .hero-cta span {
   color: var(--text);
   line-height: 1.6;
@@ -2189,12 +2202,20 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .site-nav nav > a:hover,
-  .site-nav nav > a[data-status='active']:not(.nav-link--quiet),
-  .site-nav nav > .nav-services-wrapper > button:hover,
-  .site-nav nav > .nav-services-wrapper > button.active {
+  .site-nav nav > .nav-services-wrapper > button:hover {
     background: var(--gold-soft);
     border-bottom-color: var(--line);
     color: #8d672d;
+  }
+
+  /* La pagina activa se resalta claramente (incluye Vender, que es quiet) */
+  .site-nav nav > a[data-status='active'],
+  .site-nav nav > .nav-services-wrapper > button.active {
+    background: var(--gold-soft);
+    border-bottom-color: var(--line);
+    box-shadow: inset 3px 0 0 var(--gold);
+    color: #6f4e1f;
+    font-weight: 700;
   }
 
   /* El submenu de servicios se despliega en linea dentro del panel */
@@ -2543,12 +2564,16 @@ a.contact-card:hover .contact-card-icon {
     flex-direction: column;
   }
 
-  /* Solo CTA (vender/reformas/hipotecas): drop the button to the bottom of the
-     panel so it lands at the same height as the "Buscar" button, avoiding the
-     jump when switching tabs */
+  /* Solo CTA (vender/reformas/hipotecas): reproduce el layout del buscador
+     (espaciador del input arriba + CTA donde va "Buscar" + renglón de contacto
+     oculto) para que el panel mida exactamente igual que en comprar/alquilar y
+     el bloque del hero no se desplace al cambiar de pestaña */
   .hero-cta--solo {
-    justify-content: flex-end;
-    min-height: 116px;
+    justify-content: flex-start;
+  }
+
+  .hero-cta--solo .hero-search-placeholder {
+    display: block;
   }
 
   .section-top,
@@ -7619,11 +7644,9 @@ a.contact-card:hover .contact-card-icon {
 
 .seguros-preview-tag {
   align-items: center;
-  backdrop-filter: blur(4px);
-  background: rgba(247, 241, 230, 0.14);
-  border: 1px solid rgba(247, 241, 230, 0.28);
+  background: #a47b36;
   border-radius: 100px;
-  color: #f7f1e6;
+  color: #fff;
   display: inline-flex;
   font-size: 11px;
   letter-spacing: 0.12em;

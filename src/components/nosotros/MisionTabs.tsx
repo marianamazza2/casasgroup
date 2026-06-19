@@ -51,6 +51,29 @@ export function MisionTabs({ tabs }: { tabs: Tab[] }) {
 
   const bgY = useTransform(scrollYProgress, [0, 1], ['-8%', '10%'])
 
+  // En móvil (sin pin) permitimos cambiar de pestaña arrastrando el dedo.
+  const touchStart = useRef<{ x: number; y: number } | null>(null)
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (pinned) return
+    const t = e.touches[0]
+    touchStart.current = { x: t.clientX, y: t.clientY }
+  }
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (pinned || !touchStart.current) return
+    const t = e.changedTouches[0]
+    const dx = t.clientX - touchStart.current.x
+    const dy = t.clientY - touchStart.current.y
+    touchStart.current = null
+    // Solo gestos predominantemente horizontales y con recorrido suficiente.
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return
+    setActive((prev) => {
+      const next = dx < 0 ? prev + 1 : prev - 1
+      return Math.min(tabs.length - 1, Math.max(0, next))
+    })
+  }
+
   const num = String(active + 1).padStart(2, '0')
   const total = String(tabs.length).padStart(2, '0')
 
@@ -72,7 +95,7 @@ export function MisionTabs({ tabs }: { tabs: Tab[] }) {
         </motion.div>
         <div className="mision-feature-overlay" aria-hidden="true" />
 
-        <div className="mision-feature-inner">
+        <div className="mision-feature-inner" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           <span className="mision-eyebrow">Lo que nos mueve</span>
 
           {/* Número gigante en contorno, que rueda en vertical al cambiar */}

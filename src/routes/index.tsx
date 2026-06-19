@@ -521,7 +521,7 @@ function Home() {
 
               <div className="hero-panel">
                 <div className={`hero-cta${!isSearchTab ? ' hero-cta--solo' : ''}`}>
-                  {isSearchTab && (
+                  {isSearchTab ? (
                     <LocationAutocomplete
                       className="hero-search-ac"
                       inputClassName="hero-search-input"
@@ -536,6 +536,11 @@ function Home() {
                       onSelect={(loc) => setSelectedLocation(loc)}
                       onSubmit={(q) => goToResults(q, selectedLocation ?? undefined)}
                     />
+                  ) : (
+                    // Reserva el alto del buscador para que el panel mida igual que
+                    // en comprar/alquilar y el bloque del hero no se mueva al cambiar
+                    // de pestaña (solo visible en mobile, ver hero-search-placeholder)
+                    <span className="hero-search-input hero-search-placeholder" aria-hidden="true" />
                   )}
                   {heroTab === 'vender' ? (
                     <Link className="button-link" to="/vender">
@@ -555,11 +560,10 @@ function Home() {
                     </Link>
                   )}
                 </div>
-                {isSearchTab && (
-                  <div className="direct-contact" style={{ visibility: 'hidden' }} aria-hidden="true">
-                    Prefiero hablar con alguien <Link to="/contacto">Contactar</Link>
-                  </div>
-                )}
+                {/* Renglón reservado en todas las pestañas para mantener el alto del panel */}
+                <div className="direct-contact" style={{ visibility: 'hidden' }} aria-hidden="true">
+                  Prefiero hablar con alguien <Link to="/contacto">Contactar</Link>
+                </div>
               </div>
             </div>
           </div>
