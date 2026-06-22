@@ -1,10 +1,26 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { motion } from 'framer-motion'
 import type { ReactElement } from 'react'
 import { Footer } from '../components/Footer'
 import Map, { Marker } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
+
+// Las tarjetas de contacto aparecen escalonadas al entrar en viewport
+const cardGridReveal = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+}
+
+const cardReveal = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+  },
+}
 
 export const Route = createFileRoute('/contacto')({
   validateSearch: (search: Record<string, unknown>): { ref?: string } => ({
@@ -98,25 +114,6 @@ function ContactPage() {
     return card.href
   }
 
-  // En mobile las tarjetas de contacto se muestran de a una en un slider
-  // horizontal; la card activa se deduce de la posicion de scroll y los dots
-  // permiten saltar a cada una.
-  const cardGridRef = useRef<HTMLDivElement>(null)
-  const [activeCard, setActiveCard] = useState(0)
-
-  const onCardGridScroll = () => {
-    const el = cardGridRef.current
-    if (!el || el.clientWidth === 0) return
-    const idx = Math.round(el.scrollLeft / el.clientWidth)
-    setActiveCard(Math.max(0, Math.min(contactCards.length - 1, idx)))
-  }
-
-  const goToCard = (i: number) => {
-    const el = cardGridRef.current
-    if (!el) return
-    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
-  }
-
   const heroWrapperRef = useRef<HTMLDivElement>(null)
   const heroGoldRef = useRef<HTMLDivElement>(null)
   const heroMediaRef = useRef<HTMLDivElement>(null)
@@ -192,7 +189,13 @@ function ContactPage() {
         <div className="contact-direct">
           <span className="contact-direct-eyebrow">Contacto directo</span>
           <h2>Si lo prefieres, contactanos directamente.</h2>
-          <div className="contact-card-grid" ref={cardGridRef} onScroll={onCardGridScroll}>
+          <motion.div
+            className="contact-card-grid"
+            variants={cardGridReveal}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.25 }}
+          >
             {contactCards.map((card) => {
               const inner = (
                 <>
@@ -208,36 +211,25 @@ function ContactPage() {
               )
               if (!card.href) {
                 return (
-                  <article className="contact-card" key={card.label}>
+                  <motion.article className="contact-card" key={card.label} variants={cardReveal}>
                     {inner}
-                  </article>
+                  </motion.article>
                 )
               }
               const isExternal = card.href.startsWith('http')
               return (
-                <a
+                <motion.a
                   className="contact-card"
                   key={card.label}
                   href={hrefWithRef(card)}
+                  variants={cardReveal}
                   {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
                   {inner}
-                </a>
+                </motion.a>
               )
             })}
-          </div>
-          <div className="contact-card-dots" role="tablist" aria-label="Datos de contacto">
-            {contactCards.map((card, i) => (
-              <button
-                key={card.label}
-                type="button"
-                className={`contact-card-dot${activeCard === i ? ' active' : ''}`}
-                aria-label={`Ver ${card.label}`}
-                aria-selected={activeCard === i}
-                onClick={() => goToCard(i)}
-              />
-            ))}
-          </div>
+          </motion.div>
           <div className="social-row" aria-label="Redes sociales">
             <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

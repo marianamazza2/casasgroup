@@ -1906,11 +1906,6 @@ a.contact-card:hover .contact-card-icon {
   line-height: 1.5;
 }
 
-/* Los dots del slider de contacto solo existen en mobile */
-.contact-card-dots {
-  display: none;
-}
-
 .social-row {
   display: flex;
   gap: 10px;
@@ -2791,47 +2786,16 @@ a.contact-card:hover .contact-card-icon {
     flex-basis: min(82vw, 320px);
   }
 
-  /* Slider horizontal: una tarjeta por pantalla con scroll-snap */
+  /* En mobile mostramos todas las tarjetas apiladas: mas informacion a la vista */
   .contact-card-grid {
-    display: flex;
-    gap: 0;
-    grid-template-columns: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: clamp(28px, 6vw, 40px);
   }
 
-  .contact-card-grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  .contact-card-grid > .contact-card {
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-  }
-
-  .contact-card-dots {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 22px;
-  }
-
-  .contact-card-dot {
-    background: rgba(164, 123, 54, 0.35);
-    border: none;
-    border-radius: 999px;
-    cursor: pointer;
-    height: 6px;
-    padding: 0;
-    transition: width 300ms ease, background 300ms ease;
-    width: 6px;
-  }
-
-  .contact-card-dot.active {
-    background: var(--gold);
-    width: 22px;
+  .contact-card {
+    padding: 18px 20px;
+    gap: 16px;
   }
 
   .location-band > div:first-child {
