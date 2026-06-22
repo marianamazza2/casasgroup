@@ -95,6 +95,20 @@ export const TIMELINE = [
 ]
 
 function NosotrosPage() {
+  const ctaRef = useRef<HTMLElement>(null)
+  const [ctaActive, setCtaActive] = useState(false)
+
+  useEffect(() => {
+    const el = ctaRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setCtaActive(entry.isIntersecting),
+      { threshold: 0.45 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <main className="nosotros-page">
       <NosotrosHero />
@@ -189,16 +203,24 @@ function NosotrosPage() {
 
       <TrayectoriaTimeline items={TIMELINE} />
 
-      <section className="nosotros-cta">
-        <h2>¿Quieres conocernos en persona?</h2>
-        <p>Visítanos en nuestra oficina o contáctanos. Estaremos encantados de ayudarte.</p>
-        <div className="nosotros-cta-actions">
+      <section ref={ctaRef} className={`adm-cta nosotros-cta${ctaActive ? ' is-active' : ''}`}>
+        <div
+          className="adm-cta-bg"
+          aria-hidden="true"
+          style={{
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80)',
+          }}
+        />
+        <div className="adm-cta-inner">
+          <span className="adm-cta-eyebrow">Conócenos</span>
+          <h2 className="adm-cta-title">¿Quieres conocernos en persona?</h2>
+          <p className="adm-cta-text">
+            Visítanos en nuestra oficina o contáctanos. Estaremos encantados de ayudarte.
+          </p>
           <Link className="button-link" to="/contacto">
             Contáctanos →
           </Link>
-          <a className="button-link button-link--ghost" href="tel:+34930110056">
-            Llámanos
-          </a>
         </div>
       </section>
 
@@ -323,8 +345,8 @@ function NosotrosHero() {
         <motion.span className="sum-hero-eyebrow" variants={heroItem}>
           Nuestra historia
         </motion.span>
-        <motion.h1 className="sum-hero-title" variants={heroItem}>
-          El sector necesitaba algo diferente
+        <motion.h1 className="sum-hero-title sum-hero-title--two-line" variants={heroItem}>
+          El sector<br />necesitaba<br />algo diferente
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>

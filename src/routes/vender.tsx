@@ -53,6 +53,7 @@ function VenderPage() {
   const ctaRef = useRef<HTMLElement>(null)
   const [ctaActive, setCtaActive] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [formOpen, setFormOpen] = useState(false)
   const [propertyType, setPropertyType] = useState(PROPERTY_TYPES[0])
 
   // Timeline "Cómo funciona": el riel dorado se "dibuja" con el scroll, igual
@@ -76,6 +77,8 @@ function VenderPage() {
   }, [])
 
   const scrollToForm = () => {
+    // Al venir de un CTA el usuario ya quiere el formulario: lo desplegamos (móvil)
+    setFormOpen(true)
     formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
@@ -103,7 +106,7 @@ function VenderPage() {
           </ul>
         </div>
 
-        <div className="vender-form-card">
+        <div className={`vender-form-card${formOpen ? ' is-open' : ''}`}>
           {submitted ? (
             <div className="vender-form-done" role="status">
               <span className="vender-form-done-icon" aria-hidden="true">
@@ -113,6 +116,20 @@ function VenderPage() {
               <p>Te contactaremos en menos de 24 horas con tu valoración.</p>
             </div>
           ) : (
+            <>
+              {/* Móvil: el formulario arranca colapsado tras este CTA para no ocupar
+                  toda la pantalla; se despliega al pulsarlo. En desktop está oculto. */}
+              <button
+                type="button"
+                className="vender-form-trigger"
+                aria-expanded={formOpen}
+                onClick={() => setFormOpen(true)}
+              >
+                <span>Quiero solicitar mi valoración</span>
+                <span aria-hidden="true">→</span>
+              </button>
+              <div className="vender-form-reveal">
+                <div className="vender-form-reveal-inner">
             <form
               className="vender-form"
               onSubmit={(event) => {
@@ -153,6 +170,9 @@ function VenderPage() {
               <button type="submit">Enviar →</button>
               <p className="vender-form-fine">Sin compromiso de venta. Solo para propietarios.</p>
             </form>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </section>

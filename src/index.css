@@ -620,6 +620,11 @@ button {
   .hero-search-input::placeholder {
     font-size: 14px;
   }
+  /* En mobile acortamos el recorrido del hero para que el crossfade a la
+     imagen dorada se complete con un solo scroll corto (scrollable = 60vh). */
+  .hero-scroll-wrapper {
+    height: 160vh;
+  }
 }
 
 .hero-cta button,
@@ -1508,6 +1513,7 @@ button {
 
 .property-card {
   background: var(--paper);
+  border-radius: 12px;
   flex: 0 0 calc((100vw - 2 * clamp(20px, 5vw, 72px) - 2 * 20px) / 3);
   overflow: hidden;
   scroll-snap-align: start;
@@ -1571,8 +1577,8 @@ button {
 .property-body strong {
   color: var(--charcoal);
   display: block;
-  font-family: var(--serif);
-  font-size: 27px;
+  font-family: var(--sans);
+  font-size: 16px;
   font-weight: 500;
   margin-top: 12px;
 }
@@ -2362,7 +2368,7 @@ a.contact-card:hover .contact-card-icon {
   .services-list-item {
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: 16px;
+    border-radius: 12px;
     display: flex;
     flex: 0 0 100%;
     flex-direction: column;
@@ -2477,7 +2483,7 @@ a.contact-card:hover .contact-card-icon {
   .why-rail-card {
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: 16px;
+    border-radius: 12px;
     display: flex;
     flex: 0 0 100%;
     flex-direction: column;
@@ -5664,44 +5670,6 @@ a.contact-card:hover .contact-card-icon {
   transform: translateY(-2px);
 }
 
-.nosotros-cta {
-  background: var(--gold-soft);
-  padding: clamp(58px, 8vw, 94px) clamp(22px, 5vw, 72px);
-  text-align: center;
-}
-
-.nosotros-cta h2 {
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: clamp(28px, 4vw, 38px);
-  font-weight: 300;
-  margin: 0 0 12px;
-}
-
-.nosotros-cta p {
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.7;
-  margin: 0 auto 28px;
-  max-width: 420px;
-}
-
-.nosotros-cta-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-}
-
-.button-link--ghost {
-  background: transparent;
-  color: var(--gold);
-}
-
-.button-link--ghost:hover {
-  background: var(--gold);
-  color: #fff;
-}
-
 /* ---------------------------------------------------------------------------
    Trabaja con nosotros — bloque oscuro a dos columnas tras "Nuestro equipo".
    Mismo lenguaje visual que la sección "Por qué con nosotros" de seguros. */
@@ -5892,17 +5860,38 @@ a.contact-card:hover .contact-card-icon {
 
   .valores-slide {
     border: 1px solid var(--line);
-    border-radius: 16px;
-    flex: 0 0 100%;
+    border-radius: 12px;
+    flex: 0 0 min(82vw, 320px);
     flex-direction: column;
     overflow: hidden;
     scroll-snap-align: center;
   }
 
   .valores-photo {
-    min-height: 220px;
+    aspect-ratio: 4 / 3;
+    min-height: 0;
     order: -1;
     width: 100%;
+  }
+
+  /* Texto más compacto en móvil para que la card no quede tan alta (igual
+     que las cards de administración de fincas). */
+  .valores-detail-text {
+    padding: clamp(18px, 5vw, 24px);
+  }
+
+  .valores-detail-num {
+    font-size: 26px;
+  }
+
+  .valores-detail-text h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .valores-detail-text p {
+    font-size: 13px;
+    line-height: 1.65;
   }
 
   /* Dots tipo "pill activo" debajo del slider. */
@@ -5974,11 +5963,6 @@ a.contact-card:hover .contact-card-icon {
 
   .timeline-text {
     max-width: none;
-  }
-
-  .nosotros-cta-actions {
-    align-items: center;
-    flex-direction: column;
   }
 }
 
@@ -6343,6 +6327,15 @@ a.contact-card:hover .contact-card-icon {
   width: 72px;
 }
 
+/* Títulos a los que dejamos controlar el salto con <br>: en desktop quitamos
+   el tope de 16ch y evitamos el reajuste, para que cada línea quede entera. */
+@media (min-width: 641px) {
+  .sum-hero-title--two-line {
+    max-width: none;
+    white-space: nowrap;
+  }
+}
+
 .sum-hero-subtitle {
   color: #faf7f1;
   font-size: 16px;
@@ -6435,7 +6428,7 @@ a.contact-card:hover .contact-card-icon {
 .suministro-card {
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 2px;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -6868,7 +6861,7 @@ a.contact-card:hover .contact-card-icon {
 .adm-feature-card {
   background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 2px;
+  border-radius: 12px;
   display: flex;
   flex: 0 0 calc((100vw - 2 * clamp(22px, 5vw, 72px) - 2 * 20px) / 3);
   flex-direction: column;
@@ -7749,7 +7742,7 @@ a.contact-card:hover .contact-card-icon {
 /* — Panel de previsualización — */
 .seguros-preview {
   aspect-ratio: 4 / 5;
-  border-radius: 6px;
+  border-radius: 12px;
   overflow: hidden;
   position: relative;
 }
@@ -8029,6 +8022,15 @@ a.contact-card:hover .contact-card-icon {
   border-radius: 18px;
   box-shadow: 0 18px 50px rgb(26 26 24 / 8%);
   padding: clamp(24px, 3vw, 34px);
+}
+
+/* CTA que despliega el formulario (solo móvil; oculto en desktop) */
+.vender-form-trigger {
+  display: none;
+}
+
+.vender-form-reveal-inner {
+  min-height: 0;
 }
 
 .vender-form {
@@ -8436,13 +8438,17 @@ a.contact-card:hover .contact-card-icon {
 .vw2-slide {
   background-position: center;
   background-size: cover;
-  border-radius: 18px;
+  border-radius: 12px;
   box-shadow: 0 30px 60px -34px rgba(20, 16, 10, 0.55);
   flex: 0 0 82%;
-  height: clamp(320px, 62vh, 460px);
+  height: clamp(260px, 44vh, 360px);
   overflow: hidden;
   position: relative;
   scroll-snap-align: center;
+}
+
+.vw2-slide-overlay .vw2-overlay-num {
+  color: #fff;
 }
 
 .vw2-slide::after {
@@ -8471,6 +8477,63 @@ a.contact-card:hover .contact-card-icon {
 @media (max-width: 860px) {
   .vender-form-section {
     grid-template-columns: 1fr;
+  }
+
+  /* En móvil la tarjeta sin abrir es solo el CTA: sin fondo, borde ni sombra */
+  .vender-form-card {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .vender-form-card.is-open {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    box-shadow: 0 18px 50px rgb(26 26 24 / 8%);
+    padding: clamp(24px, 6vw, 30px);
+  }
+
+  /* CTA visible: botón dorado a ancho completo que despliega el formulario */
+  .vender-form-trigger {
+    align-items: center;
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-size: 15px;
+    font-weight: 600;
+    gap: 10px;
+    justify-content: center;
+    padding: 15px 24px;
+    transition: background 180ms ease, transform 180ms ease;
+    width: 100%;
+  }
+
+  .vender-form-trigger:active {
+    transform: scale(0.99);
+  }
+
+  /* Al abrir, ocultamos el CTA y dejamos paso al formulario */
+  .vender-form-card.is-open .vender-form-trigger {
+    display: none;
+  }
+
+  /* Colapso suave del formulario con el truco grid-template-rows 0fr → 1fr */
+  .vender-form-reveal {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 440ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .vender-form-card.is-open .vender-form-reveal {
+    grid-template-rows: 1fr;
+  }
+
+  .vender-form-reveal-inner {
+    overflow: hidden;
   }
 
   /* En móvil ocultamos el split (imagen + lista) y mostramos el slider */

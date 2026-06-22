@@ -14,7 +14,7 @@ export function ContactCard({ propertyRef }: Props) {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
       >
-        <span className="detail-contact-title">¿Te interesa este inmueble?</span>
+        <span className="detail-contact-title">¿Te interesa?</span>
         <span className="detail-contact-chevron" aria-hidden="true">⌄</span>
       </button>
 

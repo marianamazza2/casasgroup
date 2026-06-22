@@ -322,7 +322,7 @@ function AdmHero() {
           Administración de fincas
         </motion.span>
         <motion.h1 className="sum-hero-title" variants={heroItem}>
-          Tu comunidad en buenas manos
+          Tu comunidad<br />en buenas manos
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
