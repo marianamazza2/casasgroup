@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { properties } from '../../lib/propertiesData'
+import { properties } from '../../lib/properties'
 import type { Property } from '../../lib/types'
 import { ContactCard } from '../../components/property/ContactCard'
 import { PropertyMap } from '../../components/property/PropertyMap'

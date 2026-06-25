@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { properties } from '../lib/propertiesData'
+import { properties } from '../lib/properties'
 import { normalize } from '../lib/locationSearch'
 import {
   BARCELONA_DISTRICTS,
