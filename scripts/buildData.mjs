@@ -5,7 +5,7 @@
 //   1. Lee el Google Sheet (publicado como CSV) y parsea las columnas.
 //   2. Filtra las filas con `publicado = SI`.
 //   3. Por cada fila, lista la carpeta de Cloudinary (inmuebles/<ref_fotos>/)
-//      vía Admin API; ordena por nombre → 01- = portada, resto = galería.
+//      vía Admin API; la foto "cover" es la portada, el resto la galería.
 //   4. Transforma cada `Inmueble` (esquema del Sheet) → `Property` (tipo de la web).
 //   5. Escribe src/lib/generatedProperties.ts con el array tipado.
 //
@@ -115,6 +115,17 @@ function toFloat(v) {
   const n = parseFloat(norm(v).replace(',', '.'))
   return Number.isFinite(n) ? n : undefined
 }
+function parseDate(v) {
+  // Normaliza a ISO 'YYYY-MM-DD'. Acepta 'YYYY-MM-DD' o 'DD/MM/YYYY' (o con '-').
+  const s = norm(v)
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)
+  if (m) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`
+  m = s.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/)
+  if (m) return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`
+  return undefined
+}
+
+const ESTADOS_VALIDOS = ['EN VENTA', 'RESERVADO', 'VENDIDO', 'ALQUILADO']
 
 // ── Mapas de enums Sheet → Property ──────────────────────────────────────────
 const MODE_BY_OPERACION = { VENTA: 'compra', ALQUILER: 'alquiler' }
@@ -136,24 +147,35 @@ function formatPrice(precio, mode) {
 }
 
 // ── Cloudinary Admin API: listar fotos de una carpeta ────────────────────────
-// GET /resources/image/upload?prefix=inmuebles/<ref_fotos>/ con Basic auth.
-// Devuelve los public_id ordenados (01-, 02-, ...).
+// Usa la Search API por `asset_folder` (no por prefijo de public_id). Esto soporta
+// las "carpetas dinámicas" — el modo por defecto de las cuentas nuevas — donde la
+// carpeta visual está separada del public_id (que queda aleatorio). La portada y el
+// orden se resuelven con el `display_name` (el nombre que ves en la Media Library:
+// cover.jpg, 01-salon.jpg, …), no con el public_id.
+// Devuelve [{ id: public_id (para la URL), name: display_name en minúscula }] ordenado.
 async function listPhotos(refFotos) {
   if (!CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) return []
-  const prefix = `${CLOUDINARY_ROOT}/${refFotos}/`
-  const url =
-    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/resources/image/upload` +
-    `?type=upload&prefix=${encodeURIComponent(prefix)}&max_results=200`
+  const folder = `${CLOUDINARY_ROOT}/${refFotos}`
+  const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/resources/search`
   const auth = Buffer.from(`${CLOUDINARY_API_KEY}:${CLOUDINARY_API_SECRET}`).toString('base64')
-  const res = await fetch(url, { headers: { Authorization: `Basic ${auth}` } })
+  // `asset_folder` cubre carpetas dinámicas; `folder` cubre cuentas con carpetas fijas.
+  const expression = `asset_folder="${folder}" OR folder="${folder}"`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ expression, max_results: 200 }),
+  })
   if (!res.ok) {
-    console.warn(`  ⚠️  Cloudinary ${res.status} para "${prefix}" — sin fotos`)
+    console.warn(`  ⚠️  Cloudinary ${res.status} para "${folder}" — sin fotos`)
     return []
   }
   const data = await res.json()
   return (data.resources ?? [])
-    .map((r) => r.public_id)
-    .sort((a, b) => a.localeCompare(b, 'es', { numeric: true }))
+    .map((r) => ({
+      id: r.public_id,
+      name: String(r.display_name || r.filename || r.public_id).toLowerCase(),
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'es', { numeric: true }))
 }
 
 // ── Transformación Inmueble → Property (Paso 3) ──────────────────────────────
@@ -175,8 +197,15 @@ async function toProperty(row, usedIds) {
   usedIds.add(id)
 
   const photos = await listPhotos(norm(row.ref_fotos) || ref.toLowerCase())
-  const image = photos.length ? cloudinaryUrl(photos[0], 'card') : ''
-  const images = photos.map((p) => cloudinaryUrl(p, 'gallery'))
+  // La foto cuyo display_name empieza con "cover" es la portada; el resto va a la
+  // galería en su orden (01-, 02-…). Si no hay ninguna "cover", la primera ordenada
+  // hace de portada (compatibilidad hacia atrás).
+  const coverIdx = photos.findIndex((p) => p.name.startsWith('cover'))
+  const ordered = coverIdx >= 0
+    ? [photos[coverIdx], ...photos.filter((_, i) => i !== coverIdx)]
+    : photos
+  const image = ordered.length ? cloudinaryUrl(ordered[0].id, 'card') : ''
+  const images = ordered.map((p) => cloudinaryUrl(p.id, 'gallery'))
 
   const features = []
   if (isYes(row.ascensor)) features.push('Ascensor')
@@ -188,7 +217,11 @@ async function toProperty(row, usedIds) {
     id,
     city: norm(row.ciudad),
     zone: norm(row.zona),
-    title: `${TIPO_LABEL[tipo] ?? 'Inmueble'} en ${norm(row.zona) || norm(row.ciudad)}`,
+    // Título = descripción corta (la dirección exacta NUNCA se muestra). Si falta,
+    // se cae a un título genérico por tipo + zona.
+    title:
+      norm(row.descripcion_corta) ||
+      `${TIPO_LABEL[tipo] ?? 'Inmueble'} en ${norm(row.zona) || norm(row.ciudad)}`,
     beds: toNumber(row.habitaciones),
     baths: toNumber(row.banos),
     m2: toNumber(row.superficie_m2),
@@ -207,6 +240,15 @@ async function toProperty(row, usedIds) {
   const lat = toFloat(row.lat)
   const lng = toFloat(row.lng)
   if (lat !== undefined && lng !== undefined) property.coords = { lat, lng }
+
+  // Estado, certificado y fecha de alta. La dirección exacta (row.direccion) se
+  // omite a propósito: nunca debe mostrarse ni viajar al cliente (privacidad).
+  const estado = norm(row.estado).toUpperCase()
+  if (ESTADOS_VALIDOS.includes(estado)) property.status = estado
+  const cert = norm(row.certificado_energetico).toUpperCase()
+  if (/^[A-G]$/.test(cert)) property.cert = cert
+  const fecha = parseDate(row.fecha_alta)
+  if (fecha) property.dateAdded = fecha
 
   return property
 }

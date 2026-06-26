@@ -16,35 +16,43 @@ type HeroTab = 'comprar' | 'alquilar' | 'vender' | 'reformas' | 'hipotecas'
 const services = [
   {
     icon: 'AD',
-    title: 'Administracion de fincas',
-    description: 'Gestion integral de comunidades con transparencia y seguimiento cercano. Cuentas, mantenimiento y comunicacion con propietarios, todo en orden.',
+    title: 'Administracion de comunidades',
+    description: 'Ofrecemos una gestion integral de comunidades basada en la excelencia operativa. Nos encargamos de la administracion, el mantenimiento, la atencion a propietarios y la gestion de todos los servicios para ofrecerte lo mejor en cada detalle.',
     image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
     tag: 'Comunidades',
     to: '/servicios/administracion-de-fincas',
   },
   {
     icon: 'HI',
-    title: 'Hipotecas',
-    description: 'Te ayudamos a encontrar la financiacion que mejor encaja con tu compra. Comparamos entre varias entidades para que elijas con criterio.',
+    title: 'Financiacion',
+    description: 'Te conseguimos las mejores opciones de financiacion del mercado. Trabajamos con diferentes entidades financieras para ofrecerte una amplia seleccion de opciones personalizadas para ayudarte a encontrar las condiciones mas competitivas segun tu perfil y tus objetivos.',
     image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
     tag: 'Financiacion',
     to: '/servicios/hipotecas',
   },
   {
     icon: 'SU',
-    title: 'Cambio de suministros',
+    title: 'Suministros',
     to: '/servicios/cambio-de-suministros',
-    description: 'Luz, gas y agua gestionados sin que muevas un dedo. Nos encargamos de todos los tramites del cambio para que tu solo pienses en instalarte.',
+    description: 'Analizamos tu perfil, comparamos las diferentes opciones disponibles en el mercado y encontramos la que mejor se adapta a tus necesidades. Ademas, gestionamos todos los tramites de principio a fin. El mejor servicio, al menor coste.',
     image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
     tag: 'Suministros',
   },
   {
     icon: 'SE',
     title: 'Seguros',
-    description: 'Proteccion para vivienda, propietario e inquilino desde el primer dia. Coberturas personalizadas con las mejores companias del mercado.',
+    description: 'Gracias a nuestra colaboracion con las principales aseguradoras del mercado, podemos ofrecerte una amplia seleccion de soluciones adaptadas a tus necesidades. Analizamos coberturas, condiciones y garantias para encontrar la proteccion mas adecuada para tu vivienda, tu inversion o tu comunidad.',
     image: 'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1200&q=80',
     tag: 'Proteccion',
     to: '/servicios/seguros',
+  },
+  {
+    icon: 'AL',
+    title: 'Alarmas',
+    description: 'Analizamos tu situacion y te ayudamos a encontrar la solucion de seguridad que mejor se adapte a tu vivienda, tu inversion, tu comunidad o tu negocio, ofreciendote proteccion, tranquilidad y confianza en todo momento.',
+    image: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Seguridad',
+    to: '/servicios/alarmas',
   },
 ]
 
@@ -580,7 +588,7 @@ function Home() {
 
       <section className="section services" id="servicios">
         <div className="services-inner">
-          <SectionHeading eyebrow="Servicios" title="Nuestros servicios" subtitle="Todo lo que necesitas en un solo lugar." />
+          <SectionHeading eyebrow="Servicios" title="Nuestros servicios" subtitle="Todo lo que necesitas para comprar, vender, financiar, proteger y gestionar tu inmueble desde un único lugar." />
           <div className="services-sticky-layout">
             <div className="services-image-panel">
               {services.map((svc, i) => (

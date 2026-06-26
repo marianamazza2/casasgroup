@@ -19,6 +19,12 @@ export type Property = {
   features: string[]
   floor?: string
   coords?: { lat: number; lng: number }
+  /** Estado comercial — muestra el badge (En venta / Reservado / Vendido). */
+  status?: EstadoInmueble
+  /** Certificado energético A–G. */
+  cert?: CertificadoEnergetico
+  /** Fecha de alta en formato ISO 'YYYY-MM-DD' (orden "Más recientes"). */
+  dateAdded?: string
 }
 
 export type MapPin = {

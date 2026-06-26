@@ -2,7 +2,6 @@ import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { properties } from '../../lib/properties'
 import type { Property } from '../../lib/types'
-import { ContactCard } from '../../components/property/ContactCard'
 import { PropertyMap } from '../../components/property/PropertyMap'
 
 export const Route = createFileRoute('/propiedades/$id')({
@@ -65,13 +64,11 @@ function PropertyDetailPage() {
         <div className="detail-main">
           <PropertyMeta property={p} propertyRef={propertyRef} />
           <PropertyStats property={p} />
+          <PropertyEssentials property={p} />
           <PropertyDescription desc={p.desc} />
           <PropertyFeatures features={p.features} />
           <LocationSection property={p} />
         </div>
-        <aside className="detail-sidebar">
-          <ContactCard propertyRef={propertyRef} />
-        </aside>
       </div>
 
       {/* Barra fija de contacto (solo mobile, estilo Airbnb): un unico CTA que
@@ -268,14 +265,76 @@ function Lightbox({
   )
 }
 
+const ESTADO_LABEL: Record<string, string> = {
+  'EN VENTA': 'En venta',
+  RESERVADO: 'Reservado',
+  VENDIDO: 'Vendido',
+  ALQUILADO: 'Alquilado',
+}
+const CATEGORY_LABEL: Record<Property['category'], string> = {
+  piso: 'Piso',
+  chalet: 'Chalet',
+  local: 'Local',
+  parking: 'Parking',
+}
+const formatInt = (n: number) => new Intl.NumberFormat('es-ES').format(n)
+
+const MONTHS_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
+/** Fecha ISO → fecha legible ("15 mar 2026"). UTC para no correr el día por zona horaria. */
+function formatDate(iso: string): string | null {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return null
+  return `${d.getUTCDate()} ${MONTHS_ES[d.getUTCMonth()]} ${d.getUTCFullYear()}`
+}
+
 function PropertyMeta({ property: p, propertyRef }: { property: Property; propertyRef: string }) {
+  const location = [p.zone, p.city].filter(Boolean).join(' · ').toUpperCase()
   return (
     <div className="detail-meta">
-      <p className="detail-zone-ref">
-        {p.zone.toUpperCase()} · Ref. {propertyRef}
-      </p>
-      <h1 className="detail-title">{p.title}</h1>
-      <p className="detail-price">{p.priceLabel}</p>
+      <div className="detail-zone-ref-row">
+        <p className="detail-zone-ref">
+          {location} · Ref. {propertyRef}
+        </p>
+        {p.status && (
+          <span className={`detail-status detail-status--${p.status.toLowerCase().replace(/\s+/g, '-')}`}>
+            {ESTADO_LABEL[p.status] ?? p.status}
+          </span>
+        )}
+      </div>
+      <div className="detail-meta-head">
+        <div className="detail-meta-left">
+          <h1 className="detail-title">{p.title}</h1>
+          <p className="detail-price">{p.priceLabel}</p>
+        </div>
+        <div className="detail-meta-aside">
+          <Link to="/contacto" search={{ ref: propertyRef }} className="button-link">
+            Contactar →
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/** Bloque "Lo esencial": tipo, precio/m², certificado energético y fecha de alta.
+ *  Mismo estilo que la fila de stats (valor grande arriba, etiqueta abajo). */
+function PropertyEssentials({ property: p }: { property: Property }) {
+  const fecha = p.dateAdded ? formatDate(p.dateAdded) : null
+  const pricePerM2 = p.m2 > 0 ? Math.round(p.price / p.m2) : null
+  const cells: Array<{ value: string; label: string }> = [
+    { value: CATEGORY_LABEL[p.category], label: 'Tipo' },
+  ]
+  if (pricePerM2 !== null) cells.push({ value: `${formatInt(pricePerM2)} €/m²`, label: 'Precio/m²' })
+  if (p.cert) cells.push({ value: p.cert, label: 'Certificado energético' })
+  if (fecha) cells.push({ value: fecha, label: 'Publicado' })
+  return (
+    <div className="detail-stats detail-stats--secondary">
+      {cells.map((c) => (
+        <div key={c.label}>
+          <p className="detail-stat-value">{c.value}</p>
+          <p className="detail-stat-label">{c.label}</p>
+        </div>
+      ))}
     </div>
   )
 }

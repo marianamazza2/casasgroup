@@ -4403,7 +4403,11 @@ a.contact-card:hover .contact-card-icon {
   grid-template-columns: 2fr 1fr 1fr;
   grid-template-rows: 230px 230px;
   gap: 6px;
+  /* Aire entre la barra de navegacion (sticky) y las fotos. */
+  margin-top: 44px;
   background: var(--warm);
+  /* Esquinas redondeadas del bloque completo de fotos (no de cada foto). */
+  border-radius: 12px;
   overflow: hidden;
 }
 .detail-photo {
@@ -4541,11 +4545,17 @@ a.contact-card:hover .contact-card-icon {
 
 /* Meta */
 .detail-meta { margin-bottom: 20px; }
+.detail-zone-ref-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
 .detail-zone-ref {
   font-size: 10px;
   letter-spacing: 0.08em;
   color: var(--gold);
-  margin: 0 0 8px;
+  margin: 0;
 }
 .detail-title {
   font-family: var(--serif);
@@ -4563,6 +4573,37 @@ a.contact-card:hover .contact-card-icon {
   color: var(--charcoal);
   margin: 0;
 }
+/* Cabecera: izquierda (título + precio) | derecha (badge arriba, botón debajo) */
+.detail-meta-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+}
+.detail-meta-left { min-width: 0; }
+.detail-meta-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.detail-status {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 4px 11px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+.detail-status--reservado { background: #fff4e5; color: #b06a00; }
+.detail-status--vendido,
+.detail-status--alquilado { background: #fdecea; color: #c0392b; }
 
 /* Stats bar */
 .detail-stats {
@@ -4572,6 +4613,11 @@ a.contact-card:hover .contact-card-icon {
   border-top: 0.5px solid var(--line);
   border-bottom: 0.5px solid var(--line);
   margin-bottom: 24px;
+}
+/* Segunda fila ("Lo esencial"): pegada a la de arriba, compartiendo el divisor. */
+.detail-stats--secondary {
+  margin-top: -24px;
+  border-top: none;
 }
 .detail-stats > div {
   flex: 1;
@@ -4604,8 +4650,8 @@ a.contact-card:hover .contact-card-icon {
 
 /* Section titles */
 .detail-section-title {
-  font-family: var(--serif);
-  font-size: 16px;
+  font-family: var(--sans);
+  font-size: 15px;
   font-weight: 600;
   color: var(--ink);
   margin: 0 0 12px;
@@ -4817,7 +4863,7 @@ a.contact-card:hover .contact-card-icon {
   z-index: 10;
   background: transparent;
   border: none;
-  color: var(--gold);
+  color: rgba(34, 34, 34, 0.55);
   font-size: 20px;
   cursor: pointer;
   line-height: 1;
@@ -4831,7 +4877,7 @@ a.contact-card:hover .contact-card-icon {
 }
 .lightbox-close:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: var(--gold);
+  color: rgba(34, 34, 34, 0.85);
 }
 
 .lightbox-img-wrap {
@@ -4858,7 +4904,7 @@ a.contact-card:hover .contact-card-icon {
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  color: #222;
+  color: rgba(34, 34, 34, 0.55);
   font-size: 36px;
   line-height: 1;
   width: 48px;

@@ -65,19 +65,20 @@
 ### A.3 — Subir las fotos
 
 1. Entrá a la carpeta `rc-001/` y arrastrá 3–6 fotos.
-2. **Renombralas** para que empiecen con número de dos dígitos. El orden manda:
+2. **Renombralas** así: la portada se llama `cover`, el resto empiezan con número:
 
 ```
 📁 rc-001/
-  🖼️  01-salon.jpg       ← portada (la que sale en la tarjeta del listado)
-  🖼️  02-cocina.jpg      ← galería de la ficha, en este orden
+  🖼️  cover.jpg          ← portada (la que sale en la tarjeta del listado)
+  🖼️  01-salon.jpg       ← galería de la ficha, en este orden
+  🖼️  02-cocina.jpg
   🖼️  03-dormitorio.jpg
-  🖼️  04-bano.jpg
 ```
 
-   - **Obligatorio:** el número al principio (`01-`, `02-`…). Define el orden.
+   - **Portada:** la foto llamada `cover` (`cover.jpg`). Es la que aparece en la card del listado.
+   - **Galería:** el resto, en orden por su número (`01-`, `02-`…).
    - **Opcional:** el texto después del guión (`salon`, `cocina`) — solo para que vos identifiques la foto.
-   - `01-` siempre es la **portada**.
+   - Si no ponés ninguna `cover`, la primera por orden (`01-`) hace de portada.
 
 > ✅ Checkpoint A: tenés una cuenta de Cloudinary, la carpeta `inmuebles/rc-001/`
 > con fotos numeradas, y anotados tu **cloud name + API key + API secret**.
@@ -92,7 +93,7 @@
 2. En la **fila 1**, pegá estos encabezados **tal cual** (sin acentos, en minúscula, una por columna):
 
 ```
-ref	publicado	operacion	tipo	estado	etiqueta	precio	direccion	zona	ciudad	habitaciones	banos	superficie_m2	planta	ascensor	terraza	garaje	trastero	certificado_energetico	descripcion_corta	descripcion_larga	ref_fotos	lat	lng
+ref	publicado	operacion	tipo	estado	etiqueta	precio	direccion	zona	ciudad	habitaciones	banos	superficie_m2	planta	ascensor	terraza	garaje	trastero	certificado_energetico	fecha_alta	descripcion_corta	descripcion_larga	ref_fotos	lat	lng
 ```
 
    > ⚠️ Los nombres importan: el script busca las columnas **por nombre**. Si escribís
@@ -114,8 +115,8 @@ En la **fila 2**, cargá un piso de ejemplo. Tabla de referencia de cada columna
 | `estado` | `EN VENTA` / `RESERVADO` / `VENDIDO` / `ALQUILADO` | `EN VENTA` |
 | `etiqueta` | `DESTACADO` / `OPORTUNIDAD` / `REBAJADO` o vacío | `DESTACADO` |
 | `precio` | Solo el número, sin € ni puntos | `320000` |
-| `direccion` | Texto libre | `C/ Verdi 18, 2º 1ª` |
-| `zona` | Barrio (alimenta el filtro de zona) | `Gràcia` |
+| `direccion` | Calle exacta. **Uso interno — NO se publica en la web** (privacidad) | `C/ Verdi 18, 2º 1ª` |
+| `zona` | Barrio (alimenta el filtro de zona y se muestra como ubicación) | `Gràcia` |
 | `ciudad` | Texto | `Barcelona` |
 | `habitaciones` | Número | `3` |
 | `banos` | Número | `2` |
@@ -126,7 +127,8 @@ En la **fila 2**, cargá un piso de ejemplo. Tabla de referencia de cada columna
 | `garaje` | `SI` / `NO` | `NO` |
 | `trastero` | `SI` / `NO` | `SI` |
 | `certificado_energetico` | `A`…`G` | `C` |
-| `descripcion_corta` | Máx. ~150 caracteres (tarjeta del listado) | `Piso luminoso reformado en Gràcia` |
+| `fecha_alta` | Fecha de publicación (orden "Más recientes"). `AAAA-MM-DD` o `DD/MM/AAAA` | `2026-03-15` |
+| `descripcion_corta` | **Es el título** del inmueble (listado y ficha). Máx. ~150 caracteres | `Piso luminoso reformado en Gràcia` |
 | `descripcion_larga` | Texto libre (ficha individual) | `Precioso piso en pleno corazón de Gràcia…` |
 | `ref_fotos` | **Debe ser igual al nombre de la carpeta en Cloudinary** | `rc-001` |
 | `lat` | Latitud (opcional, para el mapa) | `41.4036` |
@@ -135,6 +137,15 @@ En la **fila 2**, cargá un piso de ejemplo. Tabla de referencia de cada columna
 > 🔑 Lo más crítico: `ref_fotos` (`rc-001`) = nombre de la carpeta en Cloudinary (`rc-001`).
 >
 > 💡 Para `lat`/`lng`: en Google Maps, clic derecho sobre el punto → "copiar coordenadas".
+
+> 📋 **Resumen — 25 columnas.**
+> - **Obligatorias** (para que la ficha se vea completa): de `ref` a `precio`, `zona`,
+>   `ciudad`, `habitaciones`, `banos`, `superficie_m2`, `certificado_energetico`,
+>   `descripcion_corta`, `descripcion_larga`, `ref_fotos`.
+> - **Opcionales:** `etiqueta`, `planta`, `ascensor`/`terraza`/`garaje`/`trastero`,
+>   `fecha_alta` (muestra "Agregado hace…"), `lat`/`lng` (mapa).
+> - **Uso interno (no se publica):** `direccion`.
+> - **No es columna** — se calcula solo: el **precio por m²** (`precio ÷ superficie_m2`).
 
 ### B.3 — Publicar el Sheet como CSV y copiar la URL
 
@@ -213,7 +224,7 @@ npm run dev
 
 Abrí el navegador en la URL que muestra (normalmente `http://localhost:5173`).
 Deberías ver **tu piso de prueba** (RC-001) en el listado, con su foto de portada
-(`01-`), y al entrar a la ficha, la galería completa.
+(`cover`), y al entrar a la ficha, la galería completa.
 
 > 🛟 **Salvaguarda:** si `generatedProperties.ts` está vacío (porque no corriste
 > `npm run data` o el Sheet falló), la web **no se rompe**: muestra los datos de
@@ -263,27 +274,24 @@ Esto se hace **una sola vez**.
 ### E.3 — Pegar el script en el Google Sheet (Apps Script)
 
 1. En el Sheet: **Extensiones → Apps Script**.
-2. Borrá lo que haya y pegá esto (reemplazá la URL por la del paso E.2):
+2. Borrá lo que haya y pegá el contenido de **`scripts/apps-script/Code.gs`** (está en el repo).
+3. Reemplazá la constante `WEBHOOK_URL` por la URL del Deploy Hook (paso E.2).
+4. Guardá (ícono de disquete).
 
-```javascript
-function enviarWebhook() {
-  const WEBHOOK_URL = "https://api.vercel.com/v1/integrations/deploy/prj_xxxx/yyyy"; // ← tu Deploy Hook
-  UrlFetchApp.fetch(WEBHOOK_URL, { method: "post" });
-}
-```
+> El script agrupa una ráfaga de ediciones en **un solo** rebuild (espera ~60s sin
+> ediciones) para no gastar builds de más, y agrega un menú **Red Casas → Publicar
+> ahora** para forzar un rebuild a mano.
 
-3. Guardá (ícono de disquete).
+### E.4 — Conectar el disparador (trigger)
 
-### E.4 — Crear el disparador (trigger)
+**Opción rápida (recomendada):** en el editor de Apps Script, elegí la función
+`instalar` en el desplegable de arriba y tocá **▶ Ejecutar** una sola vez. Google te
+va a pedir **autorizar permisos** la primera vez → aceptá (es tu propia cuenta
+llamando a tu propio webhook). Eso crea el activador "al editar" automáticamente.
 
-1. En Apps Script, menú izquierdo → **Activadores** (ícono de reloj ⏰).
-2. **+ Agregar activador**, con esta configuración:
-   - Función: `enviarWebhook`
-   - Implementación: `Head`
-   - Origen del evento: **Desde la hoja de cálculo**
-   - Tipo de evento: **Al editar**
-3. Guardá. Google te va a pedir **autorizar permisos** la primera vez → aceptá
-   (es tu propia cuenta llamando a tu propio webhook).
+**Opción manual (alternativa):** menú izquierdo → **Activadores** (⏰) → **+ Agregar
+activador** → Función `onEditTrigger`, Origen del evento **Desde la hoja de cálculo**,
+Tipo de evento **Al editar**.
 
 > ✅ Checkpoint E: env vars en Vercel, Deploy Hook creado, Apps Script con trigger "al editar".
 
@@ -315,11 +323,11 @@ Ahora actuás como el cliente. **No vas a tocar código.**
 | Ocultar un piso | Cambiar `publicado` a `NO` | Desaparece de la web |
 | Marcarlo vendido | Cambiar `estado` a `VENDIDO` | Sale con badge "Vendido" |
 | Cambiar el precio | Editar la celda `precio` | Se actualiza en ~1 min |
-| Cambiar la foto de portada | Renombrar la foto deseada a `01-…` en Cloudinary | Nueva portada en el próximo deploy |
+| Cambiar la foto de portada | Renombrar la foto deseada a `cover` en Cloudinary | Nueva portada en el próximo deploy |
 
 > ⚠️ Cambiar **solo fotos en Cloudinary** no dispara el webhook (el trigger es sobre el
-> Sheet). Truco: tras reordenar fotos, hacé una micro-edición en el Sheet (o usá el
-> Deploy Hook a mano) para forzar el rebuild.
+> Sheet). Tras reordenar fotos, forzá el rebuild con el menú **Red Casas → Publicar
+> ahora** del Sheet (o hacé una micro-edición en cualquier celda).
 
 ---
 

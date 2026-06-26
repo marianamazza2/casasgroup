@@ -5,8 +5,13 @@ interface ImportMetaEnv {
   readonly VITE_MAPTILER_KEY: string
   /** Cloud name público de Cloudinary, usado para construir las URLs de imagen. */
   readonly VITE_CLOUDINARY_CLOUD_NAME: string
-  /** Fuente de datos de inmuebles: 'sheet' (generado) o 'hardcoded' (default). */
-  readonly VITE_DATA_SOURCE?: 'sheet' | 'hardcoded'
+  /**
+   * Fuente de datos de inmuebles (default 'hardcoded'):
+   *  - 'hardcoded': solo propertiesData.ts
+   *  - 'sheet': solo los generados (Google Sheet + Cloudinary)
+   *  - 'merge': los del Sheet sumados a los hardcodeados
+   */
+  readonly VITE_DATA_SOURCE?: 'sheet' | 'hardcoded' | 'merge'
 }
 
 interface ImportMeta {
