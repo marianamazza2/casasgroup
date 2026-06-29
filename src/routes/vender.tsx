@@ -9,9 +9,9 @@ export const Route = createFileRoute('/vender')({
 })
 
 const BENEFICIOS = [
-  'Valoración gratuita y sin compromiso',
-  'Basada en ventas reales en tu zona',
-  'Servicio exclusivo para propietarios',
+  'Sin compromiso',
+  'Datos reales de mercado',
+  'Respuesta en 24h',
 ]
 
 const PROPERTY_TYPES = ['Piso', 'Casa o chalet', 'Ático', 'Local comercial', 'Otro']
@@ -418,11 +418,11 @@ function VenderHero({ onCta }: { onCta: () => void }) {
           Vender
         </motion.span>
         <motion.h1 className="sum-hero-title" variants={heroItem}>
-          Descubre el valor real de tu vivienda
+          Conozca el valor de su vivienda
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
-          Valoración profesional, gratuita y sin compromiso, basada en datos reales de tu zona.
+          Conozca el valor real de su vivienda mediante una valoración profesional, gratuita y sin compromiso, basada en un análisis preciso del mercado y en un estudio personalizado de su inmueble.
         </motion.p>
         <motion.div variants={heroItem}>
           <button type="button" className="button-link" onClick={onCta}>

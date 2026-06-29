@@ -93,7 +93,7 @@ const cardIcons: Record<string, ReactElement> = {
 }
 
 function ContactPage() {
-  // Referencia del inmueble si se llega desde una ficha (/contacto?ref=CG-0001):
+  // Referencia del inmueble si se llega desde una ficha (/contacto?ref=GC-0001):
   // abrimos el formulario ya prellenado y la sumamos a los canales directos.
   const { ref } = Route.useSearch()
   const refMessage = ref ? `Hola, me interesa el inmueble con referencia ${ref}.` : ''
@@ -318,7 +318,7 @@ function ContactPage() {
               </label>
               <label>
                 Referencia de inmueble
-                <input name="reference" placeholder="Ej: CG-0001" defaultValue={ref ?? ''} />
+                <input name="reference" placeholder="Ej: GC-0001" defaultValue={ref ?? ''} />
               </label>
               <label>
                 Mensaje

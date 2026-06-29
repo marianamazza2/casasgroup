@@ -33,7 +33,7 @@ function PropertyDetailPage() {
     )
   }
 
-  const propertyRef = `CG-${String(p.id).padStart(4, '0')}`
+  const propertyRef = `GC-${String(p.id).padStart(4, '0')}`
 
   return (
     <div className="property-detail">

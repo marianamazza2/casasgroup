@@ -58,23 +58,37 @@ const services = [
 
 const whyItems = [
   {
-    title: 'Excelencia en cada detalle',
+    title: 'Compromiso',
     description:
-      'Cuidamos cada paso del proceso para que la experiencia sea clara, elegante y bien acompanada desde el primer contacto.',
+      'Tratamos cada operación como si fuera propia, implicándonos en cada detalle con el objetivo de ofrecer soluciones eficaces y la mejor experiencia para nuestros clientes.',
     image:
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
   },
   {
-    title: 'Trato cercano y personal',
+    title: 'Servicio 360º',
     description:
-      'Detras de cada operacion hay personas. Escuchamos, asesoramos y mantenemos una comunicacion directa.',
+      'Reunimos todos los servicios inmobiliarios en un mismo lugar: compraventa, alquileres, hipotecas, asesoramiento jurídico, administración de comunidades, reformas, seguros, alarmas para que no tenga que buscar diferentes profesionales.',
     image:
       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
   },
   {
-    title: 'Conocimiento local real',
+    title: 'Asesoramiento personalizado',
     description:
-      'Trabajamos con datos reales de mercado y conocimiento de zona para tomar mejores decisiones.',
+      'Cada cliente cuenta con un asesor dedicado que le acompaña de principio a fin, ofreciendo un seguimiento cercano, una comunicación constante y un servicio adaptado a sus necesidades.',
+    image:
+      'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: 'Experiencia',
+    description:
+      'Los años de experiencia y nuestro conocimiento del mercado inmobiliario nos permiten ofrecer un asesoramiento estratégico, adaptado a cada situación y orientado a obtener los mejores resultados.',
+    image:
+      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: 'Confianza',
+    description:
+      'La confianza es nuestro mayor compromiso. No solo gestionamos operaciones inmobiliarias; construimos relaciones basadas en la transparencia, la profesionalidad y un acompañamiento personalizado de principio a fin. Porque para nosotros, la confianza no es un valor añadido, es la base de todo lo que hacemos.',
     image:
       'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
   },
@@ -737,7 +751,7 @@ function Home() {
           ))}
         </div>
         <div className="stats">
-          <Stat value="+150" label="Operaciones" />
+          <Stat value="+1000" label="Operaciones" />
           <Stat value="98%" label="Satisfaccion" />
           <Stat value="45" label="Dias venta media" />
           <Stat value="+10" label="Anos experiencia" />
