@@ -17,6 +17,7 @@ import { Route as PropiedadesIndexRouteImport } from './routes/propiedades/index
 import { Route as ServiciosSegurosRouteImport } from './routes/servicios/seguros'
 import { Route as ServiciosHipotecasRouteImport } from './routes/servicios/hipotecas'
 import { Route as ServiciosCambioDeSuministrosRouteImport } from './routes/servicios/cambio-de-suministros'
+import { Route as ServiciosAlarmasRouteImport } from './routes/servicios/alarmas'
 import { Route as ServiciosAdministracionDeFincasRouteImport } from './routes/servicios/administracion-de-fincas'
 import { Route as PropiedadesIdRouteImport } from './routes/propiedades/$id'
 
@@ -61,6 +62,11 @@ const ServiciosCambioDeSuministrosRoute =
     path: '/servicios/cambio-de-suministros',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ServiciosAlarmasRoute = ServiciosAlarmasRouteImport.update({
+  id: '/servicios/alarmas',
+  path: '/servicios/alarmas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServiciosAdministracionDeFincasRoute =
   ServiciosAdministracionDeFincasRouteImport.update({
     id: '/servicios/administracion-de-fincas',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
   '/servicios/administracion-de-fincas': typeof ServiciosAdministracionDeFincasRoute
+  '/servicios/alarmas': typeof ServiciosAlarmasRoute
   '/servicios/cambio-de-suministros': typeof ServiciosCambioDeSuministrosRoute
   '/servicios/hipotecas': typeof ServiciosHipotecasRoute
   '/servicios/seguros': typeof ServiciosSegurosRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
   '/servicios/administracion-de-fincas': typeof ServiciosAdministracionDeFincasRoute
+  '/servicios/alarmas': typeof ServiciosAlarmasRoute
   '/servicios/cambio-de-suministros': typeof ServiciosCambioDeSuministrosRoute
   '/servicios/hipotecas': typeof ServiciosHipotecasRoute
   '/servicios/seguros': typeof ServiciosSegurosRoute
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
   '/servicios/administracion-de-fincas': typeof ServiciosAdministracionDeFincasRoute
+  '/servicios/alarmas': typeof ServiciosAlarmasRoute
   '/servicios/cambio-de-suministros': typeof ServiciosCambioDeSuministrosRoute
   '/servicios/hipotecas': typeof ServiciosHipotecasRoute
   '/servicios/seguros': typeof ServiciosSegurosRoute
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/vender'
     | '/propiedades/$id'
     | '/servicios/administracion-de-fincas'
+    | '/servicios/alarmas'
     | '/servicios/cambio-de-suministros'
     | '/servicios/hipotecas'
     | '/servicios/seguros'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/vender'
     | '/propiedades/$id'
     | '/servicios/administracion-de-fincas'
+    | '/servicios/alarmas'
     | '/servicios/cambio-de-suministros'
     | '/servicios/hipotecas'
     | '/servicios/seguros'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/vender'
     | '/propiedades/$id'
     | '/servicios/administracion-de-fincas'
+    | '/servicios/alarmas'
     | '/servicios/cambio-de-suministros'
     | '/servicios/hipotecas'
     | '/servicios/seguros'
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   VenderRoute: typeof VenderRoute
   PropiedadesIdRoute: typeof PropiedadesIdRoute
   ServiciosAdministracionDeFincasRoute: typeof ServiciosAdministracionDeFincasRoute
+  ServiciosAlarmasRoute: typeof ServiciosAlarmasRoute
   ServiciosCambioDeSuministrosRoute: typeof ServiciosCambioDeSuministrosRoute
   ServiciosHipotecasRoute: typeof ServiciosHipotecasRoute
   ServiciosSegurosRoute: typeof ServiciosSegurosRoute
@@ -220,6 +233,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServiciosCambioDeSuministrosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/servicios/alarmas': {
+      id: '/servicios/alarmas'
+      path: '/servicios/alarmas'
+      fullPath: '/servicios/alarmas'
+      preLoaderRoute: typeof ServiciosAlarmasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/servicios/administracion-de-fincas': {
       id: '/servicios/administracion-de-fincas'
       path: '/servicios/administracion-de-fincas'
@@ -244,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   VenderRoute: VenderRoute,
   PropiedadesIdRoute: PropiedadesIdRoute,
   ServiciosAdministracionDeFincasRoute: ServiciosAdministracionDeFincasRoute,
+  ServiciosAlarmasRoute: ServiciosAlarmasRoute,
   ServiciosCambioDeSuministrosRoute: ServiciosCambioDeSuministrosRoute,
   ServiciosHipotecasRoute: ServiciosHipotecasRoute,
   ServiciosSegurosRoute: ServiciosSegurosRoute,

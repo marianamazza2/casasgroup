@@ -7,6 +7,7 @@ type ServiceId =
   | 'hipotecas'
   | 'cambio-de-suministros'
   | 'seguros'
+  | 'alarmas'
 
 type Service = {
   id: ServiceId
@@ -48,6 +49,14 @@ const SERVICES: Service[] = [
     image:
       'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1000&q=80',
     to: '/servicios/seguros',
+  },
+  {
+    id: 'alarmas',
+    label: 'Alarmas',
+    tag: 'Seguridad',
+    image:
+      'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1000&q=80',
+    to: '/servicios/alarmas',
   },
 ]
 

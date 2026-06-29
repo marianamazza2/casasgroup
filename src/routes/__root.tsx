@@ -5,6 +5,7 @@ import { RouteProgress } from '../components/RouteProgress'
 
 const subMenuServices = [
   { label: 'Administracion de comunidades', gold: false, to: '/servicios/administracion-de-fincas' },
+  { label: 'Alarmas', gold: false, to: '/servicios/alarmas' },
   { label: 'Cambio de suministros', gold: false, to: '/servicios/cambio-de-suministros' },
   { label: 'Hipotecas', gold: false, to: '/servicios/hipotecas' },
   { label: 'Seguros', gold: false, to: '/servicios/seguros' },
