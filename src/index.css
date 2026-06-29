@@ -276,6 +276,7 @@ button {
   text-align: left;
   text-decoration: none;
   transition: color 180ms ease, background 180ms ease;
+  white-space: nowrap;
   width: 100%;
 }
 
@@ -1125,16 +1126,19 @@ button {
 }
 
 .why .section-top {
+  margin-left: 0;
+  margin-right: 0;
   margin-bottom: clamp(40px, 6vw, 72px);
-  padding-left: clamp(22px, 5vw, 72px);
-  padding-right: clamp(22px, 5vw, 72px);
+  max-width: none;
+  padding-left: clamp(40px, 6vw, 80px);
+  padding-right: clamp(40px, 6vw, 80px);
 }
 
 .why .stats {
   margin-top: clamp(40px, 5vw, 58px);
   margin-bottom: 0;
-  margin-left: clamp(22px, 5vw, 72px);
-  margin-right: clamp(22px, 5vw, 72px);
+  margin-left: clamp(40px, 6vw, 80px);
+  margin-right: clamp(40px, 6vw, 80px);
   max-width: none;
 }
 
@@ -2455,6 +2459,19 @@ a.contact-card:hover .contact-card-icon {
 
   .why-rail-wrap {
     display: block;
+  }
+
+  /* En mobile el heading y las stats vuelven al inset del resto del contenido
+     (la alineacion con "Conoce el valor" solo aplica en desktop, donde ambas
+     secciones conviven a lo ancho). */
+  .why .section-top {
+    padding-left: clamp(20px, 5vw, 72px);
+    padding-right: clamp(20px, 5vw, 72px);
+  }
+
+  .why .stats {
+    margin-left: clamp(20px, 5vw, 72px);
+    margin-right: clamp(20px, 5vw, 72px);
   }
 
   .why-rail {

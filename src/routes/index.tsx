@@ -682,7 +682,11 @@ function Home() {
 
       <section className="section why">
         <div className="section-top">
-          <SectionHeading eyebrow="Confianza" title="Por que elegirnos" />
+          <SectionHeading
+            eyebrow="Confianza"
+            title="Por que elegirnos"
+            subtitle="Porque cada cliente merece un asesoramiento personalizado, un servicio integral y el compromiso de un equipo que trata cada proyecto como si fuera propio."
+          />
         </div>
         <div className="why-slider">
           <button

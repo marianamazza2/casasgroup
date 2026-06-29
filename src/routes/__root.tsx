@@ -4,7 +4,7 @@ import { AnimatedOutlet } from '../components/AnimatedOutlet'
 import { RouteProgress } from '../components/RouteProgress'
 
 const subMenuServices = [
-  { label: 'Administracion de fincas', gold: false, to: '/servicios/administracion-de-fincas' },
+  { label: 'Administracion de comunidades', gold: false, to: '/servicios/administracion-de-fincas' },
   { label: 'Cambio de suministros', gold: false, to: '/servicios/cambio-de-suministros' },
   { label: 'Hipotecas', gold: false, to: '/servicios/hipotecas' },
   { label: 'Seguros', gold: false, to: '/servicios/seguros' },
