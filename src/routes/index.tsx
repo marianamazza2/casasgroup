@@ -15,6 +15,22 @@ type HeroTab = 'comprar' | 'alquilar' | 'vender' | 'reformas' | 'hipotecas'
 
 const services = [
   {
+    icon: 'CA',
+    title: 'Compra y alquiler',
+    description: 'Encuentra tu proximo hogar o inversion. Te mostramos una seleccion de inmuebles en venta y alquiler, y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
+    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Inmuebles',
+    to: '/propiedades',
+  },
+  {
+    icon: 'VE',
+    title: 'Venta',
+    description: 'Vende tu vivienda con el mejor asesoramiento. Realizamos una valoracion profesional y gratuita, preparamos tu inmueble y gestionamos toda la operacion para conseguir las mejores condiciones con la maxima tranquilidad.',
+    image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Vender',
+    to: '/vender',
+  },
+  {
     icon: 'AD',
     title: 'Administracion de comunidades',
     description: 'Ofrecemos una gestion integral de comunidades basada en la excelencia operativa. Nos encargamos de la administracion, el mantenimiento, la atencion a propietarios y la gestion de todos los servicios para ofrecerte lo mejor en cada detalle.',
