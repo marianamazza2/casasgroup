@@ -292,6 +292,21 @@ async function main() {
   const published = records.filter((r) => isYes(r.publicado))
   console.log(`  ${records.length} filas · ${published.length} publicadas`)
 
+  // ── Blindaje 1: evitar el "build vacío" ────────────────────────────────────
+  // Llegamos acá solo tras leer el Sheet con éxito (si falta SHEET_CSV_URL se
+  // retorna antes con un array vacío para builds locales). Por eso, 0 inmuebles
+  // publicados acá significa que el Sheet leído daría una web vacía: casi seguro un
+  // error humano (todo en publicado=NO, columna `publicado` rota, o filas borradas),
+  // no algo intencional. En vez de publicar sin inmuebles, fallamos a propósito:
+  // Vercel descarta este build y deja en vivo la última versión buena.
+  if (published.length === 0) {
+    throw new Error(
+      `El Sheet tiene ${records.length} fila(s) de datos pero 0 publicadas. ` +
+      `Aborto para no publicar una web vacía (revisá la columna "publicado"). ` +
+      `Se conserva en vivo la última versión buena.`
+    )
+  }
+
   const usedIds = new Set()
   const properties = []
   for (const row of published) {
