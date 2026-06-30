@@ -4306,10 +4306,11 @@ a.contact-card:hover .contact-card-icon {
   gap: 6px;
   justify-content: space-between;
   letter-spacing: 0.04em;
-  /* Mantiene el ancho del estado "Todas las zonas": al seleccionar (texto más
-     corto) no se achica; si es más largo, elipsa hasta max-width. */
-  min-width: 152px;
-  max-width: 220px;
+  /* Ancho FIJO: la pastilla nunca crece al seleccionar una zona (un nombre
+     largo se elipsa). Así la fila de controles no se desplaza ni queda detrás
+     del mapa. */
+  flex: 0 0 auto;
+  width: 168px;
   padding: 6px 12px 6px 14px;
   transition: border-color 160ms ease;
   white-space: nowrap;
@@ -4321,6 +4322,9 @@ a.contact-card:hover .contact-card-icon {
 }
 
 .zonepicker-trigger-label {
+  /* min-width:0 es imprescindible para que un hijo flex pueda encogerse y
+     mostrar la elipsis en vez de desbordar la pastilla. */
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
