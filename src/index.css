@@ -3131,7 +3131,15 @@ a.contact-card:hover .contact-card-icon {
   border-radius: 20px;
   font-size: 12px;
   letter-spacing: 0.04em;
+  max-width: 200px;
   padding: 6px 12px 6px 14px;
+}
+
+/* La etiqueta se trunca con elipsis para que la pastilla no crezca. */
+.zone-dd--pill .zone-dd-trigger > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Block variant — filters modal */

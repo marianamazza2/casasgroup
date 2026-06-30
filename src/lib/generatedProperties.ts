@@ -63,6 +63,175 @@ export const generatedProperties: Property[] = [
     "dateAdded": "2026-04-09"
   },
   {
+    "id": 3,
+    "city": "Esplugues de Llobregat",
+    "zone": "Can Vidalet",
+    "title": "Piso en venta en Can Vidalet - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.377,
+      "lng": 2.087
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 4,
+    "city": "Hospitalet de Llobregat",
+    "zone": "Can Vidalet",
+    "title": "Atico en venta en Avenida de Severo Ochoa, Can Vidalet - Hospitalet de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "floor": "Atico",
+    "coords": {
+      "lat": 41.374,
+      "lng": 2.092
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 5,
+    "city": "Esplugues de Llobregat",
+    "zone": "Can Vidalet",
+    "title": "Plaza de parking en venta en Av. Severo Ochoa - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "parking",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.376,
+      "lng": 2.089
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 6,
+    "city": "Esplugues de Llobregat",
+    "zone": "Esplugues de Llobregat",
+    "title": "Piso en venta en Carrer de l'Hortensia - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.378,
+      "lng": 2.086
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 7,
+    "city": "Esplugues de Llobregat",
+    "zone": "Can Clota",
+    "title": "Local en alquiler en Calle de Josep Anselm Clave, Can Clota - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €/mes",
+    "mode": "alquiler",
+    "category": "local",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.383,
+      "lng": 2.081
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 8,
+    "city": "Hospitalet de Llobregat",
+    "zone": "Pubilla Cases",
+    "title": "Piso en venta en Mina, Pubilla Cases, Can Serra - Hospitalet de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.366,
+      "lng": 2.099
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 9,
+    "city": "Esplugues de Llobregat",
+    "zone": "Can Vidalet",
+    "title": "Piso en venta en Calle de la Maladeta, Can Vidalet - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.375,
+      "lng": 2.088
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 10,
+    "city": "Esplugues de Llobregat",
+    "zone": "Can Vidalet",
+    "title": "Local en venta en Calle de la Pubilla Casas, Can Vidalet - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "local",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.374,
+      "lng": 2.09
+    },
+    "status": "EN VENTA"
+  },
+  {
     "id": 11,
     "city": "Hospitalet de Llobregat",
     "zone": "La Torrasa",
@@ -86,6 +255,174 @@ export const generatedProperties: Property[] = [
     },
     "status": "EN VENTA",
     "dateAdded": "2026-02-06"
+  },
+  {
+    "id": 12,
+    "city": "Esplugues de Llobregat",
+    "zone": "La Plana - Montesa",
+    "title": "Local en venta en Passatge dels Ametllers, La Plana - Montesa - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "local",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.381,
+      "lng": 2.084
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 13,
+    "city": "Barcelona",
+    "zone": "Pedralbes",
+    "title": "Casa / Chalet independiente en venta en Avenida de Pearson 49 - Pedralbes",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "chalet",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.391,
+      "lng": 2.113
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 14,
+    "city": "Hospitalet de Llobregat",
+    "zone": "La Florida",
+    "title": "Piso en venta en Calle les Aigues del Llobregat - La Florida - Hospitalet de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.362,
+      "lng": 2.104
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 15,
+    "city": "Esplugues de Llobregat",
+    "zone": "Can Vidalet",
+    "title": "Piso en venta en Calle de l'Ave Maria - Can Vidalet - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.3755,
+      "lng": 2.0875
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 16,
+    "city": "Esplugues de Llobregat",
+    "zone": "La Plana - Montesa",
+    "title": "Piso en venta en Calle de Severo Ochoa - La Plana - Montesa - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.38,
+      "lng": 2.085
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 17,
+    "city": "Esplugues de Llobregat",
+    "zone": "Can Vidalet",
+    "title": "Garaje en venta en Calle del Moli - Can Vidalet - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "parking",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.3745,
+      "lng": 2.0895
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 18,
+    "city": "Hospitalet de Llobregat",
+    "zone": "Pubilla Cases",
+    "title": "Piso en venta en Calle El-lipse - Pubilla Cases - Hospitalet de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.367,
+      "lng": 2.097
+    },
+    "status": "EN VENTA"
+  },
+  {
+    "id": 19,
+    "city": "Hospitalet de Llobregat",
+    "zone": "Pubilla Cases",
+    "title": "Piso en venta en Calle Mina - Pubilla Cases, Can Serra - Hospitalet de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 0,
+    "priceLabel": "0 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "(Completar)",
+    "features": [],
+    "coords": {
+      "lat": 41.3655,
+      "lng": 2.0985
+    },
+    "status": "EN VENTA"
   },
   {
     "id": 20,
@@ -141,5 +478,33 @@ export const generatedProperties: Property[] = [
     "status": "EN VENTA",
     "cert": "A",
     "dateAdded": "2026-03-02"
+  },
+  {
+    "id": 22,
+    "city": "Barcelona",
+    "zone": "Poblenou",
+    "title": "Piso en el centro de Poblenou a metros de la playa",
+    "beds": 3,
+    "baths": 1,
+    "m2": 90,
+    "price": 550000,
+    "priceLabel": "550.000 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "",
+    "desc": "Precioso piso en pleno corazón de Poblenou, completamente reformado con materiales de alta calidad. Cocina equipada, suelos de parquet, techos altos y mucha luz natural.",
+    "features": [
+      "Ascensor",
+      "Terraza"
+    ],
+    "tag": "Destacado",
+    "floor": "8",
+    "coords": {
+      "lat": 41.3932,
+      "lng": 2.2015
+    },
+    "status": "EN VENTA",
+    "cert": "A",
+    "dateAdded": "2026-06-11"
   }
 ]
