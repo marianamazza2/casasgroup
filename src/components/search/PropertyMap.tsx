@@ -6,6 +6,19 @@ import type { Property } from '../../lib/types'
 const STYLE_URL = `https://api.maptiler.com/maps/streets-v2/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`
 const BARCELONA_CENTER: [number, number] = [2.1734, 41.3851]
 
+// Coordenada válida para MapLibre: lng ∈ [-180,180], lat ∈ [-90,90]. Un dato
+// corrupto (p. ej. lat "413.9" por un punto decimal mal puesto en el origen)
+// haría reventar setLngLat/fitBounds y tiraría toda la página, así que lo
+// descartamos en vez de propagar la excepción.
+function hasValidCoords(p: Property): boolean {
+  if (!p.coords) return false
+  const { lat, lng } = p.coords
+  return (
+    Number.isFinite(lat) && Number.isFinite(lng) &&
+    lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180
+  )
+}
+
 type MarkerEntry = { marker: maplibregl.Marker; el: HTMLButtonElement }
 
 type Props = {
@@ -20,7 +33,7 @@ type Props = {
 function getVisibleIds(map: maplibregl.Map, props: Property[]): number[] {
   const bounds = map.getBounds()
   return props
-    .filter((p) => p.coords && bounds.contains([p.coords.lng, p.coords.lat]))
+    .filter((p) => hasValidCoords(p) && bounds.contains([p.coords!.lng, p.coords!.lat]))
     .map((p) => p.id)
 }
 
@@ -94,7 +107,7 @@ export function PropertyMap({ properties, activeId, focusZones, onPinClick, onBo
       })
 
       properties.forEach((p) => {
-        if (!p.coords || markersRef.current.has(p.id)) return
+        if (!hasValidCoords(p) || markersRef.current.has(p.id)) return
 
         // Wrapper posicionado por MapLibre (su transform de translate). El botón
         // interior lleva los estilos/animaciones: así sus transiciones no se
@@ -145,7 +158,7 @@ export function PropertyMap({ properties, activeId, focusZones, onPinClick, onBo
     prevFocusRef.current = focusKey
 
     const fit = () => {
-      const withCoords = propertiesRef.current.filter((p) => p.coords)
+      const withCoords = propertiesRef.current.filter(hasValidCoords)
       if (withCoords.length === 0) return
       const bounds = new maplibregl.LngLatBounds()
       withCoords.forEach((p) => bounds.extend([p.coords!.lng, p.coords!.lat]))
