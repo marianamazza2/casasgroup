@@ -15,20 +15,30 @@ type HeroTab = 'comprar' | 'alquilar' | 'vender' | 'reformas' | 'hipotecas'
 
 const services = [
   {
-    icon: 'CA',
-    title: 'Compra y alquiler',
-    description: 'Encuentra tu proximo hogar o inversion. Te mostramos una seleccion de inmuebles en venta y alquiler, y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
+    icon: 'CO',
+    title: 'Comprar',
+    description: 'Encuentra tu proximo hogar o inversion. Te mostramos una seleccion de inmuebles en venta y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
     image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
-    tag: 'Inmuebles',
+    tag: 'Comprar',
     to: '/propiedades',
+    search: { query: '', mode: 'compra' as const },
   },
   {
     icon: 'VE',
-    title: 'Venta',
+    title: 'Vender',
     description: 'Vende tu vivienda con el mejor asesoramiento. Realizamos una valoracion profesional y gratuita, preparamos tu inmueble y gestionamos toda la operacion para conseguir las mejores condiciones con la maxima tranquilidad.',
     image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80',
     tag: 'Vender',
     to: '/vender',
+  },
+  {
+    icon: 'AL',
+    title: 'Alquilar',
+    description: 'Encuentra tu proximo hogar de alquiler. Te mostramos una seleccion de inmuebles disponibles y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
+    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Alquilar',
+    to: '/propiedades',
+    search: { query: '', mode: 'alquiler' as const },
   },
   {
     icon: 'AD',
@@ -652,7 +662,7 @@ function Home() {
                   <div className="services-list-body">
                     <h3>{svc.title}</h3>
                     <p>{svc.description}</p>
-                    <Link className="services-list-link" to={svc.to ?? '/contacto'}>Consultar →</Link>
+                    <Link className="services-list-link" to={svc.to ?? '/contacto'} search={'search' in svc ? svc.search : undefined}>Consultar →</Link>
                   </div>
                 </article>
               ))}

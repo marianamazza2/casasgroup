@@ -1,80 +1,92 @@
-/**
- * Red Casas — Webhook Google Sheet → Vercel
- * Fase 1 · Paso 6 (Deploy Hook + Apps Script)
- *
- * Qué hace: cuando alguien edita el Sheet, dispara un rebuild de Vercel vía el
- * Deploy Hook. Vercel relanza el build (scripts/buildData.mjs lee Sheet + Cloudinary)
- * y publica la web actualizada en ~1 minuto. El equipo no toca código.
- *
- * Instalación (una sola vez):
- *   1. En el Sheet: Extensiones → Apps Script.
- *   2. Pegá este archivo (reemplazando lo que haya).
- *   3. Reemplazá WEBHOOK_URL por tu Deploy Hook de Vercel
- *      (Settings → Git → Deploy Hooks → Create Hook).
- *   4. En el editor, elegí la función `instalar` y tocá ▶ Ejecutar una vez.
- *      Google pedirá autorizar permisos la primera vez → aceptá (es tu cuenta
- *      llamando a tu propio webhook).
- *   5. Listo. Editá una celda y en ~1 min la web se actualiza sola.
- *
- * Forzar un rebuild a mano (p. ej. tras reordenar fotos en Cloudinary, que NO
- * edita el Sheet y por lo tanto no dispara el trigger): menú Red Casas → Publicar ahora.
- */
+// ─────────────────────────────────────────────────────────────────────────────
+// Casas Group — Auto-deploy de la web al editar/borrar filas del Google Sheet.
+//
+// Qué hace: cualquier cambio en el Sheet (editar, insertar o BORRAR filas) marca
+// un "pendiente"; un timer cada minuto espera a que dejes de tocar el Sheet y recién
+// ahí dispara el Deploy Hook de Vercel → Vercel reconstruye (lee Sheet + Cloudinary)
+// → web actualizada en ~1-2 min. Además un rebuild diario toma fotos nuevas de
+// Cloudinary que no tocan el Sheet.
+//
+// Instalación (una sola vez):
+//   1. En el Sheet: Extensiones → Apps Script.
+//   2. Pegá este archivo (reemplazando lo que haya).
+//   3. Poné tu Deploy Hook real en DEPLOY_HOOK_URL (Vercel → Settings → Git → Deploy Hooks).
+//   4. Elegí la función `instalar` en el desplegable y tocá ▶ Ejecutar UNA vez.
+//      Autorizá los permisos. Eso crea los 3 triggers automáticamente.
+// ─────────────────────────────────────────────────────────────────────────────
 
-// ⬇️ REEMPLAZAR por tu Deploy Hook de Vercel (Settings → Git → Deploy Hooks).
-const WEBHOOK_URL = 'https://api.vercel.com/v1/integrations/deploy/prj_xxxx/yyyy'
+// 1) Pegá acá la URL del Deploy Hook de Vercel (Settings → Git → Deploy Hooks).
+const DEPLOY_HOOK_URL = 'PEGAR_AQUI_LA_URL';
 
-// Ventana de espera: agrupa una ráfaga de ediciones en un solo rebuild.
-// Cargar las ~22 columnas de un inmueble dispara muchos "onEdit"; sin esto sería
-// un build de Vercel por cada celda. Con esto, se espera a que dejes de editar.
-const DEBOUNCE_SECONDS = 60
+// 2) Minutos sin tocar el Sheet antes de desplegar (agrupa ediciones en un solo build).
+const ESPERA_MINUTOS = 2;
 
-const PENDING_HANDLER = 'dispararRebuild_'
+// Texto de relleno: mientras DEPLOY_HOOK_URL valga esto, no se dispara nada.
+const PLACEHOLDER = 'PEGAR_AQUI_LA_URL';
 
-/** Ejecutá esto UNA vez para conectar el trigger "al editar". */
+// ── Instalación: corré esto UNA vez para crear los 3 triggers ────────────────
 function instalar() {
-  limpiarTriggers_('onEditTrigger')
-  ScriptApp.newTrigger('onEditTrigger')
-    .forSpreadsheet(SpreadsheetApp.getActive())
-    .onEdit()
-    .create()
-  SpreadsheetApp.getActive().toast('Webhook instalado. Editá el Sheet para probar.', 'Red Casas', 5)
+  // Borra triggers previos de estas funciones para no duplicarlos.
+  const handlers = ['onChangeHandler', 'checkAndDeploy', 'nightlyDeploy'];
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (handlers.indexOf(t.getHandlerFunction()) !== -1) ScriptApp.deleteTrigger(t);
+  });
+  const ss = SpreadsheetApp.getActive();
+  // Al cambiar: incluye editar, insertar y BORRAR filas.
+  ScriptApp.newTrigger('onChangeHandler').forSpreadsheet(ss).onChange().create();
+  // Cada minuto: despliega si el cliente dejó de editar.
+  ScriptApp.newTrigger('checkAndDeploy').timeBased().everyMinutes(1).create();
+  // Una vez por día (madrugada): rebuild de respaldo para fotos nuevas de Cloudinary.
+  ScriptApp.newTrigger('nightlyDeploy').timeBased().everyDays(1).atHour(4).create();
+  ss.toast('Auto-deploy instalado (cambios + respaldo diario).', 'Casas Group', 5);
 }
 
-/** Trigger instalable: cada edición reinicia la ventana de debounce. */
-function onEditTrigger() {
-  limpiarTriggers_(PENDING_HANDLER)
-  ScriptApp.newTrigger(PENDING_HANDLER)
-    .timeBased()
-    .after(DEBOUNCE_SECONDS * 1000)
-    .create()
+// Se ejecuta automáticamente con cada cambio del Sheet (trigger "Al cambiar").
+function onChangeHandler() {
+  const props = PropertiesService.getScriptProperties();
+  props.setProperty('pendiente', 'true');
+  props.setProperty('ultimaEdicion', String(Date.now()));
 }
 
-/** Se ejecuta una vez que pasaron DEBOUNCE_SECONDS sin más ediciones. */
-function dispararRebuild_() {
-  limpiarTriggers_(PENDING_HANDLER)
-  enviarWebhook()
+// Se ejecuta cada minuto. Despliega solo si dejó de editar hace >= ESPERA_MINUTOS.
+function checkAndDeploy() {
+  const props = PropertiesService.getScriptProperties();
+  if (props.getProperty('pendiente') !== 'true') return;
+
+  const ultima = Number(props.getProperty('ultimaEdicion') || '0');
+  const minutosQuieto = (Date.now() - ultima) / 60000;
+  if (minutosQuieto < ESPERA_MINUTOS) return; // todavía está editando, esperar
+
+  dispararBuild('edicion del Sheet');
+  props.deleteProperty('pendiente');
 }
 
-/** Llama al Deploy Hook de Vercel. También lo usa el menú manual. */
-function enviarWebhook() {
-  if (!WEBHOOK_URL || WEBHOOK_URL.indexOf('prj_xxxx') !== -1) {
-    throw new Error('Falta configurar WEBHOOK_URL con tu Deploy Hook de Vercel.')
+// Se ejecuta una vez por día. Reconstruye sí o sí, para tomar fotos nuevas
+// subidas a Cloudinary sin tocar el Sheet.
+function nightlyDeploy() {
+  dispararBuild('respaldo diario');
+}
+
+// Llama al Deploy Hook de Vercel.
+function dispararBuild(motivo) {
+  if (!DEPLOY_HOOK_URL || DEPLOY_HOOK_URL === PLACEHOLDER) {
+    Logger.log('⚠️ Falta configurar DEPLOY_HOOK_URL con tu Deploy Hook real de Vercel.');
+    return;
   }
-  const res = UrlFetchApp.fetch(WEBHOOK_URL, { method: 'post', muteHttpExceptions: true })
-  console.log('Deploy Hook → HTTP ' + res.getResponseCode())
+  const res = UrlFetchApp.fetch(DEPLOY_HOOK_URL, {
+    method: 'post',
+    muteHttpExceptions: true,
+  });
+  Logger.log('Build disparado (' + motivo + '). HTTP ' + res.getResponseCode());
 }
 
-/** Menú "Red Casas → Publicar ahora" para forzar un rebuild manual. */
+// Menú "Casas Group → Publicar ahora" para forzar un rebuild manual.
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu('Red Casas')
-    .addItem('Publicar ahora (rebuild)', 'enviarWebhook')
-    .addToUi()
+    .createMenu('Casas Group')
+    .addItem('Publicar ahora (rebuild)', 'publicarAhora')
+    .addToUi();
 }
-
-/** Borra los triggers cuyo handler sea el indicado (evita duplicados). */
-function limpiarTriggers_(handler) {
-  for (const t of ScriptApp.getProjectTriggers()) {
-    if (t.getHandlerFunction() === handler) ScriptApp.deleteTrigger(t)
-  }
+function publicarAhora() {
+  dispararBuild('manual');
 }
