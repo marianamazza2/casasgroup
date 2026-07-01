@@ -2905,8 +2905,12 @@ a.contact-card:hover .contact-card-icon {
   background: var(--paper);
   border-bottom: 1px solid var(--line);
   display: flex;
+  /* Red de seguridad: si los controles no caben en el ancho de .search-left,
+     envuelven a una segunda fila en vez de desbordar por debajo del mapa
+     (que es position:sticky y los taparía). */
+  flex-wrap: wrap;
   flex-shrink: 0;
-  gap: 12px;
+  gap: 10px 12px;
   padding: 10px 24px;
 }
 
@@ -2933,11 +2937,11 @@ a.contact-card:hover .contact-card-icon {
 }
 .view-toggle {
   order: 5;
-  margin-left: 16px;
+  margin-left: 12px;
 }
 .filter-btn {
   order: 6;
-  margin-left: 16px;
+  margin-left: 12px;
 }
 
 /* Botón flotante "Mapa" — solo mobile (ver media query) */
@@ -2985,9 +2989,10 @@ a.contact-card:hover .contact-card-icon {
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 8px;
-  /* Compacto: no ocupa todo el ancho (el spacer empuja el resto a la derecha). */
-  flex: 0 1 340px;
-  min-width: 200px;
+  /* Compacto: no ocupa todo el ancho (el spacer empuja el resto a la derecha).
+     Encoge primero para que la barra quepa en .search-left sin desbordar. */
+  flex: 0 1 300px;
+  min-width: 150px;
   position: relative;
   transition: border-color 160ms ease;
 }

@@ -348,7 +348,7 @@ export const generatedProperties: Property[] = [
     "desc": "Redcasas presenta este espectacular piso en la zona de Can Vidalet (Esplugues de Llobregat), a tan solo diez minutos del centro comercial Finestrelles y del tranvía, este encantador piso ofrece una ubicación inmejorable. Rodeado de escuelas, supermercados a tan solo cinco minutos del metro de Can Vidalet (L5) y a cinco minutos del metro de Can Serra (L1). La vivienda cuenta con 85 m² muy bien distribuidos. Dispone de un amplio y luminoso salón-comedor con salida a una acogedora terraza, una cocina independiente y funcional con acceso a una amplia galería, tres habitaciones amplias (dos de ellas dobles y una individual con altillo), además de un aseo y un baño completo y moderno.\nLa terraza incluye también un práctico trastero.\n\nNo te pierdas esta oportunidad. ¡Ven a verlo! Los honorarios de la agencia intermediadora y los gastos de compra-venta no están incluidos en el precio.",
     "features": [],
     "coords": {
-      "lat": 41.3755,
+      "lat": 41.375,
       "lng": 2.0875
     },
     "status": "EN VENTA"
@@ -393,7 +393,7 @@ export const generatedProperties: Property[] = [
     "desc": "Red Casas presenta en venta DOS PLAZAS de parking, ubicada en Calle Molino, de Esplugues de Llobregat (zona metro Can Vidalet). Situada en Planta -2. Vigilancia 24h con personal de seguridad. Acceso con mando y llave. No te pierdas esta gran oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compra venta no están incluidos en el precio.",
     "features": [],
     "coords": {
-      "lat": 41.3745,
+      "lat": 41.374,
       "lng": 2.0895
     },
     "status": "EN VENTA",
@@ -437,31 +437,9 @@ export const generatedProperties: Property[] = [
     "desc": "¡Oportunidad única! Ático dúplex en venta en Pubilla Casas, junto al centro comercial Finestrelles\nRedcasas presenta este luminoso y amplio ático dúplex exterior de 95 m² en una de las zonas más demandadas de L’Hospitalet de Llobregat. Ubicado a solo 5 minutos del CC Finestrelles, del metro Can Vidalet (L5) y a 3 minutos de Can Serra (L1), rodeado de todos los servicios: colegios, supermercados, parques y transporte público.\n\nLa vivienda se distribuye en un acogedor salón-comedor con salida a terraza cerrada, cocina independiente y funcional, cuatro habitaciones (tres dobles y una individual), todas con salida a terraza, lo que garantiza luz natural y ventilación cruzada. Cuenta con dos baños completos y dos prácticas galerías, ideales como zona de lavandería y almacenaje.\n\nSe trata de una cuarta planta real en finca sin ascensor. Ideal para familias que buscan amplitud, buena ubicación y calidad de vida.\n\nNo dejes pasar esta oportunidad de vivir en un ático dúplex con terrazas privadas en Pubilla Casas. ¡Contáctanos y agenda tu visita hoy mismo!\nGastos de compraventa e intermediación no incluidos en el precio.",
     "features": [],
     "coords": {
-      "lat": 41.3655,
+      "lat": 41.365,
       "lng": 2.0985
     },
     "status": "EN VENTA"
-  },
-  {
-    "id": 20,
-    "city": "Barcelona",
-    "zone": "Poblenou",
-    "title": "Piso en venta en Calle Taulat - A metros de la playa - Poblenou",
-    "beds": 4,
-    "baths": 2,
-    "m2": 95,
-    "price": 590000,
-    "priceLabel": "590.000 €",
-    "mode": "compra",
-    "category": "piso",
-    "image": "",
-    "desc": "¡Oportunidad única! Ático dúplex en venta en Poblenou, junto al centro comercial Finestrelles\nRedcasas presenta este luminoso y amplio ático dúplex exterior de 95 m² en una de las zonas más demandadas de L’Hospitalet de Llobregat. Ubicado a solo 5 minutos del CC Finestrelles, del metro Can Vidalet (L5) y a 3 minutos de Can Serra (L1), rodeado de todos los servicios: colegios, supermercados, parques y transporte público.\n\nLa vivienda se distribuye en un acogedor salón-comedor con salida a terraza cerrada, cocina independiente y funcional, cuatro habitaciones (tres dobles y una individual), todas con salida a terraza, lo que garantiza luz natural y ventilación cruzada. Cuenta con dos baños completos y dos prácticas galerías, ideales como zona de lavandería y almacenaje.\n\nSe trata de una cuarta planta real en finca sin ascensor. Ideal para familias que buscan amplitud, buena ubicación y calidad de vida.\n\nNo dejes pasar esta oportunidad de vivir en un ático dúplex con terrazas privadas en Pubilla Casas. ¡Contáctanos y agenda tu visita hoy mismo!\nGastos de compraventa e intermediación no incluidos en el precio.",
-    "features": [],
-    "coords": {
-      "lat": 41.3932,
-      "lng": 2.2015
-    },
-    "status": "EN VENTA",
-    "cert": "A"
   }
 ]

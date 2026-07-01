@@ -1,0 +1,1 @@
+import{n as e}from"./use-transform-Dk2gpQqT.js";import{I as t}from"./index-DPQ5KVlD.js";function n(n,...r){let i=n.length;function a(){let e=``;for(let a=0;a<i;a++){e+=n[a];let i=r[a];i&&(e+=t(i)?i.get():i)}return e}return e(r.filter(t),a)}export{n as t};

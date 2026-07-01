@@ -122,7 +122,7 @@ export function PropertyMap({ properties, activeId, focusZones, onPinClick, onBo
         wrapper.appendChild(el)
 
         const marker = new maplibregl.Marker({ element: wrapper, anchor: 'center' })
-          .setLngLat([p.coords.lng, p.coords.lat])
+          .setLngLat([p.coords!.lng, p.coords!.lat])
           .addTo(map)
 
         markersRef.current.set(p.id, { marker, el })
