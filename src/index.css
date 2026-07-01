@@ -2905,10 +2905,9 @@ a.contact-card:hover .contact-card-icon {
   background: var(--paper);
   border-bottom: 1px solid var(--line);
   display: flex;
-  /* Red de seguridad: si los controles no caben en el ancho de .search-left,
-     envuelven a una segunda fila en vez de desbordar por debajo del mapa
-     (que es position:sticky y los taparía). */
-  flex-wrap: wrap;
+  /* Todo en una sola fila: buscador · zona · Compra/Alquiler · vista · Filtros.
+     El buscador encoge (flex) para que quepan el resto de controles. */
+  flex-wrap: nowrap;
   flex-shrink: 0;
   gap: 10px 12px;
   padding: 10px 24px;
@@ -2991,8 +2990,8 @@ a.contact-card:hover .contact-card-icon {
   border-radius: 8px;
   /* Compacto: no ocupa todo el ancho (el spacer empuja el resto a la derecha).
      Encoge primero para que la barra quepa en .search-left sin desbordar. */
-  flex: 0 1 300px;
-  min-width: 150px;
+  flex: 0 1 240px;
+  min-width: 110px;
   position: relative;
   transition: border-color 160ms ease;
 }
@@ -3058,13 +3057,14 @@ a.contact-card:hover .contact-card-icon {
   align-items: center;
   background: transparent;
   border: 1px solid var(--line);
-  border-radius: 20px;
-  color: var(--ink);
+  border-radius: 8px;
+  color: var(--muted);
   display: flex;
   font-size: 12px;
   gap: 6px;
+  justify-content: center;
   letter-spacing: 0.04em;
-  padding: 6px 14px;
+  padding: 6px 10px;
   position: relative;
   transition: all 160ms ease;
   white-space: nowrap;

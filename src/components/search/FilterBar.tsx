@@ -20,6 +20,8 @@ export function FilterBar({ filters, availableMunicipios, viewMode, activeFilter
         type="button"
         className={`filter-btn${activeFilterCount > 0 ? ' has-filters' : ''}`}
         onClick={onOpenFilters}
+        aria-label="Filtros"
+        title="Filtros"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <line x1="21" y1="5" x2="14" y2="5" />
@@ -32,7 +34,6 @@ export function FilterBar({ filters, availableMunicipios, viewMode, activeFilter
           <line x1="8" y1="10" x2="8" y2="14" />
           <line x1="16" y1="17" x2="16" y2="21" />
         </svg>
-        Filtros
         {activeFilterCount > 0 && (
           <span className="filter-badge" aria-label={`${activeFilterCount} filtros activos`}>
             {activeFilterCount}
