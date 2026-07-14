@@ -8,6 +8,7 @@ import { MapPropertyPopup } from '../../components/search/MapPropertyPopup'
 import { SearchBar } from '../../components/search/SearchBar'
 import { FilterBar } from '../../components/search/FilterBar'
 import { ResultsHeader } from '../../components/search/ResultsHeader'
+import { NoResults } from '../../components/search/NoResults'
 import { FiltersModal } from '../../components/search/FiltersModal'
 import { usePropertyFilters } from '../../hooks/usePropertyFilters'
 
@@ -118,7 +119,16 @@ function PropiedadesPage() {
 
           {/* Property grid/list */}
           <div className={`property-results ${viewMode === 'list' ? 'results-list' : 'results-grid'}`}>
-            {visibleProperties.length === 0 ? (
+            {resultCount === 0 ? (
+              // Sin inventario real para esta búsqueda/filtros → captamos el lead.
+              <NoResults
+                mode={filters.mode}
+                zone={filters.query || province}
+                activeFilterCount={activeFilterCount}
+                onClearFilters={resetFilters}
+              />
+            ) : visibleProperties.length === 0 ? (
+              // Hay inmuebles, pero el encuadre del mapa los deja fuera.
               <p className="results-empty">No hay inmuebles en esta zona del mapa. Aleja el zoom para ver más.</p>
             ) : viewMode === 'grid' ? (
               visibleProperties.map((p) => (

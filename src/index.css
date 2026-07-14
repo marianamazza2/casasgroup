@@ -3298,6 +3298,91 @@ a.contact-card:hover .contact-card-icon {
   text-align: center;
 }
 
+/* ── Estado sin inventario (captura de lead) ──────────────────────────────── */
+
+.no-results {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  grid-column: 1 / -1;
+  margin: 0 auto;
+  max-width: 420px;
+  padding: 48px 16px;
+  text-align: center;
+}
+
+.no-results-icon {
+  align-items: center;
+  background: var(--gold-soft);
+  border-radius: 999px;
+  color: var(--gold);
+  display: flex;
+  height: 56px;
+  justify-content: center;
+  width: 56px;
+}
+
+.no-results-title {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 4px 0 0;
+}
+
+.no-results-sub {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.no-results-actions {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.no-results-wa {
+  align-items: center;
+  background: #25d366;
+  border-radius: 999px;
+  color: #fff;
+  display: inline-flex;
+  font-size: 15px;
+  font-weight: 600;
+  gap: 8px;
+  justify-content: center;
+  padding: 12px 24px;
+  text-decoration: none;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.no-results-wa:hover {
+  background: #1eb457;
+  transform: translateY(-1px);
+}
+
+.no-results-clear {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 8px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.no-results-clear:hover {
+  color: var(--text);
+}
+
 /* ── Property card — grid ─────────────────────────────────────────────────── */
 
 .property-card-grid {
@@ -4681,6 +4766,30 @@ a.contact-card:hover .contact-card-icon {
   color: var(--text);
   margin: 8px 0 0;
 }
+.detail-description-toggle {
+  display: none;
+  margin-top: 10px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold, #b8912f);
+  cursor: pointer;
+}
+
+/* Ver más / ver menos solo en mobile: colapsa la descripción larga */
+@media (max-width: 768px) {
+  .detail-description p.is-clamped {
+    display: -webkit-box;
+    -webkit-line-clamp: 10;
+    line-clamp: 10;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .detail-description-toggle { display: inline-block; }
+}
 
 /* Section titles */
 .detail-section-title {
@@ -4830,6 +4939,8 @@ a.contact-card:hover .contact-card-icon {
   /* La tarjeta-acordeon del cuerpo se reemplaza por la barra fija de contacto;
      dejamos hueco abajo para que la barra no tape la ultima seccion. */
   .detail-sidebar { display: none; }
+  /* El CTA "Contactar" del encabezado se sustituye por la barra fija de abajo. */
+  .detail-meta-aside { display: none; }
   .property-detail { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 76px); }
 
   .detail-cta-bar {

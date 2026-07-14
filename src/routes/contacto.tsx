@@ -48,8 +48,8 @@ const contactCards: ContactCard[] = [
   },
   {
     label: 'Telefono',
-    value: '+34 930 110 056',
-    href: 'tel:+34930110056',
+    value: '+34 930 119 056',
+    href: 'tel:+34930119056',
     icon: 'phone',
   },
   {

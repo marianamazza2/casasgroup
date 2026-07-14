@@ -6,6 +6,7 @@ import { RouteProgress } from '../components/RouteProgress'
 const subMenuServices = [
   { label: 'Administracion de comunidades', gold: false, to: '/servicios/administracion-de-fincas' },
   { label: 'Alarmas', gold: false, to: '/servicios/alarmas' },
+  { label: 'Alquilar', gold: false, to: '/propiedades', search: { query: '', mode: 'alquiler' as const } },
   { label: 'Cambio de suministros', gold: false, to: '/servicios/cambio-de-suministros' },
   { label: 'Hipotecas', gold: false, to: '/servicios/hipotecas' },
   { label: 'Seguros', gold: false, to: '/servicios/seguros' },
@@ -153,7 +154,6 @@ function SiteNav() {
       />
       <nav id="site-nav-menu" aria-label="Navegacion principal">
         <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>Comprar</Link>
-        <Link to="/propiedades" search={{ query: '', mode: 'alquiler' }}>Alquilar</Link>
         <Link to="/vender" className="nav-link--quiet">Vender</Link>
         <Link to="/nosotros">Nosotros</Link>
         <div
@@ -176,6 +176,7 @@ function SiteNav() {
                   <Link
                     key={item.label}
                     to={item.to}
+                    search={item.search}
                     className={item.gold ? 'nav-services-item--gold' : ''}
                     onClick={() => setServicesOpen(false)}
                   >

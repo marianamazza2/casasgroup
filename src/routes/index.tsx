@@ -11,7 +11,7 @@ export const Route = createFileRoute('/')({
   component: Home,
 })
 
-type HeroTab = 'comprar' | 'alquilar' | 'vender' | 'reformas' | 'hipotecas'
+type HeroTab = 'comprar' | 'vender'
 
 const services = [
   {
@@ -32,6 +32,14 @@ const services = [
     to: '/vender',
   },
   {
+    icon: 'HI',
+    title: 'Financiacion',
+    description: 'Te conseguimos las mejores opciones de financiacion del mercado. Trabajamos con diferentes entidades financieras para ofrecerte una amplia seleccion de opciones personalizadas para ayudarte a encontrar las condiciones mas competitivas segun tu perfil y tus objetivos.',
+    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Financiacion',
+    to: '/servicios/hipotecas',
+  },
+  {
     icon: 'AL',
     title: 'Alquilar',
     description: 'Encuentra tu proximo hogar de alquiler. Te mostramos una seleccion de inmuebles disponibles y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
@@ -49,22 +57,6 @@ const services = [
     to: '/servicios/administracion-de-fincas',
   },
   {
-    icon: 'HI',
-    title: 'Financiacion',
-    description: 'Te conseguimos las mejores opciones de financiacion del mercado. Trabajamos con diferentes entidades financieras para ofrecerte una amplia seleccion de opciones personalizadas para ayudarte a encontrar las condiciones mas competitivas segun tu perfil y tus objetivos.',
-    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
-    tag: 'Financiacion',
-    to: '/servicios/hipotecas',
-  },
-  {
-    icon: 'SU',
-    title: 'Suministros',
-    to: '/servicios/cambio-de-suministros',
-    description: 'Analizamos tu perfil, comparamos las diferentes opciones disponibles en el mercado y encontramos la que mejor se adapta a tus necesidades. Ademas, gestionamos todos los tramites de principio a fin. El mejor servicio, al menor coste.',
-    image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
-    tag: 'Suministros',
-  },
-  {
     icon: 'SE',
     title: 'Seguros',
     description: 'Gracias a nuestra colaboracion con las principales aseguradoras del mercado, podemos ofrecerte una amplia seleccion de soluciones adaptadas a tus necesidades. Analizamos coberturas, condiciones y garantias para encontrar la proteccion mas adecuada para tu vivienda, tu inversion o tu comunidad.',
@@ -79,6 +71,14 @@ const services = [
     image: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=80',
     tag: 'Seguridad',
     to: '/servicios/alarmas',
+  },
+  {
+    icon: 'SU',
+    title: 'Suministros',
+    to: '/servicios/cambio-de-suministros',
+    description: 'Analizamos tu perfil, comparamos las diferentes opciones disponibles en el mercado y encontramos la que mejor se adapta a tus necesidades. Ademas, gestionamos todos los tramites de principio a fin. El mejor servicio, al menor coste.',
+    image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Suministros',
   },
 ]
 
@@ -123,26 +123,25 @@ const whyItems = [
 const accessBlocks = [
   {
     title: 'Comprar',
-    description: 'Encuentra tu proximo hogar entre una seleccion cuidada de inmuebles.',
+    description: '¡Tenemos tu vivienda! Tenemos la vivienda perfecta para ti y te acompañamos de principio a fin en el proceso de compra con un asesoramiento profesional y personalizado.',
     image:
       'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=80',
     to: '/propiedades' as const,
     search: { query: '', mode: 'compra' as const },
   },
   {
-    title: 'Alquilar',
-    description: 'Pisos y casas listos para entrar a vivir con una gestion agil.',
+    title: 'Vender',
+    description: '¡Tenemos el comprador de tu casa! Nos encargamos de todo el proceso de venta de principio a fin.',
     image:
       'https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=1000&q=80',
-    to: '/propiedades' as const,
-    search: { query: '', mode: 'alquiler' as const },
+    to: '/vender' as const,
   },
   {
-    title: 'Vender',
-    description: 'Descubre el valor real de tu vivienda con una valoracion profesional.',
+    title: 'Financiar',
+    description: '¡Tenemos tu financiación! Te ayudamos a encontrar la financiación ideal para tu vivienda con las mejores condiciones. Nosotros nos encargamos de todo.',
     image:
       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1000&q=80',
-    to: '/vender' as const,
+    to: '/servicios/hipotecas' as const,
   },
 ]
 
@@ -408,7 +407,7 @@ function Home() {
   }
 
   const currentWhy = whyItems[whyIndex]
-  const isSearchTab = heroTab === 'comprar' || heroTab === 'alquilar'
+  const isSearchTab = heroTab === 'comprar'
 
   const displayedProperties =
     propertyMode === 'Venta'
@@ -420,21 +419,9 @@ function Home() {
       line: 'Ingresa ciudad, provincia, barrio o zona...',
       action: 'Buscar',
     },
-    alquilar: {
-      line: 'Ingresa ciudad, provincia, barrio o zona...',
-      action: 'Buscar',
-    },
     vender: {
       line: 'Descubre el valor real de tu vivienda con una valoracion gratuita.',
       action: 'Solicitar valoracion',
-    },
-    reformas: {
-      line: 'Transforma tu hogar con nuestro equipo de profesionales.',
-      action: 'Solicitar presupuesto',
-    },
-    hipotecas: {
-      line: 'Te ayudamos a encontrar la mejor financiacion para tu nuevo hogar.',
-      action: 'Hablar con un asesor',
     },
   }
 
@@ -443,7 +430,7 @@ function Home() {
       to: '/propiedades',
       search: {
         query,
-        mode: heroTab === 'alquilar' ? 'alquiler' : 'compra',
+        mode: 'compra',
         locType: loc?.type,
         province:
           loc?.province ?? (loc?.type === 'provincia' ? loc.name : undefined),
@@ -553,7 +540,7 @@ function Home() {
               <p aria-hidden="true" style={{ visibility: 'hidden' }}>Tu hogar empieza aqui.</p>
 
               <div className="hero-tabs" role="tablist" aria-label="Servicios destacados">
-                {(['comprar', 'alquilar', 'vender', 'reformas', 'hipotecas'] as HeroTab[]).map((tab) => (
+                {(['comprar', 'vender'] as HeroTab[]).map((tab) => (
                   <button
                     type="button"
                     role="tab"
@@ -594,7 +581,7 @@ function Home() {
                     <Link className="button-link" to="/vender">
                       {heroCopy[heroTab].action} <span aria-hidden="true">→</span>
                     </Link>
-                  ) : isSearchTab ? (
+                  ) : (
                     <button
                       type="button"
                       disabled={!heroSearchQuery.trim()}
@@ -602,10 +589,6 @@ function Home() {
                     >
                       {heroCopy[heroTab].action}
                     </button>
-                  ) : (
-                    <Link className="button-link" to="/contacto">
-                      {heroCopy[heroTab].action} <span aria-hidden="true">→</span>
-                    </Link>
                   )}
                 </div>
                 {/* Renglón reservado en todas las pestañas para mantener el alto del panel */}
@@ -658,7 +641,6 @@ function Home() {
                   ref={(el) => { serviceItemRefs.current[i] = el }}
                   className={`services-list-item${activeService === i ? ' active' : ''}`}
                 >
-                  <span className="services-list-num">{String(i + 1).padStart(2, '0')}</span>
                   <div className="services-list-body">
                     <h3>{svc.title}</h3>
                     <p>{svc.description}</p>
@@ -810,7 +792,7 @@ function Home() {
         <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80" alt="" />
         <div>
           <blockquote>Porque comprendimos que el sector no necesitaba mas de lo mismo.</blockquote>
-          <p>Una marca construida para cuidar cada detalle con excelencia, cercania y una forma de trabajar clara.</p>
+          <p>Una marca pensada para superar expectativas, transformar la experiencia inmobiliaria y cuidar cada detalle con excelencia.</p>
           <Link className="button-link" to="/nosotros">
             Conocenos
           </Link>

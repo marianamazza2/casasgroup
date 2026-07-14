@@ -365,10 +365,39 @@ function PropertyStats({ property: p }: { property: Property }) {
 }
 
 function PropertyDescription({ desc }: { desc: string }) {
+  const [expanded, setExpanded] = useState(false)
+  const [clampable, setClampable] = useState(false)
+  const textRef = useRef<HTMLParagraphElement>(null)
+
+  useEffect(() => {
+    const el = textRef.current
+    if (!el) return
+    const check = () => {
+      // Solo aplica en mobile (clamp activo por CSS). Detecta si el texto
+      // colapsado desborda su altura máxima.
+      const overflows = el.scrollHeight - el.clientHeight > 4
+      setClampable(overflows && !expanded)
+    }
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [desc, expanded])
+
   return (
     <div className="detail-description">
       <h2 className="detail-section-title">Descripción</h2>
-      <p>{desc}</p>
+      <p ref={textRef} className={expanded ? 'is-expanded' : 'is-clamped'}>
+        {desc}
+      </p>
+      {(clampable || expanded) && (
+        <button
+          type="button"
+          className="detail-description-toggle"
+          onClick={() => setExpanded((v) => !v)}
+        >
+          {expanded ? 'Ver menos' : 'Ver más'}
+        </button>
+      )}
     </div>
   )
 }

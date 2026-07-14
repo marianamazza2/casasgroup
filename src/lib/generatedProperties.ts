@@ -176,28 +176,6 @@ export const generatedProperties: Property[] = [
     "dateAdded": "2026-01-26"
   },
   {
-    "id": 8,
-    "city": "Hospitalet de Llobregat",
-    "zone": "Pubilla Cases",
-    "title": "Piso en venta en Mina, Pubilla Cases, Can Serra - Hospitalet de Llobregat",
-    "beds": 4,
-    "baths": 1,
-    "m2": 95,
-    "price": 275000,
-    "priceLabel": "275.000 €",
-    "mode": "compra",
-    "category": "piso",
-    "image": "",
-    "desc": "Redcasas presenta ático dúplex en la zona de Pubilla Casas, a tan solo cinco minutos del centro comercial Finestrelles y del tranvía, este encantador ático dúplex exterior ofrece una ubicación inmejorable. Rodeado de escuelas, supermercados a tan solo cinco minutos del metro de Can Vidalet (L5) y a tres minutos de Can Serra (L1).\n\nEsta vivienda consta de 95 m², se distribuye de un amplio y acogedor salón con acceso a una terraza cerrada, una cocina espaciosa y funcional, cuatro habitaciones (tres dobles y una individual), todas ellas con salida a sus respectivas terrazas, lo que garantiza luz natural y ventilación en cada espacio. Además, dispone de dos baños completos y dos galerías, ideales para zona de lavandería y almacenamiento.\n\nEs una cuarta planta real. Finca sin ascensor.\n\nNo te pierdas esta oportunidad. ¡Ven a verlo! Los honorarios de la agencia intermediadora y los gastos de compra-venta no están incluidos en el precio.",
-    "features": [],
-    "coords": {
-      "lat": 41.366,
-      "lng": 2.099
-    },
-    "status": "EN VENTA",
-    "dateAdded": "2026-01-26"
-  },
-  {
     "id": 9,
     "city": "Esplugues de Llobregat",
     "zone": "Can Vidalet",
@@ -249,8 +227,8 @@ export const generatedProperties: Property[] = [
     "beds": 3,
     "baths": 1,
     "m2": 85,
-    "price": 190000,
-    "priceLabel": "190.000 €",
+    "price": 160000,
+    "priceLabel": "160.000 €",
     "mode": "compra",
     "category": "piso",
     "image": "",
@@ -258,6 +236,7 @@ export const generatedProperties: Property[] = [
     "features": [
       "Ascensor"
     ],
+    "tag": "Nuevo",
     "floor": "Sotano",
     "coords": {
       "lat": 41.364,
@@ -385,13 +364,14 @@ export const generatedProperties: Property[] = [
     "beds": 0,
     "baths": 0,
     "m2": 0,
-    "price": 18000,
-    "priceLabel": "18.000 €",
+    "price": 15000,
+    "priceLabel": "15.000 €",
     "mode": "compra",
     "category": "parking",
     "image": "",
     "desc": "Red Casas presenta en venta DOS PLAZAS de parking, ubicada en Calle Molino, de Esplugues de Llobregat (zona metro Can Vidalet). Situada en Planta -2. Vigilancia 24h con personal de seguridad. Acceso con mando y llave. No te pierdas esta gran oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compra venta no están incluidos en el precio.",
     "features": [],
+    "tag": "Nuevo",
     "coords": {
       "lat": 41.374,
       "lng": 2.0895
@@ -400,46 +380,35 @@ export const generatedProperties: Property[] = [
     "dateAdded": "2025-12-01"
   },
   {
-    "id": 18,
-    "city": "Hospitalet de Llobregat",
-    "zone": "Pubilla Cases",
-    "title": "Piso en venta en Calle El-lipse - Pubilla Cases - Hospitalet de Llobregat",
+    "id": 20,
+    "city": "Sant Boi de Llobregat",
+    "zone": "Vinyets",
+    "title": "Bajo en venta en Sant Boi de Llobregat",
     "beds": 2,
     "baths": 1,
-    "m2": 52,
-    "price": 189000,
-    "priceLabel": "189.000 €",
+    "m2": 60,
+    "price": 230000,
+    "priceLabel": "230.000 €",
     "mode": "compra",
     "category": "piso",
-    "image": "",
-    "desc": "Redcasas presenta este fantástico piso reformado en la zona de Pubilla Casas a estrenar, ideal para entrar a vivir o invertir, en una zona con todos los servicios al alcance. Ubicado en una zona comunicada, con transporte público cercano, la Cruz Roja a 3 minutos, supermercados, colegios y todos los servicios necesarios para tu día a día.\n\nConsta de en una superficie de 52 m² con luminoso salón-comedor exterior y luz natural durante todo el día, dos habitaciones amplias, perfectas para dormitorio principal y habitación secundaria, despacho o vestidor (posibilidad de hacer una tercera habitación), cocina independiente, moderna y funcional, con salida directa a galería y un baño completo totalmente renovado con estilo actual.\n\nEs una 1ª planta real.\n\nAdemás, está equipado con aire acondicionado con bomba de frío/calor, garantizando confort en cualquier época del año.\n\n¡Todo a estrenar, listo para disfrutar desde el primer momento!\n\n¡No pierdas la oportunidad de visitarlo! Los honorarios de la agencia intermediadora y los gastos de compra-venta no están incluidos en el precio.",
-    "features": [],
+    "image": "https://res.cloudinary.com/osqpxy1j/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/ChatGPT_Image_23_jun_2026_11_40_22_v0vbmn",
+    "desc": "RedCasas presentaeste espectacular piso en Sant Boi de Llobregat, Barcelona, en la zona de Plaça Catalunya - Vinyets. Situada en una de las zonas más consolidadas de Sant Boi de Llobregat, esta vivienda disfruta de una ubicación privilegiada que combina tranquilidad con todos los servicios necesarios para el día a día. A pocos minutos se encuentra la Plaça de Catalunya, uno de los principales puntos de encuentro de la ciudad, rodeada de comercios, cafeterías, zonas verdes y espacios de ocio para toda la familia.\n\nEl inmueble consta de 60 m² construidos distribuidos en: La zona de día cuenta con salón-comedor y cocina americana integrada, una solución práctica que aporta amplitud y favorece la entrada de luz natural. Consta de dos habitaciones y dispone además de un baño completo y estancias cómodas y bien aprovechadas.\n\nUno de los principales atractivos de la propiedad son sus tres terrazas privadas, un valor añadido poco habitual que ofrece múltiples posibilidades de uso: zona de comedor exterior, espacio de relax, área de trabajo al aire libre o rincón para disfrutar del buen tiempo durante todo el año.\n\n¡Ven a verlo! Los Honorarios de la agencia intermediadora y los gastos de compra venta no están incluidos en el precio.",
+    "features": [
+      "Terraza"
+    ],
+    "images": [
+      "https://res.cloudinary.com/osqpxy1j/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_23_jun_2026_11_40_22_v0vbmn",
+      "https://res.cloudinary.com/osqpxy1j/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_23_jun_2026_12_49_13_w4esc4",
+      "https://res.cloudinary.com/osqpxy1j/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_23_jun_2026_12_27_41_d4f6nt",
+      "https://res.cloudinary.com/osqpxy1j/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_23_jun_2026_12_28_59_iiyirc",
+      "https://res.cloudinary.com/osqpxy1j/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_23_jun_2026_12_48_04_ophr5e"
+    ],
+    "floor": "Bajo",
     "coords": {
-      "lat": 41.367,
-      "lng": 2.097
+      "lat": 41.341,
+      "lng": 2.042
     },
     "status": "EN VENTA",
-    "dateAdded": "2025-11-01"
-  },
-  {
-    "id": 19,
-    "city": "Hospitalet de Llobregat",
-    "zone": "Pubilla Cases",
-    "title": "Piso en venta en Calle Mina - Pubilla Cases, Can Serra - Hospitalet de Llobregat",
-    "beds": 4,
-    "baths": 2,
-    "m2": 95,
-    "price": 290000,
-    "priceLabel": "290.000 €",
-    "mode": "compra",
-    "category": "piso",
-    "image": "",
-    "desc": "¡Oportunidad única! Ático dúplex en venta en Pubilla Casas, junto al centro comercial Finestrelles\nRedcasas presenta este luminoso y amplio ático dúplex exterior de 95 m² en una de las zonas más demandadas de L’Hospitalet de Llobregat. Ubicado a solo 5 minutos del CC Finestrelles, del metro Can Vidalet (L5) y a 3 minutos de Can Serra (L1), rodeado de todos los servicios: colegios, supermercados, parques y transporte público.\n\nLa vivienda se distribuye en un acogedor salón-comedor con salida a terraza cerrada, cocina independiente y funcional, cuatro habitaciones (tres dobles y una individual), todas con salida a terraza, lo que garantiza luz natural y ventilación cruzada. Cuenta con dos baños completos y dos prácticas galerías, ideales como zona de lavandería y almacenaje.\n\nSe trata de una cuarta planta real en finca sin ascensor. Ideal para familias que buscan amplitud, buena ubicación y calidad de vida.\n\nNo dejes pasar esta oportunidad de vivir en un ático dúplex con terrazas privadas en Pubilla Casas. ¡Contáctanos y agenda tu visita hoy mismo!\nGastos de compraventa e intermediación no incluidos en el precio.",
-    "features": [],
-    "coords": {
-      "lat": 41.365,
-      "lng": 2.0985
-    },
-    "status": "EN VENTA"
+    "dateAdded": "2026-07-03"
   }
 ]
