@@ -35,17 +35,17 @@ export function Footer() {
           </Link>
           <p>Tu hogar empieza aqui.</p>
         </div>
-        <FooterSection title="Inmuebles">
-          <a href="/#propiedades">Alquilar</a>
-          <a href="/#propiedades">Comprar</a>
-          <a href="/#valoracion">Vender</a>
-        </FooterSection>
         <FooterSection title="Servicios">
           <Link to="/servicios/administracion-de-fincas">Administración de fincas</Link>
           <Link to="/servicios/alarmas">Alarmas</Link>
           <Link to="/servicios/cambio-de-suministros">Cambio de suministros</Link>
           <Link to="/servicios/hipotecas">Hipotecas</Link>
           <Link to="/servicios/seguros">Seguros</Link>
+        </FooterSection>
+        <FooterSection title="Inmuebles">
+          <a href="/#propiedades">Alquilar</a>
+          <a href="/#propiedades">Comprar</a>
+          <a href="/#valoracion">Vender</a>
         </FooterSection>
         <FooterSection title="Contacto">
           <a href="mailto:info@casasgroup.es">info@casasgroup.es</a>
