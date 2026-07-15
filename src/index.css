@@ -923,7 +923,7 @@ button {
   border-top: 1px solid var(--line);
   display: grid;
   gap: 0 20px;
-  grid-template-columns: 28px 1fr;
+  grid-template-columns: 1fr;
   min-height: clamp(160px, 28vh, 300px);
   padding: clamp(28px, 4vw, 42px) 0 clamp(28px, 4vw, 42px) 16px;
   position: relative;
