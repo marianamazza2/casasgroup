@@ -6497,7 +6497,7 @@ a.contact-card:hover .contact-card-icon {
   font-size: 16px;
   line-height: 1.7;
   margin: 0 0 clamp(22px, 3.5vh, 32px);
-  max-width: 480px;
+  max-width: 560px;
 }
 
 /* Botón del hero con colores invertidos: fondo claro + texto dorado */
