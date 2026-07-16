@@ -171,7 +171,7 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
           >
             {images.map((src, i) => (
               <div key={i} className="detail-carousel-slide">
-                <img src={src} alt={`${title} ${i + 1}`} />
+                <img src={src} alt={`${title} ${i + 1}`} loading={i === 0 ? 'eager' : 'lazy'} />
               </div>
             ))}
           </div>
@@ -448,7 +448,7 @@ function LocationSection({ property: p }: { property: Property }) {
     <section className="detail-map-section">
       <h2 className="detail-section-title">Ubicación</h2>
       {p.coords ? (
-        <PropertyMap coords={p.coords} title={p.title} />
+        <PropertyMap coords={p.coords} />
       ) : (
         <div className="detail-map-placeholder">Ubicación no disponible</div>
       )}

@@ -10,6 +10,7 @@ interface FiltersModalProps {
   filters: FilterState
   /** Municipios presentes en el ámbito buscado (alimenta el árbol de zonas). */
   availableMunicipios: Set<string>
+  province?: string
   /** Sin inventario en el ámbito actual: no hay subzonas aplicables. */
   zonesDisabled?: boolean
   onChange: <K extends keyof FilterState>(key: K, value: FilterState[K]) => void
@@ -27,7 +28,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const COUNT_OPTIONS = [0, 1, 2, 3, 4]
 
-export function FiltersModal({ open, onClose, onApply, filters, availableMunicipios, zonesDisabled = false, onChange, onReset, resultCount }: FiltersModalProps) {
+export function FiltersModal({ open, onClose, onApply, filters, availableMunicipios, province, zonesDisabled = false, onChange, onReset, resultCount }: FiltersModalProps) {
   // Swipe-down-to-close (mobile). Drag offset in px; null = not dragging.
   const [dragY, setDragY] = useState(0)
   const dragStartRef = useRef<number | null>(null)
@@ -116,6 +117,7 @@ export function FiltersModal({ open, onClose, onApply, filters, availableMunicip
               value={filters.zones}
               onChange={(z) => onChange('zones', z)}
               availableMunicipios={availableMunicipios}
+              province={province}
               disabled={zonesDisabled}
             />
           </div>

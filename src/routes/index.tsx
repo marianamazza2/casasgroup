@@ -10,6 +10,24 @@ import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
 import type { Location } from '../lib/locationSearch'
 
 export const Route = createFileRoute('/')({
+  head: () => ({
+    meta: [
+      { title: 'Casas Group | Inmobiliaria en Barcelona' },
+      {
+        name: 'description',
+        content:
+          'Compra, venta y alquiler de viviendas en Barcelona. Te acompañamos en hipotecas, seguros y administración de fincas. Valoración gratuita.',
+      },
+      { property: 'og:title', content: 'Casas Group | Inmobiliaria en Barcelona' },
+      {
+        property: 'og:description',
+        content:
+          'Compra, venta y alquiler de viviendas en Barcelona. Hipotecas, seguros y administración de fincas. Valoración gratuita.',
+      },
+      { property: 'og:url', content: 'https://casasgroup.es/' },
+    ],
+    links: [{ rel: 'canonical', href: 'https://casasgroup.es/' }],
+  }),
   component: Home,
 })
 
@@ -723,7 +741,7 @@ function Home() {
             onTouchStart={handleWhyTouchStart}
             onTouchEnd={handleWhyTouchEnd}
           >
-            <img src={currentWhy.image} alt="" />
+            <img src={currentWhy.image} alt="" loading="lazy" />
             <div>
               <span>
                 {whyIndex + 1} / {whyItems.length}
@@ -798,7 +816,7 @@ function Home() {
       </section>
 
       <section className="section about-strip" id="nosotros">
-        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80" alt="" />
+        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80" alt="" loading="lazy" />
         <div>
           <blockquote>Porque comprendimos que el sector no necesitaba mas de lo mismo.</blockquote>
           <p>Una marca pensada para superar expectativas, transformar la experiencia inmobiliaria y cuidar cada detalle con excelencia.</p>
@@ -852,17 +870,20 @@ function Home() {
             onPointerCancel={endPropertyDrag}
           >
             {displayedProperties.map((property) => (
-              <article
+              // Enlace real (<a href>) para que Google siga el grafo desde la
+              // home a cada ficha (§9). El rail es arrastrable: si hubo drag,
+              // cancelamos la navegación con preventDefault.
+              <Link
                 className="property-card"
                 key={property.id}
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  if (propertyDrag.current.moved) return
-                  navigate({ to: '/propiedades/$id', params: { id: String(property.id) } })
+                to="/propiedades/$id"
+                params={{ id: String(property.id) }}
+                onClick={(e) => {
+                  if (propertyDrag.current.moved) e.preventDefault()
                 }}
               >
                 <div className="property-image">
-                  <img src={property.image} alt={`${property.title} en ${property.zone}`} draggable={false} />
+                  <img src={property.image} alt={`${property.title} en ${property.zone}`} draggable={false} loading="lazy" />
                   {property.tag ? <span>{property.tag}</span> : null}
                 </div>
                 <div className="property-body">
@@ -873,7 +894,7 @@ function Home() {
                   </p>
                   <strong>{property.priceLabel}</strong>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
           <button

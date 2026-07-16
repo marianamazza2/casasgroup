@@ -19,6 +19,7 @@ export function PropertyCard({ property: p, id }: Props) {
             <img
               src={p.image}
               alt={`${p.title} en ${p.zone}`}
+              loading="lazy"
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
           )}

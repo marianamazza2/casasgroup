@@ -302,8 +302,18 @@ El proyecto carga **dos librerías de mapas completas**:
 Mantener dos motores de mapas duplica el JS de mapas en el bundle. **Unificar en uno solo** (preferible MapLibre, ya mayoritario) reduce peso y mejora LCP/TBT. Además, **cargar el mapa de forma diferida** (lazy/dynamic import) ya que no es contenido crítico above-the-fold.
 
 ### 7.2 Medición pendiente
+
+**Revisión de código (hecha, jul-2026):**
+- ✅ **Fuentes**: se quitó el `@import` render-blocking de Google Fonts en `src/index.css` y se pasó a `<link>` en `index.html` con `preconnect` a `fonts.googleapis.com`/`fonts.gstatic.com`. Ya tenía `display=swap` (evita FOIT).
+- ✅ **Hero LCP**: la imagen del hero (`hero-building-light.jpg`) es `background-image` en CSS y no se descubría temprano → se añadió `<link rel="preload" as="image" fetchpriority="high">` en `index.html`.
+- ✅ **`loading="lazy"`** en imágenes below-the-fold: tarjetas de propiedad (grid y lista), carrusel de destacados y franja "nosotros" de la home, y slides 2+ del carrusel móvil del detalle. La imagen principal del detalle y la primera slide móvil quedan `eager` (son el LCP de esa vista).
+- 🟢 **`width`/`height` en imágenes**: ausentes, pero **no generan CLS** porque cada `<img>` vive en un contenedor con `height`/`aspect-ratio` fijo + `object-fit: cover`. Sin acción.
+- 🟠 **Imagen remota de Unsplash** en la franja "nosotros" (`index.tsx`): dominio externo, conviene autoalojarla y optimizarla.
+
+**Pendiente (requiere navegador, no se puede desde código):**
 - Pasar **Lighthouse** real (móvil) a home, listado, detalle y un servicio → números de LCP, CLS, TBT.
-- Revisar **carga de fuentes** (FOUT/FOIT, `font-display`), JS render-blocking y `width`/`height` en imágenes (CLS, §3.3).
+- Confirmar en campo que el preload del hero y el swap de fuentes mejoran LCP/FOUT sin regresiones.
+- Cerrar §7.1 (unificar los dos stacks de mapas) para bajar TBT/peso de bundle.
 
 ---
 

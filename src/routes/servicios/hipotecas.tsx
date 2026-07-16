@@ -4,6 +4,24 @@ import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motio
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 
 export const Route = createFileRoute('/servicios/hipotecas')({
+  head: () => ({
+    meta: [
+      { title: 'Hipotecas en Barcelona | Casas Group' },
+      {
+        name: 'description',
+        content:
+          'Te acompañamos en tu hipoteca en cuatro pasos. Descubre cuánto puedes financiar para comprar tu vivienda en Barcelona. Casas Group.',
+      },
+      { property: 'og:title', content: 'Hipotecas en Barcelona | Casas Group' },
+      {
+        property: 'og:description',
+        content:
+          'Te acompañamos en tu hipoteca en cuatro pasos. Descubre cuánto puedes financiar para comprar tu vivienda en Barcelona.',
+      },
+      { property: 'og:url', content: 'https://casasgroup.es/servicios/hipotecas' },
+    ],
+    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/hipotecas' }],
+  }),
   component: HipotecasPage,
 })
 

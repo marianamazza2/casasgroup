@@ -3,7 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1a1a18" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Fuentes: preconnect + <link> en el HTML en vez de @import en CSS.
+         Evita la petición encadenada y render-blocking del @import (auditoría §7.2). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    />
+    <!-- Precarga de la imagen LCP del hero (es background-image en CSS, así que
+         no se descubre temprano). fetchpriority alto para adelantar el LCP (§7.2). -->
+    <link
+      rel="preload"
+      as="image"
+      href="/hero-building-light.jpg"
+      fetchpriority="high"
+    />
     <!-- El <title> y las metas los gestiona TanStack Router por ruta vía
          <HeadContent /> (ver src/routes/__root.tsx, auditoría-seo §1.2). No poner
          un <title> estático aquí: quedaría primero en el DOM y document.title lo

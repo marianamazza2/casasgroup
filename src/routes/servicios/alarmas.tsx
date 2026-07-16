@@ -11,6 +11,24 @@ import type { TouchEvent } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 
 export const Route = createFileRoute('/servicios/alarmas')({
+  head: () => ({
+    meta: [
+      { title: 'Alarmas para tu vivienda | Casas Group' },
+      {
+        name: 'description',
+        content:
+          'Sistemas de alarma gestionados por quien conoce tu vivienda. Protege tu hogar en Barcelona con el acompañamiento de Casas Group.',
+      },
+      { property: 'og:title', content: 'Alarmas para tu vivienda | Casas Group' },
+      {
+        property: 'og:description',
+        content:
+          'Sistemas de alarma gestionados por quien conoce tu vivienda. Protege tu hogar en Barcelona con Casas Group.',
+      },
+      { property: 'og:url', content: 'https://casasgroup.es/servicios/alarmas' },
+    ],
+    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/alarmas' }],
+  }),
   component: AlarmasPage,
 })
 

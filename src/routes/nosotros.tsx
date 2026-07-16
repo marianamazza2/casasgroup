@@ -8,6 +8,24 @@ import { JsonLd } from '../components/JsonLd'
 import { breadcrumbSchema, organizationSchema } from '../lib/structuredData'
 
 export const Route = createFileRoute('/nosotros')({
+  head: () => ({
+    meta: [
+      { title: 'Sobre nosotros | Casas Group' },
+      {
+        name: 'description',
+        content:
+          'De Red Casas a Casas Group: conoce a nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
+      },
+      { property: 'og:title', content: 'Sobre nosotros | Casas Group' },
+      {
+        property: 'og:description',
+        content:
+          'De Red Casas a Casas Group: nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
+      },
+      { property: 'og:url', content: 'https://casasgroup.es/nosotros' },
+    ],
+    links: [{ rel: 'canonical', href: 'https://casasgroup.es/nosotros' }],
+  }),
   component: NosotrosPage,
 })
 

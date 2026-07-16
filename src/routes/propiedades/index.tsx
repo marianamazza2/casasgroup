@@ -10,7 +10,7 @@ import { FilterBar } from '../../components/search/FilterBar'
 import { ResultsHeader } from '../../components/search/ResultsHeader'
 import { NoResults } from '../../components/search/NoResults'
 import { FiltersModal } from '../../components/search/FiltersModal'
-import { usePropertyFilters, isKnownLocationSearch } from '../../hooks/usePropertyFilters'
+import { usePropertyFilters, isKnownLocationSearch, isBarcelonaScopedSearch } from '../../hooks/usePropertyFilters'
 import { Seo } from '../../components/Seo'
 import { SITE_URL } from '../../lib/structuredData'
 
@@ -45,6 +45,7 @@ export const Route = createFileRoute('/propiedades/')({
 
 function PropiedadesPage() {
   const { query, mode, locType, province } = Route.useSearch()
+  const activeProvince = province || (locType === 'provincia' ? query : undefined)
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [showFiltersModal, setShowFiltersModal] = useState(false)
   const [activeId, setActiveId] = useState<number | undefined>()
@@ -98,13 +99,21 @@ function PropiedadesPage() {
       ? filters.zone
       : filters.query || province || 'Barcelona'
 
-  // ── SEO (§4.2.2, §4.2.3) ──────────────────────────────────────────────────
+  // ── SEO (§4.2.2, §4.2.3, §6) ──────────────────────────────────────────────
   // title/description/canonical/robots se derivan de los SEARCH PARAMS DE LA URL
   // (query/mode/province), no del estado vivo de filtros: son la vista indexable
   // y estable. Los micro-filtros (precio, habitaciones…) no viven en la URL, así
   // que no generan combinaciones duplicadas que crawlear.
   const rawLocation = (province || query).trim()
-  const knownLocation = isKnownLocationSearch(query, mode, locType, province)
+  const hasLocationParam = Boolean(rawLocation)
+  // Vista indexable = ubicación reconocida por la taxonomía Y dentro de una
+  // provincia soportada. Fuera de ámbito (p.ej. province=Madrid) o texto libre
+  // sin match → vista thin/vacía → noindex (§6:
+  // no gastar crawl budget en URLs sin valor).
+  const knownLocation =
+    isKnownLocationSearch(query, mode, locType, province) &&
+    isBarcelonaScopedSearch(query, locType, province)
+  const seoNoindex = hasLocationParam && !knownLocation
   const seoLocation = knownLocation && rawLocation ? capitalize(rawLocation) : 'Barcelona'
   const seoTitle =
     mode === 'alquiler'
@@ -125,8 +134,6 @@ function PropiedadesPage() {
   if (mode === 'alquiler') canonicalParams.set('mode', 'alquiler')
   const canonicalQuery = canonicalParams.toString()
   const seoCanonical = `${SITE_URL}/propiedades${canonicalQuery ? `?${canonicalQuery}` : ''}`
-  // Texto libre que no resuelve a una zona real → sin valor de indexación.
-  const seoNoindex = Boolean(query) && !knownLocation
 
   return (
     <div className="search-page" ref={scrollRef} onScroll={handleScroll}>
@@ -156,6 +163,7 @@ function PropiedadesPage() {
             <FilterBar
               filters={filters}
               availableMunicipios={availableMunicipios}
+              province={activeProvince}
               zonesDisabled={zonesDisabled}
               viewMode={viewMode}
               activeFilterCount={activeFilterCount}
@@ -233,6 +241,7 @@ function PropiedadesPage() {
         onApply={() => { setMapVisibleIds(null); setShowFiltersModal(false) }}
         filters={filters}
         availableMunicipios={availableMunicipios}
+        province={activeProvince}
         zonesDisabled={zonesDisabled}
         onChange={setFilter}
         onReset={resetFilters}

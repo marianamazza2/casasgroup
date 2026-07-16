@@ -5,6 +5,11 @@ import {
   BARCELONA_PROVINCE_MUNICIPIOS,
   tok,
 } from '../../lib/barcelonaZones'
+import {
+  TARRAGONA_DISTRICTS,
+  TARRAGONA_MUNICIPIO,
+  TARRAGONA_PROVINCE_MUNICIPIOS,
+} from '../../lib/tarragonaZones'
 import { normalize } from '../../lib/locationSearch'
 
 interface ZonePickerProps {
@@ -13,6 +18,8 @@ interface ZonePickerProps {
   onChange: (tokens: string[]) => void
   /** Municipios presentes en el ámbito actual de búsqueda. */
   availableMunicipios: Set<string>
+  /** Provincia activa para construir el árbol de zonas. */
+  province?: string
   /**
    * "sheet" (móvil, por defecto) = resumen tocable → overlay full-screen.
    * "dropdown" (escritorio) = pastilla → panel anclado bajo el botón.
@@ -34,12 +41,16 @@ function summaryLabel(value: string[]): string {
   return value.length === 1 ? first : `${first} +${value.length - 1}`
 }
 
-export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sheet', disabled = false }: ZonePickerProps) {
+export function ZonePicker({ value, onChange, availableMunicipios, province = 'Barcelona', variant = 'sheet', disabled = false }: ZonePickerProps) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<Set<string>>(new Set(value))
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [query, setQuery] = useState('')
   const wrapRef = useRef<HTMLDivElement>(null)
+  const isTarragona = normalize(province) === normalize('Tarragona')
+  const provinceDistricts = isTarragona ? TARRAGONA_DISTRICTS : BARCELONA_DISTRICTS
+  const provinceMunicipios = isTarragona ? TARRAGONA_PROVINCE_MUNICIPIOS : BARCELONA_PROVINCE_MUNICIPIOS
+  const mainMunicipio = isTarragona ? TARRAGONA_MUNICIPIO : 'Barcelona'
 
   // ── Filtro de texto sobre todo el árbol de la provincia ─────────────────────
   const q = normalize(query)
@@ -48,23 +59,23 @@ export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sh
   // Municipios de la provincia visibles según el filtro (la capital va aparte,
   // con su árbol de distritos).
   const municipios = useMemo(
-    () => (searching ? BARCELONA_PROVINCE_MUNICIPIOS.filter((m) => normalize(m).includes(q)) : BARCELONA_PROVINCE_MUNICIPIOS),
-    [q, searching],
+    () => (searching ? provinceMunicipios.filter((m) => normalize(m).includes(q)) : provinceMunicipios),
+    [provinceMunicipios, q, searching],
   )
 
   // Distritos de Barcelona ciudad visibles según el filtro, con sus barrios.
   const districts = useMemo(() => {
     if (!searching) {
-      return BARCELONA_DISTRICTS.map((d) => ({ d, barrios: d.barrios }))
+      return provinceDistricts.map((d) => ({ d, barrios: d.barrios }))
     }
-    return BARCELONA_DISTRICTS.map((d) => {
+    return provinceDistricts.map((d) => {
       const districtMatch = normalize(d.name).includes(q)
       const barrios = districtMatch ? d.barrios : d.barrios.filter((b) => normalize(b).includes(q))
       return { d, barrios, visible: districtMatch || barrios.length > 0 }
     }).filter((x) => x.visible)
-  }, [q, searching])
+  }, [provinceDistricts, q, searching])
 
-  const showBcnHeader = !searching || normalize('barcelona').includes(q)
+  const showBcnHeader = !searching || normalize(mainMunicipio).includes(q)
   const showBarcelona = showBcnHeader || districts.length > 0
 
   // Al abrir, clonamos la selección comprometida como borrador y limpiamos búsqueda.
@@ -109,7 +120,7 @@ export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sh
 
   const allBcnState: TriState = (() => {
     if (!showBarcelona) return 'off'
-    const states = BARCELONA_DISTRICTS.map((d) => districtState(d.name, d.barrios))
+    const states = provinceDistricts.map((d) => districtState(d.name, d.barrios))
     if (states.every((s) => s === 'on')) return 'on'
     if (states.some((s) => s !== 'off')) return 'partial'
     return 'off'
@@ -147,12 +158,12 @@ export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sh
   function toggleAllBarcelona() {
     const next = new Set(draft)
     // Limpia todos los tokens de Barcelona (d:/b:), conserva municipios (m:).
-    BARCELONA_DISTRICTS.forEach((d) => {
+    provinceDistricts.forEach((d) => {
       next.delete(tok.distrito(d.name))
       d.barrios.forEach((b) => next.delete(tok.barrio(b)))
     })
     if (allBcnState !== 'on') {
-      BARCELONA_DISTRICTS.forEach((d) => next.add(tok.distrito(d.name)))
+      provinceDistricts.forEach((d) => next.add(tok.distrito(d.name)))
     }
     setDraft(next)
   }
@@ -217,7 +228,7 @@ export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sh
         <>
           {showBcnHeader && (
             <ZoneRow
-              label="Barcelona (todo el municipio)"
+              label={`${mainMunicipio} (todo el municipio)`}
               bold
               state={allBcnState}
               onToggle={toggleAllBarcelona}

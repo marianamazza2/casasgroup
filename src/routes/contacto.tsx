@@ -293,7 +293,7 @@ function ContactPage() {
           <span>Donde estamos</span>
           <h2>Visitanos en nuestra oficina</h2>
           <address>
-            Calle Ejemplo 123, Local 2<br />
+            Carrer Verge de la Mercè, 49, Loc 16<br />
             08950 Esplugues de Llobregat<br />
             Barcelona
           </address>
@@ -303,10 +303,27 @@ function ContactPage() {
           <Map
             initialViewState={{ longitude: 2.0829, latitude: 41.3766, zoom: 15 }}
             style={{ width: '100%', height: '100%' }}
-            mapStyle={`https://api.maptiler.com/maps/streets/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`}
+            mapStyle={`https://api.maptiler.com/maps/streets-v2/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`}
           >
             <Marker longitude={2.0829} latitude={41.3766} anchor="bottom">
-              <div className="map-marker">CG</div>
+              {/* Pin de mapa (gota) con las iniciales GC; la punta cae en la coordenada */}
+              <svg width="34" height="44" viewBox="0 0 32 42" aria-label="Oficina Casas Group" style={{ display: 'block', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.28))' }}>
+                <path
+                  d="M16 0C7.163 0 0 7.163 0 16c0 11 16 26 16 26s16-15 16-26C32 7.163 24.837 0 16 0z"
+                  fill="#a47b36"
+                />
+                <text
+                  x="16"
+                  y="21"
+                  textAnchor="middle"
+                  fill="#fff"
+                  fontFamily="'Cormorant Garamond', Georgia, serif"
+                  fontSize="14"
+                  fontWeight="700"
+                >
+                  GC
+                </text>
+              </svg>
             </Marker>
           </Map>
         </div>

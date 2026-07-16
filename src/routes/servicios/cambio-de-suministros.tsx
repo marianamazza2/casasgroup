@@ -4,6 +4,24 @@ import { useEffect, useRef, useState } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 
 export const Route = createFileRoute('/servicios/cambio-de-suministros')({
+  head: () => ({
+    meta: [
+      { title: 'Cambio de suministros sin papeleo | Casas Group' },
+      {
+        name: 'description',
+        content:
+          'Cambia la luz, el agua y el gas de tu nueva vivienda sin papeleo. Nos encargamos de todo en cuatro simples pasos. Casas Group.',
+      },
+      { property: 'og:title', content: 'Cambio de suministros sin papeleo | Casas Group' },
+      {
+        property: 'og:description',
+        content:
+          'Luz, agua y gas de tu nueva vivienda sin papeleo. Nos encargamos de todo en cuatro simples pasos. Casas Group.',
+      },
+      { property: 'og:url', content: 'https://casasgroup.es/servicios/cambio-de-suministros' },
+    ],
+    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/cambio-de-suministros' }],
+  }),
   component: CambioDeSuministrosPage,
 })
 

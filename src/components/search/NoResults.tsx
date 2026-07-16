@@ -23,7 +23,7 @@ export function NoResults({ mode, zone, activeFilterCount, onClearFilters }: NoR
   const accion = mode === 'compra' ? 'comprar' : 'alquilar'
 
   const title = z
-    ? `No tenemos inmuebles en ${z} ahora mismo`
+    ? `En este momento no tenemos inmuebles disponibles en ${z}`
     : 'No encontramos inmuebles con estos filtros'
 
   const message = z
@@ -44,8 +44,8 @@ export function NoResults({ mode, zone, activeFilterCount, onClearFilters }: NoR
 
       <h3 className="no-results-title">{title}</h3>
       <p className="no-results-sub">
-        Ampliamos la cartera constantemente. Déjanos tu contacto y te avisamos en
-        cuanto tengamos algun inmueble disponible.
+        Ampliamos la cartera constantemente. Déjanos tu contacto y te avisamos
+        cuando incorporemos nuevas opciones en esta zona.
       </p>
 
       <div className="no-results-actions">

@@ -13,6 +13,24 @@ import { JsonLd } from '../../components/JsonLd'
 import { breadcrumbSchema } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/servicios/seguros')({
+  head: () => ({
+    meta: [
+      { title: 'Seguros de hogar en Barcelona | Casas Group' },
+      {
+        name: 'description',
+        content:
+          'Gestiona tus seguros con quien conoce tu vivienda. Protege tu hogar en Barcelona con la cercanía de Casas Group.',
+      },
+      { property: 'og:title', content: 'Seguros de hogar en Barcelona | Casas Group' },
+      {
+        property: 'og:description',
+        content:
+          'Gestiona tus seguros con quien conoce tu vivienda. Protege tu hogar en Barcelona con Casas Group.',
+      },
+      { property: 'og:url', content: 'https://casasgroup.es/servicios/seguros' },
+    ],
+    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/seguros' }],
+  }),
   component: SegurosPage,
 })
 

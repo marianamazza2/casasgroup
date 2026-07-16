@@ -14,19 +14,23 @@ export const SITE_URL = (import.meta.env.VITE_SITE_URL ?? 'https://casasgroup.es
 export const absoluteUrl = (path: string) => `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`
 
 // ── Datos NAP del negocio ────────────────────────────────────────────────────
-// Fuente única de verdad para nombre, teléfono y email, replicando lo que ya se
-// muestra en contacto.tsx y Footer.tsx (consistencia NAP — §5.2).
-// NOTA: falta la dirección real de la oficina (§5.1 — hoy hay un placeholder en
-// contacto.tsx). Por eso el PostalAddress no incluye `streetAddress` ni `geo`:
-// no se deben publicar datos de ubicación falsos en el schema. Añadirlos aquí
-// en cuanto se disponga de la dirección real.
+// Fuente única de verdad para nombre, teléfono, email y dirección, replicando lo
+// que se muestra en contacto.tsx (consistencia NAP — §5.2).
+// La oficina está en Esplugues de Llobregat (municipio propio del área de
+// Barcelona), por eso `locality` ≠ `areaServed`: la localidad postal es Esplugues,
+// pero la zona de servicio comercial es Barcelona. `geo` coincide con el marcador
+// del mapa en contacto.tsx.
 const BUSINESS = {
   name: 'Casas Group',
   telephone: '+34 930 119 056',
   email: 'info@casasgroup.es',
-  city: 'Barcelona',
+  street: 'Carrer Verge de la Mercè, 49, Loc 16',
+  postalCode: '08950',
+  locality: 'Esplugues de Llobregat',
   region: 'Barcelona',
   country: 'ES',
+  geo: { lat: 41.3766, lng: 2.0829 },
+  areaServed: 'Barcelona',
 } as const
 
 /**
@@ -44,17 +48,25 @@ export function organizationSchema(): Record<string, unknown> {
     alternateName: 'Red Casas',
     foundingDate: '2014',
     url: SITE_URL,
-    logo: absoluteUrl('/favicon.svg'),
-    image: absoluteUrl('/favicon.svg'),
+    // Google prefiere logo raster (PNG/JPG) a SVG para el knowledge panel.
+    logo: absoluteUrl('/icon-512.png'),
+    image: absoluteUrl('/og-default.jpg'),
     telephone: BUSINESS.telephone,
     email: BUSINESS.email,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: BUSINESS.city,
+      streetAddress: BUSINESS.street,
+      postalCode: BUSINESS.postalCode,
+      addressLocality: BUSINESS.locality,
       addressRegion: BUSINESS.region,
       addressCountry: BUSINESS.country,
     },
-    areaServed: { '@type': 'City', name: BUSINESS.city },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: BUSINESS.geo.lat,
+      longitude: BUSINESS.geo.lng,
+    },
+    areaServed: { '@type': 'City', name: BUSINESS.areaServed },
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',

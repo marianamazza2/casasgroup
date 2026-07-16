@@ -4,6 +4,24 @@ import { useEffect, useRef, useState } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 
 export const Route = createFileRoute('/servicios/administracion-de-fincas')({
+  head: () => ({
+    meta: [
+      { title: 'Administración de fincas en Barcelona | Casas Group' },
+      {
+        name: 'description',
+        content:
+          'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia, cercanía y todo bajo control con Casas Group.',
+      },
+      { property: 'og:title', content: 'Administración de fincas en Barcelona | Casas Group' },
+      {
+        property: 'og:description',
+        content:
+          'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia y cercanía con Casas Group.',
+      },
+      { property: 'og:url', content: 'https://casasgroup.es/servicios/administracion-de-fincas' },
+    ],
+    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/administracion-de-fincas' }],
+  }),
   component: AdministracionDeFincasPage,
 })
 

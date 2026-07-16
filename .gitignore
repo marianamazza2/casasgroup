@@ -1,3 +1,16 @@
+# Dependencias (se instalan con npm install)
+node_modules/
+
+# Salida del build (Vercel la regenera con `npm run build`)
+dist/
+
+# Documentación interna
 docs/
+
+# Variables de entorno
 .env.local
 .env*.local
+
+# Logs y temporales
+*.log
+.DS_Store

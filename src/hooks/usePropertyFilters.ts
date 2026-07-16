@@ -9,6 +9,12 @@ import {
   taxonomyForZone,
   tok,
 } from '../lib/barcelonaZones'
+import {
+  TARRAGONA_DISTRICTS,
+  TARRAGONA_MUNICIPIO,
+  TARRAGONA_PROVINCE_MUNICIPIOS,
+  TARRAGONA_ZONE_TAXONOMY,
+} from '../lib/tarragonaZones'
 import type { FilterState } from '../lib/types'
 
 export type LocType = 'provincia' | 'municipio' | 'distrito' | 'barrio' | undefined
@@ -25,6 +31,15 @@ const BARRIO_BY_NORM = new Map<string, string>()
 for (const d of BARCELONA_DISTRICTS) {
   for (const b of d.barrios) BARRIO_BY_NORM.set(normalize(b), b)
 }
+for (const d of TARRAGONA_DISTRICTS) {
+  for (const b of d.barrios) BARRIO_BY_NORM.set(normalize(b), b)
+}
+
+const ALL_DISTRICTS = [...BARCELONA_DISTRICTS, ...TARRAGONA_DISTRICTS]
+
+function taxonomyForPropertyZone(zone: string, fallbackCity = BARCELONA_MUNICIPIO) {
+  return TARRAGONA_ZONE_TAXONOMY[zone] ?? taxonomyForZone(zone, fallbackCity)
+}
 
 /** Convierte una búsqueda libre en un token de zona si coincide con la taxonomía. */
 function initialZoneTokens(query: string, locType?: LocType): string[] {
@@ -40,33 +55,38 @@ function initialZoneTokens(query: string, locType?: LocType): string[] {
     }
     const muni = BARCELONA_PROVINCE_MUNICIPIOS.find((m) => normalize(m) === q)
     if (muni) return [tok.municipio(muni)]
+    const tarragonaMuni = TARRAGONA_PROVINCE_MUNICIPIOS.find((m) => normalize(m) === q)
+    if (tarragonaMuni) return [tok.municipio(tarragonaMuni)]
   }
   // ¿Coincide con la zona informal de algún inmueble? Usamos su taxonomía.
   const sample = properties.find((p) => normalize(p.zone) === q)
   if (sample) {
-    const tax = taxonomyForZone(sample.zone, sample.city)
+    const tax = taxonomyForPropertyZone(sample.zone, sample.city)
     if (tax.barrio) return [tok.barrio(tax.barrio)]
     if (tax.distrito) return [tok.distrito(tax.distrito)]
     return [tok.municipio(tax.municipio)]
   }
   // ¿Es un distrito o barrio oficial escrito directamente?
-  const district = BARCELONA_DISTRICTS.find((d) => normalize(d.name) === q)
+  const district = ALL_DISTRICTS.find((d) => normalize(d.name) === q)
   if (district) return [tok.distrito(district.name)]
   const barrio = BARRIO_BY_NORM.get(q)
   if (barrio) return [tok.barrio(barrio)]
   return []
 }
 
-/** La página de resultados solo ofrece subzonas dentro del ámbito Barcelona. */
-function isBarcelonaScopedSearch(query: string, locType?: LocType, province?: string): boolean {
+/** La página de resultados solo ofrece subzonas dentro de provincias soportadas. */
+export function isBarcelonaScopedSearch(query: string, locType?: LocType, province?: string): boolean {
   if (province) return normalize(province) === normalize('Barcelona')
+    || normalize(province) === normalize('Tarragona')
   if (!query) return true
   const q = normalize(query)
 
-  if (locType === 'provincia') return q === normalize('Barcelona')
+  if (locType === 'provincia') return q === normalize('Barcelona') || q === normalize('Tarragona')
   if (q === normalize(BARCELONA_MUNICIPIO)) return true
+  if (q === normalize(TARRAGONA_MUNICIPIO)) return true
   if (BARCELONA_PROVINCE_MUNICIPIOS.some((m) => normalize(m) === q)) return true
-  if (BARCELONA_DISTRICTS.some((d) => normalize(d.name) === q)) return true
+  if (TARRAGONA_PROVINCE_MUNICIPIOS.some((m) => normalize(m) === q)) return true
+  if (ALL_DISTRICTS.some((d) => normalize(d.name) === q)) return true
   if (BARRIO_BY_NORM.has(q)) return true
   return properties.some(
     (p) =>
@@ -132,8 +152,18 @@ function matchesLocation(
   p: (typeof properties)[number],
   mode: FilterState['mode'],
   query: string,
+  province?: string,
 ): boolean {
   if (p.mode !== mode) return false
+  if (province) {
+    const normalizedProvince = normalize(province)
+    if (normalizedProvince === normalize('Tarragona')) {
+      return p.city === TARRAGONA_MUNICIPIO || TARRAGONA_PROVINCE_MUNICIPIOS.some((m) => normalize(m) === normalize(p.city))
+    }
+    if (normalizedProvince === normalize('Barcelona')) {
+      return p.city === BARCELONA_MUNICIPIO || BARCELONA_PROVINCE_MUNICIPIOS.some((m) => normalize(m) === normalize(p.city))
+    }
+  }
   if (!query) return true
   const q = normalize(query)
   return (
@@ -154,13 +184,13 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
   // P.ej. el menú móvil: ir de Comprar a Alquilar dentro de /propiedades no
   // remonta la ruta (sólo cambian los search params), así que sin esto el pill
   // de modo se quedaría en el valor con el que se montó la página.
-  const lastSearch = useRef({ query, mode, locType })
+  const lastSearch = useRef({ query, mode, locType, province })
   useEffect(() => {
     const prev = lastSearch.current
-    if (prev.query === query && prev.mode === mode && prev.locType === locType) return
-    lastSearch.current = { query, mode, locType }
+    if (prev.query === query && prev.mode === mode && prev.locType === locType && prev.province === province) return
+    lastSearch.current = { query, mode, locType, province }
     setFilters(filtersFromSearch(query, mode, locType))
-  }, [query, mode, locType])
+  }, [query, mode, locType, province])
 
   const outsideBarcelonaScope = !isBarcelonaScopedSearch(filters.query, locType, province)
 
@@ -170,8 +200,8 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
     () =>
       outsideBarcelonaScope
         ? []
-        : properties.filter((p) => matchesLocation(p, filters.mode, filters.query)),
-    [outsideBarcelonaScope, filters.mode, filters.query],
+        : properties.filter((p) => matchesLocation(p, filters.mode, filters.query, province)),
+    [outsideBarcelonaScope, filters.mode, filters.query, province],
   )
 
   // Zonas que existen realmente dentro de ese ámbito, en cascada.
@@ -183,7 +213,7 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
   // Municipios presentes en el ámbito (para acotar el árbol del picker).
   const availableMunicipios = useMemo(() => {
     const set = new Set(
-      scopedProperties.map((p) => taxonomyForZone(p.zone, p.city).municipio),
+      scopedProperties.map((p) => taxonomyForPropertyZone(p.zone, p.city).municipio),
     )
     return set
   }, [scopedProperties])
@@ -196,7 +226,7 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
     const zoneActive =
       !useTokens && filters.zone !== 'Todas' && availableZones.includes(filters.zone)
     return scopedProperties.filter((p) => {
-      if (useTokens && !matchesZoneSelection(taxonomyForZone(p.zone, p.city), zoneSet)) return false
+      if (useTokens && !matchesZoneSelection(taxonomyForPropertyZone(p.zone, p.city), zoneSet)) return false
       if (zoneActive && p.zone !== filters.zone) return false
 
       if (filters.priceMin != null && p.price < filters.priceMin) return false
