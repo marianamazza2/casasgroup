@@ -4,6 +4,8 @@ import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 import type { ReactElement } from 'react'
 import { Footer } from '../components/Footer'
+import { JsonLd } from '../components/JsonLd'
+import { breadcrumbSchema, organizationSchema } from '../lib/structuredData'
 import Map, { Marker } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -25,6 +27,24 @@ const cardReveal = {
 export const Route = createFileRoute('/contacto')({
   validateSearch: (search: Record<string, unknown>): { ref?: string } => ({
     ref: typeof search.ref === 'string' ? search.ref : undefined,
+  }),
+  head: () => ({
+    meta: [
+      { title: 'Contacto | Casas Group Barcelona' },
+      {
+        name: 'description',
+        content:
+          'Contacta con Casas Group. Visítanos en nuestra oficina o escríbenos y te ayudamos con tu compra, venta o alquiler en Barcelona.',
+      },
+      { property: 'og:title', content: 'Contacto | Casas Group Barcelona' },
+      {
+        property: 'og:description',
+        content:
+          'Escríbenos o visítanos en nuestra oficina en Barcelona. Te ayudamos con tu compra, venta o alquiler.',
+      },
+      { property: 'og:url', content: 'https://casasgroup.es/contacto' },
+    ],
+    links: [{ rel: 'canonical', href: 'https://casasgroup.es/contacto' }],
   }),
   component: ContactPage,
 })
@@ -160,11 +180,25 @@ function ContactPage() {
 
   return (
     <main className="contact-page">
+      {/* LocalBusiness/RealEstateAgent con NAP y horario — §4.6, §5.2. La ficha
+          es la página que más refuerza la señal de negocio local. */}
+      <JsonLd data={organizationSchema()} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Inicio', path: '/' },
+          { name: 'Contacto', path: '/contacto' },
+        ])}
+      />
       <div className="hero-scroll-wrapper" ref={heroWrapperRef}>
         <section className="hero" id="contacto-top">
           <div className="hero-gold-bg" ref={heroGoldRef} />
           <div className="hero-media" ref={heroMediaRef} />
           <div className="hero-content">
+            {/* H1 semántico. La marca visible (hero-brand "HABLEMOS") es un div
+                animado, así que el encabezado real va oculto pero accesible. */}
+            <h1 className="visually-hidden">
+              Contacta con Casas Group — Inmobiliaria en Barcelona
+            </h1>
             <div className="hero-brand" aria-label="Hablemos">
               <div className="hero-brand-fill" ref={heroFillRef}>
                 <span className="hero-brand-hablemos">HABLEMOS</span>

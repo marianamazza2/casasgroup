@@ -45,7 +45,7 @@ export function NoResults({ mode, zone, activeFilterCount, onClearFilters }: NoR
       <h3 className="no-results-title">{title}</h3>
       <p className="no-results-sub">
         Ampliamos la cartera constantemente. Déjanos tu contacto y te avisamos en
-        cuanto entre algo{z ? ` en ${z}` : ''}.
+        cuanto tengamos algun inmueble disponible.
       </p>
 
       <div className="no-results-actions">

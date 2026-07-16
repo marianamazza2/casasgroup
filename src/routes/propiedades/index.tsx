@@ -10,7 +10,9 @@ import { FilterBar } from '../../components/search/FilterBar'
 import { ResultsHeader } from '../../components/search/ResultsHeader'
 import { NoResults } from '../../components/search/NoResults'
 import { FiltersModal } from '../../components/search/FiltersModal'
-import { usePropertyFilters } from '../../hooks/usePropertyFilters'
+import { usePropertyFilters, isKnownLocationSearch } from '../../hooks/usePropertyFilters'
+import { Seo } from '../../components/Seo'
+import { SITE_URL } from '../../lib/structuredData'
 
 type PropiedadesSearch = {
   query: string
@@ -20,6 +22,9 @@ type PropiedadesSearch = {
 }
 
 const LOC_TYPES = ['provincia', 'municipio', 'distrito', 'barrio'] as const
+
+/** Primera letra en mayúscula (para ubicaciones de la URL en el title/description). */
+const capitalize = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s)
 
 export const Route = createFileRoute('/propiedades/')({
   validateSearch: (search: Record<string, unknown>): PropiedadesSearch => {
@@ -49,7 +54,7 @@ function PropiedadesPage() {
   // "Mapa" una vez que la lista ha empezado a tapar el mapa.
   const scrollRef = useRef<HTMLDivElement>(null)
   const [scrolledIntoList, setScrolledIntoList] = useState(false)
-  const { filters, setFilter, resetFilters, filteredProperties, availableMunicipios, resultCount, activeFilterCount } =
+  const { filters, setFilter, resetFilters, filteredProperties, availableMunicipios, zonesDisabled, resultCount, activeFilterCount } =
     usePropertyFilters({ query, mode, locType, province })
 
   const handlePinClick = useCallback((id: number) => {
@@ -84,8 +89,57 @@ function PropiedadesPage() {
     ? filteredProperties.filter((p) => mapVisibleIds.has(p.id))
     : filteredProperties
 
+  // H1 semántico y dinámico: modo (venta/alquiler) + ubicación buscada. La UI de
+  // búsqueda es intencionadamente sobria (sin título grande), así que el
+  // encabezado real va oculto pero accesible (mismo patrón que la home).
+  const modeLabel = filters.mode === 'alquiler' ? 'en alquiler' : 'en venta'
+  const heading =
+    filters.zone && filters.zone !== 'Todas'
+      ? filters.zone
+      : filters.query || province || 'Barcelona'
+
+  // ── SEO (§4.2.2, §4.2.3) ──────────────────────────────────────────────────
+  // title/description/canonical/robots se derivan de los SEARCH PARAMS DE LA URL
+  // (query/mode/province), no del estado vivo de filtros: son la vista indexable
+  // y estable. Los micro-filtros (precio, habitaciones…) no viven en la URL, así
+  // que no generan combinaciones duplicadas que crawlear.
+  const rawLocation = (province || query).trim()
+  const knownLocation = isKnownLocationSearch(query, mode, locType, province)
+  const seoLocation = knownLocation && rawLocation ? capitalize(rawLocation) : 'Barcelona'
+  const seoTitle =
+    mode === 'alquiler'
+      ? `Pisos en alquiler en ${seoLocation} | Casas Group`
+      : `Pisos y casas en venta en ${seoLocation} | Casas Group`
+  const seoDescription =
+    mode === 'alquiler'
+      ? `Pisos en alquiler en ${seoLocation}. Filtra por precio, habitaciones y zona y encuentra tu próximo hogar con Casas Group.`
+      : `Pisos y casas en venta en ${seoLocation}. Filtra por zona, precio y características y encuentra tu próximo hogar con Casas Group.`
+  // Canonical limpio: mode solo si no es el por defecto (compra) — así la vista
+  // base coincide con /propiedades del sitemap. Se conserva la ubicación solo si
+  // es reconocida; locType (pista interna) se descarta siempre.
+  const canonicalParams = new URLSearchParams()
+  if (knownLocation && rawLocation) {
+    if (province) canonicalParams.set('province', province)
+    else canonicalParams.set('query', query)
+  }
+  if (mode === 'alquiler') canonicalParams.set('mode', 'alquiler')
+  const canonicalQuery = canonicalParams.toString()
+  const seoCanonical = `${SITE_URL}/propiedades${canonicalQuery ? `?${canonicalQuery}` : ''}`
+  // Texto libre que no resuelve a una zona real → sin valor de indexación.
+  const seoNoindex = Boolean(query) && !knownLocation
+
   return (
     <div className="search-page" ref={scrollRef} onScroll={handleScroll}>
+      <Seo
+        title={seoTitle}
+        description={seoDescription}
+        canonical={seoCanonical}
+        noindex={seoNoindex}
+      />
+      <h1 className="visually-hidden">
+        Pisos y casas {modeLabel} en {heading}
+      </h1>
+
       {/* ── Split layout ───────────────────────────────────────────────── */}
       <div className="search-split">
         {/* Left panel — scrollable */}
@@ -102,6 +156,7 @@ function PropiedadesPage() {
             <FilterBar
               filters={filters}
               availableMunicipios={availableMunicipios}
+              zonesDisabled={zonesDisabled}
               viewMode={viewMode}
               activeFilterCount={activeFilterCount}
               onOpenFilters={() => setShowFiltersModal(true)}
@@ -148,6 +203,7 @@ function PropiedadesPage() {
             properties={filteredProperties}
             activeId={activeId}
             focusZones={filters.zones}
+            emptyLocation={filters.query || province}
             onPinClick={handlePinClick}
             onBoundsChange={handleBoundsChange}
           />
@@ -177,6 +233,7 @@ function PropiedadesPage() {
         onApply={() => { setMapVisibleIds(null); setShowFiltersModal(false) }}
         filters={filters}
         availableMunicipios={availableMunicipios}
+        zonesDisabled={zonesDisabled}
         onChange={setFilter}
         onReset={resetFilters}
         resultCount={resultCount}

@@ -4,6 +4,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { TouchEvent as ReactTouchEvent } from 'react'
 import { homeFeaturedProperties, properties } from '../lib/properties'
 import { Footer } from '../components/Footer'
+import { JsonLd } from '../components/JsonLd'
+import { organizationSchema } from '../lib/structuredData'
 import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
 import type { Location } from '../lib/locationSearch'
 
@@ -517,6 +519,7 @@ function Home() {
 
   return (
     <main className="home-page">
+      <JsonLd data={organizationSchema()} />
       <div className="hero-scroll-wrapper" ref={heroWrapperRef}>
         <section className="hero" id="inicio">
           {/* Layer 1: same photo painted in brand gold — revealed on scroll */}
@@ -527,6 +530,12 @@ function Home() {
 
           {/* Layer 3 + 4: All hero content stacked */}
           <div className="hero-content">
+            {/* H1 semántico de la home. La marca visible (hero-brand) es un div
+                animado, así que el encabezado real va oculto pero accesible. */}
+            <h1 className="visually-hidden">
+              Casas Group — Inmobiliaria en Barcelona: compra, venta y alquiler de viviendas
+            </h1>
+
             {/* CASAS GROUP brand — gold on load, lightens as the photo turns gold */}
             <div className="hero-brand" aria-label="Casas Group">
               <div className="hero-brand-fill" ref={heroFillRef}>
@@ -853,7 +862,7 @@ function Home() {
                 }}
               >
                 <div className="property-image">
-                  <img src={property.image} alt="" draggable={false} />
+                  <img src={property.image} alt={`${property.title} en ${property.zone}`} draggable={false} />
                   {property.tag ? <span>{property.tag}</span> : null}
                 </div>
                 <div className="property-body">

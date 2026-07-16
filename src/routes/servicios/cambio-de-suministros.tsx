@@ -266,7 +266,7 @@ function SumHero() {
           Cambio de suministros
         </motion.span>
         <motion.h1 className="sum-hero-title" variants={heroItem}>
-          Nos encargamos del papeleo por ti
+          Cambio de suministros sin papeleo
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>

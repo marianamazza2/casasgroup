@@ -5,6 +5,24 @@ import { Footer } from '../components/Footer'
 import { FormSelect } from '../components/vender/FormSelect'
 
 export const Route = createFileRoute('/vender')({
+  head: () => ({
+    meta: [
+      { title: 'Vende tu vivienda | Valoración gratis | Casas Group' },
+      {
+        name: 'description',
+        content:
+          '¿Quieres vender tu casa en Barcelona? Te damos una valoración gratuita y te acompañamos en todo el proceso. Descubre cuánto vale.',
+      },
+      { property: 'og:title', content: 'Vende tu vivienda | Valoración gratis | Casas Group' },
+      {
+        property: 'og:description',
+        content:
+          'Valoración gratuita y sin compromiso de tu vivienda en Barcelona. Te acompañamos en todo el proceso de venta.',
+      },
+      { property: 'og:url', content: 'https://casasgroup.es/vender' },
+    ],
+    links: [{ rel: 'canonical', href: 'https://casasgroup.es/vender' }],
+  }),
   component: VenderPage,
 })
 

@@ -1,0 +1,1 @@
+import{gt as e,vt as t}from"./index-BGfodWIt.js";var n=t(e(),1);function r({data:e}){let t=JSON.stringify(e);return(0,n.useEffect)(()=>{let e=document.createElement(`script`);return e.type=`application/ld+json`,e.textContent=t,document.head.appendChild(e),()=>{e.remove()}},[t]),null}export{r as t};

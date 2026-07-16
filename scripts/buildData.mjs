@@ -21,6 +21,11 @@ import { dirname, resolve } from 'node:path'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(__dirname, '..')
 const OUT_FILE = resolve(ROOT, 'src/lib/generatedProperties.ts')
+const SITEMAP_FILE = resolve(ROOT, 'public/sitemap.xml')
+
+// Dominio del sitio para las URLs absolutas del sitemap. Configurable por env
+// (SITE_URL) por si cambia; sin barra final para no duplicarla al concatenar.
+const SITE_URL = (process.env.SITE_URL || 'https://casasgroup.es').replace(/\/+$/, '')
 
 // ── Carga de .env.local / .env (Node no lo hace solo) ────────────────────────
 // En Vercel las env vars ya están en process.env, así que estos archivos no
@@ -253,6 +258,62 @@ async function toProperty(row, usedIds) {
   return property
 }
 
+// ── Sitemap.xml ──────────────────────────────────────────────────────────────
+// Rutas estáticas del sitio (deben reflejar src/routes/*). El detalle de
+// propiedad (/propiedades/$id) se añade dinámicamente, una <url> por inmueble.
+const STATIC_ROUTES = [
+  { path: '/', changefreq: 'weekly', priority: '1.0' },
+  { path: '/propiedades', changefreq: 'daily', priority: '0.9' },
+  { path: '/vender', changefreq: 'monthly', priority: '0.8' },
+  { path: '/contacto', changefreq: 'monthly', priority: '0.7' },
+  { path: '/nosotros', changefreq: 'monthly', priority: '0.6' },
+  { path: '/servicios/administracion-de-fincas', changefreq: 'monthly', priority: '0.7' },
+  { path: '/servicios/alarmas', changefreq: 'monthly', priority: '0.7' },
+  { path: '/servicios/cambio-de-suministros', changefreq: 'monthly', priority: '0.7' },
+  { path: '/servicios/hipotecas', changefreq: 'monthly', priority: '0.7' },
+  { path: '/servicios/seguros', changefreq: 'monthly', priority: '0.7' },
+]
+
+const xmlEscape = (s) =>
+  String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+function writeSitemap(properties) {
+  const today = new Date().toISOString().slice(0, 10) // YYYY-MM-DD para rutas estáticas
+  const urls = []
+
+  for (const r of STATIC_ROUTES) {
+    urls.push(
+      `  <url>\n` +
+      `    <loc>${xmlEscape(SITE_URL + r.path)}</loc>\n` +
+      `    <lastmod>${today}</lastmod>\n` +
+      `    <changefreq>${r.changefreq}</changefreq>\n` +
+      `    <priority>${r.priority}</priority>\n` +
+      `  </url>`
+    )
+  }
+
+  for (const p of properties) {
+    // dateAdded (ISO YYYY-MM-DD) si existe; si no, la fecha del build.
+    const lastmod = /^\d{4}-\d{2}-\d{2}$/.test(String(p.dateAdded)) ? p.dateAdded : today
+    urls.push(
+      `  <url>\n` +
+      `    <loc>${xmlEscape(`${SITE_URL}/propiedades/${p.id}`)}</loc>\n` +
+      `    <lastmod>${lastmod}</lastmod>\n` +
+      `    <changefreq>weekly</changefreq>\n` +
+      `    <priority>0.8</priority>\n` +
+      `  </url>`
+    )
+  }
+
+  const xml =
+    `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    urls.join('\n') + '\n' +
+    `</urlset>\n`
+  writeFileSync(SITEMAP_FILE, xml, 'utf8')
+  console.log(`✔ sitemap.xml escrito (${STATIC_ROUTES.length} rutas + ${properties.length} inmuebles).`)
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 function writeOutput(properties) {
   const banner =
@@ -262,6 +323,8 @@ function writeOutput(properties) {
     `import type { Property } from './types'\n\n` +
     `export const generatedProperties: Property[] = ${JSON.stringify(properties, null, 2)}\n`
   writeFileSync(OUT_FILE, banner + '\n' + body, 'utf8')
+  // El sitemap se deriva de las mismas propiedades → se regenera siempre en sync.
+  writeSitemap(properties)
 }
 
 async function main() {

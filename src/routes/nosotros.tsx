@@ -4,6 +4,8 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Footer } from '../components/Footer'
 import { MisionTabs } from '../components/nosotros/MisionTabs'
 import { ValoresSlider } from '../components/nosotros/ValoresSlider'
+import { JsonLd } from '../components/JsonLd'
+import { breadcrumbSchema, organizationSchema } from '../lib/structuredData'
 
 export const Route = createFileRoute('/nosotros')({
   component: NosotrosPage,
@@ -111,6 +113,13 @@ function NosotrosPage() {
 
   return (
     <main className="nosotros-page">
+      <JsonLd data={organizationSchema()} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Inicio', path: '/' },
+          { name: 'Nosotros', path: '/nosotros' },
+        ])}
+      />
       <NosotrosHero />
 
       <section className="brand-story">
@@ -342,12 +351,17 @@ function NosotrosHero() {
         initial="hidden"
         animate="show"
       >
+        {/* H1 semántico de la página. El titular visible de abajo es de marca
+            (sin keyword), así que el encabezado real va oculto pero accesible. */}
+        <h1 className="visually-hidden">
+          Sobre Casas Group — inmobiliaria en Barcelona
+        </h1>
         <motion.span className="sum-hero-eyebrow" variants={heroItem}>
           Nuestra historia
         </motion.span>
-        <motion.h1 className="sum-hero-title sum-hero-title--two-line" variants={heroItem}>
+        <motion.p className="sum-hero-title sum-hero-title--two-line" variants={heroItem}>
           El sector<br />necesitaba<br />algo diferente
-        </motion.h1>
+        </motion.p>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
           Construida desde el amor, la visión, la ambición y la pasión por hacer las cosas de la

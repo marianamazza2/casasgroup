@@ -14,11 +14,11 @@ export function PropertyListItem({ property: p, id }: Props) {
       className="property-card-link"
     >
       <article id={id} className="property-card-list">
-        <div className="property-card-img" aria-hidden="true">
+        <div className="property-card-img">
           {p.image && (
             <img
               src={p.image}
-              alt=""
+              alt={`${p.title} en ${p.zone}`}
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
           )}

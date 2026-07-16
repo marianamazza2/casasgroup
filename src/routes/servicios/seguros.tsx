@@ -9,6 +9,8 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import type { TouchEvent } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
+import { JsonLd } from '../../components/JsonLd'
+import { breadcrumbSchema } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/servicios/seguros')({
   component: SegurosPage,
@@ -59,6 +61,15 @@ export const VENTAJAS = [
 function SegurosPage() {
   return (
     <main className="servicio-page">
+      {/* No hay página índice /servicios: el nivel intermedio apunta a la
+          sección de servicios de la home (mismo destino que nav y footer). */}
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Inicio', path: '/' },
+          { name: 'Servicios', path: '/#servicios' },
+          { name: 'Seguros', path: '/servicios/seguros' },
+        ])}
+      />
       <SegurosHero />
       <TiposSeguro />
       <PorQueNosotros />

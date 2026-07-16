@@ -3,6 +3,9 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { properties } from '../../lib/properties'
 import type { Property } from '../../lib/types'
 import { PropertyMap } from '../../components/property/PropertyMap'
+import { JsonLd } from '../../components/JsonLd'
+import { Seo } from '../../components/Seo'
+import { absoluteUrl, breadcrumbSchema, realEstateListingSchema } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/propiedades/$id')({
   component: PropertyDetailPage,
@@ -27,6 +30,7 @@ function PropertyDetailPage() {
   if (!p) {
     return (
       <div className="detail-notfound">
+        <Seo title="Propiedad no encontrada | Casas Group" noindex />
         <p>Propiedad no encontrada.</p>
         <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>← Volver a búsqueda</Link>
       </div>
@@ -34,9 +38,30 @@ function PropertyDetailPage() {
   }
 
   const propertyRef = `GC-${String(p.id).padStart(4, '0')}`
+  const locality = p.zone || p.city
+  const canonical = absoluteUrl(`/propiedades/${p.id}`)
+  // title/description desde los datos del inmueble (§4.3.2); OG con la foto de
+  // portada (p.image = cover) — clave para la miniatura al compartir por WhatsApp.
+  const seoTitle = `${p.title} en ${locality} | Casas Group`
+  const seoDescription = `${p.title} en ${locality}. ${p.priceLabel} · ${p.m2} m² · ${p.beds} hab. Descúbrelo y agenda tu visita con Casas Group.`
 
   return (
-    <div className="property-detail">
+    <article className="property-detail">
+      <Seo
+        title={seoTitle}
+        description={seoDescription}
+        canonical={canonical}
+        image={p.image}
+        url={canonical}
+      />
+      <JsonLd data={realEstateListingSchema(p)} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Inicio', path: '/' },
+          { name: 'Propiedades', path: '/propiedades' },
+          { name: p.title, path: `/propiedades/${p.id}` },
+        ])}
+      />
       <button
         type="button"
         className="detail-back-fab"
@@ -83,7 +108,7 @@ function PropertyDetailPage() {
           Contactar
         </Link>
       </div>
-    </div>
+    </article>
   )
 }
 
@@ -384,7 +409,7 @@ function PropertyDescription({ desc }: { desc: string }) {
   }, [desc, expanded])
 
   return (
-    <div className="detail-description">
+    <section className="detail-description">
       <h2 className="detail-section-title">Descripción</h2>
       <p ref={textRef} className={expanded ? 'is-expanded' : 'is-clamped'}>
         {desc}
@@ -398,14 +423,14 @@ function PropertyDescription({ desc }: { desc: string }) {
           {expanded ? 'Ver menos' : 'Ver más'}
         </button>
       )}
-    </div>
+    </section>
   )
 }
 
 function PropertyFeatures({ features }: { features: string[] }) {
   if (!features.length) return null
   return (
-    <div className="detail-features-section">
+    <section className="detail-features-section">
       <h2 className="detail-section-title">Características</h2>
       <div className="detail-features">
         {features.map((f) => (
@@ -414,19 +439,19 @@ function PropertyFeatures({ features }: { features: string[] }) {
           </span>
         ))}
       </div>
-    </div>
+    </section>
   )
 }
 
 function LocationSection({ property: p }: { property: Property }) {
   return (
-    <div className="detail-map-section">
+    <section className="detail-map-section">
       <h2 className="detail-section-title">Ubicación</h2>
       {p.coords ? (
         <PropertyMap coords={p.coords} title={p.title} />
       ) : (
         <div className="detail-map-placeholder">Ubicación no disponible</div>
       )}
-    </div>
+    </section>
   )
 }

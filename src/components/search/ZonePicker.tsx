@@ -18,6 +18,7 @@ interface ZonePickerProps {
    * "dropdown" (escritorio) = pastilla → panel anclado bajo el botón.
    */
   variant?: 'sheet' | 'dropdown'
+  disabled?: boolean
 }
 
 type TriState = 'on' | 'partial' | 'off'
@@ -33,7 +34,7 @@ function summaryLabel(value: string[]): string {
   return value.length === 1 ? first : `${first} +${value.length - 1}`
 }
 
-export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sheet' }: ZonePickerProps) {
+export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sheet', disabled = false }: ZonePickerProps) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<Set<string>>(new Set(value))
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
@@ -68,6 +69,7 @@ export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sh
 
   // Al abrir, clonamos la selección comprometida como borrador y limpiamos búsqueda.
   function openOverlay() {
+    if (disabled) return
     setDraft(new Set(value))
     setQuery('')
     setOpen(true)
@@ -288,6 +290,7 @@ export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sh
           className="zonepicker-trigger"
           aria-haspopup="dialog"
           aria-expanded={open}
+          disabled={disabled}
           onClick={() => (open ? setOpen(false) : openOverlay())}
         >
           <span className="zonepicker-trigger-label">{summaryLabel(value)}</span>
@@ -310,7 +313,7 @@ export function ZonePicker({ value, onChange, availableMunicipios, variant = 'sh
   // ── Móvil: resumen + overlay full-screen ────────────────────────────────────
   return (
     <>
-      <button type="button" className="zonepicker-summary" onClick={openOverlay}>
+      <button type="button" className="zonepicker-summary" onClick={openOverlay} disabled={disabled}>
         <span className="zonepicker-summary-label">{summaryLabel(value)}</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="9 18 15 12 9 6" />

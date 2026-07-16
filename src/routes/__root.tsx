@@ -1,4 +1,4 @@
-import { Link, createRootRoute, useRouterState } from '@tanstack/react-router'
+import { HeadContent, Link, createRootRoute, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { AnimatedOutlet } from '../components/AnimatedOutlet'
 import { RouteProgress } from '../components/RouteProgress'
@@ -207,6 +207,7 @@ function RootLayout() {
   // Barra de carga + crossfade entre pantallas (ver AnimatedOutlet).
   return (
     <>
+      <HeadContent />
       <RouteProgress />
       <SiteNav />
       <AnimatedOutlet />
@@ -215,5 +216,25 @@ function RootLayout() {
 }
 
 export const Route = createRootRoute({
+  // Defaults globales de <head>. Cada ruta declara su propio head() con title,
+  // description y canonical; estos valores actúan de base y se heredan salvo que
+  // la ruta los sobrescriba. Se renderizan vía <HeadContent /> en RootLayout.
+  head: () => ({
+    meta: [
+      // Título/description por defecto: sirven de fallback para las rutas que aún
+      // no declaran su propio <Seo> (el <title> estático del index.html se quitó).
+      // Las páginas con <Seo> los sobrescriben en cliente.
+      { title: 'Casas Group | Inmobiliaria en Barcelona' },
+      {
+        name: 'description',
+        content:
+          'Inmobiliaria en Barcelona: compra, venta y alquiler de viviendas. Hipotecas, seguros y administración de fincas. Valoración gratuita.',
+      },
+      { property: 'og:site_name', content: 'Casas Group' },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:locale', content: 'es_ES' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+    ],
+  }),
   component: RootLayout,
 })

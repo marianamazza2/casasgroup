@@ -5,6 +5,8 @@ interface FilterBarProps {
   filters: FilterState
   /** Municipios con inmuebles en el ámbito (marcan con un punto el árbol). */
   availableMunicipios: Set<string>
+  /** Sin inventario en el ámbito actual: no hay subzonas aplicables. */
+  zonesDisabled?: boolean
   viewMode: ViewMode
   /** Nº de filtros activos; muestra un badge sobre el botón si > 0. */
   activeFilterCount: number
@@ -13,7 +15,7 @@ interface FilterBarProps {
   onViewModeChange: (mode: ViewMode) => void
 }
 
-export function FilterBar({ filters, availableMunicipios, viewMode, activeFilterCount, onOpenFilters, onZonesChange, onViewModeChange }: FilterBarProps) {
+export function FilterBar({ filters, availableMunicipios, zonesDisabled = false, viewMode, activeFilterCount, onOpenFilters, onZonesChange, onViewModeChange }: FilterBarProps) {
   return (
     <div className="filter-bar">
       <button
@@ -46,6 +48,7 @@ export function FilterBar({ filters, availableMunicipios, viewMode, activeFilter
         onChange={onZonesChange}
         availableMunicipios={availableMunicipios}
         variant="dropdown"
+        disabled={zonesDisabled}
       />
 
       <div className="filter-bar-spacer" />

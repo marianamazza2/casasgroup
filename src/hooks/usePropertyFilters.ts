@@ -57,6 +57,24 @@ function initialZoneTokens(query: string, locType?: LocType): string[] {
   return []
 }
 
+/** La página de resultados solo ofrece subzonas dentro del ámbito Barcelona. */
+function isBarcelonaScopedSearch(query: string, locType?: LocType, province?: string): boolean {
+  if (province) return normalize(province) === normalize('Barcelona')
+  if (!query) return true
+  const q = normalize(query)
+
+  if (locType === 'provincia') return q === normalize('Barcelona')
+  if (q === normalize(BARCELONA_MUNICIPIO)) return true
+  if (BARCELONA_PROVINCE_MUNICIPIOS.some((m) => normalize(m) === q)) return true
+  if (BARCELONA_DISTRICTS.some((d) => normalize(d.name) === q)) return true
+  if (BARRIO_BY_NORM.has(q)) return true
+  return properties.some(
+    (p) =>
+      normalize(p.city) === q ||
+      normalize(p.zone) === q,
+  )
+}
+
 interface InitialSearch {
   query?: string
   mode?: FilterState['mode']
@@ -85,6 +103,24 @@ function filtersFromSearch(
     zones = initialZoneTokens(query, locType)
   }
   return { ...defaultFilters, query, mode, zone, zones }
+}
+
+/**
+ * ¿La búsqueda de la URL apunta a una ubicación reconocida por la taxonomía
+ * (provincia, municipio, distrito o barrio) — y por tanto es una página con
+ * valor de indexación (§4.2.3, §6)? Un texto libre que no resuelve a ninguna
+ * zona real es una vista sin valor SEO → se marca noindex.
+ */
+export function isKnownLocationSearch(
+  query: string,
+  mode: FilterState['mode'],
+  locType?: LocType,
+  province?: string,
+): boolean {
+  if (province) return true
+  if (!query) return false
+  const f = filtersFromSearch(query, mode, locType)
+  return (f.zone !== 'Todas') || f.zones.length > 0
 }
 
 /**
@@ -126,11 +162,16 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
     setFilters(filtersFromSearch(query, mode, locType))
   }, [query, mode, locType])
 
+  const outsideBarcelonaScope = !isBarcelonaScopedSearch(filters.query, locType, province)
+
   // Inmuebles dentro del ámbito de la búsqueda (modo + texto), en vivo: si el
   // usuario edita el buscador de la página, el ámbito y las zonas se recalculan.
   const scopedProperties = useMemo(
-    () => properties.filter((p) => matchesLocation(p, filters.mode, filters.query)),
-    [filters.mode, filters.query],
+    () =>
+      outsideBarcelonaScope
+        ? []
+        : properties.filter((p) => matchesLocation(p, filters.mode, filters.query)),
+    [outsideBarcelonaScope, filters.mode, filters.query],
   )
 
   // Zonas que existen realmente dentro de ese ámbito, en cascada.
@@ -206,6 +247,7 @@ export function usePropertyFilters(initial: InitialSearch = {}) {
     filteredProperties,
     availableZones,
     availableMunicipios,
+    zonesDisabled: scopedProperties.length === 0,
     province,
     resultCount: filteredProperties.length,
     activeFilterCount,
