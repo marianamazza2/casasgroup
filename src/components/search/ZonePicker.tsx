@@ -10,6 +10,7 @@ import {
   TARRAGONA_MUNICIPIO,
   TARRAGONA_PROVINCE_MUNICIPIOS,
 } from '../../lib/tarragonaZones'
+import { HOSPITALET_BARRIOS, HOSPITALET_MUNICIPIO } from '../../lib/hospitaletZones'
 import { normalize } from '../../lib/locationSearch'
 
 interface ZonePickerProps {
@@ -44,24 +45,36 @@ function summaryLabel(value: string[]): string {
 export function ZonePicker({ value, onChange, availableMunicipios, province = 'Barcelona', variant = 'sheet', disabled = false }: ZonePickerProps) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<Set<string>>(new Set(value))
-  const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  // Hospitalet arranca desplegado para que sus barrios se vean de entrada, igual
+  // que los distritos de Barcelona quedan a la vista.
+  const [expanded, setExpanded] = useState<Set<string>>(new Set([HOSPITALET_MUNICIPIO]))
   const [query, setQuery] = useState('')
   const wrapRef = useRef<HTMLDivElement>(null)
   const isTarragona = normalize(province) === normalize('Tarragona')
   const provinceDistricts = isTarragona ? TARRAGONA_DISTRICTS : BARCELONA_DISTRICTS
   const provinceMunicipios = isTarragona ? TARRAGONA_PROVINCE_MUNICIPIOS : BARCELONA_PROVINCE_MUNICIPIOS
   const mainMunicipio = isTarragona ? TARRAGONA_MUNICIPIO : 'Barcelona'
+  // Hospitalet tiene su propio desglose (municipio → barrios); solo en Barcelona.
+  const showHospitalet = !isTarragona
 
   // ── Filtro de texto sobre todo el árbol de la provincia ─────────────────────
   const q = normalize(query)
   const searching = q.length > 0
 
-  // Municipios de la provincia visibles según el filtro (la capital va aparte,
-  // con su árbol de distritos).
-  const municipios = useMemo(
-    () => (searching ? provinceMunicipios.filter((m) => normalize(m).includes(q)) : provinceMunicipios),
-    [provinceMunicipios, q, searching],
+  // Municipios de la provincia visibles según el filtro (la capital y Hospitalet
+  // van aparte, con su propio desglose de zonas).
+  const municipios = useMemo(() => {
+    const base = provinceMunicipios.filter((m) => normalize(m) !== normalize(HOSPITALET_MUNICIPIO))
+    return searching ? base.filter((m) => normalize(m).includes(q)) : base
+  }, [provinceMunicipios, q, searching])
+
+  // Barrios de Hospitalet visibles según el filtro.
+  const hospitaletBarrios = useMemo(
+    () => (searching ? HOSPITALET_BARRIOS.filter((b) => normalize(b).includes(q)) : HOSPITALET_BARRIOS),
+    [q, searching],
   )
+  const showHospitaletHeader = !searching || normalize(HOSPITALET_MUNICIPIO).includes(q)
+  const showHospitaletBlock = showHospitalet && (showHospitaletHeader || hospitaletBarrios.length > 0)
 
   // Distritos de Barcelona ciudad visibles según el filtro, con sus barrios.
   const districts = useMemo(() => {
@@ -126,6 +139,13 @@ export function ZonePicker({ value, onChange, availableMunicipios, province = 'B
     return 'off'
   })()
 
+  // Hospitalet (un nivel): "todo el municipio" es el token m:; cada barrio es b:.
+  const hospitaletState: TriState = (() => {
+    if (draft.has(tok.municipio(HOSPITALET_MUNICIPIO))) return 'on'
+    if (HOSPITALET_BARRIOS.some((b) => draft.has(tok.barrio(b)))) return 'partial'
+    return 'off'
+  })()
+
   // ── Mutaciones del borrador ────────────────────────────────────────────────
   function toggleDistrict(name: string, barrios: string[]) {
     const next = new Set(draft)
@@ -164,6 +184,37 @@ export function ZonePicker({ value, onChange, availableMunicipios, province = 'B
     })
     if (allBcnState !== 'on') {
       provinceDistricts.forEach((d) => next.add(tok.distrito(d.name)))
+    }
+    setDraft(next)
+  }
+
+  // Hospitalet: "todo el municipio" alterna el token m: y limpia barrios sueltos.
+  function toggleAllHospitalet() {
+    const next = new Set(draft)
+    const muni = tok.municipio(HOSPITALET_MUNICIPIO)
+    const wasOff = hospitaletState === 'off'
+    HOSPITALET_BARRIOS.forEach((b) => next.delete(tok.barrio(b)))
+    next.delete(muni)
+    if (wasOff) next.add(muni)
+    setDraft(next)
+  }
+
+  function toggleHospitaletBarrio(barrio: string) {
+    const next = new Set(draft)
+    const muni = tok.municipio(HOSPITALET_MUNICIPIO)
+    if (next.has(muni)) {
+      // Estaba "todo el municipio" → pasar a selección específica de este barrio.
+      next.delete(muni)
+      next.add(tok.barrio(barrio))
+    } else if (next.has(tok.barrio(barrio))) {
+      next.delete(tok.barrio(barrio))
+    } else {
+      next.add(tok.barrio(barrio))
+      // Si quedan todos marcados, colapsar a "todo el municipio".
+      if (HOSPITALET_BARRIOS.every((b) => next.has(tok.barrio(b)))) {
+        HOSPITALET_BARRIOS.forEach((b) => next.delete(tok.barrio(b)))
+        next.add(muni)
+      }
     }
     setDraft(next)
   }
@@ -265,6 +316,36 @@ export function ZonePicker({ value, onChange, availableMunicipios, province = 'B
         </>
       )}
 
+      {showHospitaletBlock && (
+        <div>
+          {showHospitaletHeader && (
+            <ZoneRow
+              label={`${HOSPITALET_MUNICIPIO} (todo el municipio)`}
+              bold
+              marker={availableMunicipios.has(HOSPITALET_MUNICIPIO)}
+              state={hospitaletState}
+              onToggle={toggleAllHospitalet}
+              expandable={!searching}
+              expanded={searching || expanded.has(HOSPITALET_MUNICIPIO)}
+              onExpand={() => toggleExpand(HOSPITALET_MUNICIPIO)}
+            />
+          )}
+          {(searching || expanded.has(HOSPITALET_MUNICIPIO)) && (
+            <div className="zonepicker-barrios">
+              {hospitaletBarrios.map((b) => (
+                <ZoneRow
+                  key={b}
+                  label={b}
+                  indent
+                  state={barrioChecked(b) ? 'on' : 'off'}
+                  onToggle={() => toggleHospitaletBarrio(b)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {municipios.map((m) => (
         <ZoneRow
           key={m}
@@ -275,7 +356,7 @@ export function ZonePicker({ value, onChange, availableMunicipios, province = 'B
         />
       ))}
 
-      {searching && !showBarcelona && municipios.length === 0 && (
+      {searching && !showBarcelona && !showHospitaletBlock && municipios.length === 0 && (
         <p className="zonepicker-empty">Sin resultados para “{query}”.</p>
       )}
     </div>

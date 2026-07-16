@@ -15,6 +15,11 @@ import {
   TARRAGONA_PROVINCE_MUNICIPIOS,
   TARRAGONA_ZONE_TAXONOMY,
 } from '../lib/tarragonaZones'
+import {
+  HOSPITALET_BARRIOS,
+  HOSPITALET_MUNICIPIO,
+  HOSPITALET_ZONE_TAXONOMY,
+} from '../lib/hospitaletZones'
 import type { FilterState } from '../lib/types'
 
 export type LocType = 'provincia' | 'municipio' | 'distrito' | 'barrio' | undefined
@@ -34,11 +39,29 @@ for (const d of BARCELONA_DISTRICTS) {
 for (const d of TARRAGONA_DISTRICTS) {
   for (const b of d.barrios) BARRIO_BY_NORM.set(normalize(b), b)
 }
+// Hospitalet es de un solo nivel (municipio → barrios, sin distritos).
+for (const b of HOSPITALET_BARRIOS) BARRIO_BY_NORM.set(normalize(b), b)
 
 const ALL_DISTRICTS = [...BARCELONA_DISTRICTS, ...TARRAGONA_DISTRICTS]
 
+// El cliente carga la ciudad como "Hospitalet de Llobregat" (sin el artículo),
+// pero el municipio oficial —y el token del picker— es "L'Hospitalet de Llobregat".
+// Canonizamos para que un inmueble de Hospitalet con `zone` sin mapear (que cae al
+// fallback por ciudad) siga matcheando "todo el municipio".
+function canonicalCity(city: string): string {
+  const n = normalize(city)
+  if (n === normalize(HOSPITALET_MUNICIPIO) || n === normalize('Hospitalet de Llobregat')) {
+    return HOSPITALET_MUNICIPIO
+  }
+  return city
+}
+
 function taxonomyForPropertyZone(zone: string, fallbackCity = BARCELONA_MUNICIPIO) {
-  return TARRAGONA_ZONE_TAXONOMY[zone] ?? taxonomyForZone(zone, fallbackCity)
+  return (
+    HOSPITALET_ZONE_TAXONOMY[zone] ??
+    TARRAGONA_ZONE_TAXONOMY[zone] ??
+    taxonomyForZone(zone, canonicalCity(fallbackCity))
+  )
 }
 
 /** Convierte una búsqueda libre en un token de zona si coincide con la taxonomía. */
@@ -161,13 +184,16 @@ function matchesLocation(
       return p.city === TARRAGONA_MUNICIPIO || TARRAGONA_PROVINCE_MUNICIPIOS.some((m) => normalize(m) === normalize(p.city))
     }
     if (normalizedProvince === normalize('Barcelona')) {
-      return p.city === BARCELONA_MUNICIPIO || BARCELONA_PROVINCE_MUNICIPIOS.some((m) => normalize(m) === normalize(p.city))
+      return p.city === BARCELONA_MUNICIPIO || BARCELONA_PROVINCE_MUNICIPIOS.some((m) => normalize(m) === normalize(canonicalCity(p.city)))
     }
   }
   if (!query) return true
   const q = normalize(query)
+  // `canonicalCity` cubre el desfase del artículo ("Hospitalet" en los datos vs
+  // "L'Hospitalet de Llobregat" en la búsqueda/dataset): sin esto, buscar el
+  // municipio deja el mapa vacío aunque haya inmuebles.
   return (
-    normalize(p.city).includes(q) ||
+    normalize(canonicalCity(p.city)).includes(q) ||
     normalize(p.zone).includes(q) ||
     normalize(p.title).includes(q)
   )
