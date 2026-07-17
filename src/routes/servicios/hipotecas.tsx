@@ -6,13 +6,13 @@ import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 export const Route = createFileRoute('/servicios/hipotecas')({
   head: () => ({
     meta: [
-      { title: 'Hipotecas en Barcelona | Casas Group' },
+      { title: 'Hipotecas en Barcelona | Group Casas' },
       {
         name: 'description',
         content:
-          'Te acompañamos en tu hipoteca en cuatro pasos. Descubre cuánto puedes financiar para comprar tu vivienda en Barcelona. Casas Group.',
+          'Te acompañamos en tu hipoteca en cuatro pasos. Descubre cuánto puedes financiar para comprar tu vivienda en Barcelona. Group Casas.',
       },
-      { property: 'og:title', content: 'Hipotecas en Barcelona | Casas Group' },
+      { property: 'og:title', content: 'Hipotecas en Barcelona | Group Casas' },
       {
         property: 'og:description',
         content:

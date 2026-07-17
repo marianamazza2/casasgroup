@@ -12,13 +12,13 @@ import type { Location } from '../lib/locationSearch'
 export const Route = createFileRoute('/')({
   head: () => ({
     meta: [
-      { title: 'Casas Group | Inmobiliaria en Barcelona' },
+      { title: 'Group Casas | Inmobiliaria en Barcelona' },
       {
         name: 'description',
         content:
           'Compra, venta y alquiler de viviendas en Barcelona. Te acompañamos en hipotecas, seguros y administración de fincas. Valoración gratuita.',
       },
-      { property: 'og:title', content: 'Casas Group | Inmobiliaria en Barcelona' },
+      { property: 'og:title', content: 'Group Casas | Inmobiliaria en Barcelona' },
       {
         property: 'og:description',
         content:
@@ -551,11 +551,11 @@ function Home() {
             {/* H1 semántico de la home. La marca visible (hero-brand) es un div
                 animado, así que el encabezado real va oculto pero accesible. */}
             <h1 className="visually-hidden">
-              Casas Group — Inmobiliaria en Barcelona: compra, venta y alquiler de viviendas
+              Group Casas — Inmobiliaria en Barcelona: compra, venta y alquiler de viviendas
             </h1>
 
             {/* CASAS GROUP brand — gold on load, lightens as the photo turns gold */}
-            <div className="hero-brand" aria-label="Casas Group">
+            <div className="hero-brand" aria-label="Group Casas">
               <div className="hero-brand-fill" ref={heroFillRef}>
                 <span className="hero-brand-casas">CASAS</span>
                 <span className="hero-brand-group">GROUP</span>

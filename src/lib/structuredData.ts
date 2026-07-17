@@ -21,7 +21,7 @@ export const absoluteUrl = (path: string) => `${SITE_URL}${path.startsWith('/') 
 // pero la zona de servicio comercial es Barcelona. `geo` coincide con el marcador
 // del mapa en contacto.tsx.
 const BUSINESS = {
-  name: 'Casas Group',
+  name: 'Group Casas',
   telephone: '+34 930 119 056',
   email: 'info@casasgroup.es',
   street: 'Carrer Verge de la Mercè, 49, Loc 16',
@@ -43,7 +43,7 @@ export function organizationSchema(): Record<string, unknown> {
     '@type': 'RealEstateAgent',
     '@id': `${SITE_URL}/#organization`,
     name: BUSINESS.name,
-    // Casas Group es el rebranding (2026) de Red Casas, fundada en 2014 —
+    // Group Casas es el rebranding (2026) de Red Casas, fundada en 2014 —
     // misma entidad. Datos reales del timeline de /nosotros (§4.5).
     alternateName: 'Red Casas',
     foundingDate: '2014',

@@ -15,11 +15,11 @@ import {
   TARRAGONA_PROVINCE_MUNICIPIOS,
   TARRAGONA_ZONE_TAXONOMY,
 } from '../lib/tarragonaZones'
+import { HOSPITALET_MUNICIPIO } from '../lib/hospitaletZones'
 import {
-  HOSPITALET_BARRIOS,
-  HOSPITALET_MUNICIPIO,
-  HOSPITALET_ZONE_TAXONOMY,
-} from '../lib/hospitaletZones'
+  FLAT_BARRIO_MUNICIPIOS,
+  FLAT_BARRIO_ZONE_TAXONOMY,
+} from '../lib/flatBarrioMunicipios'
 import type { FilterState } from '../lib/types'
 
 export type LocType = 'provincia' | 'municipio' | 'distrito' | 'barrio' | undefined
@@ -39,8 +39,10 @@ for (const d of BARCELONA_DISTRICTS) {
 for (const d of TARRAGONA_DISTRICTS) {
   for (const b of d.barrios) BARRIO_BY_NORM.set(normalize(b), b)
 }
-// Hospitalet es de un solo nivel (municipio → barrios, sin distritos).
-for (const b of HOSPITALET_BARRIOS) BARRIO_BY_NORM.set(normalize(b), b)
+// Municipios de un solo nivel (municipio → barrios, sin distritos): Hospitalet, Esplugues.
+for (const m of FLAT_BARRIO_MUNICIPIOS) {
+  for (const b of m.barrios) BARRIO_BY_NORM.set(normalize(b), b)
+}
 
 const ALL_DISTRICTS = [...BARCELONA_DISTRICTS, ...TARRAGONA_DISTRICTS]
 
@@ -58,7 +60,7 @@ function canonicalCity(city: string): string {
 
 function taxonomyForPropertyZone(zone: string, fallbackCity = BARCELONA_MUNICIPIO) {
   return (
-    HOSPITALET_ZONE_TAXONOMY[zone] ??
+    FLAT_BARRIO_ZONE_TAXONOMY[zone] ??
     TARRAGONA_ZONE_TAXONOMY[zone] ??
     taxonomyForZone(zone, canonicalCity(fallbackCity))
   )

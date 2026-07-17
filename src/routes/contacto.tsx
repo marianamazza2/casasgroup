@@ -30,13 +30,13 @@ export const Route = createFileRoute('/contacto')({
   }),
   head: () => ({
     meta: [
-      { title: 'Contacto | Casas Group Barcelona' },
+      { title: 'Contacto | Group Casas Barcelona' },
       {
         name: 'description',
         content:
-          'Contacta con Casas Group. Visítanos en nuestra oficina o escríbenos y te ayudamos con tu compra, venta o alquiler en Barcelona.',
+          'Contacta con Group Casas. Visítanos en nuestra oficina o escríbenos y te ayudamos con tu compra, venta o alquiler en Barcelona.',
       },
-      { property: 'og:title', content: 'Contacto | Casas Group Barcelona' },
+      { property: 'og:title', content: 'Contacto | Group Casas Barcelona' },
       {
         property: 'og:description',
         content:
@@ -197,7 +197,7 @@ function ContactPage() {
             {/* H1 semántico. La marca visible (hero-brand "HABLEMOS") es un div
                 animado, así que el encabezado real va oculto pero accesible. */}
             <h1 className="visually-hidden">
-              Contacta con Casas Group — Inmobiliaria en Barcelona
+              Contacta con Group Casas — Inmobiliaria en Barcelona
             </h1>
             <div className="hero-brand" aria-label="Hablemos">
               <div className="hero-brand-fill" ref={heroFillRef}>
@@ -307,7 +307,7 @@ function ContactPage() {
           >
             <Marker longitude={2.0829} latitude={41.3766} anchor="bottom">
               {/* Pin de mapa (gota) con las iniciales GC; la punta cae en la coordenada */}
-              <svg width="34" height="44" viewBox="0 0 32 42" aria-label="Oficina Casas Group" style={{ display: 'block', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.28))' }}>
+              <svg width="34" height="44" viewBox="0 0 32 42" aria-label="Oficina Group Casas" style={{ display: 'block', filter: 'drop-shadow(0 6px 10px rgba(0,0,0,0.28))' }}>
                 <path
                   d="M16 0C7.163 0 0 7.163 0 16c0 11 16 26 16 26s16-15 16-26C32 7.163 24.837 0 16 0z"
                   fill="#a47b36"

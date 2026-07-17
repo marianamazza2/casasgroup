@@ -6,17 +6,17 @@ import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 export const Route = createFileRoute('/servicios/administracion-de-fincas')({
   head: () => ({
     meta: [
-      { title: 'Administración de fincas en Barcelona | Casas Group' },
+      { title: 'Administración de fincas en Barcelona | Group Casas' },
       {
         name: 'description',
         content:
-          'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia, cercanía y todo bajo control con Casas Group.',
+          'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia, cercanía y todo bajo control con Group Casas.',
       },
-      { property: 'og:title', content: 'Administración de fincas en Barcelona | Casas Group' },
+      { property: 'og:title', content: 'Administración de fincas en Barcelona | Group Casas' },
       {
         property: 'og:description',
         content:
-          'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia y cercanía con Casas Group.',
+          'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia y cercanía con Group Casas.',
       },
       { property: 'og:url', content: 'https://casasgroup.es/servicios/administracion-de-fincas' },
     ],

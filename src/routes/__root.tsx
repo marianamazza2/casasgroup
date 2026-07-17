@@ -120,7 +120,7 @@ function SiteNav() {
         <Link
           className="logo logo-small"
           to="/"
-          aria-label="Casas Group"
+          aria-label="Group Casas"
           onClick={() => {
             if (pathname === '/') {
               window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -224,13 +224,13 @@ export const Route = createRootRoute({
       // Título/description por defecto: sirven de fallback para las rutas que aún
       // no declaran su propio <Seo> (el <title> estático del index.html se quitó).
       // Las páginas con <Seo> los sobrescriben en cliente.
-      { title: 'Casas Group | Inmobiliaria en Barcelona' },
+      { title: 'Group Casas | Inmobiliaria en Barcelona' },
       {
         name: 'description',
         content:
           'Inmobiliaria en Barcelona: compra, venta y alquiler de viviendas. Hipotecas, seguros y administración de fincas. Valoración gratuita.',
       },
-      { property: 'og:site_name', content: 'Casas Group' },
+      { property: 'og:site_name', content: 'Group Casas' },
       { property: 'og:type', content: 'website' },
       { property: 'og:locale', content: 'es_ES' },
       // Imagen por defecto al compartir (WhatsApp/Facebook/X). Las rutas con foto

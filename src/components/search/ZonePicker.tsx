@@ -10,8 +10,12 @@ import {
   TARRAGONA_MUNICIPIO,
   TARRAGONA_PROVINCE_MUNICIPIOS,
 } from '../../lib/tarragonaZones'
-import { HOSPITALET_BARRIOS, HOSPITALET_MUNICIPIO } from '../../lib/hospitaletZones'
+import { FLAT_BARRIO_MUNICIPIOS } from '../../lib/flatBarrioMunicipios'
 import { normalize } from '../../lib/locationSearch'
+
+// Nombres (normalizados) de los municipios que se despliegan en barrios: se
+// excluyen de la lista plana de municipios para no duplicarlos.
+const FLAT_BARRIO_NAMES = new Set(FLAT_BARRIO_MUNICIPIOS.map((m) => normalize(m.name)))
 
 interface ZonePickerProps {
   /** Tokens seleccionados (m:/d:/b:). */
@@ -45,36 +49,41 @@ function summaryLabel(value: string[]): string {
 export function ZonePicker({ value, onChange, availableMunicipios, province = 'Barcelona', variant = 'sheet', disabled = false }: ZonePickerProps) {
   const [open, setOpen] = useState(false)
   const [draft, setDraft] = useState<Set<string>>(new Set(value))
-  // Hospitalet arranca desplegado para que sus barrios se vean de entrada, igual
-  // que los distritos de Barcelona quedan a la vista.
-  const [expanded, setExpanded] = useState<Set<string>>(new Set([HOSPITALET_MUNICIPIO]))
+  // Los municipios "planos" (Hospitalet, Esplugues) arrancan desplegados para que
+  // sus barrios se vean de entrada, igual que los distritos de Barcelona.
+  const [expanded, setExpanded] = useState<Set<string>>(
+    () => new Set(FLAT_BARRIO_MUNICIPIOS.map((m) => m.name)),
+  )
   const [query, setQuery] = useState('')
   const wrapRef = useRef<HTMLDivElement>(null)
   const isTarragona = normalize(province) === normalize('Tarragona')
   const provinceDistricts = isTarragona ? TARRAGONA_DISTRICTS : BARCELONA_DISTRICTS
   const provinceMunicipios = isTarragona ? TARRAGONA_PROVINCE_MUNICIPIOS : BARCELONA_PROVINCE_MUNICIPIOS
   const mainMunicipio = isTarragona ? TARRAGONA_MUNICIPIO : 'Barcelona'
-  // Hospitalet tiene su propio desglose (municipio → barrios); solo en Barcelona.
-  const showHospitalet = !isTarragona
+  // Los municipios con desglose de barrios (Hospitalet, Esplugues) son de la
+  // provincia de Barcelona; en Tarragona no se muestran.
+  const showFlatMunicipios = !isTarragona
 
   // ── Filtro de texto sobre todo el árbol de la provincia ─────────────────────
   const q = normalize(query)
   const searching = q.length > 0
 
-  // Municipios de la provincia visibles según el filtro (la capital y Hospitalet
-  // van aparte, con su propio desglose de zonas).
+  // Municipios de la provincia visibles según el filtro (la capital y los
+  // municipios con desglose van aparte, con su propio árbol de zonas).
   const municipios = useMemo(() => {
-    const base = provinceMunicipios.filter((m) => normalize(m) !== normalize(HOSPITALET_MUNICIPIO))
+    const base = provinceMunicipios.filter((m) => !FLAT_BARRIO_NAMES.has(normalize(m)))
     return searching ? base.filter((m) => normalize(m).includes(q)) : base
   }, [provinceMunicipios, q, searching])
 
-  // Barrios de Hospitalet visibles según el filtro.
-  const hospitaletBarrios = useMemo(
-    () => (searching ? HOSPITALET_BARRIOS.filter((b) => normalize(b).includes(q)) : HOSPITALET_BARRIOS),
-    [q, searching],
-  )
-  const showHospitaletHeader = !searching || normalize(HOSPITALET_MUNICIPIO).includes(q)
-  const showHospitaletBlock = showHospitalet && (showHospitaletHeader || hospitaletBarrios.length > 0)
+  // Bloques de municipios con desglose (municipio → barrios), filtrados por texto.
+  const flatMunicipioBlocks = useMemo(() => {
+    if (!showFlatMunicipios) return []
+    return FLAT_BARRIO_MUNICIPIOS.map((m) => {
+      const barrios = searching ? m.barrios.filter((b) => normalize(b).includes(q)) : m.barrios
+      const showHeader = !searching || normalize(m.name).includes(q)
+      return { name: m.name, allBarrios: m.barrios, barrios, showHeader, visible: showHeader || barrios.length > 0 }
+    }).filter((b) => b.visible)
+  }, [showFlatMunicipios, q, searching])
 
   // Distritos de Barcelona ciudad visibles según el filtro, con sus barrios.
   const districts = useMemo(() => {
@@ -139,12 +148,12 @@ export function ZonePicker({ value, onChange, availableMunicipios, province = 'B
     return 'off'
   })()
 
-  // Hospitalet (un nivel): "todo el municipio" es el token m:; cada barrio es b:.
-  const hospitaletState: TriState = (() => {
-    if (draft.has(tok.municipio(HOSPITALET_MUNICIPIO))) return 'on'
-    if (HOSPITALET_BARRIOS.some((b) => draft.has(tok.barrio(b)))) return 'partial'
+  // Municipios planos (un nivel): "todo el municipio" es el token m:; cada barrio es b:.
+  function flatMunicipioState(name: string, barrios: string[]): TriState {
+    if (draft.has(tok.municipio(name))) return 'on'
+    if (barrios.some((b) => draft.has(tok.barrio(b)))) return 'partial'
     return 'off'
-  })()
+  }
 
   // ── Mutaciones del borrador ────────────────────────────────────────────────
   function toggleDistrict(name: string, barrios: string[]) {
@@ -188,20 +197,20 @@ export function ZonePicker({ value, onChange, availableMunicipios, province = 'B
     setDraft(next)
   }
 
-  // Hospitalet: "todo el municipio" alterna el token m: y limpia barrios sueltos.
-  function toggleAllHospitalet() {
+  // "Todo el municipio" alterna el token m: y limpia barrios sueltos.
+  function toggleAllFlatMunicipio(name: string, barrios: string[]) {
     const next = new Set(draft)
-    const muni = tok.municipio(HOSPITALET_MUNICIPIO)
-    const wasOff = hospitaletState === 'off'
-    HOSPITALET_BARRIOS.forEach((b) => next.delete(tok.barrio(b)))
+    const muni = tok.municipio(name)
+    const wasOff = flatMunicipioState(name, barrios) === 'off'
+    barrios.forEach((b) => next.delete(tok.barrio(b)))
     next.delete(muni)
     if (wasOff) next.add(muni)
     setDraft(next)
   }
 
-  function toggleHospitaletBarrio(barrio: string) {
+  function toggleFlatBarrio(name: string, barrios: string[], barrio: string) {
     const next = new Set(draft)
-    const muni = tok.municipio(HOSPITALET_MUNICIPIO)
+    const muni = tok.municipio(name)
     if (next.has(muni)) {
       // Estaba "todo el municipio" → pasar a selección específica de este barrio.
       next.delete(muni)
@@ -211,8 +220,8 @@ export function ZonePicker({ value, onChange, availableMunicipios, province = 'B
     } else {
       next.add(tok.barrio(barrio))
       // Si quedan todos marcados, colapsar a "todo el municipio".
-      if (HOSPITALET_BARRIOS.every((b) => next.has(tok.barrio(b)))) {
-        HOSPITALET_BARRIOS.forEach((b) => next.delete(tok.barrio(b)))
+      if (barrios.every((b) => next.has(tok.barrio(b)))) {
+        barrios.forEach((b) => next.delete(tok.barrio(b)))
         next.add(muni)
       }
     }
@@ -316,35 +325,35 @@ export function ZonePicker({ value, onChange, availableMunicipios, province = 'B
         </>
       )}
 
-      {showHospitaletBlock && (
-        <div>
-          {showHospitaletHeader && (
+      {flatMunicipioBlocks.map(({ name, allBarrios, barrios, showHeader }) => (
+        <div key={name}>
+          {showHeader && (
             <ZoneRow
-              label={`${HOSPITALET_MUNICIPIO} (todo el municipio)`}
+              label={`${name} (todo el municipio)`}
               bold
-              marker={availableMunicipios.has(HOSPITALET_MUNICIPIO)}
-              state={hospitaletState}
-              onToggle={toggleAllHospitalet}
+              marker={availableMunicipios.has(name)}
+              state={flatMunicipioState(name, allBarrios)}
+              onToggle={() => toggleAllFlatMunicipio(name, allBarrios)}
               expandable={!searching}
-              expanded={searching || expanded.has(HOSPITALET_MUNICIPIO)}
-              onExpand={() => toggleExpand(HOSPITALET_MUNICIPIO)}
+              expanded={searching || expanded.has(name)}
+              onExpand={() => toggleExpand(name)}
             />
           )}
-          {(searching || expanded.has(HOSPITALET_MUNICIPIO)) && (
+          {(searching || expanded.has(name)) && (
             <div className="zonepicker-barrios">
-              {hospitaletBarrios.map((b) => (
+              {barrios.map((b) => (
                 <ZoneRow
                   key={b}
                   label={b}
                   indent
                   state={barrioChecked(b) ? 'on' : 'off'}
-                  onToggle={() => toggleHospitaletBarrio(b)}
+                  onToggle={() => toggleFlatBarrio(name, allBarrios, b)}
                 />
               ))}
             </div>
           )}
         </div>
-      )}
+      ))}
 
       {municipios.map((m) => (
         <ZoneRow
@@ -356,7 +365,7 @@ export function ZonePicker({ value, onChange, availableMunicipios, province = 'B
         />
       ))}
 
-      {searching && !showBarcelona && !showHospitaletBlock && municipios.length === 0 && (
+      {searching && !showBarcelona && flatMunicipioBlocks.length === 0 && municipios.length === 0 && (
         <p className="zonepicker-empty">Sin resultados para “{query}”.</p>
       )}
     </div>

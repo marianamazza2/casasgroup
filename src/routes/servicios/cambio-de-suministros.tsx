@@ -6,17 +6,17 @@ import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 export const Route = createFileRoute('/servicios/cambio-de-suministros')({
   head: () => ({
     meta: [
-      { title: 'Cambio de suministros sin papeleo | Casas Group' },
+      { title: 'Cambio de suministros sin papeleo | Group Casas' },
       {
         name: 'description',
         content:
-          'Cambia la luz, el agua y el gas de tu nueva vivienda sin papeleo. Nos encargamos de todo en cuatro simples pasos. Casas Group.',
+          'Cambia la luz, el agua y el gas de tu nueva vivienda sin papeleo. Nos encargamos de todo en cuatro simples pasos. Group Casas.',
       },
-      { property: 'og:title', content: 'Cambio de suministros sin papeleo | Casas Group' },
+      { property: 'og:title', content: 'Cambio de suministros sin papeleo | Group Casas' },
       {
         property: 'og:description',
         content:
-          'Luz, agua y gas de tu nueva vivienda sin papeleo. Nos encargamos de todo en cuatro simples pasos. Casas Group.',
+          'Luz, agua y gas de tu nueva vivienda sin papeleo. Nos encargamos de todo en cuatro simples pasos. Group Casas.',
       },
       { property: 'og:url', content: 'https://casasgroup.es/servicios/cambio-de-suministros' },
     ],

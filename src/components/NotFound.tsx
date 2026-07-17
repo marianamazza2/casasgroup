@@ -9,7 +9,7 @@ import { Seo } from './Seo'
 export function NotFound() {
   return (
     <main className="notfound-page">
-      <Seo title="Página no encontrada | Casas Group" noindex />
+      <Seo title="Página no encontrada | Group Casas" noindex />
       <div className="notfound-inner">
         <span className="notfound-code" aria-hidden="true">404</span>
         <h1 className="notfound-title">Esta página no existe</h1>

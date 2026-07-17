@@ -30,7 +30,7 @@ function PropertyDetailPage() {
   if (!p) {
     return (
       <div className="detail-notfound">
-        <Seo title="Propiedad no encontrada | Casas Group" noindex />
+        <Seo title="Propiedad no encontrada | Group Casas" noindex />
         <p>Propiedad no encontrada.</p>
         <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>← Volver a búsqueda</Link>
       </div>
@@ -42,8 +42,8 @@ function PropertyDetailPage() {
   const canonical = absoluteUrl(`/propiedades/${p.id}`)
   // title/description desde los datos del inmueble (§4.3.2); OG con la foto de
   // portada (p.image = cover) — clave para la miniatura al compartir por WhatsApp.
-  const seoTitle = `${p.title} en ${locality} | Casas Group`
-  const seoDescription = `${p.title} en ${locality}. ${p.priceLabel} · ${p.m2} m² · ${p.beds} hab. Descúbrelo y agenda tu visita con Casas Group.`
+  const seoTitle = `${p.title} en ${locality} | Group Casas`
+  const seoDescription = `${p.title} en ${locality}. ${p.priceLabel} · ${p.m2} m² · ${p.beds} hab. Descúbrelo y agenda tu visita con Group Casas.`
 
   return (
     <article className="property-detail">

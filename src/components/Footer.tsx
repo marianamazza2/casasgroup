@@ -29,7 +29,7 @@ export function Footer() {
     <footer className="footer">
       <div className="footer-grid">
         <div className="footer-brand">
-          <Link className="logo logo-small footer-logo" to="/" aria-label="Casas Group">
+          <Link className="logo logo-small footer-logo" to="/" aria-label="Group Casas">
             <small>GROUP</small>
             <span>CASAS</span>
           </Link>
@@ -55,7 +55,7 @@ export function Footer() {
       </div>
       <div className="footer-legal">
         <span className="footer-copyright">
-          © {new Date().getFullYear()} Casas Group. Todos los derechos reservados.
+          © {new Date().getFullYear()} Group Casas. Todos los derechos reservados.
         </span>
         <nav className="footer-legal-links" aria-label="Páginas legales">
           <a href="/aviso-legal">Aviso legal</a>

@@ -10,17 +10,17 @@ import { breadcrumbSchema, organizationSchema } from '../lib/structuredData'
 export const Route = createFileRoute('/nosotros')({
   head: () => ({
     meta: [
-      { title: 'Sobre nosotros | Casas Group' },
+      { title: 'Sobre nosotros | Group Casas' },
       {
         name: 'description',
         content:
-          'De Red Casas a Casas Group: conoce a nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
+          'De Red Casas a Group Casas: conoce a nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
       },
-      { property: 'og:title', content: 'Sobre nosotros | Casas Group' },
+      { property: 'og:title', content: 'Sobre nosotros | Group Casas' },
       {
         property: 'og:description',
         content:
-          'De Red Casas a Casas Group: nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
+          'De Red Casas a Group Casas: nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
       },
       { property: 'og:url', content: 'https://casasgroup.es/nosotros' },
     ],
@@ -111,7 +111,7 @@ export const TIMELINE = [
   { year: '2014', text: 'Nacimiento de Red Casas' },
   { year: '2018', text: 'Expansión a nuevas zonas' },
   { year: '2023', text: 'Más de 100 operaciones' },
-  { year: '2026', text: 'Rebranding: Casas Group' },
+  { year: '2026', text: 'Rebranding: Group Casas' },
 ]
 
 function NosotrosPage() {
@@ -144,10 +144,10 @@ function NosotrosPage() {
         <div className="brand-story-photo">Foto Angie / fundadora</div>
         <div className="brand-story-text">
           <span className="brand-story-eyebrow">La marca</span>
-          <h2>De Red Casas a Casas Group</h2>
+          <h2>De Red Casas a Group Casas</h2>
           <div className="nosotros-gold-line nosotros-gold-line--left" />
           <p>
-            Casas Group nació de la convicción de que el sector inmobiliario podía ofrecer mucho más. Una marca
+            Group Casas nació de la convicción de que el sector inmobiliario podía ofrecer mucho más. Una marca
             pensada para superar expectativas, transformar la experiencia inmobiliaria y cuidar cada detalle con
             excelencia.
           </p>
@@ -165,7 +165,7 @@ function NosotrosPage() {
       <section className="section team">
         <div className="section-heading section-heading--center">
           <h2>Nuestro equipo</h2>
-          <p>Conoce las personas detrás de Casas Group</p>
+          <p>Conoce las personas detrás de Group Casas</p>
         </div>
         <div className="team-grid">
           {TEAM.map((member, i) => (
@@ -372,18 +372,17 @@ function NosotrosHero() {
         {/* H1 semántico de la página. El titular visible de abajo es de marca
             (sin keyword), así que el encabezado real va oculto pero accesible. */}
         <h1 className="visually-hidden">
-          Sobre Casas Group — inmobiliaria en Barcelona
+          Sobre Group Casas — inmobiliaria en Barcelona
         </h1>
         <motion.span className="sum-hero-eyebrow" variants={heroItem}>
-          Nuestra historia
+          Hay otra forma de ser una inmobiliaria.
         </motion.span>
         <motion.p className="sum-hero-title sum-hero-title--two-line" variants={heroItem}>
-          El sector<br />necesitaba<br />algo diferente
+          Y esa es<br />la nuestra.
         </motion.p>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
-          Construida desde el amor, la visión, la ambición y la pasión por hacer las cosas de la
-          mejor manera.
+          Bienvenido a Group Casas
         </motion.p>
         <motion.div variants={heroItem}>
           <Link className="button-link" to="/contacto">

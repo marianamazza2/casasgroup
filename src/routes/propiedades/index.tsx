@@ -117,12 +117,12 @@ function PropiedadesPage() {
   const seoLocation = knownLocation && rawLocation ? capitalize(rawLocation) : 'Barcelona'
   const seoTitle =
     mode === 'alquiler'
-      ? `Pisos en alquiler en ${seoLocation} | Casas Group`
-      : `Pisos y casas en venta en ${seoLocation} | Casas Group`
+      ? `Pisos en alquiler en ${seoLocation} | Group Casas`
+      : `Pisos y casas en venta en ${seoLocation} | Group Casas`
   const seoDescription =
     mode === 'alquiler'
-      ? `Pisos en alquiler en ${seoLocation}. Filtra por precio, habitaciones y zona y encuentra tu próximo hogar con Casas Group.`
-      : `Pisos y casas en venta en ${seoLocation}. Filtra por zona, precio y características y encuentra tu próximo hogar con Casas Group.`
+      ? `Pisos en alquiler en ${seoLocation}. Filtra por precio, habitaciones y zona y encuentra tu próximo hogar con Group Casas.`
+      : `Pisos y casas en venta en ${seoLocation}. Filtra por zona, precio y características y encuentra tu próximo hogar con Group Casas.`
   // Canonical limpio: mode solo si no es el por defecto (compra) — así la vista
   // base coincide con /propiedades del sitemap. Se conserva la ubicación solo si
   // es reconocida; locType (pista interna) se descarta siempre.

@@ -13,17 +13,17 @@ import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 export const Route = createFileRoute('/servicios/alarmas')({
   head: () => ({
     meta: [
-      { title: 'Alarmas para tu vivienda | Casas Group' },
+      { title: 'Alarmas para tu vivienda | Group Casas' },
       {
         name: 'description',
         content:
-          'Sistemas de alarma gestionados por quien conoce tu vivienda. Protege tu hogar en Barcelona con el acompañamiento de Casas Group.',
+          'Sistemas de alarma gestionados por quien conoce tu vivienda. Protege tu hogar en Barcelona con el acompañamiento de Group Casas.',
       },
-      { property: 'og:title', content: 'Alarmas para tu vivienda | Casas Group' },
+      { property: 'og:title', content: 'Alarmas para tu vivienda | Group Casas' },
       {
         property: 'og:description',
         content:
-          'Sistemas de alarma gestionados por quien conoce tu vivienda. Protege tu hogar en Barcelona con Casas Group.',
+          'Sistemas de alarma gestionados por quien conoce tu vivienda. Protege tu hogar en Barcelona con Group Casas.',
       },
       { property: 'og:url', content: 'https://casasgroup.es/servicios/alarmas' },
     ],
