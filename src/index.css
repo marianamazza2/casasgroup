@@ -2340,15 +2340,31 @@ a.contact-card:hover .contact-card-icon {
     color: var(--gold);
   }
 
+  /* El fondo (hero-media / hero-gold-bg son inset:0 sobre .hero) llena el
+     viewport GRANDE y estático (100vh): así al colapsar la barra del navegador
+     no aparece hueco ni se hace "zoom" (la caja no se redimensiona).
+     El CONTENIDO, en cambio, se ancla al alto CHICO (100svh) para quedar
+     centrado en el área visible inicial y no moverse — ver .hero-content abajo. */
   .hero {
-    /* En mobile la barra del navegador se colapsa al scrollear: con 100vh (=
-       viewport "grande") la caja arranca más alta que el área visible y el
-       contenido se recoloca al scrollear (el título "salta" y aparece el
-       DESCÚBRENOS). Con 100dvh la caja siempre iguala lo visible, así el hero
-       queda clavado en el centro como en desktop. vh es el fallback. */
     height: 100vh;
-    height: 100dvh;
     top: 0;
+    align-items: flex-start;
+  }
+
+  .hero-content {
+    /* Zona de contenido = alto visible inicial (estático). justify-content
+       centra la marca dentro de esa zona, anclada arriba. Como svh no cambia
+       al colapsar la barra, el título queda clavado igual que en desktop. */
+    min-height: 100svh;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+
+  /* DESCÚBRENOS: anclado al borde inferior del alto chico (no del grande),
+     para que sea visible desde la carga y no aparezca recién al scrollear. */
+  .hero-scroll-hint {
+    bottom: auto;
+    top: calc(100svh - clamp(52px, 8vw, 76px));
   }
 
   .hero-scroll-wrapper {
