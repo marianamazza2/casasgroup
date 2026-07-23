@@ -2341,7 +2341,13 @@ a.contact-card:hover .contact-card-icon {
   }
 
   .hero {
+    /* En mobile la barra del navegador se colapsa al scrollear: con 100vh (=
+       viewport "grande") la caja arranca más alta que el área visible y el
+       contenido se recoloca al scrollear (el título "salta" y aparece el
+       DESCÚBRENOS). Con 100dvh la caja siempre iguala lo visible, así el hero
+       queda clavado en el centro como en desktop. vh es el fallback. */
     height: 100vh;
+    height: 100dvh;
     top: 0;
   }
 
