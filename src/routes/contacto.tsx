@@ -59,6 +59,13 @@ type ContactCard = {
   icon: string
 }
 
+// Google Maps para la direccion de la oficina. Se busca por el nombre catalan
+// oficial de la calle (con tildes) aunque en pantalla se muestre en castellano,
+// porque es como Maps la resuelve.
+const OFFICE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  'Carrer Verge de la Mercè, 49, 08950 Esplugues de Llobregat, Barcelona',
+)}`
+
 const contactCards: ContactCard[] = [
   {
     label: 'Email',
@@ -211,11 +218,12 @@ function ContactPage() {
                 Cuentanos que necesitas y te responderemos.
               </p>
               <button type="button" className="button-link" onClick={() => setIsPanelOpen(true)}>
-                Escribenos
+                Rellenar formulario
               </button>
             </div>
           </div>
           <div className="hero-scroll-hint" aria-hidden="true">
+            <span>Ver mas</span>
             <div className="scroll-arrow" />
           </div>
         </section>
@@ -295,9 +303,21 @@ function ContactPage() {
           <span>Donde estamos</span>
           <h2>Visitanos</h2>
           <address>
-            Calle Verge de la Merce 49, local 16<br />
-            08950 Esplugues de Llobregat<br />
-            Barcelona
+            <a className="location-address-link" href={OFFICE_MAPS_URL} target="_blank" rel="noopener noreferrer">
+              <span className="location-address-lines">
+                Calle Verge de la Merce 49, local 16<br />
+                08950 Esplugues de Llobregat<br />
+                Barcelona
+              </span>
+              <span className="location-address-cta">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                Como llegar
+                <span className="location-address-arrow" aria-hidden="true">→</span>
+              </span>
+            </a>
           </address>
           <p>Lun - Vie: 09:30 - 20:30<br />Sab: 10:00 - 20:00</p>
         </div>

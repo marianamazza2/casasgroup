@@ -1878,7 +1878,9 @@ button {
     box-shadow 0.5s ease;
 }
 
-a.contact-card:hover {
+/* El hover se aplica a todas las tarjetas, tambien a las que no son enlace
+   (Horario), para que la fila se comporte de forma uniforme. */
+.contact-card:hover {
   border-color: var(--gold);
   box-shadow: 0 24px 50px -30px rgba(140, 105, 40, 0.5);
   transform: translateY(-5px);
@@ -1904,7 +1906,7 @@ a.contact-card:hover {
   width: 22px;
 }
 
-a.contact-card:hover .contact-card-icon {
+.contact-card:hover .contact-card-icon {
   background: var(--gold);
   color: #fff;
 }
@@ -2004,6 +2006,52 @@ a.contact-card:hover .contact-card-icon {
 .location-band p {
   color: var(--muted);
   font-size: 13px;
+}
+
+/* La direccion abre Google Maps. El bloque entero es el enlace, con un
+   "Como llegar" dorado debajo para que se vea que es clicable sin hover. */
+.location-band address .location-address-link {
+  color: inherit;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.location-address-lines {
+  text-decoration-color: rgba(164, 123, 54, 0.35);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color 0.35s ease, text-decoration-color 0.35s ease;
+}
+
+.location-address-cta {
+  align-items: center;
+  color: var(--gold);
+  display: flex;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 7px;
+  letter-spacing: 0.04em;
+  margin-top: 12px;
+}
+
+.location-address-cta svg {
+  height: 16px;
+  width: 16px;
+}
+
+.location-address-arrow {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.location-address-link:hover .location-address-lines,
+.location-address-link:focus-visible .location-address-lines {
+  color: var(--gold);
+  text-decoration-color: var(--gold);
+}
+
+.location-address-link:hover .location-address-arrow {
+  transform: translateX(4px);
 }
 
 .map-panel {
