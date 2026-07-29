@@ -14,13 +14,13 @@ export const Route = createFileRoute('/nosotros')({
       {
         name: 'description',
         content:
-          'De Red Casas a Group Casas: conoce a nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
+          'Conoce a Group Casas: nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
       },
       { property: 'og:title', content: 'Sobre nosotros | Group Casas' },
       {
         property: 'og:description',
         content:
-          'De Red Casas a Group Casas: nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
+          'Group Casas: nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
       },
       { property: 'og:url', content: 'https://casasgroup.es/nosotros' },
     ],
@@ -108,7 +108,7 @@ export const TEAM = [
 ]
 
 export const TIMELINE = [
-  { year: '2014', text: 'Nacimiento de Red Casas' },
+  { year: '2014', text: 'Nacimiento de Group Casas' },
   { year: '2018', text: 'Expansión a nuevas zonas' },
   { year: '2023', text: 'Más de 100 operaciones' },
   { year: '2026', text: 'Rebranding: Group Casas' },
@@ -144,16 +144,15 @@ function NosotrosPage() {
         <div className="brand-story-photo">Foto Angie / fundadora</div>
         <div className="brand-story-text">
           <span className="brand-story-eyebrow">La marca</span>
-          <h2>De Red Casas a Group Casas</h2>
+          <h2>Group Casas</h2>
           <div className="nosotros-gold-line nosotros-gold-line--left" />
           <p>
-            Group Casas nació de la convicción de que el sector inmobiliario podía ofrecer mucho más. Una marca
-            pensada para superar expectativas, transformar la experiencia inmobiliaria y cuidar cada detalle con
-            excelencia.
+            Group Casas nace con un propósito: transformar la forma en la que las personas viven una de las
+            decisiones más importantes de su vida.
           </p>
           <p>
-            No somos una inmobiliaria más. Somos un equipo que entiende que comprar, vender o alquilar una vivienda
-            es una de las decisiones más importantes que tomamos. Y queremos que esa experiencia sea excepcional.
+            No queríamos crear una inmobiliaria más. Queríamos construir una marca capaz de transformar la
+            experiencia de comprar, vender, financiar, reformar, o administrar una vivienda.
           </p>
         </div>
       </section>
@@ -220,7 +219,7 @@ function NosotrosPage() {
           <div className="trabaja-actions">
             <a
               className="button-link"
-              href="mailto:rrhh@casasgroup.es?subject=Candidatura espontánea"
+              href="mailto:rrhh@groupcasas.com?subject=Candidatura espontánea"
             >
               Envíanos tu CV →
             </a>

@@ -107,6 +107,9 @@ function parseCSV(text) {
 
 // ── Helpers de parseo de celdas ──────────────────────────────────────────────
 const norm = (v) => String(v ?? '').trim()
+// Rebranding 2026: la marca antigua "Red Casas" no debe aparecer en la web.
+// Se reemplaza en cualquier texto proveniente del Sheet (case-insensitive).
+const rebrand = (v) => norm(v).replace(/red\s+casas/gi, 'Group Casas')
 const isYes = (v) => norm(v).toUpperCase() === 'SI'
 function toNumber(v) {
   // Para enteros tipo precio/m²/hab: "320000", "320.000" → quita separadores de miles.
@@ -217,6 +220,8 @@ async function toProperty(row, usedIds) {
   if (isYes(row.terraza)) features.push('Terraza')
   if (isYes(row.garaje)) features.push('Garaje')
   if (isYes(row.trastero)) features.push('Trastero')
+  if (isYes(row.balcon)) features.push('Balcón')
+  if (isYes(row.galeria)) features.push('Galería')
 
   const property = {
     id,
@@ -225,7 +230,7 @@ async function toProperty(row, usedIds) {
     // Título = descripción corta (la dirección exacta NUNCA se muestra). Si falta,
     // se cae a un título genérico por tipo + zona.
     title:
-      norm(row.descripcion_corta) ||
+      rebrand(row.descripcion_corta) ||
       `${TIPO_LABEL[tipo] ?? 'Inmueble'} en ${norm(row.zona) || norm(row.ciudad)}`,
     beds: toNumber(row.habitaciones),
     baths: toNumber(row.banos),
@@ -235,7 +240,7 @@ async function toProperty(row, usedIds) {
     mode,
     category: CATEGORY_BY_TIPO[tipo] ?? 'piso',
     image,
-    desc: norm(row.descripcion_larga) || norm(row.descripcion_corta),
+    desc: rebrand(row.descripcion_larga) || rebrand(row.descripcion_corta),
     features,
   }
   // Campos opcionales: solo se incluyen si aplican.

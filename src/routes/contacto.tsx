@@ -62,8 +62,8 @@ type ContactCard = {
 const contactCards: ContactCard[] = [
   {
     label: 'Email',
-    value: 'info@casasgroup.es',
-    href: 'mailto:info@casasgroup.es',
+    value: 'info@groupcasas.com',
+    href: 'mailto:info@groupcasas.com',
     icon: 'mail',
   },
   {
@@ -80,8 +80,8 @@ const contactCards: ContactCard[] = [
   },
   {
     label: 'Horario',
-    value: 'Lun - Vie: 9:00 - 19:00',
-    detail: 'Sab: 10:00 - 14:00',
+    value: 'Lun - Vie: 09:30 - 20:30',
+    detail: 'Sab: 10:00 - 20:00',
     icon: 'clock',
   },
 ]
@@ -206,7 +206,9 @@ function ContactPage() {
             </div>
             <div className="hero-ui" ref={heroUiRef}>
               <p className="contact-hero-tagline">
-                Estamos aqui para ayudarte en cada paso. Cuentanos que necesitas y te responderemos con una propuesta clara.
+                Estamos aqui para ayudarte en cada paso.
+                <br />
+                Cuentanos que necesitas y te responderemos.
               </p>
               <button type="button" className="button-link" onClick={() => setIsPanelOpen(true)}>
                 Escribenos
@@ -291,13 +293,13 @@ function ContactPage() {
       <section className="location-band">
         <div>
           <span>Donde estamos</span>
-          <h2>Visitanos en nuestra oficina</h2>
+          <h2>Visitanos</h2>
           <address>
-            Carrer Verge de la Mercè, 49, Loc 16<br />
+            Calle Verge de la Merce 49, local 16<br />
             08950 Esplugues de Llobregat<br />
             Barcelona
           </address>
-          <p>Lunes a Viernes: 9:00 - 19:00<br />Sabado: 10:00 - 14:00</p>
+          <p>Lun - Vie: 09:30 - 20:30<br />Sab: 10:00 - 20:00</p>
         </div>
         <div className="map-panel" aria-label="Mapa de la oficina">
           <Map
@@ -357,7 +359,7 @@ function ContactPage() {
               </label>
               <label>
                 Telefono *
-                <input name="phone" type="tel" placeholder="+34 600 000 000" required />
+                <input name="phone" type="tel" placeholder="601 391 778" required />
               </label>
               <label>
                 Motivo de contacto *
@@ -366,10 +368,6 @@ function ContactPage() {
                     <option value={item} key={item}>{item}</option>
                   ))}
                 </select>
-              </label>
-              <label>
-                Referencia de inmueble
-                <input name="reference" placeholder="Ej: GC-0001" defaultValue={ref ?? ''} />
               </label>
               <label>
                 Mensaje

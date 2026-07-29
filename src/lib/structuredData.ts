@@ -23,8 +23,8 @@ export const absoluteUrl = (path: string) => `${SITE_URL}${path.startsWith('/') 
 const BUSINESS = {
   name: 'Group Casas',
   telephone: '+34 930 119 056',
-  email: 'info@casasgroup.es',
-  street: 'Carrer Verge de la Mercè, 49, Loc 16',
+  email: 'info@groupcasas.com',
+  street: 'Calle Verge de la Merce 49, local 16',
   postalCode: '08950',
   locality: 'Esplugues de Llobregat',
   region: 'Barcelona',
@@ -43,9 +43,7 @@ export function organizationSchema(): Record<string, unknown> {
     '@type': 'RealEstateAgent',
     '@id': `${SITE_URL}/#organization`,
     name: BUSINESS.name,
-    // Group Casas es el rebranding (2026) de Red Casas, fundada en 2014 —
-    // misma entidad. Datos reales del timeline de /nosotros (§4.5).
-    alternateName: 'Red Casas',
+    // Marca fundada en 2014. Datos reales del timeline de /nosotros (§4.5).
     foundingDate: '2014',
     url: SITE_URL,
     // Google prefiere logo raster (PNG/JPG) a SVG para el knowledge panel.
@@ -71,14 +69,14 @@ export function organizationSchema(): Record<string, unknown> {
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        opens: '09:00',
-        closes: '19:00',
+        opens: '09:30',
+        closes: '20:30',
       },
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: 'Saturday',
         opens: '10:00',
-        closes: '14:00',
+        closes: '20:00',
       },
     ],
     // sameAs: [...] — añadir perfiles reales (Instagram, Facebook, LinkedIn)

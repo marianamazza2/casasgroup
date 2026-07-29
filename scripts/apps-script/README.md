@@ -13,7 +13,7 @@ Edición en el Sheet → llama al **Deploy Hook** de Vercel → Vercel relanza e
 - **Debounce (`DEBOUNCE_SECONDS = 60`):** agrupa una ráfaga de ediciones en un solo
   rebuild. Sin esto, cargar las 22 columnas de un inmueble dispararía ~22 builds en
   Vercel (gasta build-minutes del free tier).
-- **Menú `Red Casas → Publicar ahora`:** fuerza un rebuild a mano. Útil cuando
+- **Menú `Casas Group → Publicar ahora`:** fuerza un rebuild a mano. Útil cuando
   reordenás/cambiás fotos en Cloudinary, que **no** edita el Sheet y por lo tanto no
   dispara el trigger automático.
 

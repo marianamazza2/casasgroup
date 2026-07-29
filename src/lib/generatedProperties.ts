@@ -17,7 +17,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "parking",
     "image": "",
-    "desc": "Red Casas presenta plaza de parking en venta con una superficie de 10m², cubierta en un parking cerrado con puerta automática y que dispone de ascensor. Se encuentra ubicada en Av. Severo Ohoa en Esplugues de Llobregat.\n\nNo te pierdas esta oportunidad.\n\n¡Ven a verlo!\n\nLos honorarios de la agencia intermediadora y los gastos de compra venta no están incluidos en el precio.",
+    "desc": "Group Casas presenta plaza de parking en venta con una superficie de 10m², cubierta en un parking cerrado con puerta automática y que dispone de ascensor. Se encuentra ubicada en Av. Severo Ohoa en Esplugues de Llobregat.\n\nNo te pierdas esta oportunidad.\n\n¡Ven a verlo!\n\nLos honorarios de la agencia intermediadora y los gastos de compra venta no están incluidos en el precio.",
     "features": [],
     "coords": {
       "lat": 41.376,
@@ -64,7 +64,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "piso",
     "image": "",
-    "desc": "Red Casas presenta loft en venta reformado, amplio y luminoso ubicado en zona de Esplugues de Llobregat Can Vidalet. Se distribuye de un amplio salon comedor. Consta de 1 habitacion (anteriormente 2 habitaciones), cocina y baño. Es una cuarta planta en una finca sin ascensor. Esta ubicado a 10min del Finestrelles y el tranvía. Se encuentran cantidad de lugares de interés como bares y restaurantes, comercios locales de todo tipo, supermercados, centros educativos y farmacias. El metro de Can Vidalet (L5) está a 1 minuto.\n\nLa vivenda está alquilada hasta Septiembre de 2026.\n\nNo te pierdas esta oportunidad.\n\n¡Ven a verlo!\n\nLos honorarios de la agencia y gastos de alquiler no están incluidos en el precio",
+    "desc": "Group Casas presenta loft en venta reformado, amplio y luminoso ubicado en zona de Esplugues de Llobregat Can Vidalet. Se distribuye de un amplio salon comedor. Consta de 1 habitacion (anteriormente 2 habitaciones), cocina y baño. Es una cuarta planta en una finca sin ascensor. Esta ubicado a 10min del Finestrelles y el tranvía. Se encuentran cantidad de lugares de interés como bares y restaurantes, comercios locales de todo tipo, supermercados, centros educativos y farmacias. El metro de Can Vidalet (L5) está a 1 minuto.\n\nLa vivenda está alquilada hasta Septiembre de 2026.\n\nNo te pierdas esta oportunidad.\n\n¡Ven a verlo!\n\nLos honorarios de la agencia y gastos de alquiler no están incluidos en el precio",
     "features": [],
     "coords": {
       "lat": 41.378,
@@ -86,7 +86,7 @@ export const generatedProperties: Property[] = [
     "mode": "alquiler",
     "category": "local",
     "image": "",
-    "desc": "Red Casas presenta local comercial en alquiler en Esplugues de Llobregat. Se encuentra ubicado en una zona comercial rodeado de comercios de todo tipo, zonas verdes, bancos, colegios, etc. A 10 minutos de tranvía Can Clota y a 1 min. de la parada de bus EP1, consta de 175 M2. El alquiler es de 800 euros mas IVA. Con opción a compra.\n\nNo te pierdas esta oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "desc": "Group Casas presenta local comercial en alquiler en Esplugues de Llobregat. Se encuentra ubicado en una zona comercial rodeado de comercios de todo tipo, zonas verdes, bancos, colegios, etc. A 10 minutos de tranvía Can Clota y a 1 min. de la parada de bus EP1, consta de 175 M2. El alquiler es de 800 euros mas IVA. Con opción a compra.\n\nNo te pierdas esta oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [],
     "coords": {
       "lat": 41.383,
@@ -108,7 +108,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "piso",
     "image": "",
-    "desc": "Red Casas presenta piso en venta exterior luminoso en buen estado en la zona de Can Vidalet, Esplugues de Llobregat. A tan solo un minuto de la linea azul, Can Vidalet (L5), y 5 minutos del tranvía parada Can Oliveres, rodeado de zonas verdes, supermercados y escuelas.\n\nConsta de: 60 m2 construidos que se dividen en un amplio salón comedor luminoso y cocina, tres habitaciones, dos dobles y una individual y un baño.\nFinca sin ascensor.\n// Vivienda actualmente alquilada, renovable año a año//\n\nNo te pierdas esta oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "desc": "Group Casas presenta piso en venta exterior luminoso en buen estado en la zona de Can Vidalet, Esplugues de Llobregat. A tan solo un minuto de la linea azul, Can Vidalet (L5), y 5 minutos del tranvía parada Can Oliveres, rodeado de zonas verdes, supermercados y escuelas.\n\nConsta de: 60 m2 construidos que se dividen en un amplio salón comedor luminoso y cocina, tres habitaciones, dos dobles y una individual y un baño.\nFinca sin ascensor.\n// Vivienda actualmente alquilada, renovable año a año//\n\nNo te pierdas esta oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [],
     "coords": {
       "lat": 41.375,
@@ -156,7 +156,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "local",
     "image": "",
-    "desc": "Red Casas presenta local totalmente reformado en venta en la zona de La Plana - Montesa (Esplugues de Llobregat) situado en un entorno con gran afluencia de público y rodeado de todos los servicios esenciales, ofrece una ubicación estratégica y cómoda. A solo 5 minutos andando\nencontrarás la parada de tranvía Sardana, además de colegios, supermercados y comercios que\naportan practicidad y vida al barrio.\n\nEl inmueble dispone de 80 m² construidos, distribuidos en 5 habitaciones y 1 baño completo, lo que permite adaptarlo fácilmente a diferentes usos en función de las necesidades. Cabe destacar que la propiedad cuenta tanto con acceso directo desde la calle como con entrada desde el propio edificio/portal.\n\nNo te pierdas esta oportunidad ¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "desc": "Group Casas presenta local totalmente reformado en venta en la zona de La Plana - Montesa (Esplugues de Llobregat) situado en un entorno con gran afluencia de público y rodeado de todos los servicios esenciales, ofrece una ubicación estratégica y cómoda. A solo 5 minutos andando\nencontrarás la parada de tranvía Sardana, además de colegios, supermercados y comercios que\naportan practicidad y vida al barrio.\n\nEl inmueble dispone de 80 m² construidos, distribuidos en 5 habitaciones y 1 baño completo, lo que permite adaptarlo fácilmente a diferentes usos en función de las necesidades. Cabe destacar que la propiedad cuenta tanto con acceso directo desde la calle como con entrada desde el propio edificio/portal.\n\nNo te pierdas esta oportunidad ¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [],
     "coords": {
       "lat": 41.381,
@@ -222,7 +222,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "parking",
     "image": "",
-    "desc": "Red Casas presenta en venta DOS PLAZAS de parking, ubicada en Calle Molino, de Esplugues de Llobregat (zona metro Can Vidalet). Situada en Planta -2. Vigilancia 24h con personal de seguridad. Acceso con mando y llave. No te pierdas esta gran oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compra venta no están incluidos en el precio.",
+    "desc": "Group Casas presenta en venta DOS PLAZAS de parking, ubicada en Calle Molino, de Esplugues de Llobregat (zona metro Can Vidalet). Situada en Planta -2. Vigilancia 24h con personal de seguridad. Acceso con mando y llave. No te pierdas esta gran oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compra venta no están incluidos en el precio.",
     "features": [],
     "tag": "Nuevo",
     "coords": {
@@ -245,7 +245,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "piso",
     "image": "",
-    "desc": "Red Casas presenta este piso totalmente reformado en venta en Hospitalet de Llobregat, ubicado en la zona de La Torrassa. A escasos minutos de las líneas L10S y muy cerca del metro\nL1, y rodeado de todos los servicios necesarios para el día a día: centros educativos, supermercados, comercios de proximidad y agradables zonas verdes.\nLa vivienda dispone de una superficie aproximada de 70m?, actualmente distribuida en salón comedor con salida a un balcón, cocina independiente, tres habitaciones (una de ella también con salida al balcón), un baño completo con doble pica y un patio interior privado.\nEl inmueble se encuentra totalmente reformado, todo nuevo a estrenar, listo para entrar a vivir.\nAdemás, cuenta con aire acondicionado, electrodomésticos: Encimera de Dekton, Electrodomésticos Bosch (horno y microondas), Lavavajillas integrado, Frigorífico combi inverter y lavadora incluida.\nLa finca dispone de ascensor y cuenta con el Certificado de Aptitud del edificio vigente. Es una finca CON ascensor.\nNo te pierdas esta oportunidad.\n¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "desc": "Group Casas presenta este piso totalmente reformado en venta en Hospitalet de Llobregat, ubicado en la zona de La Torrassa. A escasos minutos de las líneas L10S y muy cerca del metro\nL1, y rodeado de todos los servicios necesarios para el día a día: centros educativos, supermercados, comercios de proximidad y agradables zonas verdes.\nLa vivienda dispone de una superficie aproximada de 70m?, actualmente distribuida en salón comedor con salida a un balcón, cocina independiente, tres habitaciones (una de ella también con salida al balcón), un baño completo con doble pica y un patio interior privado.\nEl inmueble se encuentra totalmente reformado, todo nuevo a estrenar, listo para entrar a vivir.\nAdemás, cuenta con aire acondicionado, electrodomésticos: Encimera de Dekton, Electrodomésticos Bosch (horno y microondas), Lavavajillas integrado, Frigorífico combi inverter y lavadora incluida.\nLa finca dispone de ascensor y cuenta con el Certificado de Aptitud del edificio vigente. Es una finca CON ascensor.\nNo te pierdas esta oportunidad.\n¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [
       "Ascensor"
     ],
@@ -269,7 +269,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "piso",
     "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/ChatGPT_Image_13_jul_2026_13_45_10_Copy1_eyacx4",
-    "desc": "Red Casas presenta en exclusiva este piso totalmente reformado en venta en Hospitalet de Llobregat, ubicado en la zona de Santa Eulalia. A escasos minutos de las líneas L10S y muy cerca del centro comercial la Gran vía 2, y rodeado de todos los servicios necesarios para el día a día: centros educativos, supermercados, comercios de proximidad y agradables zonas verdes.\nLa vivienda dispone de una superficie aproximada de 70 m?, actualmente distribuida en salón comedor, cocina independiente, tres habitaciones, un baño completo y galería.\nEl inmueble se encuentra totalmente reformado, todo nuevo a estrenar, listo para entrar a vivir.\nAdemás, cuenta con aire acondicionado, electrodomésticos: horno, lavavajillas, nevera.\nDestaca especialmente su impresionante techo de volta catalana original, cuidadosamente restaurado, que aporta personalidad, caracter y un estilo único.\nEs una finca sin ascensor.\nNo te pierdas esta oportunidad.\n¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "desc": "Group Casas presenta en exclusiva este piso totalmente reformado en venta en Hospitalet de Llobregat, ubicado en la zona de Santa Eulalia. A escasos minutos de las líneas L10S y muy cerca del centro comercial la Gran vía 2, y rodeado de todos los servicios necesarios para el día a día: centros educativos, supermercados, comercios de proximidad y agradables zonas verdes.\nLa vivienda dispone de una superficie aproximada de 70 m?, actualmente distribuida en salón comedor, cocina independiente, tres habitaciones, un baño completo y galería.\nEl inmueble se encuentra totalmente reformado, todo nuevo a estrenar, listo para entrar a vivir.\nAdemás, cuenta con aire acondicionado, electrodomésticos: horno, lavavajillas, nevera.\nDestaca especialmente su impresionante techo de volta catalana original, cuidadosamente restaurado, que aporta personalidad, caracter y un estilo único.\nEs una finca sin ascensor.\nNo te pierdas esta oportunidad.\n¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [],
     "images": [
       "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_13_jul_2026_13_45_10_Copy1_eyacx4",
@@ -320,7 +320,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "piso",
     "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_15_54_s8akac",
-    "desc": "Red Casas presenta esta luminosa vivienda totalmente exterior en venta en la zona de Pubilla\nCasas (Hospitalet de Llobregat), ubicada a pocos metros del metro L5 Can Vidalet, del centro comercial Finestrelles y rodeada de colegios, supermercados y todo tipo de servicios, lo que garantiza comodidad y una excelente calidad de vida.\nLa vivienda cuenta con aproximadamente 88 m' distribuidos en 4 habitaciones (dos dobles y dos individuales), una amplia cocina independiente y un baño completo. El salón-comedor tiene salida a un amplio balcón, al que también se accede desde la habitación principal, aportando luminosidad y amplitud a la vivienda.\nTodas las estancias disponen además de aire acondicionado con bomba de frio y calor para mayor confort durante todo el año. La finca no dispone de ascensor.\n//Las imágenes mostradas son una propuesta visual de cómo podría verse la vivienda decorada.\nLa estructura, distribución y espacios del piso se mantienen exactamente iguales. //\nNo te pierdas esta oportunidad ¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "desc": "Group Casas presenta esta luminosa vivienda totalmente exterior en venta en la zona de Pubilla\nCasas (Hospitalet de Llobregat), ubicada a pocos metros del metro L5 Can Vidalet, del centro comercial Finestrelles y rodeada de colegios, supermercados y todo tipo de servicios, lo que garantiza comodidad y una excelente calidad de vida.\nLa vivienda cuenta con aproximadamente 88 m' distribuidos en 4 habitaciones (dos dobles y dos individuales), una amplia cocina independiente y un baño completo. El salón-comedor tiene salida a un amplio balcón, al que también se accede desde la habitación principal, aportando luminosidad y amplitud a la vivienda.\nTodas las estancias disponen además de aire acondicionado con bomba de frio y calor para mayor confort durante todo el año. La finca no dispone de ascensor.\n//Las imágenes mostradas son una propuesta visual de cómo podría verse la vivienda decorada.\nLa estructura, distribución y espacios del piso se mantienen exactamente iguales. //\nNo te pierdas esta oportunidad ¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [],
     "images": [
       "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_15_54_s8akac",
@@ -401,7 +401,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "piso",
     "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_mifkzq",
-    "desc": "Red Casas presenta en este piso en venta en Hospitalet de Llobregat, ubicado en la zona de Pubilla Casas. A escasos minutos de las líneas L5 y L1 de metro, y rodeado de todos los servicios necesarios para el día a día: centros educativos, supermercados, comercios de proximidad y agradables zonas verdes.\nLa vivienda dispone de una superficie aproximada de 55m?, actualmente distribuida en salón comedor, cocina independiente, una habitacion (con posibilidad de hacer dos), un baño completo y galería.\nEl inmueble se encuentra en buen estado de conservación. Es una finca sin ascensor.\nActualmente alquilado hasta julio del 2027.\nNo te pierdas esta oportunidad.\n¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "desc": "Group Casas presenta en este piso en venta en Hospitalet de Llobregat, ubicado en la zona de Pubilla Casas. A escasos minutos de las líneas L5 y L1 de metro, y rodeado de todos los servicios necesarios para el día a día: centros educativos, supermercados, comercios de proximidad y agradables zonas verdes.\nLa vivienda dispone de una superficie aproximada de 55m?, actualmente distribuida en salón comedor, cocina independiente, una habitacion (con posibilidad de hacer dos), un baño completo y galería.\nEl inmueble se encuentra en buen estado de conservación. Es una finca sin ascensor.\nActualmente alquilado hasta julio del 2027.\nNo te pierdas esta oportunidad.\n¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [],
     "images": [
       "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_mifkzq",
@@ -433,7 +433,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "piso",
     "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_gcsa0o",
-    "desc": "Red Casas presenta piso en venta en la zona de Pubilla Casas. A escasos minutos de las líneas L5 y L1 de metro, y rodeado de todos los servicios necesarios para el día a día: centros educativos, supermercados, comercios de proximidad y agradables zonas verdes. 5 minutos hasta llegar al centro comercial Finestrelles.\nLa vivienda dispone de una superficie aproximada de 70m?, actualmente distribuida en salón comedor exterior, amplia cocina independiente, tres habitaciones dobles y un baño completo.\nEl inmueble se encuentra en buen estado pero requiere de algunas reformas. Es una finca SIN ascensor.\n//Las imágenes mostradas son una propuesta visual de cómo podría verse la vivienda vacia. La estructura, distribución y espacios del piso se mantienen exactamente iguales. //.\nNo te pierdas esta oportunidad.\n¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "desc": "Group Casas presenta piso en venta en la zona de Pubilla Casas. A escasos minutos de las líneas L5 y L1 de metro, y rodeado de todos los servicios necesarios para el día a día: centros educativos, supermercados, comercios de proximidad y agradables zonas verdes. 5 minutos hasta llegar al centro comercial Finestrelles.\nLa vivienda dispone de una superficie aproximada de 70m?, actualmente distribuida en salón comedor exterior, amplia cocina independiente, tres habitaciones dobles y un baño completo.\nEl inmueble se encuentra en buen estado pero requiere de algunas reformas. Es una finca SIN ascensor.\n//Las imágenes mostradas son una propuesta visual de cómo podría verse la vivienda vacia. La estructura, distribución y espacios del piso se mantienen exactamente iguales. //.\nNo te pierdas esta oportunidad.\n¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [],
     "images": [
       "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_gcsa0o",
@@ -464,7 +464,7 @@ export const generatedProperties: Property[] = [
     "mode": "compra",
     "category": "piso",
     "image": "",
-    "desc": "Red Casas presenta piso en venta exterior luminoso en buen estado en la zona de Can\nVidalet, Esplugues de Llobregat. A tan solo un minuto de la linea azul, Can Vidalet (L5), y 5 minutos del tranvía parada Can Oliveres, rodeado de zonas verdes, supermercados y escuelas.\nConsta de: 60 m2 construidos que se dividen en un amplio salón comedor luminoso y cocina, tres habitaciones, dos dobles y una individual y un baño.\nFinca sin ascensor.\n// Vivienda actualmente alquilada, renovable año a año//\nNo te pierdas esta oportunidad. ¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "desc": "Group Casas presenta piso en venta exterior luminoso en buen estado en la zona de Can\nVidalet, Esplugues de Llobregat. A tan solo un minuto de la linea azul, Can Vidalet (L5), y 5 minutos del tranvía parada Can Oliveres, rodeado de zonas verdes, supermercados y escuelas.\nConsta de: 60 m2 construidos que se dividen en un amplio salón comedor luminoso y cocina, tres habitaciones, dos dobles y una individual y un baño.\nFinca sin ascensor.\n// Vivienda actualmente alquilada, renovable año a año//\nNo te pierdas esta oportunidad. ¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [],
     "floor": "5",
     "coords": {
