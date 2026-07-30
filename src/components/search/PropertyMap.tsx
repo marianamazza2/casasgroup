@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import type { Property } from '../../lib/types'
+import { hasValidCoords } from '../../lib/coords'
 
 const STYLE_URL = `https://api.maptiler.com/maps/streets-v2/style.json?key=${import.meta.env.VITE_MAPTILER_KEY}`
 const BARCELONA_CENTER: [number, number] = [2.1734, 41.3851]
@@ -31,19 +32,6 @@ function writeCenterDataset(container: HTMLDivElement | null, center: maplibregl
   if (!container) return
   const lngLat = maplibregl.LngLat.convert(center)
   container.dataset.center = `${lngLat.lng.toFixed(4)},${lngLat.lat.toFixed(4)}`
-}
-
-// Coordenada válida para MapLibre: lng ∈ [-180,180], lat ∈ [-90,90]. Un dato
-// corrupto (p. ej. lat "413.9" por un punto decimal mal puesto en el origen)
-// haría reventar setLngLat/fitBounds y tiraría toda la página, así que lo
-// descartamos en vez de propagar la excepción.
-function hasValidCoords(p: Property): boolean {
-  if (!p.coords) return false
-  const { lat, lng } = p.coords
-  return (
-    Number.isFinite(lat) && Number.isFinite(lng) &&
-    lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180
-  )
 }
 
 type MarkerEntry = { marker: maplibregl.Marker; el: HTMLButtonElement }

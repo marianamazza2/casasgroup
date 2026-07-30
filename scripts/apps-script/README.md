@@ -17,6 +17,23 @@ Edición en el Sheet → llama al **Deploy Hook** de Vercel → Vercel relanza e
   reordenás/cambiás fotos en Cloudinary, que **no** edita el Sheet y por lo tanto no
   dispara el trigger automático.
 
+## Validación de coordenadas
+
+El mismo archivo valida `lat`/`lng` mientras se escriben (trigger simple `onEdit`,
+no hace falta instalarlo):
+
+- Fuera del área de trabajo (lat 40.4–42.9, lng 0.1–3.4) → celda **roja** + nota
+  explicando el problema y, si se puede deducir, el valor probable.
+- **lat y lng invertidos** o **punto decimal corrido** con una única lectura
+  posible → los corrige y deja la celda **ámbar** con una nota de qué cambió.
+  Si hay más de una lectura posible, no adivina: marca en rojo y ofrece las opciones.
+- La coordenada se trata como **par**: si una mitad no tiene arreglo claro, no se
+  toca ninguna de las dos.
+- Menú **Casas Group → Revisar coordenadas de todas las filas** para repasar lo ya cargado.
+
+Poné `AUTOCORREGIR = false` si preferís que solo marque y nunca modifique datos.
+El rango vive en `COORD_AMBITO` y debe coincidir con `AMBITO` en `scripts/buildData.mjs`.
+
 ## Instalación
 
 1. Vercel: **Settings → Git → Deploy Hooks → Create Hook** (branch de producción) → copiá la URL.

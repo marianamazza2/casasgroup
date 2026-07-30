@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { properties } from '../../lib/properties'
 import type { Property } from '../../lib/types'
+import { isValidCoords } from '../../lib/coords'
 import { PropertyMap } from '../../components/property/PropertyMap'
 import { JsonLd } from '../../components/JsonLd'
 import { Seo } from '../../components/Seo'
@@ -447,7 +448,9 @@ function LocationSection({ property: p }: { property: Property }) {
   return (
     <section className="detail-map-section">
       <h2 className="detail-section-title">Ubicación</h2>
-      {p.coords ? (
+      {/* `isValidCoords` y no `p.coords`: una coordenada corrupta hace que
+          MapLibre lance y tumbe el render de la ficha entera (no solo el mapa). */}
+      {isValidCoords(p.coords) ? (
         <PropertyMap coords={p.coords} />
       ) : (
         <div className="detail-map-placeholder">Ubicación no disponible</div>

@@ -123,6 +123,40 @@ function toFloat(v) {
   const n = parseFloat(norm(v).replace(',', '.'))
   return Number.isFinite(n) ? n : undefined
 }
+// Encuadre plausible para el ámbito del sitio (provincias de Barcelona y
+// Tarragona, con margen). Cualquier coordenada fuera de acá es un error de carga,
+// no un inmueble lejano: el Sheet solo tiene inmuebles de esta zona.
+const AMBITO = { latMin: 40.4, latMax: 42.9, lngMin: 0.1, lngMax: 3.4 }
+
+/**
+ * Valida el par lat/lng del Sheet, que se carga a mano y llega con los errores
+ * típicos: punto decimal de más ("413.9" por "41.39"), lat y lng invertidos, o
+ * una celda pegada de otra fila. Una coordenada fuera de rango hace que MapLibre
+ * lance ("Invalid LngLat latitude value") y tumbe el render de la ficha entera,
+ * así que la descartamos acá y avisamos por consola: el inmueble se publica
+ * igual, solo que sin mapa. Preferimos avisar y no adivinar: corregir el dato en
+ * el Sheet es trabajo de quien lo carga, y auto-invertir en silencio taparía el
+ * error hasta que un día mueva un inmueble de verdad.
+ */
+function validCoords(lat, lng, ref) {
+  if (lat === undefined || lng === undefined) return undefined
+  const dentro = (v, min, max) => v >= min && v <= max
+  const { latMin, latMax, lngMin, lngMax } = AMBITO
+  if (dentro(lat, latMin, latMax) && dentro(lng, lngMin, lngMax)) return { lat, lng }
+  if (dentro(lng, latMin, latMax) && dentro(lat, lngMin, lngMax)) {
+    console.warn(
+      `  ⚠️  ${ref}: lat y lng parecen invertidos (lat ${lat}, lng ${lng}) → se ignoran. ` +
+      `En el Sheet deberían ser lat=${lng}, lng=${lat}. El inmueble se publica sin mapa.`,
+    )
+    return undefined
+  }
+  console.warn(
+    `  ⚠️  ${ref}: coordenadas fuera del ámbito del sitio (lat ${lat}, lng ${lng}) → se ignoran. ` +
+    `Revisá el punto decimal en el Sheet. El inmueble se publica sin mapa.`,
+  )
+  return undefined
+}
+
 function parseDate(v) {
   // Normaliza a ISO 'YYYY-MM-DD'. Acepta 'YYYY-MM-DD' o 'DD/MM/YYYY' (o con '-').
   const s = norm(v)
@@ -143,12 +177,6 @@ const CATEGORY_BY_TIPO = {
 const TIPO_LABEL = {
   PISO: 'Piso', DUPLEX: 'Dúplex', CHALET: 'Chalet', LOCAL: 'Local', PARKING: 'Parking',
 }
-// La unión Property.tag es cerrada ('Nuevo'|'Destacado'|'Exclusiva'); mapeamos
-// las etiquetas del Sheet a esos valores. Ajustable si se cambia el tipo.
-const TAG_BY_ETIQUETA = {
-  DESTACADO: 'Destacado', OPORTUNIDAD: 'Exclusiva', REBAJADO: 'Nuevo',
-}
-
 function formatPrice(precio, mode) {
   const formatted = new Intl.NumberFormat('es-ES').format(precio)
   return mode === 'alquiler' ? `${formatted} €/mes` : `${formatted} €`
@@ -191,7 +219,8 @@ async function toProperty(row, usedIds) {
   const ref = norm(row.ref)
   const operacion = norm(row.operacion).toUpperCase()
   const tipo = norm(row.tipo).toUpperCase()
-  const etiqueta = norm(row.etiqueta).toUpperCase()
+  // Texto libre: se muestra tal cual se escriba en el Sheet (sin mapeos).
+  const etiqueta = norm(row.etiqueta)
   const mode = MODE_BY_OPERACION[operacion] ?? 'compra'
   const precio = toNumber(row.precio)
 
@@ -244,12 +273,11 @@ async function toProperty(row, usedIds) {
     features,
   }
   // Campos opcionales: solo se incluyen si aplican.
-  if (TAG_BY_ETIQUETA[etiqueta]) property.tag = TAG_BY_ETIQUETA[etiqueta]
+  if (etiqueta) property.tag = etiqueta
   if (images.length) property.images = images
   if (norm(row.planta)) property.floor = norm(row.planta)
-  const lat = toFloat(row.lat)
-  const lng = toFloat(row.lng)
-  if (lat !== undefined && lng !== undefined) property.coords = { lat, lng }
+  const coords = validCoords(toFloat(row.lat), toFloat(row.lng), ref)
+  if (coords) property.coords = coords
 
   // Estado, certificado y fecha de alta. La dirección exacta (row.direccion) se
   // omite a propósito: nunca debe mostrarse ni viajar al cliente (privacidad).

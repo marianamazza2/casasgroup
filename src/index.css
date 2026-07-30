@@ -1681,8 +1681,12 @@ button {
   padding: 0;
 }
 
+/* GROUP va mas pequeno que en el header (10px) porque aqui CASAS lleva menos
+   letter-spacing y es mas estrecho: a 10px las dos palabras se veian casi del
+   mismo peso y se perdia la jerarquia del logo. */
 .footer-logo small {
   color: rgb(255 255 255 / 0.58);
+  font-size: 7.5px;
   letter-spacing: 0.16em;
   margin-bottom: 0;
 }

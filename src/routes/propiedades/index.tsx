@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useCallback, useRef, useState } from 'react'
 import type { Property, ViewMode } from '../../lib/types'
+import { hasValidCoords } from '../../lib/coords'
 import { PropertyCard } from '../../components/search/PropertyCard'
 import { PropertyListItem } from '../../components/search/PropertyListItem'
 import { PropertyMap } from '../../components/search/PropertyMap'
@@ -86,8 +87,12 @@ function PropiedadesPage() {
     scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
+  // El recorte por encuadre solo se aplica a lo que el mapa puede situar: un
+  // inmueble sin coordenadas válidas (o con un dato corrupto que descartamos)
+  // no tiene pin, así que nunca entraría en `mapVisibleIds` y desaparecería del
+  // listado aunque esté publicado y pase los filtros. Se muestra siempre.
   const visibleProperties = mapVisibleIds
-    ? filteredProperties.filter((p) => mapVisibleIds.has(p.id))
+    ? filteredProperties.filter((p) => mapVisibleIds.has(p.id) || !hasValidCoords(p))
     : filteredProperties
 
   // H1 semántico y dinámico: modo (venta/alquiler) + ubicación buscada. La UI de

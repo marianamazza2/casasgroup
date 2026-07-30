@@ -291,9 +291,9 @@ function AdministracionDeFincasPage() {
           }}
         />
         <div className="adm-cta-inner">
-          <span className="adm-cta-eyebrow">Auditoría gratuita</span>
-          <h2 className="adm-cta-title">¿Quieres mejorar la gestión de tu comunidad?</h2>
-          <p className="adm-cta-text">Te hacemos una auditoría gratuita y sin compromiso.</p>
+          <span className="adm-cta-eyebrow">Valoración gratuita</span>
+          <h2 className="adm-cta-title">¿Quieres que administremos tu comunidad?</h2>
+          <p className="adm-cta-text">Te hacemos una valoración gratuita y sin compromiso.</p>
           <Link className="button-link" to="/contacto">
             Contáctanos →
           </Link>
@@ -344,11 +344,11 @@ function AdmHero() {
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
-          Gestión transparente y cercana de tu comunidad de vecinos.
+          Administramos tu comunidad
         </motion.p>
         <motion.div variants={heroItem}>
           <Link className="button-link" to="/contacto">
-            Solicitar auditoría gratuita →
+            Solicitar presupuesto →
           </Link>
         </motion.div>
       </motion.div>

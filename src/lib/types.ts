@@ -12,7 +12,9 @@ export type Property = {
   priceLabel: string
   mode: 'compra' | 'alquiler'
   category: 'piso' | 'chalet' | 'local' | 'parking'
-  tag?: 'Nuevo' | 'Destacado' | 'Exclusiva'
+  // Badge de la ficha: texto libre, se muestra tal cual venga de la columna
+  // `etiqueta` del Sheet. Si la celda esta vacia no se pinta badge.
+  tag?: string
   image: string
   images?: string[]
   desc: string

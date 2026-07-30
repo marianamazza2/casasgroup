@@ -87,8 +87,8 @@ const contactCards: ContactCard[] = [
   },
   {
     label: 'Horario',
-    value: 'Lun - Vie: 09:30 - 20:30',
-    detail: 'Sab: 10:00 - 20:00',
+    value: 'Lun - Vie: 09:30 - 20:30 hs.',
+    detail: 'Sab: 10:00 - 20:00 hs.',
     icon: 'clock',
   },
 ]
@@ -223,7 +223,7 @@ function ContactPage() {
             </div>
           </div>
           <div className="hero-scroll-hint" aria-hidden="true">
-            <span>Ver mas</span>
+            <span>o ver mas</span>
             <div className="scroll-arrow" />
           </div>
         </section>
@@ -319,7 +319,7 @@ function ContactPage() {
               </span>
             </a>
           </address>
-          <p>Lun - Vie: 09:30 - 20:30<br />Sab: 10:00 - 20:00</p>
+          <p>Lun - Vie: 09:30 - 20:30 hs.<br />Sab: 10:00 - 20:00 hs.</p>
         </div>
         <div className="map-panel" aria-label="Mapa de la oficina">
           <Map

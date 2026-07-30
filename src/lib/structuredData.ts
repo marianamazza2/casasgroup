@@ -5,6 +5,7 @@
 // reutilizar los mismos schemas cuando se active prerender/SSR.
 
 import type { Property } from './types'
+import { isValidCoords } from './coords'
 
 /** Dominio canónico del sitio (mismo que public/sitemap.xml). Sobrescribible por
  *  entorno para previews/staging. Sin barra final para poder concatenar rutas. */
@@ -128,7 +129,9 @@ export function realEstateListingSchema(p: Property): Record<string, unknown> {
       addressCountry: BUSINESS.country,
     },
   }
-  if (p.coords) {
+  // Solo publicamos el geo si la coordenada es plausible: un dato corrupto en el
+  // JSON-LD es peor que no declarar ubicación (Google lo lee como dato real).
+  if (isValidCoords(p.coords)) {
     accommodation.geo = {
       '@type': 'GeoCoordinates',
       latitude: p.coords.lat,
