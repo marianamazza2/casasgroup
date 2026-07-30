@@ -223,8 +223,8 @@ function ContactPage() {
             </div>
           </div>
           <div className="hero-scroll-hint" aria-hidden="true">
-            <span>o ver mas</span>
-            <div className="scroll-arrow" />
+            <span>ver mas</span>
+            <span className="scroll-pulse-line" />
           </div>
         </section>
       </div>

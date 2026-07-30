@@ -569,6 +569,14 @@ button {
   z-index: 5;
 }
 
+/* En contacto el hint usa la misma tipografía que el scroll de los heroes de
+   servicios (.sum-hero-scroll): más tracking y un punto menos de contraste. */
+.contact-page .hero-scroll-hint {
+  color: rgba(248, 242, 231, 0.6);
+  gap: 12px;
+  letter-spacing: 0.2em;
+}
+
 .scroll-arrow {
   animation: scroll-bounce 1.8s ease-in-out infinite;
   border-bottom: 1.5px solid currentColor;
@@ -6671,6 +6679,26 @@ button {
   max-width: 560px;
 }
 
+/* En las páginas de servicios la descripción del hero va en ligera (300).
+   Va antes que la regla de la entradilla para no pisarle su peso. */
+.servicio-page .sum-hero-subtitle {
+  font-weight: 300;
+}
+
+/* Hero con dos párrafos: el primero funciona como entradilla y el segundo la
+   desarrolla, así que los juntamos y bajamos un punto el contraste del cuerpo. */
+.sum-hero-subtitle:has(+ .sum-hero-subtitle--body) {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.sum-hero-subtitle--body {
+  color: rgba(250, 247, 241, 0.86);
+  font-weight: 300;
+  line-height: 1.65;
+  max-width: 665px;
+}
+
 /* Botón del hero con colores invertidos: fondo claro + texto dorado */
 .sum-hero .button-link {
   background: #faf7f1;
@@ -6699,7 +6727,10 @@ button {
   z-index: 2;
 }
 
-.sum-hero-scroll-line {
+/* Línea vertical que crece y se desvanece. Nació en los heroes de servicios
+   (.sum-hero-scroll-line) y la reutiliza el hint de contacto (.scroll-pulse-line). */
+.sum-hero-scroll-line,
+.scroll-pulse-line {
   background: linear-gradient(rgba(248, 242, 231, 0.7), transparent);
   height: 48px;
   width: 1px;
@@ -6724,7 +6755,8 @@ button {
     animation: none;
   }
 
-  .sum-hero-scroll-line {
+  .sum-hero-scroll-line,
+  .scroll-pulse-line {
     animation: none;
   }
 }
@@ -6737,6 +6769,13 @@ button {
 
   .sum-hero-subtitle {
     font-size: 14px;
+  }
+
+  /* En móvil el hero tiene altura fija: el párrafo largo se compacta para que
+     el botón siga entrando sin recortarse. */
+  .sum-hero-subtitle--body {
+    font-size: 13px;
+    line-height: 1.55;
   }
 
   .sum-hero-scroll {
@@ -7166,6 +7205,7 @@ button {
 
 /* Solo se usa en mobile (ver media query de 768px) */
 .adm-prose-toggle {
+  align-items: center;
   background: none;
   border: 0;
   color: var(--gold);
@@ -7174,18 +7214,32 @@ button {
   font-family: var(--sans);
   font-size: 14px;
   font-weight: 600;
+  gap: 8px;
   margin-top: 14px;
   padding: 0;
 }
 
+/* Pico: mira hacia abajo en "Ver más" y gira hacia arriba en "Ver menos". */
+.adm-prose-chevron {
+  border-bottom: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  height: 7px;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  width: 7px;
+}
+
+.adm-prose-chevron.is-up {
+  transform: translateY(1px) rotate(-135deg);
+}
+
 /* Ver más / ver menos solo en mobile: el texto es largo y se comería la
-   pantalla entera. Plegado se corta a ~10 líneas con un degradado que insinúa
-   que sigue. En desktop se ve completo (is-clamped no hace nada aquí). */
+   pantalla entera. Plegado se corta justo al final del segundo párrafo
+   (--adm-prose-clamp lo mide el JS). En desktop se ve completo (is-clamped no
+   hace nada aquí). */
 @media (max-width: 768px) {
   .adm-prose.is-clamped {
-    -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
-    max-height: 260px;
+    max-height: var(--adm-prose-clamp, 420px);
     overflow: hidden;
   }
 
@@ -7201,8 +7255,12 @@ button {
     transition: max-height 500ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
+  /* Alineado a la derecha: el pulgar llega antes y no compite con el inicio de
+     los párrafos, que van alineados a la izquierda. */
   .adm-prose-toggle {
-    display: inline-block;
+    display: flex;
+    margin-left: auto;
+    width: fit-content;
   }
 }
 

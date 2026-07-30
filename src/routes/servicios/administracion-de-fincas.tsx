@@ -78,6 +78,28 @@ function AdministracionDeFincasPage() {
     setProseOpen((v) => !v)
   }
 
+  // El corte del "Ver más" cae justo al final del segundo párrafo: lo medimos en
+  // vez de fijar un alto, porque el número de líneas cambia con el ancho. El CSS
+  // solo usa esta variable dentro del media query de mobile.
+  useEffect(() => {
+    const el = proseRef.current
+    if (!el) return
+
+    const measure = () => {
+      // offsetTop/Height y no getBoundingClientRect: los párrafos entran con un
+      // transform y los rects lo incluirían, falseando la medida.
+      const second = el.children[1] as HTMLElement | undefined
+      if (!second) return
+      const cut = second.offsetTop + second.offsetHeight - el.offsetTop
+      el.style.setProperty('--adm-prose-clamp', `${cut}px`)
+    }
+
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   useEffect(() => {
     const el = ctaRef.current
     if (!el) return
@@ -127,6 +149,10 @@ function AdministracionDeFincasPage() {
           onClick={toggleProse}
         >
           {proseOpen ? 'Ver menos' : 'Ver más'}
+          <span
+            className={`adm-prose-chevron${proseOpen ? ' is-up' : ''}`}
+            aria-hidden="true"
+          />
         </button>
       </section>
 
@@ -188,12 +214,18 @@ function AdmHero() {
         <motion.span className="sum-hero-eyebrow" variants={heroItem}>
           Administración de fincas
         </motion.span>
-        <motion.h1 className="sum-hero-title" variants={heroItem}>
+        <motion.h1 className="sum-hero-title sum-hero-title--two-line" variants={heroItem}>
           Tu comunidad<br />en buenas manos
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
           Administramos tu comunidad
+        </motion.p>
+        <motion.p className="sum-hero-subtitle sum-hero-subtitle--body" variants={heroItem}>
+          Ofrecemos una gestión integral de comunidades basada en la organización y la excelencia
+          operativa. Supervisamos cada aspecto de la administración, desde la gestión financiera y el
+          mantenimiento general hasta la atención personalizada a propietarios y proveedores,
+          asegurando un servicio eficiente, cercano y de confianza.
         </motion.p>
         <motion.div variants={heroItem}>
           <Link className="button-link" to="/contacto">
@@ -203,7 +235,6 @@ function AdmHero() {
       </motion.div>
 
       <div className="sum-hero-scroll" aria-hidden="true">
-        <span>Descúbrelo</span>
         <span className="sum-hero-scroll-line" />
       </div>
     </section>
