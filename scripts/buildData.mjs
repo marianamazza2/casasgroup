@@ -169,6 +169,29 @@ function parseDate(v) {
 
 const ESTADOS_VALIDOS = ['EN VENTA', 'RESERVADO', 'VENDIDO', 'ALQUILADO']
 
+// Columnas SI/NO del Sheet → etiqueta que se muestra en la ficha ("Características").
+// El orden de esta lista es el orden en que aparecen las etiquetas en la web.
+//
+// Sumar una característica nueva = agregar la columna al Sheet (con el nombre exacto
+// de la izquierda, en minúsculas y sin tildes) + una línea acá. No hay que tocar
+// nada más: la ficha las pinta como etiquetas de texto, sin iconos por nombre.
+const FEATURES_POR_COLUMNA = [
+  ['ascensor', 'Ascensor'],
+  ['terraza', 'Terraza'],
+  ['balcon', 'Balcón'],
+  ['galeria', 'Galería'],
+  ['patio', 'Patio'],
+  ['jardin_privado', 'Jardín privado'],
+  ['garaje', 'Garaje'],
+  ['trastero', 'Trastero'],
+  ['cocina_equipada', 'Cocina equipada'],
+  ['cocina_office', 'Cocina office'],
+  ['electrodomesticos', 'Electrodomésticos'],
+  ['aire_acondicionado', 'Aire acondicionado'],
+  ['armarios_empotrados', 'Armarios empotrados'],
+  ['transporte_publico', 'Cerca de transporte público'],
+]
+
 // ── Mapas de enums Sheet → Property ──────────────────────────────────────────
 const MODE_BY_OPERACION = { VENTA: 'compra', ALQUILER: 'alquiler' }
 const CATEGORY_BY_TIPO = {
@@ -244,13 +267,9 @@ async function toProperty(row, usedIds) {
   const image = ordered.length ? cloudinaryUrl(ordered[0].id, 'card') : ''
   const images = ordered.map((p) => cloudinaryUrl(p.id, 'gallery'))
 
-  const features = []
-  if (isYes(row.ascensor)) features.push('Ascensor')
-  if (isYes(row.terraza)) features.push('Terraza')
-  if (isYes(row.garaje)) features.push('Garaje')
-  if (isYes(row.trastero)) features.push('Trastero')
-  if (isYes(row.balcon)) features.push('Balcón')
-  if (isYes(row.galeria)) features.push('Galería')
+  const features = FEATURES_POR_COLUMNA
+    .filter(([columna]) => isYes(row[columna]))
+    .map(([, etiqueta]) => etiqueta)
 
   const property = {
     id,

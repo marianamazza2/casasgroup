@@ -7137,131 +7137,73 @@ button {
   }
 }
 
-/* Administración de fincas — slider de features full-bleed: 3 cards en desktop
-   con flechas, y navegación por swipe + dots en mobile (igual que el rail de
-   propiedades de la home). La sección pierde el padding lateral para que el
-   track sangre a todo el ancho; el heading lo recupera. */
-.adm-features {
-  padding-left: 0;
-  padding-right: 0;
+/* Administración de fincas — "Qué incluye" es texto corrido a todo el ancho de
+   la sección (solo lo limita el padding lateral de .section). */
+/* Un poco más de aire entre el "Qué incluye" y el párrafo de entrada que los 12px
+   por defecto del heading (aquí el texto que sigue es largo y necesita respirar). */
+.adm-features .section-heading p {
+  margin-top: clamp(20px, 2.2vw, 30px);
 }
 
-.adm-features .section-heading {
-  padding-inline: clamp(22px, 5vw, 72px);
+/* El hueco entre el párrafo de entrada (que vive en el .section-heading) y el
+   primer párrafo del bloque es el mismo que separa los párrafos entre sí. */
+.adm-prose {
+  --adm-prose-gap: clamp(16px, 1.3vw, 18px);
+
+  margin-top: var(--adm-prose-gap);
 }
 
-.adm-feature-wrap {
-  margin-top: clamp(36px, 4vw, 52px);
-  position: relative;
+.adm-prose p {
+  color: var(--text);
+  font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 1.85;
+  margin: 0 0 var(--adm-prose-gap);
 }
 
-/* Flechas centradas sobre la imagen (no sobre la card completa, que incluye el
-   texto). --adm-arrow-y lo fija el JS midiendo la altura del media. */
-.adm-feature-wrap .rail-nav {
-  top: var(--adm-arrow-y, 38%);
+.adm-prose p:last-child {
+  margin-bottom: 0;
 }
 
-.adm-feature-track {
-  cursor: grab;
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding: 0 clamp(22px, 5vw, 72px) 8px;
-  scroll-padding-inline-start: clamp(22px, 5vw, 72px);
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Mientras se arrastra con el ratón: sin snap (no pelea con scrollLeft) ni
-   selección de texto, y cursor de agarre. */
-.adm-feature-track.is-grabbing {
-  cursor: grabbing;
-  scroll-snap-type: none;
-  user-select: none;
-}
-
-.adm-feature-track::-webkit-scrollbar {
-  display: none;
-}
-
-.adm-feature-card {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  display: flex;
-  flex: 0 0 calc((100vw - 2 * clamp(22px, 5vw, 72px) - 2 * 20px) / 3);
-  flex-direction: column;
-  overflow: hidden;
-  scroll-snap-align: start;
-  transition: box-shadow 280ms ease, transform 280ms ease;
-}
-
-.adm-feature-card:hover {
-  box-shadow: 0 18px 40px rgb(26 26 24 / 8%);
-  transform: translateY(-4px);
-}
-
-.adm-feature-media {
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-}
-
-.adm-feature-media img {
-  display: block;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-  width: 100%;
-}
-
-.adm-feature-card:hover .adm-feature-media img {
-  transform: scale(1.05);
-}
-
-.adm-feature-body {
-  padding: clamp(20px, 2.4vw, 28px);
-}
-
-.adm-feature-title {
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: clamp(20px, 2.4vw, 26px);
-  font-weight: 500;
-  line-height: 1.15;
-  margin: 0 0 10px;
-}
-
-.adm-feature-desc {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-  margin: 0;
-}
-
-/* Dots solo en mobile (desktop usa flechas), igual que el rail de la home. */
-.adm-feature-dots {
-  align-items: center;
-  display: none;
-  gap: 9px;
-  justify-content: center;
-  margin-top: clamp(24px, 3vw, 34px);
-}
-
-.adm-feature-dot {
-  background: rgba(164, 123, 54, 0.35);
+/* Solo se usa en mobile (ver media query de 768px) */
+.adm-prose-toggle {
+  background: none;
   border: 0;
-  border-radius: 999px;
+  color: var(--gold);
   cursor: pointer;
-  height: 8px;
+  display: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 14px;
   padding: 0;
-  transition: background 0.3s ease, width 0.3s ease;
-  width: 8px;
 }
 
-.adm-feature-dot.is-active {
-  background: var(--gold);
-  width: 30px;
+/* Ver más / ver menos solo en mobile: el texto es largo y se comería la
+   pantalla entera. Plegado se corta a ~10 líneas con un degradado que insinúa
+   que sigue. En desktop se ve completo (is-clamped no hace nada aquí). */
+@media (max-width: 768px) {
+  .adm-prose.is-clamped {
+    -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+    max-height: 260px;
+    overflow: hidden;
+  }
+
+  /* Tope holgado (el texto mide ~1150px en el móvil más estrecho): solo existe
+     para que el max-height pueda animarse, nunca llega a recortar. */
+  .adm-prose.is-expanded {
+    max-height: 1600px;
+    overflow: visible;
+  }
+
+  .adm-prose {
+    scroll-margin-top: 96px;
+    transition: max-height 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .adm-prose-toggle {
+    display: inline-block;
+  }
 }
 
 /* ─── Hipotecas ─── */
@@ -7797,18 +7739,6 @@ button {
   }
 }
 
-/* Mobile/tablet: como el rail de la home — sin flechas, navegación por swipe
-   con dots de paginación. */
-@media (max-width: 1024px) {
-  .adm-feature-wrap .rail-nav {
-    display: none;
-  }
-
-  .adm-feature-dots {
-    display: flex;
-  }
-}
-
 @media (max-width: 640px) {
   .servicio-hero {
     padding: 72px clamp(20px, 4vw, 56px);
@@ -7862,10 +7792,6 @@ button {
 
   .stats--3 {
     grid-template-columns: 1fr;
-  }
-
-  .adm-feature-card {
-    flex-basis: min(82vw, 320px);
   }
 
   .cf-intro {

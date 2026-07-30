@@ -127,7 +127,9 @@ export const generatedProperties: Property[] = [
     "category": "piso",
     "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_o0lgc9",
     "desc": "Redcasas presenta este espectacular piso en la zona de Can Vidalet (Esplugues de Llobregat), a tan solo diez minutos del centro comercial Finestrelles y del tranvía, este encantador piso ofrece una ubicación inmejorable. Rodeado de escuelas, supermercados a tan solo tres minutos del metro de Can Vidalet (L5) y a cinco minutos del metro de Can Serra (L1).\nLa vivienda cuenta con 91 m' muy bien distribuidos. Dispone de un amplio salón-comedor con salida a una acogedora terraza, una cocina independiente y funcional con acceso a una amplia galería, cuatro habitaciones amplias y dobles, además de dos baños completos y modernos.\nNo te pierdas esta oportunidad. ¡Ven a verlo! Los honorarios de la agencia intermediadora y los gastos de compra-venta no están incluidos en el precio.",
-    "features": [],
+    "features": [
+      "Galería"
+    ],
     "images": [
       "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_o0lgc9",
       "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/01-salon_cfbtxa",
@@ -144,7 +146,7 @@ export const generatedProperties: Property[] = [
     "floor": "1",
     "coords": {
       "lat": 41.375,
-      "lng": 2.0875
+      "lng": 2.088
     }
   },
   {
@@ -161,7 +163,10 @@ export const generatedProperties: Property[] = [
     "category": "piso",
     "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_15_54_s8akac",
     "desc": "Group Casas presenta esta luminosa vivienda totalmente exterior en venta en la zona de Pubilla\nCasas (Hospitalet de Llobregat), ubicada a pocos metros del metro L5 Can Vidalet, del centro comercial Finestrelles y rodeada de colegios, supermercados y todo tipo de servicios, lo que garantiza comodidad y una excelente calidad de vida.\nLa vivienda cuenta con aproximadamente 88 m' distribuidos en 4 habitaciones (dos dobles y dos individuales), una amplia cocina independiente y un baño completo. El salón-comedor tiene salida a un amplio balcón, al que también se accede desde la habitación principal, aportando luminosidad y amplitud a la vivienda.\nTodas las estancias disponen además de aire acondicionado con bomba de frio y calor para mayor confort durante todo el año. La finca no dispone de ascensor.\n//Las imágenes mostradas son una propuesta visual de cómo podría verse la vivienda decorada.\nLa estructura, distribución y espacios del piso se mantienen exactamente iguales. //\nNo te pierdas esta oportunidad ¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
-    "features": [],
+    "features": [
+      "Balcón",
+      "Galería"
+    ],
     "images": [
       "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_15_54_s8akac",
       "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_33_45_hyr9de",
@@ -225,7 +230,7 @@ export const generatedProperties: Property[] = [
     "floor": "Entreplanta interior",
     "coords": {
       "lat": 41.375,
-      "lng": 2.0875
+      "lng": 2.088
     }
   },
   {
