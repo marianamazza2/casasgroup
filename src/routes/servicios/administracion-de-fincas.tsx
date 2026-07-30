@@ -62,6 +62,9 @@ const SERVICE_PARAGRAPHS = [
   'Gestionamos comunidades de propietarios en régimen de propiedad horizontal y propiedades en régimen de propiedad vertical, ofreciendo un servicio personalizado adaptado a las necesidades de cada finca.',
 ]
 
+// Altura del difuminado plegado: ~4 líneas del segundo párrafo asomando.
+const PROSE_FADE = 104
+
 function AdministracionDeFincasPage() {
   const ctaRef = useRef<HTMLElement>(null)
   const [ctaActive, setCtaActive] = useState(false)
@@ -78,9 +81,9 @@ function AdministracionDeFincasPage() {
     setProseOpen((v) => !v)
   }
 
-  // El corte del "Ver más" cae justo al final del segundo párrafo: lo medimos en
-  // vez de fijar un alto, porque el número de líneas cambia con el ancho. El CSS
-  // solo usa esta variable dentro del media query de mobile.
+  // Plegado, el último párrafo legible es el primero: a partir de ahí el texto se
+  // desvanece. Medimos en vez de fijar altos porque el número de líneas cambia
+  // con el ancho. El CSS solo usa estas variables dentro del media query mobile.
   useEffect(() => {
     const el = proseRef.current
     if (!el) return
@@ -90,7 +93,11 @@ function AdministracionDeFincasPage() {
       // transform y los rects lo incluirían, falseando la medida.
       const second = el.children[1] as HTMLElement | undefined
       if (!second) return
-      const cut = second.offsetTop + second.offsetHeight - el.offsetTop
+      // El degradado arranca donde empieza el segundo párrafo y el corte cae unas
+      // líneas más abajo, para que se vea el texto difuminándose y no un tajo.
+      const fade = second.offsetTop - el.offsetTop
+      const cut = fade + Math.min(second.offsetHeight, PROSE_FADE)
+      el.style.setProperty('--adm-prose-fade', `${fade}px`)
       el.style.setProperty('--adm-prose-clamp', `${cut}px`)
     }
 

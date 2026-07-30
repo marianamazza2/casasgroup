@@ -6767,6 +6767,15 @@ button {
     padding-inline: clamp(20px, 6vw, 28px);
   }
 
+  /* En móvil también respetamos el salto del <br>: escalamos el título con el
+     ancho de pantalla para que cada línea entre entera y no se descuelgue una
+     palabra suelta (p. ej. "comunidad" cayendo debajo de "Tu"). */
+  .sum-hero-title--two-line {
+    font-size: clamp(24px, 9.2vw, 38px);
+    max-width: none;
+    white-space: nowrap;
+  }
+
   .sum-hero-subtitle {
     font-size: 14px;
   }
@@ -7234,13 +7243,32 @@ button {
 }
 
 /* Ver más / ver menos solo en mobile: el texto es largo y se comería la
-   pantalla entera. Plegado se corta justo al final del segundo párrafo
-   (--adm-prose-clamp lo mide el JS). En desktop se ve completo (is-clamped no
-   hace nada aquí). */
+   pantalla entera. Plegado, el último párrafo legible es el primero: desde el
+   arranque del segundo (--adm-prose-fade) el texto se desvanece hasta el corte
+   (--adm-prose-clamp). Ambas las mide el JS. En desktop se ve completo
+   (is-clamped no hace nada aquí). */
 @media (max-width: 768px) {
   .adm-prose.is-clamped {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 0,
+      #000 var(--adm-prose-fade, 200px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      #000 0,
+      #000 var(--adm-prose-fade, 200px),
+      transparent 100%
+    );
     max-height: var(--adm-prose-clamp, 420px);
     overflow: hidden;
+  }
+
+  /* El final del degradado ya es casi invisible: sin este ajuste el botón queda
+     flotando lejos del último párrafo legible. */
+  .adm-prose.is-clamped + .adm-prose-toggle {
+    margin-top: -10px;
   }
 
   /* Tope holgado (el texto mide ~1150px en el móvil más estrecho): solo existe
