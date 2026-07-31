@@ -62,8 +62,9 @@ const SERVICE_PARAGRAPHS = [
   'Gestionamos comunidades de propietarios en régimen de propiedad horizontal y propiedades en régimen de propiedad vertical, ofreciendo un servicio personalizado adaptado a las necesidades de cada finca.',
 ]
 
-// Altura del difuminado plegado: ~4 líneas del segundo párrafo asomando.
-const PROSE_FADE = 104
+// Líneas que dura la rampa del difuminado: arranca al final del primer párrafo
+// y muere justo al acabar la primera línea del segundo.
+const PROSE_FADE_LINES = 3
 
 function AdministracionDeFincasPage() {
   const ctaRef = useRef<HTMLElement>(null)
@@ -81,9 +82,11 @@ function AdministracionDeFincasPage() {
     setProseOpen((v) => !v)
   }
 
-  // Plegado, el último párrafo legible es el primero: a partir de ahí el texto se
-  // desvanece. Medimos en vez de fijar altos porque el número de líneas cambia
-  // con el ancho. El CSS solo usa estas variables dentro del media query mobile.
+  // Plegado, el último párrafo legible es el primero y el corte cae al terminar
+  // la primera línea del segundo ("Asesoramos en el proceso..."), que queda casi
+  // del todo difuminada. Medimos en vez de fijar altos porque el número de
+  // líneas cambia con el ancho. El CSS solo usa estas variables dentro del media
+  // query mobile.
   useEffect(() => {
     const el = proseRef.current
     if (!el) return
@@ -93,10 +96,19 @@ function AdministracionDeFincasPage() {
       // transform y los rects lo incluirían, falseando la medida.
       const second = el.children[1] as HTMLElement | undefined
       if (!second) return
-      // El degradado arranca donde empieza el segundo párrafo y el corte cae unas
-      // líneas más abajo, para que se vea el texto difuminándose y no un tajo.
-      const fade = second.offsetTop - el.offsetTop
-      const cut = fade + Math.min(second.offsetHeight, PROSE_FADE)
+
+      const styles = getComputedStyle(second)
+      const parsed = Number.parseFloat(styles.lineHeight)
+      // line-height: normal no da un número: reconstruimos la línea desde el
+      // font-size con el mismo 1.85 del CSS.
+      const line = Number.isFinite(parsed)
+        ? parsed
+        : Number.parseFloat(styles.fontSize) * 1.85
+
+      // El corte deja asomar una sola línea del segundo párrafo, y el degradado
+      // empieza unas líneas antes para que muera justo ahí en vez de dar un tajo.
+      const cut = second.offsetTop - el.offsetTop + line
+      const fade = Math.max(0, cut - line * PROSE_FADE_LINES)
       el.style.setProperty('--adm-prose-fade', `${fade}px`)
       el.style.setProperty('--adm-prose-clamp', `${cut}px`)
     }

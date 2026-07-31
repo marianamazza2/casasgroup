@@ -7243,10 +7243,11 @@ button {
 }
 
 /* Ver más / ver menos solo en mobile: el texto es largo y se comería la
-   pantalla entera. Plegado, el último párrafo legible es el primero: desde el
-   arranque del segundo (--adm-prose-fade) el texto se desvanece hasta el corte
-   (--adm-prose-clamp). Ambas las mide el JS. En desktop se ve completo
-   (is-clamped no hace nada aquí). */
+   pantalla entera. Plegado, el último párrafo legible es el primero: el texto se
+   desvanece desde --adm-prose-fade (unas líneas antes del final de ese párrafo)
+   hasta el corte --adm-prose-clamp, que cae al acabar la primera línea del
+   segundo. Ambas las mide el JS. En desktop se ve completo (is-clamped no hace
+   nada aquí). */
 @media (max-width: 768px) {
   .adm-prose.is-clamped {
     -webkit-mask-image: linear-gradient(
