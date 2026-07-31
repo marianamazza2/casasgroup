@@ -7284,10 +7284,10 @@ button {
     overflow: hidden;
   }
 
-  /* El final del degradado ya es casi invisible: sin este ajuste el botón queda
-     flotando lejos del último párrafo legible. */
+  /* Aire por debajo del corte: pegado a la línea difuminada el botón parecía
+     parte del párrafo. */
   .adm-prose.is-clamped + .adm-prose-toggle {
-    margin-top: -18px;
+    margin-top: 16px;
   }
 
   /* Tope holgado (el texto mide ~1150px en el móvil más estrecho): solo existe

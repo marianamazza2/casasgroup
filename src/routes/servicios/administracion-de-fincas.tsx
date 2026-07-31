@@ -63,9 +63,10 @@ const SERVICE_PARAGRAPHS = [
 ]
 
 // Líneas del segundo párrafo que asoman difuminándose. La rampa entera cae
-// dentro de ellas: el primer párrafo se lee opaco de principio a fin y el
-// degradado ocupa estas líneas, así se ve progresivo en vez de un tajo.
-const PROSE_FADE_LINES = 3
+// dentro de ellas: el primer párrafo se lee opaco de principio a fin, la
+// primera línea de "Asesoramos..." arranca el degradado, la segunda lo termina
+// y de la tercera ya no se ve nada (si no, el botón "Ver más" se le superpone).
+const PROSE_FADE_LINES = 2
 
 function AdministracionDeFincasPage() {
   const ctaRef = useRef<HTMLElement>(null)
