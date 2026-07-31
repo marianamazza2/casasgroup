@@ -62,10 +62,10 @@ const SERVICE_PARAGRAPHS = [
   'Gestionamos comunidades de propietarios en régimen de propiedad horizontal y propiedades en régimen de propiedad vertical, ofreciendo un servicio personalizado adaptado a las necesidades de cada finca.',
 ]
 
-// Líneas que dura la rampa del difuminado: arranca a mitad del primer párrafo y
-// muere justo al acabar la primera línea del segundo. Con menos líneas el hueco
-// entre párrafos se come casi toda la rampa y el corte se nota de golpe.
-const PROSE_FADE_LINES = 5
+// Líneas del segundo párrafo que asoman difuminándose. La rampa entera cae
+// dentro de ellas: el primer párrafo se lee opaco de principio a fin y el
+// degradado ocupa estas líneas, así se ve progresivo en vez de un tajo.
+const PROSE_FADE_LINES = 3
 
 function AdministracionDeFincasPage() {
   const ctaRef = useRef<HTMLElement>(null)
@@ -83,11 +83,11 @@ function AdministracionDeFincasPage() {
     setProseOpen((v) => !v)
   }
 
-  // Plegado, el último párrafo legible es el primero y el corte cae al terminar
-  // la primera línea del segundo ("Asesoramos en el proceso..."), que queda casi
-  // del todo difuminada. Medimos en vez de fijar altos porque el número de
-  // líneas cambia con el ancho. El CSS solo usa estas variables dentro del media
-  // query mobile.
+  // Plegado, el primer párrafo se lee entero y el degradado arranca justo donde
+  // empieza el segundo ("Asesoramos en el proceso..."), del que asoman
+  // PROSE_FADE_LINES líneas cada vez más tenues hasta el corte. Medimos en vez
+  // de fijar altos porque el número de líneas cambia con el ancho. El CSS solo
+  // usa estas variables dentro del media query mobile.
   useEffect(() => {
     const el = proseRef.current
     if (!el) return
@@ -106,10 +106,10 @@ function AdministracionDeFincasPage() {
         ? parsed
         : Number.parseFloat(styles.fontSize) * 1.85
 
-      // El corte deja asomar una sola línea del segundo párrafo, y el degradado
-      // empieza unas líneas antes para que muera justo ahí en vez de dar un tajo.
-      const cut = second.offsetTop - el.offsetTop + line
-      const fade = Math.max(0, cut - line * PROSE_FADE_LINES)
+      // El degradado empieza en la primera línea del segundo párrafo y el corte
+      // cae PROSE_FADE_LINES líneas más abajo: toda la rampa queda ahí dentro.
+      const fade = second.offsetTop - el.offsetTop
+      const cut = fade + line * PROSE_FADE_LINES
       el.style.setProperty('--adm-prose-fade', `${fade}px`)
       el.style.setProperty('--adm-prose-clamp', `${cut}px`)
     }

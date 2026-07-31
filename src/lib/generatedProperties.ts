@@ -308,9 +308,18 @@ export const generatedProperties: Property[] = [
     "priceLabel": "199.900 €",
     "mode": "compra",
     "category": "piso",
-    "image": "",
+    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_dkqdkv",
     "desc": "Group Casas presenta este piso ubicado en una zona muy bien comunicada de Santa Eulàlia, cerca de metro L1, autobuses y acceso rápido a las principales vías que conectan con Barcelona y alrededores. Las paradas Torrassa L1 y Can Tries | Gornal L9S-L10S se encuentran a pocos minutos caminando. La zona cuenta con centro de salud, farmacias, supermercados, institutos y todos los servicios básicos.\n\nLa vivienda cuenta con una superficie aproximada de 60 m² y ofrece una distribución funcional compuesta por un luminoso salón-comedor exterior, cocina independiente, tres habitaciones dobles y un baño.\n\nLa finca no dispone de ascensor.\n\nNo te pierdas esta oportunidad.\n¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [],
+    "images": [
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_dkqdkv",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/01-salon_nl1fyr",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/02-salon_wrbxgq",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/03-cocina_iq5ieq",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/04-habitacion_rscjzj",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/05-habitacion_alshtl",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/06-baño_x4wwyo"
+    ],
     "floor": "1",
     "coords": {
       "lat": 41.365,
@@ -330,11 +339,23 @@ export const generatedProperties: Property[] = [
     "priceLabel": "190.000 €",
     "mode": "compra",
     "category": "piso",
-    "image": "",
+    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_gptonx",
     "desc": "Group Casas presenta este piso ubicado en una zona muy bien comunicada de Santa Eulàlia, cerca de metro L1, autobuses y acceso rápido a las principales vías que conectan con Barcelona y alrededores. Las paradas Torrassa L1 y Can Tries | Gornal L9S-L10S se encuentran a pocos minutos caminando. La zona cuenta con centro de salud, farmacias, supermercados, institutos y todos los servicios básicos.\n\nLa vivienda dispone de una superficie aproximada de 70m², actualmente distribuida en salón comedor con salida a un balcón, cocina independiente, tres habitaciones (una de ella también con salida al balcón), y un baño.\n\nLa finca dispone de ascensor.\nNo te pierdas esta oportunidad.\n¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [
       "Ascensor",
       "Terraza"
+    ],
+    "images": [
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_gptonx",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/01-salon_d5a8yq",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/02-balcon_gbpncs",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/03-balcon_ivcuxb",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/04-cocina_saqh3e",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/05-habitacion_iqdiov",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/06-habitacion_ikvbcx",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/07-balcon2_uizzgr",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/08-baño_ustpvz",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/10-galeria_suljep"
     ],
     "floor": "5",
     "coords": {

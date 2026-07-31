@@ -7243,29 +7243,41 @@ button {
 }
 
 /* Ver más / ver menos solo en mobile: el texto es largo y se comería la
-   pantalla entera. Plegado, el último párrafo legible es el primero: el texto se
-   desvanece desde --adm-prose-fade (unas líneas antes del final de ese párrafo,
-   PROSE_FADE_LINES en el TSX) hasta el corte --adm-prose-clamp, que cae al
-   acabar la primera línea del segundo. Ambas las mide el JS. En desktop se ve completo (is-clamped no hace
-   nada aquí). */
+   pantalla entera. Plegado, el primer párrafo se lee opaco entero: el texto se
+   desvanece desde --adm-prose-fade (el inicio del segundo párrafo) hasta el
+   corte --adm-prose-clamp, PROSE_FADE_LINES líneas más abajo. Ambas las mide el
+   JS. En desktop se ve completo (is-clamped no hace nada aquí). */
 @media (max-width: 768px) {
   .adm-prose.is-clamped {
-    /* El stop intermedio suaviza el codo: sin él, el paso de opaco a rampa
-       lineal se ve como una raya justo donde arranca el degradado. */
+    /* Los stops intermedios suavizan el codo: con una rampa lineal a secas el
+       paso de opaco a degradado se ve como una raya justo donde arranca, y con
+       un solo stop la caída va a saltos. Estos cinco aproximan una curva. */
     -webkit-mask-image: linear-gradient(
       to bottom,
       #000 0,
       #000 var(--adm-prose-fade, 200px),
+      rgba(0, 0, 0, 0.92)
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.2),
       rgba(0, 0, 0, 0.72)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.45),
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.4),
+      rgba(0, 0, 0, 0.45)
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.6),
+      rgba(0, 0, 0, 0.2)
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.8),
       transparent 100%
     );
     mask-image: linear-gradient(
       to bottom,
       #000 0,
       #000 var(--adm-prose-fade, 200px),
+      rgba(0, 0, 0, 0.92)
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.2),
       rgba(0, 0, 0, 0.72)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.45),
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.4),
+      rgba(0, 0, 0, 0.45)
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.6),
+      rgba(0, 0, 0, 0.2)
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.8),
       transparent 100%
     );
     max-height: var(--adm-prose-clamp, 420px);
@@ -7275,7 +7287,7 @@ button {
   /* El final del degradado ya es casi invisible: sin este ajuste el botón queda
      flotando lejos del último párrafo legible. */
   .adm-prose.is-clamped + .adm-prose-toggle {
-    margin-top: -10px;
+    margin-top: -18px;
   }
 
   /* Tope holgado (el texto mide ~1150px en el móvil más estrecho): solo existe
