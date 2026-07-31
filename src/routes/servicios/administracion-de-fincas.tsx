@@ -62,9 +62,10 @@ const SERVICE_PARAGRAPHS = [
   'Gestionamos comunidades de propietarios en régimen de propiedad horizontal y propiedades en régimen de propiedad vertical, ofreciendo un servicio personalizado adaptado a las necesidades de cada finca.',
 ]
 
-// Líneas que dura la rampa del difuminado: arranca al final del primer párrafo
-// y muere justo al acabar la primera línea del segundo.
-const PROSE_FADE_LINES = 3
+// Líneas que dura la rampa del difuminado: arranca a mitad del primer párrafo y
+// muere justo al acabar la primera línea del segundo. Con menos líneas el hueco
+// entre párrafos se come casi toda la rampa y el corte se nota de golpe.
+const PROSE_FADE_LINES = 5
 
 function AdministracionDeFincasPage() {
   const ctaRef = useRef<HTMLElement>(null)

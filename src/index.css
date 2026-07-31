@@ -7244,22 +7244,28 @@ button {
 
 /* Ver más / ver menos solo en mobile: el texto es largo y se comería la
    pantalla entera. Plegado, el último párrafo legible es el primero: el texto se
-   desvanece desde --adm-prose-fade (unas líneas antes del final de ese párrafo)
-   hasta el corte --adm-prose-clamp, que cae al acabar la primera línea del
-   segundo. Ambas las mide el JS. En desktop se ve completo (is-clamped no hace
+   desvanece desde --adm-prose-fade (unas líneas antes del final de ese párrafo,
+   PROSE_FADE_LINES en el TSX) hasta el corte --adm-prose-clamp, que cae al
+   acabar la primera línea del segundo. Ambas las mide el JS. En desktop se ve completo (is-clamped no hace
    nada aquí). */
 @media (max-width: 768px) {
   .adm-prose.is-clamped {
+    /* El stop intermedio suaviza el codo: sin él, el paso de opaco a rampa
+       lineal se ve como una raya justo donde arranca el degradado. */
     -webkit-mask-image: linear-gradient(
       to bottom,
       #000 0,
       #000 var(--adm-prose-fade, 200px),
+      rgba(0, 0, 0, 0.72)
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.45),
       transparent 100%
     );
     mask-image: linear-gradient(
       to bottom,
       #000 0,
       #000 var(--adm-prose-fade, 200px),
+      rgba(0, 0, 0, 0.72)
+        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.45),
       transparent 100%
     );
     max-height: var(--adm-prose-clamp, 420px);
