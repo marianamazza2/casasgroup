@@ -281,18 +281,18 @@ function SumHero() {
         animate="show"
       >
         <motion.span className="sum-hero-eyebrow" variants={heroItem}>
-          Cambio de suministros
+          Suministros
         </motion.span>
         <motion.h1 className="sum-hero-title" variants={heroItem}>
-          Cambio de suministros sin papeleo
+          Todos tus suministros, una sola empresa que los gestiona
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
-          Luz, gas, agua e internet listos el día que llegas a tu nuevo hogar.
+          Luz, agua, gas e internet listos desde el día que llegas a tu nuevo hogar.
         </motion.p>
         <motion.div variants={heroItem}>
           <Link className="button-link" to="/contacto">
-            Solicitar gestión →
+            Contáctanos →
           </Link>
         </motion.div>
       </motion.div>
@@ -337,7 +337,7 @@ function CtaBanner() {
         <h2 className="adm-cta-title">No pierdas tiempo con el papeleo</h2>
         <p className="adm-cta-text">Contáctanos y nos encargamos de todo.</p>
         <Link className="button-link" to="/contacto">
-          Solicitar gestión →
+          Contáctanos →
         </Link>
       </div>
     </section>
