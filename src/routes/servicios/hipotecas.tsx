@@ -82,7 +82,11 @@ function HipotecasPage() {
           <span className="cf-eyebrow">Cómo funciona</span>
           <h2 className="cf-title">En cuatro pasos</h2>
           <p className="cf-intro">
-            Un proceso claro y acompañado, desde la primera consulta hasta la firma.
+            Te ayudamos a encontrar la hipoteca que mejor se adapta a tus necesidades.
+            Analizamos tu perfil financiero, negociamos con las principales entidades
+            bancarias y te acompañamos durante todo el proceso, desde la búsqueda de la mejor
+            financiación hasta la firma de la escritura pública ante notario, ofreciéndote un
+            servicio cercano, transparente y totalmente personalizado.
           </p>
         </div>
 
@@ -113,9 +117,9 @@ function HipotecasPage() {
           }}
         />
         <div className="adm-cta-inner">
-          <span className="adm-cta-eyebrow">Consulta gratuita</span>
+          <span className="adm-cta-eyebrow">Asesoramiento financiero gratuito</span>
           <h2 className="adm-cta-title">¿Quieres saber cuánto puedes financiar?</h2>
-          <p className="adm-cta-text">Primera consulta gratuita y sin compromiso.</p>
+          <p className="adm-cta-text">Primer asesoramiento financiero gratuito</p>
           <Link className="button-link" to="/contacto">
             Hablar con un asesor →
           </Link>
