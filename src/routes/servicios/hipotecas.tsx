@@ -26,12 +26,10 @@ export const Route = createFileRoute('/servicios/hipotecas')({
 })
 
 export const BENEFICIOS = [
-  'Analizamos tu perfil financiero y capacidad de endeudamiento',
-  'Negociamos con múltiples bancos para conseguir las mejores condiciones',
-  'Te asesoramos sobre hipoteca fija, variable o mixta',
-  'Preparamos y presentamos toda la documentación',
-  'Te acompañamos a la firma en notaría',
-  'Sin costes ocultos ni letra pequeña',
+  'Analizamos tu perfil financiero y encontramos la hipoteca que mejor se adapta a ti',
+  'Comparamos y negociamos con las principales entidades bancarias para conseguir las mejores condiciones para tu hipoteca',
+  'Te presentamos las mejores opciones y te asesoramos para elegir la financiación más adecuada para ti',
+  'Una vez elegida la mejor opción, nos encargamos de coordinar todos los trámites y te acompañamos hasta la firma de la escritura pública ante notario',
 ]
 
 export const PROCESO = [
@@ -234,12 +232,12 @@ function HipotecasHero() {
           Hipotecas
         </motion.span>
         <motion.h1 className="sum-hero-title" variants={heroItem}>
-          Conseguimos tu mejor hipoteca
+          Te conseguimos la mejor hipoteca
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
-          Trabajamos con los principales bancos para conseguirte las mejores condiciones
-          hipotecarias.
+          Gracias a nuestros acuerdos con diferentes bancos, encontramos la financiación que
+          mejor se adapte a ti.
         </motion.p>
         <motion.div variants={heroItem}>
           <Link className="button-link" to="/contacto">
@@ -325,7 +323,7 @@ function QueHacemos() {
     >
       <div className={`qh-sticky${pinned ? ' is-pinned' : ''}`}>
         <div className="qh-head">
-          <span className="qh-eyebrow">Qué hacemos por ti</span>
+          <span className="qh-eyebrow">¿Qué hacemos por ti?</span>
           <h2 className="qh-title">Te acompañamos</h2>
         </div>
 
