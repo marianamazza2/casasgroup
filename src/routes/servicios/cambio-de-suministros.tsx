@@ -73,23 +73,23 @@ export const SUMINISTROS = [
 export const PASOS = [
   {
     num: '1',
-    title: 'Dinos qué necesitas',
-    desc: 'Qué suministros quieres y los datos de tu vivienda.',
+    title: 'Solicitud',
+    desc: 'Recibimos la información de tu vivienda y tus necesidades.',
   },
   {
     num: '2',
-    title: 'Nos encargamos',
-    desc: 'Gestionamos todo el papeleo con cada compañía.',
+    title: 'Propuesta de gestión',
+    desc: 'Preparamos un presupuesto personalizado. Tras tu aprobación, iniciamos las gestiones.',
   },
   {
     num: '3',
-    title: 'Te confirmamos',
-    desc: 'Recibes confirmación de cada gestión realizada.',
+    title: 'Tramitación',
+    desc: 'Gestionamos la contratación de principio a fin con todas las empresas suministradoras.',
   },
   {
     num: '4',
-    title: 'Todo listo',
-    desc: 'Llegas a tu nuevo hogar con todo funcionando.',
+    title: 'Activación',
+    desc: 'Te confirmamos cada gestión para que llegues a tu nueva vivienda con todos los servicios operativos.',
   },
 ]
 
