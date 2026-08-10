@@ -6,6 +6,7 @@ import type { ReactElement } from 'react'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
 import { breadcrumbSchema, organizationSchema } from '../lib/structuredData'
+import { properties } from '../lib/properties'
 import Map, { Marker } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -25,9 +26,13 @@ const cardReveal = {
 }
 
 export const Route = createFileRoute('/contacto')({
-  validateSearch: (search: Record<string, unknown>): { ref?: string } => ({
-    ref: typeof search.ref === 'string' ? search.ref : undefined,
-  }),
+  // ?inmueble=<id> cuando se llega desde una ficha: identifica el piso sin
+  // exponer la referencia interna, y nos deja rescatar su titulo para el mensaje.
+  validateSearch: (search: Record<string, unknown>): { inmueble?: number } => {
+    const raw = search.inmueble
+    const id = typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw) : NaN
+    return { inmueble: Number.isFinite(id) ? id : undefined }
+  },
   head: () => ({
     meta: [
       { title: 'Contacto | Group Casas Barcelona' },
@@ -120,23 +125,30 @@ const cardIcons: Record<string, ReactElement> = {
 }
 
 function ContactPage() {
-  // Referencia del inmueble si se llega desde una ficha (/contacto?ref=GC-0001):
-  // abrimos el formulario ya prellenado y la sumamos a los canales directos.
-  const { ref } = Route.useSearch()
-  const refMessage = ref ? `Hola, me interesa el inmueble con referencia ${ref}.` : ''
+  // Si se llega desde una ficha (/contacto?inmueble=12) abrimos el formulario ya
+  // prellenado. El mensaje nombra el inmueble por su titulo y zona en vez de por
+  // la referencia interna: se entiende de un vistazo en WhatsApp o en el email.
+  const { inmueble } = Route.useSearch()
+  const property = inmueble === undefined ? undefined : properties.find((p) => p.id === inmueble)
+  // El titulo ya incluye calle y zona ("Piso en venta en Carrer X - Zona"), asi
+  // que no hace falta anadirle la localidad.
+  const propertyLabel = property?.title ?? ''
+  const propertyMessage = property
+    ? `Hola, me interesa este inmueble: ${propertyLabel}. ¿Podéis darme más información?`
+    : ''
 
-  const [isPanelOpen, setIsPanelOpen] = useState(() => Boolean(ref))
+  const [isPanelOpen, setIsPanelOpen] = useState(() => Boolean(property))
   const [reason, setReason] = useState(contactReasons[0])
 
-  // Devuelve el href del canal directo con la referencia incluida en el mensaje.
-  const hrefWithRef = (card: ContactCard) => {
-    if (!card.href || !ref) return card.href
+  // Devuelve el href del canal directo con el mensaje sobre el inmueble.
+  const hrefForProperty = (card: ContactCard) => {
+    if (!card.href || !property) return card.href
     if (card.icon === 'whatsapp') {
-      return `${card.href}?text=${encodeURIComponent(refMessage)}`
+      return `${card.href}?text=${encodeURIComponent(propertyMessage)}`
     }
     if (card.icon === 'mail') {
-      const subject = encodeURIComponent(`Consulta inmueble ${ref}`)
-      return `${card.href}?subject=${subject}&body=${encodeURIComponent(refMessage)}`
+      const subject = encodeURIComponent(`Consulta: ${propertyLabel}`)
+      return `${card.href}?subject=${subject}&body=${encodeURIComponent(propertyMessage)}`
     }
     return card.href
   }
@@ -265,7 +277,7 @@ function ContactPage() {
                 <motion.a
                   className="contact-card"
                   key={card.label}
-                  href={hrefWithRef(card)}
+                  href={hrefForProperty(card)}
                   variants={cardReveal}
                   {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 >
@@ -391,7 +403,7 @@ function ContactPage() {
               </label>
               <label>
                 Mensaje
-                <textarea name="message" placeholder="Escribe tu mensaje..." rows={5} defaultValue={refMessage} />
+                <textarea name="message" placeholder="Escribe tu mensaje..." rows={5} defaultValue={propertyMessage} />
               </label>
               <button type="submit">Enviar mensaje</button>
             </form>

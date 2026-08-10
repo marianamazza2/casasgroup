@@ -93,6 +93,14 @@ const services = [
     to: '/servicios/alarmas',
   },
   {
+    icon: 'RE',
+    title: 'Reformas',
+    description: 'Reformamos tu vivienda de principio a fin: proyecto, obra y acabados con un presupuesto cerrado, plazos comprometidos y un unico interlocutor que coordina a todos los gremios para que tu solo tengas que decidir como quieres vivir.',
+    image: 'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Obras',
+    to: '/servicios/reformas',
+  },
+  {
     icon: 'SU',
     title: 'Suministros',
     to: '/servicios/cambio-de-suministros',

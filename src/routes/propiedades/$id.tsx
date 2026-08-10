@@ -98,12 +98,13 @@ function PropertyDetailPage() {
       </div>
 
       {/* Barra fija de contacto (solo mobile, estilo Airbnb): un unico CTA que
-          lleva a /contacto pasando la referencia del inmueble. */}
+          lleva a /contacto pasando el id del inmueble, para prellenar el mensaje
+          con su titulo. */}
       <div className="detail-cta-bar">
         <span className="detail-cta-price">{p.priceLabel}</span>
         <Link
           to="/contacto"
-          search={{ ref: propertyRef }}
+          search={{ inmueble: p.id }}
           className="detail-cta-btn"
         >
           Contactar
@@ -333,7 +334,7 @@ function PropertyMeta({ property: p, propertyRef }: { property: Property; proper
           <p className="detail-price">{p.priceLabel}</p>
         </div>
         <div className="detail-meta-aside">
-          <Link to="/contacto" search={{ ref: propertyRef }} className="button-link">
+          <Link to="/contacto" search={{ inmueble: p.id }} className="button-link">
             Contactar →
           </Link>
         </div>

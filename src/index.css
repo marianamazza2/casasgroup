@@ -1637,7 +1637,29 @@ button {
 .footer-grid {
   display: grid;
   gap: 34px;
-  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  /* La columna de Servicios lleva su contenido en dos sub-columnas: el
+     minmax(max-content, …) le garantiza el ancho que necesitan los enlaces
+     largos ("Administración de fincas") en vez de repartir el sobrante a
+     ciegas y partirlos en dos líneas. */
+  grid-template-columns: 1.4fr minmax(max-content, 1.8fr) 1fr 1fr;
+}
+
+/* Servicios son 6 enlaces: en desktop van en dos columnas de 3 (el
+   grid-auto-flow: column llena primero las 3 filas y salta a la segunda) para
+   que la columna no quede el doble de alta que las demás. En mobile no aplica:
+   ahí cada sección es un acordeón de una sola columna. */
+@media (min-width: 901px) {
+  .footer-col-services .footer-col-links {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(2, max-content);
+    grid-template-rows: repeat(3, auto);
+    column-gap: clamp(24px, 3vw, 42px);
+  }
+
+  .footer-col-services .footer-col-links a {
+    white-space: nowrap;
+  }
 }
 
 .footer-legal {
@@ -6480,7 +6502,10 @@ button {
 .otros-servicios-grid {
   display: grid;
   gap: clamp(16px, 2vw, 24px);
-  grid-template-columns: repeat(4, 1fr);
+  /* Auto-fit: la sección muestra 3 tarjetas (o 4 en la página de suministros,
+     que no se lista a sí misma). Con columnas fijas quedaba un hueco a la
+     derecha cuando son 3. */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   margin: 0 auto;
   max-width: 1320px;
 }
@@ -8927,5 +8952,346 @@ button {
 
   .vender-stat:nth-child(3) {
     border-left: 0;
+  }
+}
+
+/* ═══════════════════════ Reformas ═══════════════════════ */
+
+/* Qué reformamos — acordeón horizontal de paneles: el activo se ensancha y
+   revela su texto; los demás quedan en gris con el título en vertical. */
+.ref-panels {
+  display: flex;
+  gap: 8px;
+  height: clamp(380px, 58vh, 540px);
+  margin-top: clamp(36px, 5vh, 56px);
+}
+
+.ref-panel {
+  background: none;
+  border: none;
+  border-radius: 12px;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  transition: flex-grow 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ref-panel.is-active {
+  flex-grow: 3.2;
+}
+
+.ref-panel-img {
+  background-position: center;
+  background-size: cover;
+  filter: grayscale(0.5) brightness(0.72);
+  inset: 0;
+  position: absolute;
+  transform: scale(1.06);
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 620ms ease;
+}
+
+.ref-panel.is-active .ref-panel-img {
+  filter: none;
+  transform: scale(1);
+}
+
+.ref-panel-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(20, 15, 7, 0) 26%,
+    rgba(20, 15, 7, 0.5) 58%,
+    rgba(20, 15, 7, 0.92) 100%
+  );
+  inset: 0;
+  position: absolute;
+  transition: background 620ms ease;
+}
+
+/* Con el panel abierto el texto ocupa más alto: el degradado sube para que
+   siempre se lea sobre las fotos claras (cocinas, baños). */
+.ref-panel.is-active .ref-panel-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(20, 15, 7, 0) 8%,
+    rgba(20, 15, 7, 0.62) 48%,
+    rgba(20, 15, 7, 0.94) 100%
+  );
+}
+
+/* Título en vertical mientras el panel está colapsado */
+.ref-panel-label {
+  bottom: 26px;
+  color: #f7f1e6;
+  font-family: var(--serif);
+  font-size: clamp(17px, 1.8vw, 21px);
+  left: 50%;
+  letter-spacing: 0.04em;
+  position: absolute;
+  transform: translateX(-50%) rotate(180deg);
+  transition: opacity 280ms ease;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+}
+
+.ref-panel.is-active .ref-panel-label {
+  opacity: 0;
+}
+
+.ref-panel-body {
+  bottom: 0;
+  color: #f7f1e6;
+  display: block;
+  left: 0;
+  opacity: 0;
+  padding: clamp(22px, 2.4vw, 34px);
+  position: absolute;
+  right: 0;
+  text-align: left;
+  text-shadow: 0 1px 14px rgba(20, 15, 7, 0.55);
+  transform: translateY(16px);
+  transition: opacity 420ms ease 100ms,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1) 100ms;
+}
+
+.ref-panel.is-active .ref-panel-body {
+  opacity: 1;
+  transform: none;
+}
+
+.ref-panel-num {
+  color: #d8b057;
+  display: block;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.14em;
+  margin-bottom: 8px;
+}
+
+.ref-panel-title {
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 500;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.ref-panel-desc {
+  color: rgba(247, 241, 230, 0.82);
+  display: block;
+  font-size: 14px;
+  line-height: 1.65;
+  max-width: 46ch;
+}
+
+@media (max-width: 860px) {
+  /* En móvil el acordeón pasa a vertical: cada panel es una tarjeta que crece
+     al tocarla (y se pliega al volver a tocar). */
+  .ref-panels {
+    flex-direction: column;
+    gap: 10px;
+    height: auto;
+  }
+
+  .ref-panel {
+    flex: none;
+    height: 132px;
+  }
+
+  .ref-panel.is-active {
+    height: 320px;
+  }
+
+  /* La tarjeta abierta es baja y el texto ocupa casi todo el alto: oscurecemos
+     la foto entera para que se lea igual de bien en fotos claras. */
+  .ref-panel.is-active .ref-panel-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(20, 15, 7, 0.3) 0%,
+      rgba(20, 15, 7, 0.74) 42%,
+      rgba(20, 15, 7, 0.94) 100%
+    );
+  }
+
+  .ref-panel-label {
+    bottom: 18px;
+    left: 22px;
+    transform: none;
+    writing-mode: horizontal-tb;
+  }
+}
+
+/* Antes y después — comparador con divisor arrastrable */
+.ref-ba {
+  background: var(--warm);
+}
+
+.ref-ba-stage {
+  /* Ancho completo del contenedor y formato apaisado para que no crezca a lo
+     alto. El max-height es el tope que garantiza que el comparador entero se
+     vea sin scrollear en la pantalla de un portátil. */
+  aspect-ratio: 2 / 1;
+  border-radius: 12px;
+  cursor: ew-resize;
+  max-height: 62vh;
+  overflow: hidden;
+  /* Ancho explícito: sin él, al recortar el alto con max-height el navegador
+     estrecha también el ancho para conservar la proporción. */
+  width: 100%;
+  position: relative;
+  /* pan-y deja pasar el scroll vertical de la página y reserva el gesto
+     horizontal para el divisor */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ref-ba-media {
+  inset: 0;
+  position: absolute;
+}
+
+.ref-ba-img {
+  background-position: center;
+  background-size: cover;
+  inset: 0;
+  position: absolute;
+}
+
+/* El "después" se recorta desde el divisor hacia la derecha */
+.ref-ba-img--after {
+  clip-path: inset(0 0 0 var(--ref-split, 50%));
+}
+
+.ref-ba-tag {
+  backdrop-filter: blur(6px);
+  background: rgb(255 255 255 / 82%);
+  border-radius: 999px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  padding: 6px 13px;
+  position: absolute;
+  text-transform: uppercase;
+  top: 16px;
+}
+
+.ref-ba-tag--antes {
+  left: 16px;
+}
+
+.ref-ba-tag--despues {
+  right: 16px;
+}
+
+.ref-ba-divider {
+  background: rgba(247, 241, 230, 0.92);
+  bottom: 0;
+  box-shadow: 0 0 18px rgba(20, 15, 7, 0.45);
+  left: var(--ref-split, 50%);
+  position: absolute;
+  top: 0;
+  transform: translateX(-1px);
+  width: 2px;
+}
+
+.ref-ba-knob {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.94);
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 6px 22px rgba(20, 15, 7, 0.35);
+  color: var(--gold);
+  cursor: ew-resize;
+  display: flex;
+  font-size: 17px;
+  height: clamp(44px, 5vw, 54px);
+  justify-content: center;
+  left: var(--ref-split, 50%);
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: box-shadow 300ms ease, transform 300ms ease;
+  width: clamp(44px, 5vw, 54px);
+}
+
+.ref-ba-stage:hover .ref-ba-knob {
+  box-shadow: 0 8px 28px rgba(20, 15, 7, 0.45);
+}
+
+.ref-ba-knob:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.ref-ba-caption {
+  bottom: 0;
+  color: #f7f1e6;
+  left: 0;
+  padding: clamp(22px, 3vw, 34px);
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  background: linear-gradient(180deg, rgba(20, 15, 7, 0) 0%, rgba(20, 15, 7, 0.8) 100%);
+}
+
+.ref-ba-caption-title {
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(19px, 2.4vw, 26px);
+  font-weight: 500;
+}
+
+.ref-ba-caption-meta {
+  color: rgba(247, 241, 230, 0.72);
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* Selector de proyecto: va encima de la imagen, entre el titular y el comparador */
+.ref-ba-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: clamp(28px, 4vh, 44px) 0 clamp(32px, 4.5vh, 52px);
+}
+
+.ref-ba-tab {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  transition: border-color 300ms ease, color 300ms ease, background 300ms ease;
+}
+
+.ref-ba-tab:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.ref-ba-tab.is-active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .ref-ba-stage {
+    aspect-ratio: 4 / 5;
+    max-height: none;
   }
 }

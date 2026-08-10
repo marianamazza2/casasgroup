@@ -9,6 +9,7 @@ const subMenuServices = [
   { label: 'Alquilar', gold: false, to: '/propiedades', search: { query: '', mode: 'alquiler' as const } },
   { label: 'Cambio de suministros', gold: false, to: '/servicios/cambio-de-suministros' },
   { label: 'Hipotecas', gold: false, to: '/servicios/hipotecas' },
+  { label: 'Reformas', gold: false, to: '/servicios/reformas' },
   { label: 'Seguros', gold: false, to: '/servicios/seguros' },
 ]
 

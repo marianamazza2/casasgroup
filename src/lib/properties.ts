@@ -56,19 +56,47 @@ export const properties: Property[] =
       : hardcodedProperties
 
 /**
+ * ¿Este inmueble está marcado como destacado en el Sheet?
+ *
+ * La columna `etiqueta` la carga el cliente a mano, así que la comparación tolera
+ * mayúsculas, acentos y espacios sobrantes: DESTACADO, destacado y Destacado
+ * cuentan igual. Antes era `tag === 'Destacado'` exacto y cualquier variante
+ * fallaba en silencio (el inmueble mostraba el cartel pero no entraba a la home).
+ */
+const isDestacado = (p: Property) =>
+  (p.tag ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLowerCase() === 'destacado'
+
+/** Cuántos inmuebles entran en el carrusel de la home. */
+const HOME_SLOTS = 6
+
+/**
  * Inmuebles destacados para el home.
- *   - 'sheet': los que llevan etiqueta DESTACADO (o los primeros si no hay).
+ *   - 'sheet': primero los marcados DESTACADO en el Sheet, y se completa hasta 6
+ *     con los ÚLTIMOS del Sheet (las altas más recientes).
  *   - 'merge': los destacados del Sheet primero, completando con los curados.
  *   - 'hardcoded': la lista curada de `propertiesData`.
+ *
+ * Las dos reglas SE SUMAN, no se excluyen. Esto es a propósito: el cliente marca
+ * DESTACADO los que quiere fijar, y para subir a la home uno que ya lleva otra
+ * etiqueta (p. ej. REBAJADO — la columna sólo admite un valor) lo mueve al final
+ * del Sheet. Si fueran excluyentes, un solo DESTACADO anularía esa segunda vía y
+ * la home quedaría con menos de 6 inmuebles.
  */
 export const homeFeaturedProperties: Property[] =
   dataSource === 'sheet'
     ? (() => {
-        const destacados = generatedProperties.filter((p) => p.tag === 'Destacado')
-        return (destacados.length ? destacados : generatedProperties).slice(0, 6)
+        const destacados = generatedProperties.filter(isDestacado)
+        // El relleno excluye a los destacados para no repetir ninguno si además
+        // están entre las últimas filas del Sheet.
+        const relleno = generatedProperties.filter((p) => !isDestacado(p)).slice(-HOME_SLOTS)
+        return [...destacados, ...relleno].slice(0, HOME_SLOTS)
       })()
     : dataSource === 'merge'
-      ? [...sheetShifted.filter((p) => p.tag === 'Destacado'), ...hardcodedFeatured].slice(0, 6)
+      ? [...sheetShifted.filter(isDestacado), ...hardcodedFeatured].slice(0, 6)
       : hardcodedFeatured
 
 /** Pins del mapa — derivados de la fuente activa (mismo cálculo que el original). */

@@ -4,10 +4,18 @@ import { Link } from '@tanstack/react-router'
 // Sección de enlaces del footer. En desktop se muestra siempre expandida; en
 // mobile el <h3> se vuelve un botón que despliega/colapsa los enlaces (acordeón)
 // para que el footer no ocupe casi toda la pantalla.
-function FooterSection({ title, children }: { title: string; children: React.ReactNode }) {
+function FooterSection({
+  title,
+  className,
+  children,
+}: {
+  title: string
+  className?: string
+  children: React.ReactNode
+}) {
   const [open, setOpen] = useState(false)
   return (
-    <div className={`footer-col${open ? ' is-open' : ''}`}>
+    <div className={`footer-col${className ? ` ${className}` : ''}${open ? ' is-open' : ''}`}>
       <button
         type="button"
         className="footer-col-toggle"
@@ -35,11 +43,12 @@ export function Footer() {
           </Link>
           <p>Tu hogar empieza aqui.</p>
         </div>
-        <FooterSection title="Servicios">
+        <FooterSection title="Servicios" className="footer-col-services">
           <Link to="/servicios/administracion-de-fincas">Administración de fincas</Link>
           <Link to="/servicios/alarmas">Alarmas</Link>
           <Link to="/servicios/cambio-de-suministros">Cambio de suministros</Link>
           <Link to="/servicios/hipotecas">Hipotecas</Link>
+          <Link to="/servicios/reformas">Reformas</Link>
           <Link to="/servicios/seguros">Seguros</Link>
         </FooterSection>
         <FooterSection title="Inmuebles">

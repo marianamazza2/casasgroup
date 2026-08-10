@@ -8,6 +8,7 @@ type ServiceId =
   | 'cambio-de-suministros'
   | 'seguros'
   | 'alarmas'
+  | 'reformas'
 
 type Service = {
   id: ServiceId
@@ -17,6 +18,10 @@ type Service = {
   to?: string
 }
 
+// Servicios promocionados en "Seguimos a tu lado". Cambio de suministros sigue
+// siendo una página válida (y pasa su propio currentId), pero no se muestra
+// como tarjeta. Como cada página se excluye a sí misma, la rejilla queda
+// siempre en cuatro tarjetas.
 const SERVICES: Service[] = [
   {
     id: 'administracion-de-fincas',
@@ -35,12 +40,12 @@ const SERVICES: Service[] = [
     to: '/servicios/hipotecas',
   },
   {
-    id: 'cambio-de-suministros',
-    label: 'Cambio de suministros',
-    tag: 'Suministros',
+    id: 'reformas',
+    label: 'Reformas',
+    tag: 'Obras',
     image:
-      'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80',
-    to: '/servicios/cambio-de-suministros',
+      'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?auto=format&fit=crop&w=1000&q=80',
+    to: '/servicios/reformas',
   },
   {
     id: 'seguros',

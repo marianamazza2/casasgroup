@@ -27,6 +27,20 @@ export const Route = createFileRoute('/servicios/cambio-de-suministros')({
 
 export const SUMINISTROS = [
   {
+    title: 'Agua',
+    desc: 'Tramitamos el cambio con tu compañía local para que el suministro esté listo el día que llegas.',
+    tag: 'Suministros',
+    image:
+      'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: 'Domiciliaciones',
+    desc: 'Configuramos los pagos automáticos de cada suministro para que no tengas que pensar en nada.',
+    tag: 'Gestión',
+    image:
+      'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
     title: 'Electricidad',
     desc: 'Cambio de titularidad y selección de la mejor tarifa para tu nueva vivienda, sin cortes ni complicaciones.',
     tag: 'Energía',
@@ -41,32 +55,18 @@ export const SUMINISTROS = [
       'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1200&q=80',
   },
   {
-    title: 'Agua',
-    desc: 'Tramitamos el cambio con tu compañía local para que el suministro esté listo el día que llegas.',
-    tag: 'Suministros',
-    image:
-      'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Internet y teléfono',
-    desc: 'Comparamos las ofertas del mercado y contratamos la que mejor encaja con tu ritmo de vida.',
+    title: 'Internet',
+    desc: 'Comparamos las ofertas de fibra del mercado y contratamos la que mejor encaja contigo.',
     tag: 'Conectividad',
     image:
       'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
   },
   {
-    title: 'Seguros de hogar',
-    desc: 'Coberturas personalizadas con las mejores compañías para proteger tu vivienda desde el primer día.',
-    tag: 'Protección',
+    title: 'Teléfono',
+    desc: 'Gestionamos el alta o la portabilidad de tu línea fija y móvil, con la tarifa que mejor se ajusta a ti.',
+    tag: 'Conectividad',
     image:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Domiciliaciones',
-    desc: 'Configuramos los pagos automáticos de cada suministro para que no tengas que pensar en nada.',
-    tag: 'Gestión',
-    image:
-      'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1516387938699-a93567ec168e?auto=format&fit=crop&w=1200&q=80',
   },
 ]
 
