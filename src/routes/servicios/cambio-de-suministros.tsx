@@ -34,13 +34,6 @@ export const SUMINISTROS = [
       'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
   },
   {
-    title: 'Domiciliaciones',
-    desc: 'Configuramos los pagos automáticos de cada suministro para que no tengas que pensar en nada.',
-    tag: 'Gestión',
-    image:
-      'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
     title: 'Electricidad',
     desc: 'Cambio de titularidad y selección de la mejor tarifa para tu nueva vivienda, sin cortes ni complicaciones.',
     tag: 'Energía',
@@ -48,25 +41,18 @@ export const SUMINISTROS = [
       'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
   },
   {
-    title: 'Gas natural',
-    desc: 'Gestión del cambio de titular y revisión de la instalación con las compañías de tu zona.',
+    title: 'Gas',
+    desc: 'Gestionamos el cambio de titular y buscamos las mejores opciones del mercado para tu vivienda.',
     tag: 'Energía',
     image:
       'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1200&q=80',
   },
   {
-    title: 'Internet',
-    desc: 'Comparamos las ofertas de fibra del mercado y contratamos la que mejor encaja contigo.',
+    title: 'Telecomunicaciones',
+    desc: 'Nos encargamos de gestionar tus servicios de telecomunicaciones, encontrando la mejor opción de internet y telefonía para que disfrutes de conexión desde el primer día en tu nueva vivienda.',
     tag: 'Conectividad',
     image:
       'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Teléfono',
-    desc: 'Gestionamos el alta o la portabilidad de tu línea fija y móvil, con la tarifa que mejor se ajusta a ti.',
-    tag: 'Conectividad',
-    image:
-      'https://images.unsplash.com/photo-1516387938699-a93567ec168e?auto=format&fit=crop&w=1200&q=80',
   },
 ]
 
@@ -165,8 +151,11 @@ function CambioDeSuministrosPage() {
         <div className="services-inner">
           <div className="section-heading">
             <span>Qué gestionamos</span>
-            <h2>Todo bajo control</h2>
-            <p>Nos ocupamos de cada suministro para que tú solo pienses en instalarte.</p>
+            <h2>Todo lo que necesitas, en un solo lugar</h2>
+            <p>
+              Nos encargamos de todos los suministros para que tú solo tengas que
+              disfrutar de tu nuevo hogar.
+            </p>
           </div>
 
           <motion.div
@@ -337,7 +326,7 @@ function CtaBanner() {
         <h2 className="adm-cta-title">No pierdas tiempo con el papeleo</h2>
         <p className="adm-cta-text">Contáctanos y nos encargamos de todo.</p>
         <Link className="button-link" to="/contacto">
-          Contáctanos →
+          Solicitar gestión →
         </Link>
       </div>
     </section>
