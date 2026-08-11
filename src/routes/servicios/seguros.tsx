@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { TouchEvent } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 import { JsonLd } from '../../components/JsonLd'
-import { breadcrumbSchema } from '../../lib/structuredData'
+import { breadcrumbSchema, absoluteUrl } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/servicios/seguros')({
   head: () => ({
@@ -27,9 +27,9 @@ export const Route = createFileRoute('/servicios/seguros')({
         content:
           'Gestiona tus seguros con quien conoce tu vivienda. Protege tu hogar en Barcelona con Group Casas.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/servicios/seguros' },
+      { property: 'og:url', content: absoluteUrl('/servicios/seguros') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/seguros' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/seguros') }],
   }),
   component: SegurosPage,
 })

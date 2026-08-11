@@ -1,11 +1,10 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { animate, motion, useInView } from 'framer-motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import type { TouchEvent as ReactTouchEvent } from 'react'
 import { homeFeaturedProperties, properties } from '../lib/properties'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
-import { organizationSchema } from '../lib/structuredData'
+import { organizationSchema, absoluteUrl } from '../lib/structuredData'
 import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
 import type { Location } from '../lib/locationSearch'
 
@@ -24,9 +23,9 @@ export const Route = createFileRoute('/')({
         content:
           'Compra, venta y alquiler de viviendas en Barcelona. Hipotecas, seguros y administración de fincas. Valoración gratuita.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/' },
+      { property: 'og:url', content: absoluteUrl('/') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/') }],
   }),
   component: Home,
 })
@@ -110,43 +109,13 @@ const services = [
   },
 ]
 
-const whyItems = [
-  {
-    title: 'Compromiso',
-    description:
-      'Tratamos cada operación como si fuera propia, implicándonos en cada detalle con el objetivo de ofrecer soluciones eficaces y la mejor experiencia para nuestros clientes.',
-    image:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Servicio 360º',
-    description:
-      'Reunimos todos los servicios inmobiliarios en un mismo lugar: compraventa, alquileres, hipotecas, asesoramiento jurídico, administración de comunidades, reformas, seguros, alarmas para que no tenga que buscar diferentes profesionales.',
-    image:
-      'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Asesoramiento personalizado',
-    description:
-      'Cada cliente cuenta con un asesor dedicado que le acompaña de principio a fin, ofreciendo un seguimiento cercano, una comunicación constante y un servicio adaptado a sus necesidades.',
-    image:
-      'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Experiencia',
-    description:
-      'Los años de experiencia y nuestro conocimiento del mercado inmobiliario nos permiten ofrecer un asesoramiento estratégico, adaptado a cada situación y orientado a obtener los mejores resultados.',
-    image:
-      'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Confianza',
-    description:
-      'La confianza es nuestro mayor compromiso. No solo gestionamos operaciones inmobiliarias; construimos relaciones basadas en la transparencia, la profesionalidad y un acompañamiento personalizado de principio a fin. Porque para nosotros, la confianza no es un valor añadido, es la base de todo lo que hacemos.',
-    image:
-      'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
-  },
-]
+// "Por que elegirnos": un unico texto bajo una foto protagonista (antes era un
+// slider de cinco caracteristicas).
+const WHY_IMAGE =
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80'
+
+const WHY_TEXT =
+  'En Group Casas te acompañamos en cada etapa. Te ayudamos a encontrar la mejor financiación para comprar tu vivienda, gestionamos el proceso de compraventa de principio a fin y, una vez adquirida, ponemos a tu disposición nuestro servicio de reformas para que esté perfecta desde el primer día. Además, administramos tu comunidad si así lo deseas. Todo lo que necesitas para tu vivienda, en un solo lugar.'
 
 const accessBlocks = [
   {
@@ -179,11 +148,8 @@ function Home() {
   const [heroSearchQuery, setHeroSearchQuery] = useState('')
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
   const [propertyMode, setPropertyMode] = useState<'Venta' | 'Alquiler'>('Venta')
-  const [whyIndex, setWhyIndex] = useState(0)
   const [activeProperty, setActiveProperty] = useState(0)
   const propertiesRef = useRef<HTMLDivElement>(null)
-  const whyRailRef = useRef<HTMLDivElement>(null)
-  const whyItemRefs = useRef<(HTMLElement | null)[]>([])
 
   const heroWrapperRef = useRef<HTMLDivElement>(null)
   const heroGoldRef = useRef<HTMLDivElement>(null)
@@ -387,43 +353,6 @@ function Home() {
     return () => rail.removeEventListener('scroll', handlePropertySwipe)
   }, [propertyMode])
 
-  // Mobile: "Por que elegirnos" es un slider horizontal de cards (mismo
-  // formato que servicios); detectamos la card centrada por el scroll del rail.
-  useEffect(() => {
-    const list = whyRailRef.current
-    if (!list) return
-    const handleWhySwipe = () => {
-      if (window.innerWidth > 1024) return
-      const items = whyItemRefs.current.filter(Boolean) as HTMLElement[]
-      if (!items.length) return
-      const center = list.scrollLeft + list.clientWidth / 2
-      let closestIdx = 0
-      let closestDist = Infinity
-      items.forEach((item, i) => {
-        const itemCenter = item.offsetLeft + item.offsetWidth / 2
-        const dist = Math.abs(itemCenter - center)
-        if (dist < closestDist) {
-          closestDist = dist
-          closestIdx = i
-        }
-      })
-      setWhyIndex(closestIdx)
-    }
-    list.addEventListener('scroll', handleWhySwipe, { passive: true })
-    handleWhySwipe()
-    return () => list.removeEventListener('scroll', handleWhySwipe)
-  }, [])
-
-  const scrollToWhyRail = (i: number) => {
-    const list = whyRailRef.current
-    const item = whyItemRefs.current[i]
-    if (!list || !item) return
-    list.scrollTo({
-      left: item.offsetLeft + item.offsetWidth / 2 - list.clientWidth / 2,
-      behavior: 'smooth',
-    })
-  }
-
   const scrollToService = (i: number) => {
     const list = servicesListRef.current
     const item = serviceItemRefs.current[i]
@@ -434,7 +363,6 @@ function Home() {
     })
   }
 
-  const currentWhy = whyItems[whyIndex]
   const isSearchTab = heroTab === 'comprar'
 
   const displayedProperties =
@@ -464,26 +392,6 @@ function Home() {
           loc?.province ?? (loc?.type === 'provincia' ? loc.name : undefined),
       },
     })
-  }
-
-  const nextWhy = (direction: -1 | 1) => {
-    setWhyIndex((current) => (current + direction + whyItems.length) % whyItems.length)
-  }
-
-  // Mobile: las flechas estan ocultas, asi que permitimos navegar el slider
-  // con swipe horizontal sobre la card.
-  const whyTouchStartX = useRef<number | null>(null)
-
-  const handleWhyTouchStart = (e: ReactTouchEvent) => {
-    whyTouchStartX.current = e.touches[0].clientX
-  }
-
-  const handleWhyTouchEnd = (e: ReactTouchEvent) => {
-    if (whyTouchStartX.current === null) return
-    const delta = e.changedTouches[0].clientX - whyTouchStartX.current
-    whyTouchStartX.current = null
-    if (Math.abs(delta) < 40) return
-    nextWhy(delta < 0 ? 1 : -1)
   }
 
   const scrollToProperty = (i: number) => {
@@ -731,72 +639,29 @@ function Home() {
             subtitle="Porque cada cliente merece un asesoramiento personalizado, un servicio integral y el compromiso de un equipo que trata cada proyecto como si fuera propio."
           />
         </div>
-        <div className="why-slider">
-          <button
-            type="button"
-            className="why-nav why-nav-prev"
-            aria-label="Anterior"
-            onClick={() => nextWhy(-1)}
+        {/* Foto protagonista y un solo texto debajo, misma composicion que el
+            "Que incluye" de administracion de fincas. */}
+        <div className="why-story">
+          <motion.div
+            className="why-story-frame"
+            initial={{ opacity: 0, scale: 1.04 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span aria-hidden="true">←</span>
-          </button>
-          <motion.article
-            className="why-card"
-            key={currentWhy.title}
-            initial={{ opacity: 0.3 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.35 }}
-            onTouchStart={handleWhyTouchStart}
-            onTouchEnd={handleWhyTouchEnd}
+            <img src={WHY_IMAGE} alt="" loading="lazy" decoding="async" />
+          </motion.div>
+          <motion.p
+            className="why-story-text"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
           >
-            <img src={currentWhy.image} alt="" loading="lazy" />
-            <div>
-              <span>
-                {whyIndex + 1} / {whyItems.length}
-              </span>
-              <h3>{currentWhy.title}</h3>
-              <p>{currentWhy.description}</p>
-            </div>
-          </motion.article>
-          <button
-            type="button"
-            className="why-nav why-nav-next"
-            aria-label="Siguiente"
-            onClick={() => nextWhy(1)}
-          >
-            <span aria-hidden="true">→</span>
-          </button>
+            {WHY_TEXT}
+          </motion.p>
         </div>
 
-        {/* Mobile: slider horizontal de cards, mismo formato que "Nuestros servicios" */}
-        <div className="why-rail-wrap">
-          <div className="why-rail" ref={whyRailRef}>
-            {whyItems.map((item, i) => (
-              <article
-                key={item.title}
-                ref={(el) => { whyItemRefs.current[i] = el }}
-                className="why-rail-card"
-              >
-                <span className="why-rail-num">{String(i + 1).padStart(2, '0')}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        <div className="why-dots" role="tablist" aria-label="Por que elegirnos">
-          {whyItems.map((item, i) => (
-            <button
-              type="button"
-              key={item.title}
-              className={i === whyIndex ? 'why-dot active' : 'why-dot'}
-              aria-label={`Ir a ${item.title}`}
-              aria-selected={i === whyIndex}
-              onClick={() => scrollToWhyRail(i)}
-            />
-          ))}
-        </div>
         <div className="stats">
           <Stat value="+1000" label="Operaciones" />
           <Stat value="98%" label="Satisfaccion" />

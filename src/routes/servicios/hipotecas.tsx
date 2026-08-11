@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
+import { absoluteUrl } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/servicios/hipotecas')({
   head: () => ({
@@ -18,9 +19,9 @@ export const Route = createFileRoute('/servicios/hipotecas')({
         content:
           'Te acompañamos en tu hipoteca en cuatro pasos. Descubre cuánto puedes financiar para comprar tu vivienda en Barcelona.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/servicios/hipotecas' },
+      { property: 'og:url', content: absoluteUrl('/servicios/hipotecas') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/hipotecas' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/hipotecas') }],
   }),
   component: HipotecasPage,
 })

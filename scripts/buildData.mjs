@@ -25,7 +25,7 @@ const SITEMAP_FILE = resolve(ROOT, 'public/sitemap.xml')
 
 // Dominio del sitio para las URLs absolutas del sitemap. Configurable por env
 // (SITE_URL) por si cambia; sin barra final para no duplicarla al concatenar.
-const SITE_URL = (process.env.SITE_URL || 'https://casasgroup.es').replace(/\/+$/, '')
+const SITE_URL = (process.env.SITE_URL || 'https://groupcasas.com').replace(/\/+$/, '')
 
 // ── Carga de .env.local / .env (Node no lo hace solo) ────────────────────────
 // En Vercel las env vars ya están en process.env, así que estos archivos no

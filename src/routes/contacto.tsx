@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import type { ReactElement } from 'react'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
-import { breadcrumbSchema, organizationSchema } from '../lib/structuredData'
+import { breadcrumbSchema, organizationSchema, absoluteUrl } from '../lib/structuredData'
 import { properties } from '../lib/properties'
 import Map, { Marker } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
@@ -47,9 +47,9 @@ export const Route = createFileRoute('/contacto')({
         content:
           'Escríbenos o visítanos en nuestra oficina en Barcelona. Te ayudamos con tu compra, venta o alquiler.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/contacto' },
+      { property: 'og:url', content: absoluteUrl('/contacto') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/contacto' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/contacto') }],
   }),
   component: ContactPage,
 })

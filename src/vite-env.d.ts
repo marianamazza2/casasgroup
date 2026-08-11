@@ -6,12 +6,10 @@ interface ImportMetaEnv {
   /** Cloud name público de Cloudinary, usado para construir las URLs de imagen. */
   readonly VITE_CLOUDINARY_CLOUD_NAME: string
   /**
-   * Fuente de datos de inmuebles (default 'hardcoded'):
-   *  - 'hardcoded': solo propertiesData.ts
-   *  - 'sheet': solo los generados (Google Sheet + Cloudinary)
-   *  - 'merge': los del Sheet sumados a los hardcodeados
+   * Dominio canónico del sitio, sin barra final (default 'https://groupcasas.com').
+   * Se usa para canonicals, og:url y JSON-LD. Sobrescribible para previews/staging.
    */
-  readonly VITE_DATA_SOURCE?: 'sheet' | 'hardcoded' | 'merge'
+  readonly VITE_SITE_URL?: string
 }
 
 interface ImportMeta {

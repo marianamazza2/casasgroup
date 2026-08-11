@@ -9,6 +9,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import type { TouchEvent } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
+import { absoluteUrl } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/servicios/alarmas')({
   head: () => ({
@@ -25,9 +26,9 @@ export const Route = createFileRoute('/servicios/alarmas')({
         content:
           'Sistemas de alarma gestionados por quien conoce tu vivienda. Protege tu hogar en Barcelona con Group Casas.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/servicios/alarmas' },
+      { property: 'og:url', content: absoluteUrl('/servicios/alarmas') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/alarmas' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/alarmas') }],
   }),
   component: AlarmasPage,
 })

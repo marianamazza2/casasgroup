@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
+import { absoluteUrl } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/servicios/cambio-de-suministros')({
   head: () => ({
@@ -18,9 +19,9 @@ export const Route = createFileRoute('/servicios/cambio-de-suministros')({
         content:
           'Luz, agua y gas de tu nueva vivienda sin papeleo. Nos encargamos de todo en cuatro simples pasos. Group Casas.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/servicios/cambio-de-suministros' },
+      { property: 'og:url', content: absoluteUrl('/servicios/cambio-de-suministros') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/cambio-de-suministros' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/cambio-de-suministros') }],
   }),
   component: CambioDeSuministrosPage,
 })

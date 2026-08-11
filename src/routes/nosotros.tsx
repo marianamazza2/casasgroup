@@ -5,7 +5,7 @@ import { Footer } from '../components/Footer'
 import { MisionTabs } from '../components/nosotros/MisionTabs'
 import { ValoresSlider } from '../components/nosotros/ValoresSlider'
 import { JsonLd } from '../components/JsonLd'
-import { breadcrumbSchema, organizationSchema } from '../lib/structuredData'
+import { breadcrumbSchema, organizationSchema, absoluteUrl } from '../lib/structuredData'
 
 export const Route = createFileRoute('/nosotros')({
   head: () => ({
@@ -22,9 +22,9 @@ export const Route = createFileRoute('/nosotros')({
         content:
           'Group Casas: nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/nosotros' },
+      { property: 'og:url', content: absoluteUrl('/nosotros') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/nosotros' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/nosotros') }],
   }),
   component: NosotrosPage,
 })

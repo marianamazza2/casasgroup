@@ -193,7 +193,7 @@ export const generatedProperties: Property[] = [
   {
     "id": 26,
     "city": "Esplugues de Llobregat",
-    "zone": "",
+    "zone": "Can vidalet",
     "title": "Piso en Can Vidalet",
     "beds": 3,
     "baths": 1,

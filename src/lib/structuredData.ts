@@ -9,7 +9,7 @@ import { isValidCoords } from './coords'
 
 /** Dominio canónico del sitio (mismo que public/sitemap.xml). Sobrescribible por
  *  entorno para previews/staging. Sin barra final para poder concatenar rutas. */
-export const SITE_URL = (import.meta.env.VITE_SITE_URL ?? 'https://casasgroup.es').replace(/\/$/, '')
+export const SITE_URL = (import.meta.env.VITE_SITE_URL ?? 'https://groupcasas.com').replace(/\/$/, '')
 
 /** URL absoluta a partir de una ruta del sitio ('/propiedades' → 'https://…/propiedades'). */
 export const absoluteUrl = (path: string) => `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`

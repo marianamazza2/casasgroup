@@ -9,6 +9,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { KeyboardEvent, PointerEvent } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
+import { absoluteUrl } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/servicios/reformas')({
   head: () => ({
@@ -25,9 +26,9 @@ export const Route = createFileRoute('/servicios/reformas')({
         content:
           'Reformas integrales, cocinas, baños y zonas comunes en Barcelona. Presupuesto cerrado y un único interlocutor con Group Casas.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/servicios/reformas' },
+      { property: 'og:url', content: absoluteUrl('/servicios/reformas') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/reformas' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/reformas') }],
   }),
   component: ReformasPage,
 })

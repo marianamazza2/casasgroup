@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
 import { Footer } from '../components/Footer'
 import { FormSelect } from '../components/vender/FormSelect'
+import { absoluteUrl } from '../lib/structuredData'
 
 export const Route = createFileRoute('/vender')({
   head: () => ({
@@ -19,9 +20,9 @@ export const Route = createFileRoute('/vender')({
         content:
           'Valoración gratuita y sin compromiso de tu vivienda en Barcelona. Te acompañamos en todo el proceso de venta.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/vender' },
+      { property: 'og:url', content: absoluteUrl('/vender') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/vender' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/vender') }],
   }),
   component: VenderPage,
 })

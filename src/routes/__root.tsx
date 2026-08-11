@@ -2,6 +2,7 @@ import { HeadContent, Link, createRootRoute, useRouterState } from '@tanstack/re
 import { useEffect, useState } from 'react'
 import { AnimatedOutlet } from '../components/AnimatedOutlet'
 import { RouteProgress } from '../components/RouteProgress'
+import { absoluteUrl } from '../lib/structuredData'
 
 const subMenuServices = [
   { label: 'Administracion de comunidades', gold: false, to: '/servicios/administracion-de-fincas' },
@@ -236,11 +237,11 @@ export const Route = createRootRoute({
       { property: 'og:locale', content: 'es_ES' },
       // Imagen por defecto al compartir (WhatsApp/Facebook/X). Las rutas con foto
       // propia (p.ej. la ficha = foto de portada) la sobrescriben vía <Seo image>.
-      { property: 'og:image', content: 'https://casasgroup.es/og-default.jpg' },
+      { property: 'og:image', content: absoluteUrl('/og-default.jpg') },
       { property: 'og:image:width', content: '1200' },
       { property: 'og:image:height', content: '630' },
       { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:image', content: 'https://casasgroup.es/og-default.jpg' },
+      { name: 'twitter:image', content: absoluteUrl('/og-default.jpg') },
     ],
   }),
   component: RootLayout,

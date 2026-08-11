@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { QueIncluyeCarousel } from '../../components/servicios/QueIncluyeCarousel'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
+import { absoluteUrl } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/servicios/administracion-de-fincas')({
   head: () => ({
@@ -19,9 +20,9 @@ export const Route = createFileRoute('/servicios/administracion-de-fincas')({
         content:
           'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia y cercanía con Group Casas.',
       },
-      { property: 'og:url', content: 'https://casasgroup.es/servicios/administracion-de-fincas' },
+      { property: 'og:url', content: absoluteUrl('/servicios/administracion-de-fincas') },
     ],
-    links: [{ rel: 'canonical', href: 'https://casasgroup.es/servicios/administracion-de-fincas' }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/administracion-de-fincas') }],
   }),
   component: AdministracionDeFincasPage,
 })
