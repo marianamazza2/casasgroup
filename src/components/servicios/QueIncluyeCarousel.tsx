@@ -127,7 +127,6 @@ export function QueIncluyeCarousel() {
   }
 
   const slide = SLIDES[index]
-  const counter = `${String(index + 1).padStart(2, '0')} / ${String(SLIDES.length).padStart(2, '0')}`
 
   return (
     <div
@@ -197,20 +196,17 @@ export function QueIncluyeCarousel() {
         </AnimatePresence>
       </div>
 
-      <div className="qi-nav">
-        <span className="qi-counter">{counter}</span>
-        <div className="qi-dots">
-          {SLIDES.map((s, i) => (
-            <button
-              key={s.title}
-              type="button"
-              className={`qi-dot${i === index ? ' is-active' : ''}`}
-              onClick={() => go(i, i > index ? 1 : -1)}
-              aria-label={s.title}
-              aria-current={i === index}
-            />
-          ))}
-        </div>
+      <div className="qi-dots">
+        {SLIDES.map((s, i) => (
+          <button
+            key={s.title}
+            type="button"
+            className={`qi-dot${i === index ? ' is-active' : ''}`}
+            onClick={() => go(i, i > index ? 1 : -1)}
+            aria-label={s.title}
+            aria-current={i === index}
+          />
+        ))}
       </div>
     </div>
   )

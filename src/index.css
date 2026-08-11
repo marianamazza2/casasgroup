@@ -1217,11 +1217,12 @@ button {
 .why-story-frame {
   aspect-ratio: 16 / 9;
   background: var(--paper);
-  border-radius: 2px;
+  border-radius: 12px;
   overflow: hidden;
 }
 
 .why-story-frame img {
+  border-radius: inherit;
   display: block;
   height: 100%;
   object-fit: cover;
@@ -7116,7 +7117,7 @@ button {
 .qi-frame {
   aspect-ratio: 16 / 9;
   background: var(--warm);
-  border-radius: 2px;
+  border-radius: 12px;
   overflow: hidden;
   position: relative;
   /* El swipe horizontal es nuestro; el scroll vertical sigue siendo del navegador. */
@@ -7124,8 +7125,10 @@ button {
 }
 
 /* Las diapositivas se apilan en el mismo hueco para poder cruzarse (la saliente
-   sigue en el DOM durante la transición). */
+   sigue en el DOM durante la transición). El radio se repite aquí porque Safari
+   no siempre recorta con el overflow del contenedor a un hijo con transform. */
 .qi-photo {
+  border-radius: inherit;
   display: block;
   height: 100%;
   inset: 0;
@@ -7204,24 +7207,11 @@ button {
   margin: 12px 0 0;
 }
 
-.qi-nav {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-top: clamp(18px, 2vw, 26px);
-}
-
-.qi-counter {
-  color: var(--gold);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-}
-
 .qi-dots {
   display: flex;
   gap: 12px;
+  justify-content: center;
+  margin-top: clamp(8px, 1vw, 14px);
 }
 
 .qi-dot {
