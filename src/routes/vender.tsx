@@ -233,7 +233,7 @@ function VenderPage() {
             La valoración es gratuita y no implica ningún compromiso de venta.
           </p>
           <button type="button" className="button-link" onClick={scrollToForm}>
-            Solicitar valoración gratuita →
+            Solicita tu valoración gratuita →
           </button>
         </div>
       </section>
@@ -436,15 +436,15 @@ function VenderHero({ onCta }: { onCta: () => void }) {
           Vender
         </motion.span>
         <motion.h1 className="sum-hero-title" variants={heroItem}>
-          Conozca el valor de su vivienda
+          Conoce el valor de tu vivienda
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
-          Conozca el valor real de su vivienda mediante una valoración profesional, gratuita y sin compromiso, basada en un análisis preciso del mercado y en un estudio personalizado de su inmueble.
+          Conoce el valor real de tu vivienda mediante una valoración profesional, gratuita y sin compromiso, basada en un análisis preciso del mercado y en un estudio personalizado de tu inmueble.
         </motion.p>
         <motion.div variants={heroItem}>
           <button type="button" className="button-link" onClick={onCta}>
-            Solicitar valoración gratuita →
+            Solicita tu valoración gratuita →
           </button>
         </motion.div>
       </motion.div>
