@@ -37,7 +37,7 @@ export const Route = createFileRoute('/servicios/seguros')({
 export const TIPOS_SEGURO = [
   {
     title: 'Seguro de hogar',
-    desc: 'Protección integral: continente, contenido, responsabilidad civil y asistencia.',
+    desc: 'Protección para tu hogar, seguridad en cada momento.',
     icon: 'home',
     tag: 'El más contratado',
     image:
@@ -45,7 +45,7 @@ export const TIPOS_SEGURO = [
   },
   {
     title: 'Seguro de comunidad',
-    desc: 'Cobertura para elementos comunes, responsabilidad civil comunitaria y daños a terceros.',
+    desc: 'Protección integral para tu comunidad.',
     icon: 'building',
     tag: 'Comunidades',
     image:
@@ -53,7 +53,7 @@ export const TIPOS_SEGURO = [
   },
   {
     title: 'Seguro de impago',
-    desc: 'Protege tu inversión como propietario ante el impago de alquileres.',
+    desc: 'Protección para tu alquiler y seguridad en el pago de cada mensualidad.',
     icon: 'shield',
     tag: 'Propietarios',
     image:
@@ -61,7 +61,7 @@ export const TIPOS_SEGURO = [
   },
   {
     title: 'Seguro de vida',
-    desc: 'Vinculado a tu hipoteca o como protección adicional para tu familia.',
+    desc: 'Protección para tu vida, seguridad para tu futuro.',
     icon: 'heart',
     tag: 'Tu familia',
     image:
@@ -70,10 +70,9 @@ export const TIPOS_SEGURO = [
 ] as const
 
 export const VENTAJAS = [
-  'Comparamos ofertas de múltiples aseguradoras',
-  'Encontramos la mejor relación calidad-precio',
-  'Gestionamos siniestros y reclamaciones por ti',
-  'Sin costes adicionales para el cliente',
+  'Comparamos las mejores opciones entre distintas aseguradoras',
+  'Te presentamos una propuesta personalizada para tu aprobación',
+  'Formalizamos la contratación y gestionamos tu seguro',
 ]
 
 function SegurosPage() {
@@ -147,12 +146,13 @@ function SegurosHero() {
           Seguros
         </motion.span>
         <motion.h1 className="sum-hero-title" variants={heroItem}>
-          Protege tu vivienda
+          Protege lo que más te importa
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
-          Comparamos y gestionamos los seguros que necesitas. Sin complicaciones,
-          con la cobertura adecuada.
+          Analizamos tus necesidades y comparamos entre las principales
+          aseguradoras para encontrar la póliza que mejor protege tu vivienda,
+          con las coberturas adecuadas y al mejor precio.
         </motion.p>
         <motion.div variants={heroItem}>
           <Link className="button-link" to="/contacto">
