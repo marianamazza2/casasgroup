@@ -7210,129 +7210,204 @@ button {
   }
 }
 
-/* Administración de fincas — "Qué incluye" es texto corrido a todo el ancho de
-   la sección (solo lo limita el padding lateral de .section). */
+/* Administración de fincas — "Qué incluye" es un carrusel: cada servicio ocupa
+   una diapositiva con la fotografía como protagonista y el texto debajo. */
 /* Un poco más de aire entre el "Qué incluye" y el párrafo de entrada que los 12px
    por defecto del heading (aquí el texto que sigue es largo y necesita respirar). */
 .adm-features .section-heading p {
+  margin-inline: auto;
   margin-top: clamp(20px, 2.2vw, 30px);
+  max-width: 62ch;
 }
 
-/* El hueco entre el párrafo de entrada (que vive en el .section-heading) y el
-   primer párrafo del bloque es el mismo que separa los párrafos entre sí. */
-.adm-prose {
-  --adm-prose-gap: clamp(16px, 1.3vw, 18px);
-
-  margin-top: var(--adm-prose-gap);
+.qi-carousel {
+  margin: clamp(34px, 4.5vw, 56px) auto 0;
+  max-width: 1120px;
 }
 
-.adm-prose p {
-  color: var(--text);
-  font-size: clamp(14px, 1.15vw, 16px);
-  line-height: 1.85;
-  margin: 0 0 var(--adm-prose-gap);
-}
-
-.adm-prose p:last-child {
-  margin-bottom: 0;
-}
-
-/* Solo se usa en mobile (ver media query de 768px) */
-.adm-prose-toggle {
+/* Las flechas viven fuera de la foto en desktop (de ahí el grid de 3 columnas)
+   y se superponen a sus bordes en cuanto no hay hueco lateral (ver mobile). */
+.qi-stage {
   align-items: center;
-  background: none;
-  border: 0;
+  display: grid;
+  gap: clamp(14px, 2.5vw, 34px);
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.qi-frame {
+  aspect-ratio: 16 / 9;
+  background: var(--warm);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  /* El swipe horizontal es nuestro; el scroll vertical sigue siendo del navegador. */
+  touch-action: pan-y;
+}
+
+/* Las diapositivas se apilan en el mismo hueco para poder cruzarse (la saliente
+   sigue en el DOM durante la transición). */
+.qi-photo {
+  display: block;
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  position: absolute;
+  width: 100%;
+}
+
+.qi-arrow {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(164, 123, 54, 0.45);
+  border-radius: 50%;
   color: var(--gold);
-  cursor: pointer;
-  display: none;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 600;
-  gap: 8px;
-  margin-top: 14px;
+  display: flex;
+  height: clamp(40px, 4vw, 52px);
+  justify-content: center;
   padding: 0;
+  transition: background-color 300ms ease, border-color 300ms ease, transform 300ms ease;
+  width: clamp(40px, 4vw, 52px);
 }
 
-/* Pico: mira hacia abajo en "Ver más" y gira hacia arriba en "Ver menos". */
-.adm-prose-chevron {
-  border-bottom: 1.5px solid currentColor;
-  border-right: 1.5px solid currentColor;
-  height: 7px;
-  transform: translateY(-2px) rotate(45deg);
-  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
-  width: 7px;
+.qi-arrow:hover {
+  background: rgba(164, 123, 54, 0.08);
+  border-color: var(--gold);
 }
 
-.adm-prose-chevron.is-up {
-  transform: translateY(1px) rotate(-135deg);
+.qi-arrow--prev:hover {
+  transform: translateX(-2px);
 }
 
-/* Ver más / ver menos solo en mobile: el texto es largo y se comería la
-   pantalla entera. Plegado, el primer párrafo se lee opaco entero: el texto se
-   desvanece desde --adm-prose-fade (el inicio del segundo párrafo) hasta el
-   corte --adm-prose-clamp, PROSE_FADE_LINES líneas más abajo. Ambas las mide el
-   JS. En desktop se ve completo (is-clamped no hace nada aquí). */
-@media (max-width: 768px) {
-  .adm-prose.is-clamped {
-    /* Los stops intermedios suavizan el codo: con una rampa lineal a secas el
-       paso de opaco a degradado se ve como una raya justo donde arranca, y con
-       un solo stop la caída va a saltos. Estos cinco aproximan una curva. */
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      #000 0,
-      #000 var(--adm-prose-fade, 200px),
-      rgba(0, 0, 0, 0.92)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.2),
-      rgba(0, 0, 0, 0.72)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.4),
-      rgba(0, 0, 0, 0.45)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.6),
-      rgba(0, 0, 0, 0.2)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.8),
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      #000 0,
-      #000 var(--adm-prose-fade, 200px),
-      rgba(0, 0, 0, 0.92)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.2),
-      rgba(0, 0, 0, 0.72)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.4),
-      rgba(0, 0, 0, 0.45)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.6),
-      rgba(0, 0, 0, 0.2)
-        calc(var(--adm-prose-fade, 200px) + (100% - var(--adm-prose-fade, 200px)) * 0.8),
-      transparent 100%
-    );
-    max-height: var(--adm-prose-clamp, 420px);
-    overflow: hidden;
+.qi-arrow--next:hover {
+  transform: translateX(2px);
+}
+
+/* Pico fino dorado, girado según el lado. El translate compensa el centro
+   óptico: un chevron cuadrado rotado se ve descentrado si no se corrige. */
+.qi-arrow-chevron {
+  border-right: 1px solid currentColor;
+  border-top: 1px solid currentColor;
+  height: 9px;
+  width: 9px;
+}
+
+.qi-arrow--next .qi-arrow-chevron {
+  transform: translateX(-2px) rotate(45deg);
+}
+
+.qi-arrow--prev .qi-arrow-chevron {
+  transform: translateX(2px) rotate(-135deg);
+}
+
+.qi-caption {
+  margin: clamp(22px, 2.8vw, 34px) auto 0;
+  max-width: 68ch;
+  /* Altura reservada para el texto más largo: sin ella, la barra de puntos
+     brinca al cambiar de diapositiva. En mobile se relaja (ver media query). */
+  min-height: 132px;
+  position: relative;
+  text-align: center;
+}
+
+.qi-title {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(24px, 2.6vw, 32px);
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.qi-desc {
+  color: var(--text);
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.8;
+  margin: 12px 0 0;
+}
+
+.qi-nav {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: clamp(18px, 2vw, 26px);
+}
+
+.qi-counter {
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.qi-dots {
+  display: flex;
+  gap: 12px;
+}
+
+.qi-dot {
+  background: transparent;
+  border: 1px solid rgba(164, 123, 54, 0.55);
+  border-radius: 50%;
+  height: 9px;
+  padding: 0;
+  transition: background-color 300ms ease, transform 300ms ease;
+  width: 9px;
+}
+
+.qi-dot:hover {
+  background: rgba(164, 123, 54, 0.35);
+}
+
+.qi-dot.is-active {
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: scale(1.15);
+}
+
+@media (max-width: 900px) {
+  /* Sin hueco lateral las flechas se meten sobre la foto, en círculo claro para
+     que sigan leyéndose sobre cualquier imagen. */
+  .qi-stage {
+    display: block;
+    position: relative;
   }
 
-  /* Aire por debajo del corte: pegado a la línea difuminada el botón parecía
-     parte del párrafo. */
-  .adm-prose.is-clamped + .adm-prose-toggle {
-    margin-top: 16px;
+  .qi-arrow {
+    backdrop-filter: blur(2px);
+    background: rgba(255, 255, 255, 0.82);
+    border-color: rgba(164, 123, 54, 0.35);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
   }
 
-  /* Tope holgado (el texto mide ~1150px en el móvil más estrecho): solo existe
-     para que el max-height pueda animarse, nunca llega a recortar. */
-  .adm-prose.is-expanded {
-    max-height: 1600px;
-    overflow: visible;
+  .qi-arrow:hover,
+  .qi-arrow--prev:hover,
+  .qi-arrow--next:hover {
+    background: #fff;
+    transform: translateY(-50%);
   }
 
-  .adm-prose {
-    scroll-margin-top: 96px;
-    transition: max-height 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  .qi-arrow--prev {
+    left: 12px;
   }
 
-  /* Alineado a la derecha: el pulgar llega antes y no compite con el inicio de
-     los párrafos, que van alineados a la izquierda. */
-  .adm-prose-toggle {
-    display: flex;
-    margin-left: auto;
-    width: fit-content;
+  .qi-arrow--next {
+    right: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .qi-frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Aquí el texto respira menos y la reserva de altura de desktop dejaría un
+     hueco enorme: la subimos a lo justo para el título + descripción. */
+  .qi-caption {
+    min-height: 168px;
   }
 }
 

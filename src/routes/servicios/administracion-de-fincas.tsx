@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
+import { QueIncluyeCarousel } from '../../components/servicios/QueIncluyeCarousel'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 
 export const Route = createFileRoute('/servicios/administracion-de-fincas')({
@@ -38,88 +39,9 @@ const heroItem = {
   },
 }
 
-const proseVariants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.08 },
-  },
-}
-
-const proseItem = {
-  hidden: { opacity: 0, y: 18 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
-  },
-}
-
-const SERVICE_PARAGRAPHS = [
-  'Cada comunidad cuenta con un equipo de formado por un administrador de fincas, un abogado especializado y un asesor dedicado, que trabajan de forma coordinada para proteger los intereses de la comunidad y ofrecer un servicio cercano, eficaz y personalizado.',
-  'Asesoramos en el proceso de constitución y legalización de la Comunidad de Propietarios, acompañando a los propietarios durante todo el proceso hasta su correcta puesta en funcionamiento. Una vez constituida, nos encargamos de su gestión y administración diaria, velando por el buen funcionamiento de la comunidad y la conservación del inmueble.',
-  'Gestionamos la economía de la comunidad mediante la elaboración del presupuesto anual, el control de ingresos y gastos, la emisión y gestión de recibos, el pago a proveedores y la reclamación de impagos. Además, convocamos y coordinamos las reuniones de la comunidad, redactamos las actas, ejecutamos los acuerdos adoptados y buscamos de forma continua las mejores condiciones con los proveedores para optimizar los recursos y reducir los gastos de la comunidad.',
-  'Ponemos a disposición de todos los propietarios un portal online donde podrán consultar la documentación de la comunidad, actas, convocatorias, estados de cuenta, recibos, incidencias y toda la información relevante, con acceso rápido, seguro y disponible las 24 horas del día.',
-  'Gestionamos comunidades de propietarios en régimen de propiedad horizontal y propiedades en régimen de propiedad vertical, ofreciendo un servicio personalizado adaptado a las necesidades de cada finca.',
-]
-
-// Líneas del segundo párrafo que asoman difuminándose. La rampa entera cae
-// dentro de ellas: el primer párrafo se lee opaco de principio a fin, la
-// primera línea de "Asesoramos..." arranca el degradado, la segunda lo termina
-// y de la tercera ya no se ve nada (si no, el botón "Ver más" se le superpone).
-const PROSE_FADE_LINES = 2
-
 function AdministracionDeFincasPage() {
   const ctaRef = useRef<HTMLElement>(null)
   const [ctaActive, setCtaActive] = useState(false)
-
-  // Mobile: el texto arranca colapsado (el clamp lo aplica el CSS, en desktop se
-  // ve entero pase lo que pase con este estado).
-  const proseRef = useRef<HTMLDivElement>(null)
-  const [proseOpen, setProseOpen] = useState(false)
-
-  const toggleProse = () => {
-    // Al plegar, el contenido de arriba se encoge y el botón "salta" fuera de
-    // vista: devolvemos al usuario al principio del bloque.
-    if (proseOpen) proseRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
-    setProseOpen((v) => !v)
-  }
-
-  // Plegado, el primer párrafo se lee entero y el degradado arranca justo donde
-  // empieza el segundo ("Asesoramos en el proceso..."), del que asoman
-  // PROSE_FADE_LINES líneas cada vez más tenues hasta el corte. Medimos en vez
-  // de fijar altos porque el número de líneas cambia con el ancho. El CSS solo
-  // usa estas variables dentro del media query mobile.
-  useEffect(() => {
-    const el = proseRef.current
-    if (!el) return
-
-    const measure = () => {
-      // offsetTop/Height y no getBoundingClientRect: los párrafos entran con un
-      // transform y los rects lo incluirían, falseando la medida.
-      const second = el.children[1] as HTMLElement | undefined
-      if (!second) return
-
-      const styles = getComputedStyle(second)
-      const parsed = Number.parseFloat(styles.lineHeight)
-      // line-height: normal no da un número: reconstruimos la línea desde el
-      // font-size con el mismo 1.85 del CSS.
-      const line = Number.isFinite(parsed)
-        ? parsed
-        : Number.parseFloat(styles.fontSize) * 1.85
-
-      // El degradado empieza en la primera línea del segundo párrafo y el corte
-      // cae PROSE_FADE_LINES líneas más abajo: toda la rampa queda ahí dentro.
-      const fade = second.offsetTop - el.offsetTop
-      const cut = fade + line * PROSE_FADE_LINES
-      el.style.setProperty('--adm-prose-fade', `${fade}px`)
-      el.style.setProperty('--adm-prose-clamp', `${cut}px`)
-    }
-
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
 
   useEffect(() => {
     const el = ctaRef.current
@@ -137,7 +59,7 @@ function AdministracionDeFincasPage() {
       <AdmHero />
 
       <section className="section adm-features">
-        <div className="section-heading">
+        <div className="section-heading section-heading--center">
           <span>El servicio</span>
           <h2>Qué incluye</h2>
           <p>
@@ -146,35 +68,7 @@ function AdministracionDeFincasPage() {
           </p>
         </div>
 
-        <motion.div
-          id="adm-prose"
-          ref={proseRef}
-          className={`adm-prose${proseOpen ? ' is-expanded' : ' is-clamped'}`}
-          variants={proseVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.15 }}
-        >
-          {SERVICE_PARAGRAPHS.map((text) => (
-            <motion.p key={text.slice(0, 40)} variants={proseItem}>
-              {text}
-            </motion.p>
-          ))}
-        </motion.div>
-
-        <button
-          type="button"
-          className="adm-prose-toggle"
-          aria-expanded={proseOpen}
-          aria-controls="adm-prose"
-          onClick={toggleProse}
-        >
-          {proseOpen ? 'Ver menos' : 'Ver más'}
-          <span
-            className={`adm-prose-chevron${proseOpen ? ' is-up' : ''}`}
-            aria-hidden="true"
-          />
-        </button>
+        <QueIncluyeCarousel />
       </section>
 
       <section ref={ctaRef} className={`adm-cta${ctaActive ? ' is-active' : ''}`}>
@@ -250,7 +144,7 @@ function AdmHero() {
         </motion.p>
         <motion.div variants={heroItem}>
           <Link className="button-link" to="/contacto">
-            Solicitar presupuesto →
+            Solicitar valoración →
           </Link>
         </motion.div>
       </motion.div>
