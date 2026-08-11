@@ -36,20 +36,20 @@ export const Route = createFileRoute('/servicios/seguros')({
 
 export const TIPOS_SEGURO = [
   {
+    title: 'Seguro de vida',
+    desc: 'Protección para tu vida, seguridad para tu futuro.',
+    icon: 'heart',
+    tag: 'Tu familia',
+    image:
+      'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
     title: 'Seguro de hogar',
     desc: 'Protección para tu hogar, seguridad en cada momento.',
     icon: 'home',
     tag: 'El más contratado',
     image:
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Seguro de comunidad',
-    desc: 'Protección integral para tu comunidad.',
-    icon: 'building',
-    tag: 'Comunidades',
-    image:
-      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
   },
   {
     title: 'Seguro de impago',
@@ -60,12 +60,12 @@ export const TIPOS_SEGURO = [
       'https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=1200&q=80',
   },
   {
-    title: 'Seguro de vida',
-    desc: 'Protección para tu vida, seguridad para tu futuro.',
-    icon: 'heart',
-    tag: 'Tu familia',
+    title: 'Seguro de comunidad',
+    desc: 'Protección integral para tu comunidad.',
+    icon: 'building',
+    tag: 'Comunidades',
     image:
-      'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
   },
 ] as const
 
@@ -156,7 +156,7 @@ function SegurosHero() {
         </motion.p>
         <motion.div variants={heroItem}>
           <Link className="button-link" to="/contacto">
-            Solicitar comparación →
+            Solicitar valoración →
           </Link>
         </motion.div>
       </motion.div>
@@ -434,7 +434,7 @@ function CtaBanner() {
           Te hacemos una comparación gratuita y sin compromiso.
         </p>
         <Link className="button-link" to="/contacto">
-          Solicitar comparación →
+          Solicitar valoración →
         </Link>
       </div>
     </section>
