@@ -342,8 +342,7 @@ function PorQueNosotros() {
         <div
           className="seguros-porque-img"
           style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=1200&q=80)',
+            backgroundImage: 'url(/seguros/por-que-nosotros.webp)',
           }}
         />
       </div>

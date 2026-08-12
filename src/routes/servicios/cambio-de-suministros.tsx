@@ -31,29 +31,25 @@ export const SUMINISTROS = [
     title: 'Agua',
     desc: 'Tramitamos el cambio con tu compañía local para que el suministro esté listo el día que llegas.',
     tag: 'Suministros',
-    image:
-      'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
+    image: '/suministros/agua.webp',
   },
   {
     title: 'Electricidad',
     desc: 'Cambio de titularidad y selección de la mejor tarifa para tu nueva vivienda, sin cortes ni complicaciones.',
     tag: 'Energía',
-    image:
-      'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
+    image: '/suministros/electricidad.webp',
   },
   {
     title: 'Gas',
     desc: 'Gestionamos el cambio de titular y buscamos las mejores opciones del mercado para tu vivienda.',
     tag: 'Energía',
-    image:
-      'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1200&q=80',
+    image: '/suministros/gas.webp',
   },
   {
     title: 'Telecomunicaciones',
     desc: 'Nos encargamos de gestionar tus servicios de telecomunicaciones, encontrando la mejor opción de internet y telefonía para que disfrutes de conexión desde el primer día en tu nueva vivienda.',
     tag: 'Conectividad',
-    image:
-      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+    image: '/suministros/telecomunicaciones.webp',
   },
 ]
 

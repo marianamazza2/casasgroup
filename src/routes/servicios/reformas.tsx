@@ -37,32 +37,27 @@ export const TIPOS_REFORMA = [
   {
     title: 'Reforma integral',
     desc: 'Renovamos la vivienda completa: distribución, instalaciones, acabados y mobiliario. Un solo equipo, un solo presupuesto y una única fecha de entrega.',
-    image:
-      'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?auto=format&fit=crop&w=1400&q=80',
+    image: '/reformas/reforma_integral.webp',
   },
   {
     title: 'Cocinas',
     desc: 'Diseñamos y ejecutamos la cocina de principio a fin: mobiliario, encimeras, electrodomésticos e iluminación, aprovechando cada centímetro del espacio.',
-    image:
-      'https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1400&q=80',
+    image: '/reformas/reforma_cocina.webp',
   },
   {
     title: 'Baños',
     desc: 'Cambiamos sanitarios, alicatados y fontanería con soluciones que ganan espacio, reducen el consumo de agua y se mantienen impecables con los años.',
-    image:
-      'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1400&q=80',
+    image: '/reformas/reforma_bano.webp',
   },
   {
     title: 'Pintura y acabados',
     desc: 'Alisado de paredes, pintura, parquet, puertas y carpintería. La reforma más rápida y la que más cambia la sensación de tu casa.',
-    image:
-      'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?auto=format&fit=crop&w=1400&q=80',
+    image: '/reformas/pintura.webp',
   },
   {
     title: 'Zonas comunes',
     desc: 'Rehabilitación de portales, escaleras, fachadas y ascensores, coordinada con la administración de la finca y con los plazos acordados en junta.',
-    image:
-      'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=1400&q=80',
+    image: '/reformas/zonas_comunes.webp',
   },
 ] as const
 
