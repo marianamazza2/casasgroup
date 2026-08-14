@@ -1,8 +1,11 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { useState, useEffect, useCallback, useRef } from 'react'
+import type { CSSProperties } from 'react'
 import { properties } from '../../lib/properties'
 import type { Property } from '../../lib/types'
 import { isValidCoords } from '../../lib/coords'
+import { gallerySrcSet, withTransform } from '../../lib/cloudinary'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { PropertyMap } from '../../components/property/PropertyMap'
 import { JsonLd } from '../../components/JsonLd'
 import { Seo } from '../../components/Seo'
@@ -114,10 +117,19 @@ function PropertyDetailPage() {
   )
 }
 
+/** Fondo LQIP: miniatura desenfocada (~1 KB) bajo la foto grande, para que el
+ *  hueco no se vea vacío mientras baja. */
+const lqip = (src: string): CSSProperties => ({
+  backgroundImage: `url("${withTransform(src, 'placeholder')}")`,
+})
+
 function PhotoGallery({ images, title }: { images: string[]; title: string }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [carouselIndex, setCarouselIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
+  // Mismo breakpoint que el CSS (index.css §Gallery). Se monta un solo layout:
+  // ver useMediaQuery para por qué no basta con display:none.
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   const main = images[0]
   const thumbs = images.slice(1, 5)
@@ -133,62 +145,96 @@ function PhotoGallery({ images, title }: { images: string[]; title: string }) {
   return (
     <>
       {/* Desktop / tablet grid */}
-      <div className="detail-gallery">
-        <div
-          className="detail-photo detail-photo--main"
-          onClick={() => setLightboxIndex(0)}
-        >
-          <img src={main} alt={title} />
+      {!isMobile && (
+        <div className="detail-gallery">
+          <div
+            className="detail-photo detail-photo--main"
+            style={lqip(main)}
+            onClick={() => setLightboxIndex(0)}
+          >
+            {/* fetchPriority alto: es el LCP de la ficha y por defecto compite en
+                igualdad con las miniaturas. */}
+            <img
+              src={main}
+              srcSet={gallerySrcSet(main)}
+              sizes="(max-width: 1180px) 50vw, 584px"
+              alt={title}
+              fetchPriority="high"
+              decoding="async"
+            />
+          </div>
+          {slots.map((src, i) => {
+            const isLast = i === 3
+            return (
+              <div
+                key={i}
+                className={`detail-photo${isLast ? ' detail-photo--last' : ''}${src ? ' detail-photo--clickable' : ''}`}
+                style={src ? lqip(src) : undefined}
+                onClick={() => src && setLightboxIndex(i + 1)}
+              >
+                {/* Miniaturas de ~285×230: pedir el derivado de 600px, no el de
+                    1600px de la galería. */}
+                {src && (
+                  <img
+                    src={withTransform(src, 'preview')}
+                    alt={`${title} ${i + 2}`}
+                    decoding="async"
+                  />
+                )}
+                {isLast && (
+                  <button
+                    className="detail-gallery-btn"
+                    onClick={(e) => { e.stopPropagation(); setLightboxIndex(0) }}
+                  >
+                    <span className="detail-gallery-btn-grid">⊞</span>
+                    Mostrar todas las fotos
+                  </button>
+                )}
+              </div>
+            )
+          })}
         </div>
-        {slots.map((src, i) => {
-          const isLast = i === 3
-          return (
-            <div
-              key={i}
-              className={`detail-photo${isLast ? ' detail-photo--last' : ''}${src ? ' detail-photo--clickable' : ''}`}
-              onClick={() => src && setLightboxIndex(i + 1)}
-            >
-              {src && <img src={src} alt={`${title} ${i + 2}`} />}
-              {isLast && (
-                <button
-                  className="detail-gallery-btn"
-                  onClick={(e) => { e.stopPropagation(); setLightboxIndex(0) }}
-                >
-                  <span className="detail-gallery-btn-grid">⊞</span>
-                  Mostrar todas las fotos
-                </button>
-              )}
-            </div>
-          )
-        })}
-      </div>
+      )}
 
       {/* Mobile swipeable carousel */}
-      <div className="detail-carousel">
-        <div className="detail-carousel-stage">
-          <div
-            className="detail-carousel-track"
-            ref={carouselRef}
-            onScroll={onCarouselScroll}
-          >
-            {images.map((src, i) => (
-              <div key={i} className="detail-carousel-slide">
-                <img src={src} alt={`${title} ${i + 1}`} loading={i === 0 ? 'eager' : 'lazy'} />
-              </div>
-            ))}
-          </div>
-          {images.length > 1 && (
+      {isMobile && (
+        <div className="detail-carousel">
+          <div className="detail-carousel-stage">
             <div
-              className="detail-carousel-count"
-              role="status"
-              aria-live="polite"
-              aria-label={`Foto ${carouselIndex + 1} de ${images.length}`}
+              className="detail-carousel-track"
+              ref={carouselRef}
+              onScroll={onCarouselScroll}
             >
-              {carouselIndex + 1} / {images.length}
+              {images.map((src, i) => (
+                <div key={i} className="detail-carousel-slide" style={lqip(src)}>
+                  {/* La foto vecina se baja MIENTRAS mirás la actual. Con
+                      loading="lazy" en todas menos la primera, cada swipe
+                      arrancaba la descarga recién al llegar a la foto. */}
+                  <img
+                    src={src}
+                    srcSet={gallerySrcSet(src)}
+                    sizes="100vw"
+                    alt={`${title} ${i + 1}`}
+                    loading={Math.abs(i - carouselIndex) <= 1 ? 'eager' : 'lazy'}
+                    fetchPriority={i === 0 ? 'high' : 'auto'}
+                    decoding="async"
+                  />
+                </div>
+              ))}
             </div>
-          )}
+            {images.length > 1 && (
+              <div
+                className="detail-carousel-count"
+                role="status"
+                aria-live="polite"
+                aria-label={`Foto ${carouselIndex + 1} de ${images.length}`}
+              >
+                {carouselIndex + 1} / {images.length}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {lightboxIndex !== null && (
         <Lightbox
@@ -248,6 +294,17 @@ function Lightbox({
     }
   }, [onClose, prev, next])
 
+  // Solo la foto actual está en el DOM, así que cada flecha desmontaba una <img>
+  // y montaba otra: descarga desde cero. Precargar las vecinas las deja en caché
+  // del navegador antes de que hagan falta.
+  useEffect(() => {
+    if (total < 2) return
+    for (const i of [(current + 1) % total, (current - 1 + total) % total]) {
+      const img = new Image()
+      img.src = images[i]
+    }
+  }, [current, total, images])
+
   return (
     <div className="lightbox-overlay" onClick={onClose}>
       <button className="lightbox-close" onClick={onClose}>✕</button>
@@ -265,7 +322,14 @@ function Lightbox({
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <img src={images[current]} alt={`${title} ${current + 1}`} />
+        <img
+          src={images[current]}
+          srcSet={gallerySrcSet(images[current])}
+          sizes="100vw"
+          alt={`${title} ${current + 1}`}
+          fetchPriority="high"
+          decoding="async"
+        />
       </div>
 
       <button
@@ -284,7 +348,14 @@ function Lightbox({
             className={`lightbox-thumb${i === current ? ' lightbox-thumb--active' : ''}`}
             onClick={() => setCurrent(i)}
           >
-            <img src={src} alt={`${title} ${i + 1}`} />
+            {/* 64×48 en pantalla: el derivado de 200px sobra. Antes se bajaba el
+                de 1600px de la galería, uno por foto del inmueble. */}
+            <img
+              src={withTransform(src, 'thumbnail')}
+              alt={`${title} ${i + 1}`}
+              loading="lazy"
+              decoding="async"
+            />
           </button>
         ))}
       </div>

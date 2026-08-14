@@ -420,7 +420,7 @@ button {
 
 /* Gold version of the hero photo — revealed on scroll */
 .hero-gold-bg {
-  background: linear-gradient(#fff3d7, rgb(57 39 7 / 39%)), url('/hero-building-gold.jpg') center / cover no-repeat;
+  background: linear-gradient(#fff3d7, rgb(57 39 7 / 39%)), url('/hero-building-gold.webp') center / cover no-repeat;
   inset: 0;
   opacity: 0;
   position: absolute;
@@ -457,7 +457,7 @@ button {
 
 .hero-media {
   animation: hero-media-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-  background: linear-gradient(#ffffff, rgb(22 16 6 / 0%)), url('/hero-building-light.jpg') center / cover no-repeat;
+  background: linear-gradient(#ffffff, rgb(22 16 6 / 0%)), url('/hero-building-light.webp') center / cover no-repeat;
   inset: 0;
   position: absolute;
   will-change: opacity;
@@ -749,6 +749,8 @@ button {
 .home-page .hero-search-input {
   border-bottom-color: rgba(255, 255, 255, 0.7);
   color: #fff;
+  /* Placeholder y texto escrito centrados sobre la linea dorada del hero */
+  text-align: center;
 }
 
 .home-page .hero-search-input::placeholder {
@@ -892,7 +894,7 @@ button {
 }
 
 .services-image-panel {
-  border-radius: 2px;
+  border-radius: 12px;
   height: calc(100vh - 140px);
   max-height: 680px;
   overflow: hidden;
@@ -3625,6 +3627,12 @@ button {
     z-index: 1;
   }
 
+  /* La hoja de resultados monta 22px sobre el borde inferior del mapa: el botón
+     de ubicación tiene que quedar por encima de esa curva. */
+  .map-locate {
+    margin-bottom: 48px;
+  }
+
   /* Cabecera de resultados = "asa" de la hoja que sube sobre el mapa */
   .results-header {
     order: 2;
@@ -3732,6 +3740,73 @@ button {
   color: #fff;
   box-shadow: 0 4px 14px rgb(164 123 54 / 0.35);
   transform: scale(1.08);
+}
+
+/* ── Map: ubicación del usuario ───────────────────────────────────────────── */
+
+/* Botón "mi ubicación": FAB circular abajo a la derecha, como el de Google Maps
+   pero con la flecha en dorado de marca. */
+.map-locate {
+  margin: 0 14px 30px 0;
+}
+
+.map-locate-btn {
+  align-items: center;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.28);
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  height: 38px;
+  justify-content: center;
+  padding: 0;
+  transition: color 150ms ease, transform 150ms ease;
+  width: 38px;
+}
+
+/* La flecha apunta arriba a la derecha, igual que en Google Maps. */
+.map-locate-btn svg {
+  transform: rotate(42deg);
+}
+
+.map-locate-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.map-locate-btn.is-locating {
+  animation: map-locate-pulse 1s ease-in-out infinite;
+}
+
+.map-locate-btn:disabled {
+  color: #c4c4c4;
+  cursor: default;
+}
+
+@keyframes map-locate-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* Punto azul "estás aquí". Es puramente informativo: no captura clics, así que
+   nunca interfiere con los pines de precio aunque quede solapado. */
+.map-user-dot {
+  background: #1a73e8;
+  border: 2.5px solid #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 6px rgb(26 115 232 / 0.18),
+    0 1px 4px rgb(0 0 0 / 0.3);
+  height: 16px;
+  pointer-events: none;
+  width: 16px;
+  animation: map-user-dot-in 260ms ease-out;
+}
+
+@keyframes map-user-dot-in {
+  from { opacity: 0; transform: scale(0.4); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 /* ── Map property popup ───────────────────────────────────────────────────── */
@@ -4610,8 +4685,12 @@ button {
   border-radius: 12px;
   overflow: hidden;
 }
+/* El LQIP (miniatura desenfocada) llega como background-image inline desde
+   $id.tsx; aquí solo se define cómo se encuadra. */
 .detail-photo {
   background: var(--warm);
+  background-size: cover;
+  background-position: center;
   overflow: hidden;
   position: relative;
 }
@@ -4666,6 +4745,8 @@ button {
   scroll-snap-align: center;
   aspect-ratio: 4 / 3;
   background: var(--warm);
+  background-size: cover;
+  background-position: center;
 }
 .detail-carousel-slide img {
   width: 100%;
@@ -4864,8 +4945,8 @@ button {
 @media (max-width: 768px) {
   .detail-description p.is-clamped {
     display: -webkit-box;
-    -webkit-line-clamp: 10;
-    line-clamp: 10;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -8766,7 +8847,11 @@ button {
   background-position: center;
   background-size: cover;
   border-radius: 12px;
-  box-shadow: 0 30px 60px -34px rgba(20, 16, 10, 0.55);
+  /* La sombra tiene que caber en el padding inferior del slider (que recorta
+     por el overflow-x): con un desplazamiento grande se cortaba en seco y
+     dejaba una banda gris bajo las tarjetas. Extensión hacia abajo =
+     desplazamiento + blur/2 + spread = 14 + 14 - 18 = 10px. */
+  box-shadow: 0 14px 28px -18px rgba(20, 16, 10, 0.45);
   flex: 0 0 82%;
   height: clamp(260px, 44vh, 360px);
   overflow: hidden;
@@ -8873,7 +8958,7 @@ button {
     gap: 16px;
     margin: 0 -20px;
     overflow-x: auto;
-    padding: 4px 20px 16px;
+    padding: 4px 20px 20px;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
   }
@@ -9067,6 +9152,12 @@ button {
     left: 22px;
     transform: none;
     writing-mode: horizontal-tb;
+  }
+
+  /* "Cada rincón de / tu casa": el quiebre cae antes de "tu", no entre
+     "tu" y "casa". */
+  .reformas-tipos .ref-tipos-h2-break {
+    display: block;
   }
 }
 

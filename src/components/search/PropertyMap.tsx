@@ -16,6 +16,9 @@ const KNOWN_LOCATION_CENTERS: Record<string, [number, number]> = {
   lleida: [0.6200, 41.6176],
 }
 
+// Flecha de navegación (Material), la misma del botón circular de Google Maps.
+const LOCATE_ICON = `<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2 4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>`
+
 function knownCenterForLocation(location: string): [number, number] | undefined {
   return KNOWN_LOCATION_CENTERS[normalizeLocation(location)]
 }
@@ -72,6 +75,7 @@ export function PropertyMap({ properties, activeId, focusZones, emptyLocation, o
   const propertiesRef = useRef(properties)
   const prevFocusRef = useRef<string | null>(null)
   const prevEmptyLocationRef = useRef<string | null>(null)
+  const userMarkerRef = useRef<maplibregl.Marker | null>(null)
 
   useEffect(() => { callbackRef.current = onPinClick })
   useEffect(() => { boundsCallbackRef.current = onBoundsChange })
@@ -113,6 +117,99 @@ export function PropertyMap({ properties, activeId, focusZones, emptyLocation, o
       map.remove()
       mapRef.current = null
       markersRef.current.clear()
+    }
+  }, [])
+
+  // Botón "mi ubicación", estilo Google Maps: nada pasa hasta que el usuario lo
+  // aprieta. Recién ahí el navegador pide permiso y se dibuja el punto azul.
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !navigator.geolocation) return
+
+    let watchId: number | null = null
+    let cancelled = false
+
+    const container = document.createElement('div')
+    container.className = 'map-locate'
+
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.className = 'map-locate-btn'
+    button.title = 'Mostrar mi ubicación'
+    button.setAttribute('aria-label', 'Mostrar mi ubicación')
+    button.innerHTML = LOCATE_ICON
+    container.appendChild(button)
+
+    const setState = (state: 'idle' | 'locating' | 'denied') => {
+      button.classList.toggle('is-locating', state === 'locating')
+      button.disabled = state === 'denied'
+      if (state === 'denied') {
+        button.title = 'Ubicación bloqueada en los ajustes del navegador'
+        button.setAttribute('aria-label', button.title)
+      }
+    }
+
+    const onPosition = (position: GeolocationPosition) => {
+      if (cancelled) return
+      const lngLat: [number, number] = [position.coords.longitude, position.coords.latitude]
+
+      if (userMarkerRef.current) {
+        userMarkerRef.current.setLngLat(lngLat)
+      } else {
+        const el = document.createElement('div')
+        el.className = 'map-user-dot'
+        el.setAttribute('aria-hidden', 'true')
+        userMarkerRef.current = new maplibregl.Marker({ element: el, anchor: 'center' })
+          .setLngLat(lngLat)
+          .addTo(map)
+      }
+
+      setState('idle')
+      map.easeTo({ center: lngLat, zoom: Math.max(map.getZoom(), 14), duration: 700 })
+    }
+
+    const onError = (error: GeolocationPositionError) => {
+      if (cancelled) return
+      setState(error.code === error.PERMISSION_DENIED ? 'denied' : 'idle')
+    }
+
+    button.addEventListener('click', () => {
+      // Ya localizados: el click solo vuelve a centrar en el punto.
+      const current = userMarkerRef.current?.getLngLat()
+      if (current) {
+        map.easeTo({ center: current, zoom: Math.max(map.getZoom(), 14), duration: 700 })
+        return
+      }
+
+      setState('locating')
+      // Una lectura puntual para responder rápido, y a partir de ahí el
+      // seguimiento para que el punto acompañe si la persona se mueve.
+      navigator.geolocation.getCurrentPosition(onPosition, onError, {
+        enableHighAccuracy: true,
+        maximumAge: 30_000,
+        timeout: 10_000,
+      })
+      if (watchId === null) {
+        watchId = navigator.geolocation.watchPosition(onPosition, onError, {
+          enableHighAccuracy: true,
+          maximumAge: 30_000,
+          timeout: 10_000,
+        })
+      }
+    })
+
+    const control: maplibregl.IControl = {
+      onAdd: () => container,
+      onRemove: () => container.remove(),
+    }
+    map.addControl(control, 'bottom-right')
+
+    return () => {
+      cancelled = true
+      if (watchId !== null) navigator.geolocation.clearWatch(watchId)
+      map.removeControl(control)
+      userMarkerRef.current?.remove()
+      userMarkerRef.current = null
     }
   }, [])
 

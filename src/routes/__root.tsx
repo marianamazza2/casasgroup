@@ -2,6 +2,7 @@ import { HeadContent, Link, createRootRoute, useRouterState } from '@tanstack/re
 import { useEffect, useState } from 'react'
 import { AnimatedOutlet } from '../components/AnimatedOutlet'
 import { RouteProgress } from '../components/RouteProgress'
+import { useScrollRestoreRetry } from '../hooks/useScrollRestoreRetry'
 import { absoluteUrl } from '../lib/structuredData'
 
 const subMenuServices = [
@@ -206,6 +207,10 @@ function SiteNav() {
 }
 
 function RootLayout() {
+  // Al volver atrás, reaplica la posición guardada cuando la pantalla ya ha
+  // montado (TanStack la aplica demasiado pronto y se recorta). Ver el hook.
+  useScrollRestoreRetry({ getElement: () => window })
+
   // Barra de carga + crossfade entre pantallas (ver AnimatedOutlet).
   return (
     <>

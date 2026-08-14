@@ -428,14 +428,20 @@ function Home() {
       moved: false,
     }
     rail.classList.add('is-grabbing')
-    rail.setPointerCapture(e.pointerId)
   }
 
   const onPropertyPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const rail = propertiesRef.current
     if (!rail || !propertyDrag.current.active) return
     const dx = e.clientX - propertyDrag.current.startX
-    if (Math.abs(dx) > 4) propertyDrag.current.moved = true
+    if (Math.abs(dx) > 4 && !propertyDrag.current.moved) {
+      propertyDrag.current.moved = true
+      // La captura se toma solo cuando el arrastre es real. Tomarla ya en el
+      // pointerdown redirige mousedown/mouseup al rail, así que el click se
+      // dispara sobre el div y nunca sobre el <a> de la tarjeta: en desktop no
+      // se podía abrir ninguna ficha desde el carrusel de la home.
+      rail.setPointerCapture(e.pointerId)
+    }
     rail.scrollLeft = propertyDrag.current.startScroll - dx
   }
 
@@ -444,10 +450,9 @@ function Home() {
     if (!rail || !propertyDrag.current.active) return
     propertyDrag.current.active = false
     rail.classList.remove('is-grabbing')
-    try {
+    // Puede no haberse capturado nunca (click sin arrastre)
+    if (rail.hasPointerCapture(e.pointerId)) {
       rail.releasePointerCapture(e.pointerId)
-    } catch {
-      // pointer ya liberado
     }
   }
 

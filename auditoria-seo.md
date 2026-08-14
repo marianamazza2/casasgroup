@@ -140,18 +140,21 @@ En `scripts/buildData.mjs` las URLs se generan con `f_auto,q_auto` (formato auto
 
 Esto es exactamente lo correcto. **El pipeline de fotos de inmuebles no necesita cambios de formato.**
 
-### 3.2 Imágenes del hero (locales) — 🔴 sin optimizar
-Son los pesos pesados del sitio y el LCP del home:
+### 3.2 Imágenes del hero (locales) — ✅ resuelto
+Eran los pesos pesados del sitio y el LCP del home. De los 5 archivos, el
+crossfade solo usaba 2 (`-gold` y `-light`); los otros 3 eran material muerto.
 
-| Archivo | Peso | Acción |
+| Archivo | Antes | Ahora |
 |---|---|---|
-| `hero-initial.png` | 1.5 MB | Convertir a WebP/AVIF; verificar si se usa |
-| `hero-bg.png` | 1.3 MB | Convertir a WebP/AVIF; verificar si se usa |
-| `hero-building.jpg` | 416 KB | Verificar si se usa; si no, borrar |
-| `hero-building-gold.jpg` | 324 KB | Recomprimir (crossfade) |
-| `hero-building-light.jpg` | 233 KB | Recomprimir (crossfade) |
+| `hero-initial.png` | 1.5 MB | borrado (sin usar) |
+| `hero-bg.png` | 1.3 MB | borrado (sin usar) |
+| `hero-building.jpg` | 416 KB | borrado (sin usar) |
+| `hero-building-gold.jpg` → `.webp` | 324 KB | 70 KB (−78%) |
+| `hero-building-light.jpg` → `.webp` | 233 KB | 41 KB (−83%) |
 
-Hay 5 archivos pero el efecto de crossfade solo usa 2 (`-gold` y `-light`). Convertir PNG→WebP/AVIF baja ~80% el peso. Eliminar los archivos muertos.
+Total: 3,8 MB → 111 KB. La conversión la hace `scripts/optimizeImages.mjs`
+(`npm run images`), que rasteriza con Chromium vía Playwright y cubre cualquier
+JPG/PNG nuevo que se añada a `/public`.
 
 ### 3.3 Otros puntos de imagen
 - `index.tsx:810` usa una imagen **hardcodeada de Unsplash** → sustituir por imagen propia autoalojada/Cloudinary (control, velocidad, sin dependencia de terceros).

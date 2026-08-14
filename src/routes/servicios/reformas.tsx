@@ -215,10 +215,12 @@ const panelsReveal = {
 
 // "Qué reformamos" — paneles de imagen que se expanden en acordeón horizontal.
 // En desktop el panel activo se abre con hover/foco; en móvil el acordeón pasa a
-// vertical y se abre al tocar (por eso el estado vive aquí y no en CSS puro).
+// vertical y la tarjeta abierta la marca el scroll (por eso el estado vive aquí
+// y no en CSS puro).
 function QueReformamos() {
   const [active, setActive] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
+  const panelsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 860px)')
@@ -228,16 +230,51 @@ function QueReformamos() {
     return () => mq.removeEventListener('change', update)
   }, [])
 
+  // En móvil la tarjeta activa la decide el scroll: repartimos el recorrido del
+  // acordeón por la pantalla en tantas bandas como paneles. Medimos el
+  // contenedor (no cada panel) porque su alto total es constante —siempre hay
+  // una tarjeta abierta— y así abrir una no reposiciona el cálculo.
+  useEffect(() => {
+    if (!isMobile) return
+    const el = panelsRef.current
+    if (!el) return
+
+    let frame = 0
+    const measure = () => {
+      frame = 0
+      const rect = el.getBoundingClientRect()
+      if (!rect.height) return
+      const progress = (window.innerHeight * 0.5 - rect.top) / rect.height
+      const i = Math.floor(progress * TIPOS_REFORMA.length)
+      setActive(Math.min(TIPOS_REFORMA.length - 1, Math.max(0, i)))
+    }
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure)
+    }
+
+    measure()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [isMobile])
+
   return (
     <section className="section reformas-tipos">
       <div className="services-inner">
         <div className="section-heading section-heading--center">
           <span>Qué reformamos</span>
-          <h2>Cada rincón de tu casa</h2>
+          <h2>
+            Cada rincón de <span className="ref-tipos-h2-break">tu casa</span>
+          </h2>
         </div>
 
         <motion.div
           className="ref-panels"
+          ref={panelsRef}
           variants={panelsReveal}
           initial="hidden"
           whileInView="show"
@@ -251,7 +288,7 @@ function QueReformamos() {
                 type="button"
                 className={`ref-panel${open ? ' is-active' : ''}`}
                 aria-expanded={open}
-                onClick={() => setActive(isMobile && open ? -1 : i)}
+                onClick={() => !isMobile && setActive(i)}
                 onMouseEnter={() => !isMobile && setActive(i)}
                 onFocus={() => !isMobile && setActive(i)}
               >

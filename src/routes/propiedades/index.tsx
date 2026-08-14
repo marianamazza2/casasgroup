@@ -12,6 +12,7 @@ import { ResultsHeader } from '../../components/search/ResultsHeader'
 import { NoResults } from '../../components/search/NoResults'
 import { FiltersModal } from '../../components/search/FiltersModal'
 import { usePropertyFilters, isKnownLocationSearch, isBarcelonaScopedSearch } from '../../hooks/usePropertyFilters'
+import { useScrollRestoreRetry } from '../../hooks/useScrollRestoreRetry'
 import { Seo } from '../../components/Seo'
 import { SITE_URL } from '../../lib/structuredData'
 
@@ -87,6 +88,10 @@ function PropiedadesPage() {
     scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
+  // Al volver desde una ficha, devuelve la lista a donde estaba (la hoja tiene
+  // su propio scroll, así que no basta con la restauración de la ventana)
+  useScrollRestoreRetry({ id: 'search-page', getElement: () => scrollRef.current })
+
   // El recorte por encuadre solo se aplica a lo que el mapa puede situar: un
   // inmueble sin coordenadas válidas (o con un dato corrupto que descartamos)
   // no tiene pin, así que nunca entraría en `mapVisibleIds` y desaparecería del
@@ -141,7 +146,14 @@ function PropiedadesPage() {
   const seoCanonical = `${SITE_URL}/propiedades${canonicalQuery ? `?${canonicalQuery}` : ''}`
 
   return (
-    <div className="search-page" ref={scrollRef} onScroll={handleScroll}>
+    <div
+      className="search-page"
+      ref={scrollRef}
+      onScroll={handleScroll}
+      // Identifica este scroller en la caché de scroll de TanStack, para poder
+      // devolver la lista donde estaba al volver desde una ficha
+      data-scroll-restoration-id="search-page"
+    >
       <Seo
         title={seoTitle}
         description={seoDescription}
