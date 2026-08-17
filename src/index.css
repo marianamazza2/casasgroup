@@ -1970,6 +1970,30 @@ button {
   line-height: 1.5;
 }
 
+/* Los dots solo aparecen en mobile, donde la grid se vuelve slider */
+.contact-card-dots {
+  display: none;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.contact-card-dot {
+  background: rgba(164, 123, 54, 0.35);
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  height: 8px;
+  padding: 0;
+  transition: background 240ms ease, width 240ms ease;
+  width: 8px;
+}
+
+.contact-card-dot.is-active {
+  background: var(--gold);
+  width: 22px;
+}
+
 .social-row {
   display: flex;
   gap: 10px;
@@ -2870,16 +2894,35 @@ button {
     flex-basis: min(82vw, 320px);
   }
 
-  /* En mobile mostramos todas las tarjetas apiladas: mas informacion a la vista */
+  /* En mobile las tarjetas pasan a ser un slider horizontal con scroll-snap:
+     ocupan menos alto y la siguiente asoma para invitar a deslizar. */
   .contact-card-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    grid-template-columns: none;
     gap: 12px;
     margin-top: clamp(28px, 6vw, 40px);
+    margin-inline: calc(clamp(24px, 6vw, 80px) * -1);
+    overflow-x: auto;
+    padding-inline: clamp(24px, 6vw, 80px);
+    scroll-padding-inline-start: clamp(24px, 6vw, 80px);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .contact-card-grid::-webkit-scrollbar {
+    display: none;
   }
 
   .contact-card {
+    flex: 0 0 82%;
     padding: 18px 20px;
     gap: 16px;
+    scroll-snap-align: start;
+  }
+
+  .contact-card-dots {
+    display: flex;
   }
 
   .location-band > div:first-child {
@@ -3451,6 +3494,57 @@ button {
   color: var(--text);
 }
 
+/* Mobile (vista Airbnb): el bloque centrado gasta demasiado alto y el CTA queda
+   fuera de la hoja. Compactamos: el pin baja de tamaño y pasa a la MISMA fila
+   que el título (grid de 2 columnas), y todo se alinea a la izquierda. */
+@media (max-width: 900px) {
+  .no-results {
+    align-items: start;
+    column-gap: 12px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    padding: 24px 16px 28px;
+    row-gap: 10px;
+    text-align: left;
+  }
+
+  .no-results-icon {
+    height: 36px;
+    width: 36px;
+  }
+
+  .no-results-icon svg {
+    height: 20px;
+    width: 20px;
+  }
+
+  /* 6px = (36 - 24) / 2: centra el pin contra la PRIMERA línea del título,
+     aunque el título ocupe dos o tres líneas. */
+  .no-results-title {
+    font-size: 20px;
+    line-height: 1.2;
+    margin: 6px 0 0;
+  }
+
+  .no-results-sub,
+  .no-results-actions {
+    grid-column: 1 / -1;
+  }
+
+  .no-results-sub {
+    font-size: 14px;
+  }
+
+  .no-results-actions {
+    align-items: stretch;
+    margin-top: 4px;
+  }
+
+  .no-results-clear {
+    align-self: center;
+  }
+}
+
 /* ── Property card — grid ─────────────────────────────────────────────────── */
 
 .property-card-grid {
@@ -3686,7 +3780,7 @@ button {
   /* La hoja de resultados monta 22px sobre el borde inferior del mapa: el botón
      de ubicación tiene que quedar por encima de esa curva. */
   .map-locate {
-    margin-bottom: 48px;
+    margin-bottom: 56px;
   }
 
   /* Cabecera de resultados = "asa" de la hoja que sube sobre el mapa */
@@ -3801,9 +3895,10 @@ button {
 /* ── Map: ubicación del usuario ───────────────────────────────────────────── */
 
 /* Botón "mi ubicación": FAB circular abajo a la derecha, como el de Google Maps
-   pero con la flecha en dorado de marca. */
+   pero con la flecha en dorado de marca. El margen derecho (8.5px) deja su eje
+   alineado con el de los botones +/- de zoom (29px de ancho y 10px de margen). */
 .map-locate {
-  margin: 0 14px 30px 0;
+  margin: 0 8.5px 38px 0;
 }
 
 .map-locate-btn {
@@ -3815,16 +3910,18 @@ button {
   color: var(--gold);
   cursor: pointer;
   display: flex;
-  height: 38px;
+  height: 32px;
   justify-content: center;
   padding: 0;
   transition: color 150ms ease, transform 150ms ease;
-  width: 38px;
+  width: 32px;
 }
 
 /* La flecha apunta arriba a la derecha, igual que en Google Maps. */
 .map-locate-btn svg {
+  height: 16px;
   transform: rotate(42deg);
+  width: 16px;
 }
 
 .map-locate-btn:hover:not(:disabled) {

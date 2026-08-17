@@ -153,6 +153,41 @@ function ContactPage() {
     return card.href
   }
 
+  // En móvil las tarjetas de contacto se convierten en un slider horizontal con
+  // dots: el activo se deduce de la posición de scroll y los dots saltan a cada uno.
+  const cardsRef = useRef<HTMLDivElement>(null)
+  const [activeCard, setActiveCard] = useState(0)
+
+  const onCardsScroll = () => {
+    const el = cardsRef.current
+    if (!el) return
+    const cards = Array.from(el.querySelectorAll<HTMLElement>('.contact-card'))
+    if (!cards.length) return
+    const center = el.scrollLeft + el.clientWidth / 2
+    let closestIdx = 0
+    let closestDist = Infinity
+    cards.forEach((card, i) => {
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2
+      const dist = Math.abs(cardCenter - center)
+      if (dist < closestDist) {
+        closestDist = dist
+        closestIdx = i
+      }
+    })
+    setActiveCard(closestIdx)
+  }
+
+  const goToCard = (i: number) => {
+    const el = cardsRef.current
+    if (!el) return
+    const card = el.querySelectorAll<HTMLElement>('.contact-card')[i]
+    if (!card) return
+    el.scrollTo({
+      left: card.offsetLeft + card.offsetWidth / 2 - el.clientWidth / 2,
+      behavior: 'smooth',
+    })
+  }
+
   const heroWrapperRef = useRef<HTMLDivElement>(null)
   const heroGoldRef = useRef<HTMLDivElement>(null)
   const heroMediaRef = useRef<HTMLDivElement>(null)
@@ -247,6 +282,8 @@ function ContactPage() {
           <h2>Si lo prefieres, contactanos directamente.</h2>
           <motion.div
             className="contact-card-grid"
+            ref={cardsRef}
+            onScroll={onCardsScroll}
             variants={cardGridReveal}
             initial="hidden"
             whileInView="show"
@@ -286,6 +323,18 @@ function ContactPage() {
               )
             })}
           </motion.div>
+          <div className="contact-card-dots" role="tablist" aria-label="Datos de contacto">
+            {contactCards.map((card, i) => (
+              <button
+                key={card.label}
+                type="button"
+                className={`contact-card-dot${activeCard === i ? ' is-active' : ''}`}
+                aria-label={`Ver ${card.label}`}
+                aria-selected={activeCard === i}
+                onClick={() => goToCard(i)}
+              />
+            ))}
+          </div>
           <div className="social-row" aria-label="Redes sociales">
             <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
