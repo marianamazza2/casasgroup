@@ -230,23 +230,46 @@ function QueReformamos() {
     return () => mq.removeEventListener('change', update)
   }, [])
 
-  // En móvil la tarjeta activa la decide el scroll: repartimos el recorrido del
-  // acordeón por la pantalla en tantas bandas como paneles. Medimos el
-  // contenedor (no cada panel) porque su alto total es constante —siempre hay
-  // una tarjeta abierta— y así abrir una no reposiciona el cálculo.
+  // En móvil el acordeón lo mueve el scroll, pero de forma continua: en vez de
+  // saltar de una tarjeta a la siguiente al cruzar un umbral, el "peso" de
+  // apertura (--w) pasa de una a otra acompañando al dedo. Los pesos siempre
+  // suman 1, así que el alto total del acordeón no cambia y nada da un salto
+  // bajo el dedo. Escribimos las variables en el DOM (no en el estado) para no
+  // re-renderizar en cada frame.
   useEffect(() => {
     if (!isMobile) return
     const el = panelsRef.current
     if (!el) return
 
+    const panels = Array.from(el.children) as HTMLElement[]
+    const n = TIPOS_REFORMA.length
     let frame = 0
+
+    const smooth = (t: number) => t * t * (3 - 2 * t)
+    const clamp01 = (t: number) => Math.min(1, Math.max(0, t))
+    // Zona muerta al principio y al final de cada banda: la tarjeta se queda
+    // abierta un tramo y el relevo ocurre en el centro, sin sensación de tirón.
+    const relay = (t: number) => smooth(clamp01((t - 0.22) / 0.56))
+
     const measure = () => {
       frame = 0
       const rect = el.getBoundingClientRect()
       if (!rect.height) return
       const progress = (window.innerHeight * 0.5 - rect.top) / rect.height
-      const i = Math.floor(progress * TIPOS_REFORMA.length)
-      setActive(Math.min(TIPOS_REFORMA.length - 1, Math.max(0, i)))
+      // La primera tarjeta ya está abierta al entrar y la última al salir.
+      const pos = Math.min(n - 1, Math.max(0, progress * n - 0.5))
+      const i = Math.floor(pos)
+      const e = relay(pos - i)
+
+      for (let k = 0; k < n; k += 1) {
+        const w = k === i ? 1 - e : k === i + 1 ? e : 0
+        // El texto entra sólo cuando la tarjeta ya está mayormente abierta,
+        // para que no se vean dos bloques a medio desvanecer a la vez.
+        const t = smooth(clamp01((w - 0.45) / 0.4))
+        panels[k].style.setProperty('--w', w.toFixed(4))
+        panels[k].style.setProperty('--t', t.toFixed(4))
+      }
+      setActive(Math.round(pos))
     }
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(measure)
@@ -259,6 +282,10 @@ function QueReformamos() {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
       if (frame) cancelAnimationFrame(frame)
+      panels.forEach((p) => {
+        p.style.removeProperty('--w')
+        p.style.removeProperty('--t')
+      })
     }
   }, [isMobile])
 
@@ -286,7 +313,7 @@ function QueReformamos() {
               <button
                 key={tipo.title}
                 type="button"
-                className={`ref-panel${open ? ' is-active' : ''}`}
+                className={`ref-panel${open && !isMobile ? ' is-active' : ''}`}
                 aria-expanded={open}
                 onClick={() => !isMobile && setActive(i)}
                 onMouseEnter={() => !isMobile && setActive(i)}

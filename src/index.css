@@ -9285,8 +9285,11 @@ button {
 }
 
 @media (max-width: 860px) {
-  /* En móvil el acordeón pasa a vertical: cada panel es una tarjeta que crece
-     al tocarla (y se pliega al volver a tocar). */
+  /* En móvil el acordeón pasa a vertical y lo mueve el scroll. Nada usa
+     transiciones aquí: el alto, la foto y el texto se interpolan con --w
+     (apertura, 0→1) y --t (texto, 0→1), que el JS actualiza en cada frame de
+     scroll. Así el movimiento va pegado al dedo en lugar de dispararse de
+     golpe al cruzar un umbral. */
   .ref-panels {
     flex-direction: column;
     gap: 10px;
@@ -9295,28 +9298,45 @@ button {
 
   .ref-panel {
     flex: none;
-    height: 132px;
+    /* Los pesos suman 1, así que el alto total del bloque es constante. */
+    height: calc(132px + 188px * var(--w, 0));
+    transition: none;
+    will-change: height;
   }
 
-  .ref-panel.is-active {
-    height: 320px;
+  .ref-panel-img {
+    filter: grayscale(calc(0.5 - 0.5 * var(--w, 0)))
+      brightness(calc(0.72 + 0.28 * var(--w, 0)));
+    transform: scale(calc(1.06 - 0.06 * var(--w, 0)));
+    transition: none;
   }
 
   /* La tarjeta abierta es baja y el texto ocupa casi todo el alto: oscurecemos
-     la foto entera para que se lea igual de bien en fotos claras. */
-  .ref-panel.is-active .ref-panel-overlay {
+     la foto entera para que se lea igual de bien en fotos claras. Un degradado
+     único cuya opacidad sube con la apertura (los gradientes no interpolan). */
+  .ref-panel-overlay {
     background: linear-gradient(
       180deg,
       rgba(20, 15, 7, 0.3) 0%,
       rgba(20, 15, 7, 0.74) 42%,
       rgba(20, 15, 7, 0.94) 100%
     );
+    opacity: calc(0.82 + 0.18 * var(--w, 0));
+    transition: none;
+  }
+
+  .ref-panel-body {
+    opacity: var(--t, 0);
+    transform: translateY(calc(12px * (1 - var(--t, 0))));
+    transition: none;
   }
 
   .ref-panel-label {
     bottom: 18px;
     left: 22px;
+    opacity: calc(1 - var(--t, 0));
     transform: none;
+    transition: none;
     writing-mode: horizontal-tb;
   }
 
