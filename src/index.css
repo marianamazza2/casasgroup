@@ -1240,6 +1240,33 @@ button {
   text-align: center;
 }
 
+/* Boton "Ver mas / Ver menos" compartido (componente TextToggle): mismo estilo
+   en la descripcion de un inmueble y en cualquier texto colapsable. Oculto por
+   defecto porque solo se usa en mobile; cada instancia lo muestra en su
+   breakpoint. El piquito apunta abajo para abrir y gira 180deg al desplegar. */
+.text-toggle {
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--gold, #b8912f);
+  cursor: pointer;
+  display: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  gap: 5px;
+  padding: 0;
+}
+
+.text-toggle-chevron {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.text-toggle[aria-expanded='true'] .text-toggle-chevron {
+  transform: rotate(180deg);
+}
+
 .rail-nav {
   align-items: center;
   background: var(--paper);
@@ -2165,6 +2192,20 @@ button {
   border-bottom-color: var(--gold);
 }
 
+/* Anti-zoom iOS (ver nota en .search-input). Estos campos no declaran
+   font-size: heredan los 11px del <label>, así que en móvil hay que fijarlos. */
+@media (max-width: 768px) {
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea {
+    font-size: 16px;
+  }
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder {
+    font-size: 14px;
+  }
+}
+
 .contact-form button {
   margin-top: 4px;
   width: 100%;
@@ -2576,6 +2617,20 @@ button {
 
   .why-story-text {
     text-align: left;
+  }
+
+  /* Recorte a 4 lineas mientras esta plegado; el toggle quita la clase. */
+  .why-story-text.is-clamped {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    display: -webkit-box;
+    line-clamp: 4;
+    overflow: hidden;
+  }
+
+  .why-story-toggle {
+    display: inline-flex;
+    margin-top: 10px;
   }
 
   .valuation-media {
@@ -3036,10 +3091,11 @@ button {
 }
 
 /* iOS Safari hace zoom al enfocar un input con font-size < 16px y luego no
-   restaura el ancho. En móvil forzamos 16px en el buscador y los filtros. */
+   restaura el ancho. En móvil forzamos 16px.
+   OJO: cada override de estos vive pegado a su regla base, porque comparten
+   especificidad y gana la que aparece más abajo en el archivo. */
 @media (max-width: 768px) {
-  .search-input,
-  .filters-input {
+  .search-input {
     font-size: 16px;
   }
 }
@@ -4136,6 +4192,17 @@ button {
   color: var(--muted);
 }
 
+/* Anti-zoom iOS (ver nota en .search-input). El placeholder se queda a 13px
+   para que "Sin mínimo" / "Sin máximo" no desborde la caja. */
+@media (max-width: 768px) {
+  .filters-input {
+    font-size: 16px;
+  }
+  .filters-input::placeholder {
+    font-size: 13px;
+  }
+}
+
 /* Asa de arrastre — solo visible en mobile (full-screen sheet). */
 .filters-modal-grab {
   display: none;
@@ -4929,16 +4996,7 @@ button {
   margin: 8px 0 0;
 }
 .detail-description-toggle {
-  display: none;
   margin-top: 10px;
-  padding: 0;
-  background: none;
-  border: none;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--gold, #b8912f);
-  cursor: pointer;
 }
 
 /* Ver más / ver menos solo en mobile: colapsa la descripción larga */
@@ -4950,7 +5008,7 @@ button {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  .detail-description-toggle { display: inline-block; }
+  .detail-description-toggle { display: inline-flex; }
 }
 
 /* Section titles */
@@ -8495,6 +8553,17 @@ button {
 .vender-form input:focus,
 .vender-form select:focus {
   border-color: var(--gold);
+}
+
+/* Anti-zoom iOS (ver nota en .search-input). */
+@media (max-width: 768px) {
+  .vender-form input,
+  .vender-form select {
+    font-size: 16px;
+  }
+  .vender-form input::placeholder {
+    font-size: 14px;
+  }
 }
 
 /* Dropdown custom (reemplaza el <select> nativo) */

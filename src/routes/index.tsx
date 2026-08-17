@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { homeFeaturedProperties, properties } from '../lib/properties'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
+import { TextToggle } from '../components/TextToggle'
 import { organizationSchema, absoluteUrl } from '../lib/structuredData'
 import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
 import type { Location } from '../lib/locationSearch'
@@ -159,6 +160,9 @@ function Home() {
   const accessSectionRef = useRef<HTMLElement>(null)
   const [activeAccessBlock, setActiveAccessBlock] = useState<number | null>(null)
   const [activeService, setActiveService] = useState(0)
+  // Solo tiene efecto en mobile: ahi el parrafo de "Por que elegirnos" se
+  // recorta a 4 lineas hasta que se pulsa "Ver mas".
+  const [whyExpanded, setWhyExpanded] = useState(false)
   const serviceItemRefs = useRef<(HTMLElement | null)[]>([])
   const servicesListRef = useRef<HTMLDivElement | null>(null)
 
@@ -627,7 +631,7 @@ function Home() {
             </Link>
             <div className="valuation-microstats">
               <span>Sin compromiso</span>
-              <span>Datos reales de mercado</span>
+              <span>+100 operaciones cerradas</span>
               <span>Respuesta en 24h</span>
             </div>
           </div>
@@ -657,7 +661,8 @@ function Home() {
             <img src={WHY_IMAGE} alt="" loading="lazy" decoding="async" />
           </motion.div>
           <motion.p
-            className="why-story-text"
+            id="why-story-text"
+            className={`why-story-text${whyExpanded ? '' : ' is-clamped'}`}
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -665,6 +670,12 @@ function Home() {
           >
             {WHY_TEXT}
           </motion.p>
+          <TextToggle
+            expanded={whyExpanded}
+            onToggle={() => setWhyExpanded((v) => !v)}
+            controls="why-story-text"
+            className="why-story-toggle"
+          />
         </div>
 
         <div className="stats">

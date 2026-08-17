@@ -8,6 +8,7 @@ import { gallerySrcSet, withTransform } from '../../lib/cloudinary'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { PropertyMap } from '../../components/property/PropertyMap'
 import { JsonLd } from '../../components/JsonLd'
+import { TextToggle } from '../../components/TextToggle'
 import { Seo } from '../../components/Seo'
 import { absoluteUrl, breadcrumbSchema, realEstateListingSchema } from '../../lib/structuredData'
 
@@ -484,17 +485,16 @@ function PropertyDescription({ desc }: { desc: string }) {
   return (
     <section className="detail-description">
       <h2 className="detail-section-title">Descripción</h2>
-      <p ref={textRef} className={expanded ? 'is-expanded' : 'is-clamped'}>
+      <p id="detail-description-text" ref={textRef} className={expanded ? 'is-expanded' : 'is-clamped'}>
         {desc}
       </p>
       {(clampable || expanded) && (
-        <button
-          type="button"
+        <TextToggle
+          expanded={expanded}
+          onToggle={() => setExpanded((v) => !v)}
+          controls="detail-description-text"
           className="detail-description-toggle"
-          onClick={() => setExpanded((v) => !v)}
-        >
-          {expanded ? 'Ver menos' : 'Ver más'}
-        </button>
+        />
       )}
     </section>
   )
