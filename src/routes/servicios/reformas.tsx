@@ -80,7 +80,7 @@ export const PROYECTOS = [
     despues: '/reformas/bano-despues.webp',
   },
   {
-    label: 'Reforma integral',
+    label: 'Reforma',
     zona: 'Eixample, Barcelona',
     meta: '92 m² · 9 semanas',
     antes: '/reformas/salon-antes.webp',
