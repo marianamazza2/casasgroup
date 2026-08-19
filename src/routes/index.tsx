@@ -37,7 +37,7 @@ const services = [
     icon: 'CO',
     title: 'Comprar',
     description: 'Encuentra tu proximo hogar o inversion. Te mostramos una seleccion de inmuebles en venta y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80',
     tag: 'Comprar',
     to: '/propiedades',
     search: { query: '', mode: 'compra' as const },
@@ -114,31 +114,6 @@ const services = [
 const WHY_TEXT =
   'En Group Casas te acompañamos en cada etapa. Te ayudamos a encontrar la mejor financiación para comprar tu vivienda, gestionamos el proceso de compraventa de principio a fin y, una vez adquirida, ponemos a tu disposición nuestro servicio de reformas para que esté perfecta desde el primer día. Además, administramos tu comunidad si así lo deseas. Todo lo que necesitas para tu vivienda, en un solo lugar.'
 
-const accessBlocks = [
-  {
-    title: 'Comprar',
-    description: '¡Tenemos tu vivienda! Tenemos la vivienda perfecta para ti y te acompañamos de principio a fin en el proceso de compra con un asesoramiento profesional y personalizado.',
-    image:
-      'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=80',
-    to: '/propiedades' as const,
-    search: { query: '', mode: 'compra' as const },
-  },
-  {
-    title: 'Vender',
-    description: '¡Tenemos el comprador de tu casa! Nos encargamos de todo el proceso de venta de principio a fin.',
-    image:
-      'https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=1000&q=80',
-    to: '/vender' as const,
-  },
-  {
-    title: 'Financiar',
-    description: '¡Tenemos tu financiación! Te ayudamos a encontrar la financiación ideal para tu vivienda con las mejores condiciones. Nosotros nos encargamos de todo.',
-    image:
-      'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1000&q=80',
-    to: '/servicios/hipotecas' as const,
-  },
-]
-
 function Home() {
   const navigate = useNavigate()
   const [heroTab, setHeroTab] = useState<HeroTab>('comprar')
@@ -153,11 +128,8 @@ function Home() {
   const heroMediaRef = useRef<HTMLDivElement>(null)
   const heroFillRef = useRef<HTMLDivElement>(null)
   const heroUiRef = useRef<HTMLDivElement>(null)
-  const accessSectionRef = useRef<HTMLElement>(null)
-  const [activeAccessBlock, setActiveAccessBlock] = useState<number | null>(null)
   const [activeService, setActiveService] = useState(0)
   const serviceItemRefs = useRef<(HTMLElement | null)[]>([])
-  const servicesListRef = useRef<HTMLDivElement | null>(null)
 
   const [skipAnimation] = useState(() => {
     try { return sessionStorage.getItem('heroSeen') === 'true' } catch { return false }
@@ -228,38 +200,7 @@ function Home() {
   }, [skipAnimation])
 
   useEffect(() => {
-    const handleAccessScroll = () => {
-      const section = accessSectionRef.current
-      if (!section) return
-      const items = section.querySelectorAll<HTMLElement>('.access-block-item')
-      if (!items.length) return
-
-      const viewportCenter = window.innerHeight / 2
-      let closestIdx: number | null = null
-      let closestDist = Infinity
-
-      items.forEach((item, i) => {
-        const rect = item.getBoundingClientRect()
-        if (rect.bottom > 0 && rect.top < window.innerHeight) {
-          const dist = Math.abs(rect.top + rect.height / 2 - viewportCenter)
-          if (dist < closestDist) {
-            closestDist = dist
-            closestIdx = i
-          }
-        }
-      })
-
-      setActiveAccessBlock(closestIdx)
-    }
-
-    window.addEventListener('scroll', handleAccessScroll, { passive: true })
-    handleAccessScroll()
-    return () => window.removeEventListener('scroll', handleAccessScroll)
-  }, [])
-
-  useEffect(() => {
     const handleServiceScroll = () => {
-      if (window.innerWidth <= 1024) return
       const items = serviceItemRefs.current.filter(Boolean) as HTMLElement[]
       if (!items.length) return
       const viewportCenter = window.innerHeight / 2
@@ -280,33 +221,6 @@ function Home() {
     window.addEventListener('scroll', handleServiceScroll, { passive: true })
     handleServiceScroll()
     return () => window.removeEventListener('scroll', handleServiceScroll)
-  }, [])
-
-  // Mobile: el listado de servicios es un slider horizontal; detectamos la card
-  // centrada por la posicion de scroll del propio contenedor.
-  useEffect(() => {
-    const list = servicesListRef.current
-    if (!list) return
-    const handleServiceSwipe = () => {
-      if (window.innerWidth > 1024) return
-      const items = serviceItemRefs.current.filter(Boolean) as HTMLElement[]
-      if (!items.length) return
-      const center = list.scrollLeft + list.clientWidth / 2
-      let closestIdx = 0
-      let closestDist = Infinity
-      items.forEach((item, i) => {
-        const itemCenter = item.offsetLeft + item.offsetWidth / 2
-        const dist = Math.abs(itemCenter - center)
-        if (dist < closestDist) {
-          closestDist = dist
-          closestIdx = i
-        }
-      })
-      setActiveService(closestIdx)
-    }
-    list.addEventListener('scroll', handleServiceSwipe, { passive: true })
-    handleServiceSwipe()
-    return () => list.removeEventListener('scroll', handleServiceSwipe)
   }, [])
 
   useEffect(() => {
@@ -352,16 +266,6 @@ function Home() {
 
   const scrollToServices = () => {
     document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  const scrollToService = (i: number) => {
-    const list = servicesListRef.current
-    const item = serviceItemRefs.current[i]
-    if (!list || !item) return
-    list.scrollTo({
-      left: item.offsetLeft + item.offsetWidth / 2 - list.clientWidth / 2,
-      behavior: 'smooth',
-    })
   }
 
   const isSearchTab = heroTab === 'comprar'
@@ -603,53 +507,22 @@ function Home() {
       <section className="section services" id="servicios">
         <div className="services-inner">
           <SectionHeading eyebrow="Servicios" title="Nuestros servicios" subtitle="Todo lo que necesitas para comprar, vender, financiar, proteger y gestionar tu inmueble desde un único lugar." />
-          <div className="services-sticky-layout">
-            <div className="services-image-panel">
-              {services.map((svc, i) => (
-                <div
-                  key={svc.title}
-                  className={`services-image-layer${activeService === i ? ' active' : ''}`}
-                  style={{ backgroundImage: `url(${svc.image})` }}
-                />
-              ))}
-              <div className="services-image-overlay" />
-              <motion.div
-                key={`svc-tag-${activeService}`}
-                className="services-image-tag"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35 }}
-              >
-                <span>{String(activeService + 1).padStart(2, '0')}</span>
-                {services[activeService].tag}
-              </motion.div>
-            </div>
-
-            <div className="services-list" ref={servicesListRef}>
-              {services.map((svc, i) => (
-                <article
-                  key={svc.title}
-                  ref={(el) => { serviceItemRefs.current[i] = el }}
-                  className={`services-list-item${activeService === i ? ' active' : ''}`}
-                >
-                  <div className="services-list-body">
-                    <h3>{svc.title}</h3>
-                    <p>{svc.description}</p>
-                    <Link className="services-list-link" to={svc.to ?? '/contacto'} search={'search' in svc ? svc.search : undefined}>Consultar →</Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-          <div className="services-dots">
+          <div className="services-scroll-list">
             {services.map((svc, i) => (
-              <button
+              <Link
                 key={svc.title}
-                type="button"
-                className={`services-dot${activeService === i ? ' active' : ''}`}
-                onClick={() => scrollToService(i)}
-                aria-label={`Ver ${svc.title}`}
-              />
+                ref={(el) => { serviceItemRefs.current[i] = el }}
+                to={svc.to ?? '/contacto'}
+                search={'search' in svc ? svc.search : undefined}
+                className={`service-scroll-item${activeService === i ? ' is-active' : ''}`}
+              >
+                <div className="service-scroll-bg" style={{ backgroundImage: `url(${svc.image})` }} />
+                <div className="service-scroll-copy">
+                  <p>{svc.description}</p>
+                </div>
+                <h3 className="service-scroll-title">{svc.title}</h3>
+                <span className="service-scroll-arrow" aria-hidden="true">→</span>
+              </Link>
             ))}
           </div>
         </div>
@@ -676,24 +549,6 @@ function Home() {
           <div className="valuation-deco" aria-hidden="true">0€</div>
         </div>
         <div className="valuation-media" aria-hidden="true" />
-      </section>
-
-      <section className="access-blocks" ref={accessSectionRef}>
-        {accessBlocks.map((item, i) => (
-          <Link
-            key={item.title}
-            to={item.to}
-            search={item.search}
-            className={`access-block-item${activeAccessBlock === i ? ' is-active' : ''}`}
-          >
-            <div className="access-bg" style={{ backgroundImage: `url(${item.image})` }} />
-            <div className="access-desc">
-              <p>{item.description}</p>
-            </div>
-            <h2 className="access-title">{item.title}</h2>
-            <span className="access-arrow" aria-hidden="true">→</span>
-          </Link>
-        ))}
       </section>
 
       <section className="section about-strip" id="nosotros">
