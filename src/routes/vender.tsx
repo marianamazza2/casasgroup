@@ -38,22 +38,22 @@ const PROPERTY_TYPES = ['Piso', 'Casa o chalet', 'Ático', 'Local comercial', 'O
 const PROCESO = [
   {
     num: '1',
-    title: 'Completa el formulario',
-    desc: 'Rellena los datos de tu vivienda y nos pondremos en contacto contigo.',
+    title: 'Informe de valoración',
+    desc: 'Completa el formulario con los datos de tu vivienda y nos pondremos en contacto contigo.',
   },
   {
     num: '2',
     title: 'Valoración profesional',
-    desc: 'Analizamos tu inmueble y la zona para darte una valoración basada en datos reales.',
+    desc: 'Analizamos tu vivienda para ofrecerte una valoración precisa y basada en datos reales.',
   },
   {
     num: '3',
-    title: 'Te explicamos el valor',
-    desc: 'Te contactamos para explicarte el resultado y resolver todas tus dudas.',
+    title: 'Entrega del informe',
+    desc: 'Te entregamos el informe de valoración y te explicamos por qué ese es el precio de tu vivienda.',
   },
   {
     num: '4',
-    title: 'Si decides vender',
+    title: 'Venta de tu vivienda',
     desc: 'Si tras la valoración decides vender, te acompañamos hasta la firma.',
   },
 ]
@@ -199,7 +199,7 @@ function VenderPage() {
       {/* Cómo funciona — timeline "En cuatro simples pasos" (cambio de suministros) */}
       <section className="pasos">
         <div className="pasos-head">
-          <span className="pasos-eyebrow">Proceso simple</span>
+          <span className="pasos-eyebrow">Proceso sencillo</span>
           <h2 className="pasos-title">Cómo funciona</h2>
         </div>
 
