@@ -4,7 +4,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { homeFeaturedProperties, properties } from '../lib/properties'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
-import { TextToggle } from '../components/TextToggle'
 import { organizationSchema, absoluteUrl } from '../lib/structuredData'
 import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
 import type { Location } from '../lib/locationSearch'
@@ -53,20 +52,19 @@ const services = [
   },
   {
     icon: 'HI',
-    title: 'Financiacion',
+    title: 'Financiar',
     description: 'Te conseguimos las mejores opciones de financiacion del mercado. Trabajamos con diferentes entidades financieras para ofrecerte una amplia seleccion de opciones personalizadas para ayudarte a encontrar las condiciones mas competitivas segun tu perfil y tus objetivos.',
     image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
-    tag: 'Financiacion',
+    tag: 'Financiar',
     to: '/servicios/hipotecas',
   },
   {
-    icon: 'AL',
-    title: 'Alquilar',
-    description: 'Encuentra tu proximo hogar de alquiler. Te mostramos una seleccion de inmuebles disponibles y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
-    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80',
-    tag: 'Alquilar',
-    to: '/propiedades',
-    search: { query: '', mode: 'alquiler' as const },
+    icon: 'RE',
+    title: 'Reformar',
+    description: 'Reformamos tu vivienda de principio a fin: proyecto, obra y acabados con un presupuesto cerrado, plazos comprometidos y un unico interlocutor que coordina a todos los gremios para que tu solo tengas que decidir como quieres vivir.',
+    image: 'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Obras',
+    to: '/servicios/reformas',
   },
   {
     icon: 'AD',
@@ -93,14 +91,6 @@ const services = [
     to: '/servicios/alarmas',
   },
   {
-    icon: 'RE',
-    title: 'Reformas',
-    description: 'Reformamos tu vivienda de principio a fin: proyecto, obra y acabados con un presupuesto cerrado, plazos comprometidos y un unico interlocutor que coordina a todos los gremios para que tu solo tengas que decidir como quieres vivir.',
-    image: 'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?auto=format&fit=crop&w=1200&q=80',
-    tag: 'Obras',
-    to: '/servicios/reformas',
-  },
-  {
     icon: 'SU',
     title: 'Suministros',
     to: '/servicios/cambio-de-suministros',
@@ -108,13 +98,19 @@ const services = [
     image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
     tag: 'Suministros',
   },
+  {
+    icon: 'AQ',
+    title: 'Alquilar',
+    description: 'Encuentra tu proximo hogar de alquiler. Te mostramos una seleccion de inmuebles disponibles y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
+    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80',
+    tag: 'Alquilar',
+    to: '/propiedades',
+    search: { query: '', mode: 'alquiler' as const },
+  },
 ]
 
-// "Por que elegirnos": un unico texto bajo una foto protagonista (antes era un
-// slider de cinco caracteristicas).
-const WHY_IMAGE =
-  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80'
-
+// Bloque de marca bajo el hero: wordmark + un unico texto (antes era un slider
+// de cinco caracteristicas y despues una foto protagonista con el mismo texto).
 const WHY_TEXT =
   'En Group Casas te acompañamos en cada etapa. Te ayudamos a encontrar la mejor financiación para comprar tu vivienda, gestionamos el proceso de compraventa de principio a fin y, una vez adquirida, ponemos a tu disposición nuestro servicio de reformas para que esté perfecta desde el primer día. Además, administramos tu comunidad si así lo deseas. Todo lo que necesitas para tu vivienda, en un solo lugar.'
 
@@ -160,9 +156,6 @@ function Home() {
   const accessSectionRef = useRef<HTMLElement>(null)
   const [activeAccessBlock, setActiveAccessBlock] = useState<number | null>(null)
   const [activeService, setActiveService] = useState(0)
-  // Solo tiene efecto en mobile: ahi el parrafo de "Por que elegirnos" se
-  // recorta a 4 lineas hasta que se pulsa "Ver mas".
-  const [whyExpanded, setWhyExpanded] = useState(false)
   const serviceItemRefs = useRef<(HTMLElement | null)[]>([])
   const servicesListRef = useRef<HTMLDivElement | null>(null)
 
@@ -357,6 +350,10 @@ function Home() {
     return () => rail.removeEventListener('scroll', handlePropertySwipe)
   }, [propertyMode])
 
+  const scrollToServices = () => {
+    document.getElementById('servicios')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const scrollToService = (i: number) => {
     const list = servicesListRef.current
     const item = serviceItemRefs.current[i]
@@ -471,6 +468,13 @@ function Home() {
           {/* Layer 2: light building photo, visible on load */}
           <div className="hero-media" ref={heroMediaRef} />
 
+          {/* Esfumado del pie hacia la seccion siguiente. Son dos capas: la
+              primera multiplica (baja los blancos de la foto por debajo del
+              color de la seccion) y la segunda funde al color exacto. Van
+              antes de .hero-content para que la UI del hero quede por encima. */}
+          <div className="hero-fade-tint" aria-hidden="true" />
+          <div className="hero-fade" aria-hidden="true" />
+
           {/* Layer 3 + 4: All hero content stacked */}
           <div className="hero-content">
             {/* H1 semántico de la home. La marca visible (hero-brand) es un div
@@ -561,6 +565,41 @@ function Home() {
         </section>
       </div>
 
+      <section className="section why">
+        {/* Wordmark + un unico parrafo de marca, en la linea del hero pero a
+            menor escala. El CTA baja al bloque de servicios. */}
+        <div className="why-story">
+          <motion.p
+            className="why-wordmark"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Group Casas
+          </motion.p>
+          <motion.p
+            className="why-story-text"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+          >
+            {WHY_TEXT}
+          </motion.p>
+          <button type="button" className="why-story-cta" onClick={scrollToServices}>
+            Descubre nuestros servicios <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <div className="stats">
+          <Stat value="+1000" label="Operaciones" />
+          <Stat value="98%" label="Satisfaccion" />
+          <Stat value="45" label="Dias venta media" />
+          <Stat value="+10" label="Anos experiencia" />
+        </div>
+      </section>
+
       <section className="section services" id="servicios">
         <div className="services-inner">
           <SectionHeading eyebrow="Servicios" title="Nuestros servicios" subtitle="Todo lo que necesitas para comprar, vender, financiar, proteger y gestionar tu inmueble desde un único lugar." />
@@ -632,58 +671,11 @@ function Home() {
             <div className="valuation-microstats">
               <span>Sin compromiso</span>
               <span>+100 operaciones cerradas</span>
-              <span>Respuesta en 24h</span>
             </div>
           </div>
           <div className="valuation-deco" aria-hidden="true">0€</div>
         </div>
         <div className="valuation-media" aria-hidden="true" />
-      </section>
-
-      <section className="section why">
-        <div className="section-top">
-          <SectionHeading
-            eyebrow="Confianza"
-            title="Por que elegirnos"
-            subtitle="Porque cada cliente merece un asesoramiento personalizado, un servicio integral y el compromiso de un equipo que trata cada proyecto como si fuera propio."
-          />
-        </div>
-        {/* Foto protagonista y un solo texto debajo, misma composicion que el
-            "Que incluye" de administracion de fincas. */}
-        <div className="why-story">
-          <motion.div
-            className="why-story-frame"
-            initial={{ opacity: 0, scale: 1.04 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <img src={WHY_IMAGE} alt="" loading="lazy" decoding="async" />
-          </motion.div>
-          <motion.p
-            id="why-story-text"
-            className={`why-story-text${whyExpanded ? '' : ' is-clamped'}`}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-          >
-            {WHY_TEXT}
-          </motion.p>
-          <TextToggle
-            expanded={whyExpanded}
-            onToggle={() => setWhyExpanded((v) => !v)}
-            controls="why-story-text"
-            className="why-story-toggle"
-          />
-        </div>
-
-        <div className="stats">
-          <Stat value="+1000" label="Operaciones" />
-          <Stat value="98%" label="Satisfaccion" />
-          <Stat value="45" label="Dias venta media" />
-          <Stat value="+10" label="Anos experiencia" />
-        </div>
       </section>
 
       <section className="access-blocks" ref={accessSectionRef}>

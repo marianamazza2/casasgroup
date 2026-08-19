@@ -388,7 +388,11 @@ button {
   font-size: clamp(28px, 4vw, 46px);
 }
 
+/* El fondo va en --warm (no en el --paper blanco de .home-page) porque el hero
+   es sticky: el redondeo sub-pixel entre su borde inferior y la seccion
+   siguiente dejaba ver una linea de blanco puro, mas clara que la seccion. */
 .hero-scroll-wrapper {
+  background: var(--warm);
   height: 230vh;
   position: relative;
 }
@@ -416,6 +420,62 @@ button {
   pointer-events: none;
   position: absolute;
   z-index: 3;
+}
+
+/* Esfumado del pie del hero hacia el fondo de la seccion siguiente (--warm).
+   Con una sola capa de crema translucida no alcanza: el suelo de la foto es
+   mas blanco que --warm, y una capa alpha solo interpola entre foto y crema,
+   asi que esa zona se queda por encima del color de la seccion y se ve como
+   una franja mas clara. Por eso van dos capas:
+   1. .hero-fade-tint multiplica -> ningun pixel puede superar el color por el
+      que se multiplica, con lo que los blancos bajan por debajo de --warm.
+   2. .hero-fade funde en alpha hasta --warm exacto, para que la union con la
+      seccion siguiente sea invisible.
+   Ambas en z-index 4: sobre el velo (z-index 3) y bajo .hero-content, que
+   pinta despues por orden de DOM con el mismo z-index. */
+.hero-fade-tint,
+.hero-fade {
+  bottom: 0;
+  height: clamp(200px, 34vh, 420px);
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  z-index: 4;
+}
+
+.hero-fade-tint {
+  /* Empieza en blanco (multiplicar por blanco no altera nada, asi que no se ve
+     donde arranca el esfumado) y llega a --warm ya en el 12%: a partir de ahi
+     ningun pixel puede superar el color de la seccion, pase lo que pase con el
+     encuadre de la foto. Sigue bajando a tonos mas oscuros para que el
+     esfumado llegue al crema desde abajo y nunca por encima. */
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #f7f5f0 12%,
+    #e2ddd0 60%,
+    #dbd5c7 100%
+  );
+  mix-blend-mode: multiply;
+}
+
+.hero-fade {
+  background: linear-gradient(
+    to bottom,
+    rgb(247 245 240 / 0) 0%,
+    rgb(247 245 240 / 0.1) 30%,
+    rgb(247 245 240 / 0.34) 58%,
+    rgb(247 245 240 / 0.72) 82%,
+    rgb(247 245 240 / 0.94) 95%,
+    rgb(247 245 240 / 1) 100%
+  );
+}
+
+/* El hint queda dentro del esfumado, asi que en la home va en tono calido
+   oscuro en vez del blanco que usan los heroes de servicios/contacto. */
+.home-page .hero-scroll-hint {
+  color: rgb(120 96 52 / 0.9);
 }
 
 /* Gold version of the hero photo — revealed on scroll */
@@ -1158,15 +1218,6 @@ button {
   padding-right: 0;
 }
 
-.why .section-top {
-  margin-left: 0;
-  margin-right: 0;
-  margin-bottom: clamp(40px, 6vw, 72px);
-  max-width: none;
-  padding-left: clamp(40px, 6vw, 80px);
-  padding-right: clamp(40px, 6vw, 80px);
-}
-
 .why .stats {
   margin-top: clamp(40px, 5vw, 58px);
   margin-bottom: 0;
@@ -1207,28 +1258,25 @@ button {
   color: var(--gold);
 }
 
-/* "Por que elegirnos": foto protagonista centrada y un unico parrafo debajo
-   (misma composicion que el carrusel "Que incluye" de administracion de
-   fincas). El inset lateral iguala al del heading y las stats de la seccion. */
+/* Bloque de marca bajo el hero: wordmark, un unico parrafo y el CTA que baja a
+   servicios. El inset lateral iguala al de las stats de la seccion. */
 .why-story {
   margin: 0 auto;
   max-width: 1120px;
   padding-inline: clamp(40px, 6vw, 80px);
+  text-align: center;
 }
 
-.why-story-frame {
-  aspect-ratio: 16 / 9;
-  background: var(--paper);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.why-story-frame img {
-  border-radius: inherit;
-  display: block;
-  height: 100%;
-  object-fit: cover;
-  width: 100%;
+/* Misma tipografia que la marca del hero, a menor escala. */
+.why-wordmark {
+  color: var(--gold);
+  font-family: var(--serif);
+  font-size: clamp(38px, 5.6vw, 76px);
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  margin: 0;
+  text-transform: uppercase;
 }
 
 .why-story-text {
@@ -1238,6 +1286,29 @@ button {
   margin: clamp(24px, 3vw, 38px) auto 0;
   max-width: 74ch;
   text-align: center;
+}
+
+.why-story-cta {
+  background: none;
+  border: none;
+  color: var(--gold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  gap: 12px;
+  letter-spacing: 0.18em;
+  margin-top: clamp(28px, 3.5vw, 44px);
+  padding: 0;
+  text-transform: uppercase;
+  transition: gap 200ms ease, opacity 200ms ease;
+}
+
+.why-story-cta:hover {
+  gap: 18px;
+  opacity: 0.75;
 }
 
 /* Boton "Ver mas / Ver menos" compartido (componente TextToggle): mismo estilo
@@ -2617,13 +2688,8 @@ button {
     grid-template-columns: 1fr;
   }
 
-  /* En mobile el heading, la foto y las stats comparten el mismo inset que el
+  /* En mobile el bloque de marca y las stats comparten el mismo inset que el
      resto del contenido (la alineacion ancha solo aplica en desktop). */
-  .why .section-top {
-    padding-left: clamp(20px, 5vw, 72px);
-    padding-right: clamp(20px, 5vw, 72px);
-  }
-
   .why .stats {
     margin-left: clamp(20px, 5vw, 72px);
     margin-right: clamp(20px, 5vw, 72px);
@@ -2633,28 +2699,8 @@ button {
     padding-inline: clamp(20px, 5vw, 72px);
   }
 
-  /* Mas cuadrada que el 16/9 de desktop: a este ancho la foto quedaria como una
-     franja. */
-  .why-story-frame {
-    aspect-ratio: 4 / 3;
-  }
-
   .why-story-text {
     text-align: left;
-  }
-
-  /* Recorte a 4 lineas mientras esta plegado; el toggle quita la clase. */
-  .why-story-text.is-clamped {
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-    display: -webkit-box;
-    line-clamp: 4;
-    overflow: hidden;
-  }
-
-  .why-story-toggle {
-    display: inline-flex;
-    margin-top: 10px;
   }
 
   .valuation-media {

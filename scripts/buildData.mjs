@@ -52,12 +52,16 @@ function loadEnvFile(file) {
 loadEnvFile('.env.local')
 loadEnvFile('.env')
 
-const {
-  SHEET_CSV_URL,
-  VITE_CLOUDINARY_CLOUD_NAME: CLOUD_NAME,
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_API_SECRET,
-} = process.env
+// El loader de arriba ya limpia los .env locales, pero en Vercel `process.env`
+// llega tal cual se pegó en el panel: un salto de línea o un espacio invisible al
+// final de SHEET_CSV_URL viaja dentro de la URL y Google responde HTTP 400. Por
+// eso normalizamos acá, no en el loader.
+const env = (key) => process.env[key]?.trim() || undefined
+
+const SHEET_CSV_URL = env('SHEET_CSV_URL')
+const CLOUD_NAME = env('VITE_CLOUDINARY_CLOUD_NAME')
+const CLOUDINARY_API_KEY = env('CLOUDINARY_API_KEY')
+const CLOUDINARY_API_SECRET = env('CLOUDINARY_API_SECRET')
 
 // Carpeta raíz de los inmuebles en Cloudinary.
 const CLOUDINARY_ROOT = 'inmuebles'
@@ -393,7 +397,18 @@ async function main() {
   }
 
   const res = await fetch(SHEET_CSV_URL)
-  if (!res.ok) throw new Error(`No se pudo leer el Sheet: HTTP ${res.status}`)
+  if (!res.ok) {
+    // Pistas para los códigos que devuelve Google al publicar un Sheet como CSV:
+    // 400 = URL malformada (típico: caracteres de más pegados en la env var),
+    // 401/404 = el Sheet dejó de estar publicado o el gid ya no existe.
+    const hint =
+      res.status === 400
+        ? ' Revisá el valor de SHEET_CSV_URL en Vercel: suele ser un espacio o salto de línea de más al pegarla.'
+        : res.status === 401 || res.status === 404
+          ? ' El Sheet dejó de estar publicado en la web, o el gid de la pestaña cambió (Archivo → Compartir → Publicar en la web).'
+          : ''
+    throw new Error(`No se pudo leer el Sheet: HTTP ${res.status}.${hint}`)
+  }
   const rows = parseCSV(await res.text()).filter((r) => r.some((c) => norm(c) !== ''))
   if (!rows.length) throw new Error('El Sheet está vacío.')
 
