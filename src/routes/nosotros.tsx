@@ -152,7 +152,10 @@ function NosotrosPage() {
           </p>
           <p>
             No queríamos crear una inmobiliaria más. Queríamos construir una marca capaz de transformar la
-            experiencia de comprar, vender, financiar, reformar, o administrar una vivienda.
+            experiencia de comprar, vender, financiar, reformar o administrar una vivienda.
+          </p>
+          <p>
+            Todo lo que necesitas para tu vivienda, en un solo lugar.
           </p>
         </div>
       </section>
