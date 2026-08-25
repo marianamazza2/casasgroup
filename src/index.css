@@ -963,6 +963,12 @@ button {
   padding-bottom: 0;
 }
 
+/* La pagina de suministros no usa .services-scroll-list, asi que recupera el
+   padding inferior que .services anula para el carrusel de la home. */
+.services--suministros {
+  padding-bottom: clamp(58px, 8vw, 94px);
+}
+
 .services-scroll-list {
   background: var(--warm);
   margin-inline: calc(-1 * clamp(22px, 5vw, 72px));

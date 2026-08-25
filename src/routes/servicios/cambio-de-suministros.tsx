@@ -140,7 +140,7 @@ function CambioDeSuministrosPage() {
     <main className="servicio-page">
       <SumHero />
 
-      <section className="section services">
+      <section className="section services services--suministros">
         <div className="services-inner">
           <div className="section-heading">
             <span>Qué gestionamos</span>
