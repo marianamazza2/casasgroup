@@ -53,7 +53,7 @@ const services = [
   {
     icon: 'HI',
     title: 'Financiar',
-    description: 'Te conseguimos las mejores opciones de financiacion del mercado. Trabajamos con diferentes entidades financieras para ofrecerte una amplia seleccion de opciones personalizadas para ayudarte a encontrar las condiciones mas competitivas segun tu perfil y tus objetivos.',
+    description: 'Te conseguimos las mejores opciones de financiacion del mercado. Trabajamos con diferentes entidades financieras para encontrar las condiciones mas competitivas segun tu perfil y tus objetivos.',
     image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
     tag: 'Financiar',
     to: '/servicios/hipotecas',
@@ -61,15 +61,15 @@ const services = [
   {
     icon: 'RE',
     title: 'Reformar',
-    description: 'Reformamos tu vivienda de principio a fin: proyecto, obra y acabados con un presupuesto cerrado, plazos comprometidos y un unico interlocutor que coordina a todos los gremios para que tu solo tengas que decidir como quieres vivir.',
+    description: 'Reformamos tu vivienda de principio a fin: proyecto, obra y acabados con presupuesto cerrado, plazos comprometidos y un unico interlocutor que coordina a todos los gremios.',
     image: 'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?auto=format&fit=crop&w=1200&q=80',
     tag: 'Obras',
     to: '/servicios/reformas',
   },
   {
     icon: 'AD',
-    title: 'Administracion de comunidades',
-    description: 'Ofrecemos una gestion integral de comunidades basada en la excelencia operativa. Nos encargamos de la administracion, el mantenimiento, la atencion a propietarios y la gestion de todos los servicios para ofrecerte lo mejor en cada detalle.',
+    title: 'Comunidades',
+    description: 'Ofrecemos una gestion integral de comunidades basada en la excelencia operativa: administracion, mantenimiento, atencion a propietarios y coordinacion de todos los servicios.',
     image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
     tag: 'Comunidades',
     to: '/servicios/administracion-de-fincas',
@@ -77,7 +77,7 @@ const services = [
   {
     icon: 'SE',
     title: 'Seguros',
-    description: 'Gracias a nuestra colaboracion con las principales aseguradoras del mercado, podemos ofrecerte una amplia seleccion de soluciones adaptadas a tus necesidades. Analizamos coberturas, condiciones y garantias para encontrar la proteccion mas adecuada para tu vivienda, tu inversion o tu comunidad.',
+    description: 'Colaboramos con las principales aseguradoras del mercado. Analizamos coberturas, condiciones y garantias para encontrar la proteccion mas adecuada para tu vivienda, tu inversion o tu comunidad.',
     image: 'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1200&q=80',
     tag: 'Proteccion',
     to: '/servicios/seguros',

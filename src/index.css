@@ -448,26 +448,32 @@ button {
   /* Empieza en blanco (multiplicar por blanco no altera nada, asi que no se ve
      donde arranca el esfumado) y llega a --warm ya en el 12%: a partir de ahi
      ningun pixel puede superar el color de la seccion, pase lo que pase con el
-     encuadre de la foto. Sigue bajando a tonos mas oscuros para que el
-     esfumado llegue al crema desde abajo y nunca por encima. */
+     encuadre de la foto. Baja un poco mas para que el esfumado llegue al crema
+     desde abajo, pero sin oscurecer tanto como para que la franja se vea
+     grisacea: el tramo final ya lo cubre .hero-fade en opacidad 1. */
   background: linear-gradient(
     to bottom,
     #ffffff 0%,
     #f7f5f0 12%,
-    #e2ddd0 60%,
-    #dbd5c7 100%
+    #ebe6da 60%,
+    #e6e1d4 100%
   );
   mix-blend-mode: multiply;
 }
 
+/* Llega a opacidad 1 en el 88% y no en el 100%: mientras el alpha es < 1 el
+   resultado es una mezcla entre la foto (ya oscurecida por el multiply) y el
+   crema, asi que siempre queda por debajo de --warm. Antes solo tocaba
+   #f7f5f0 en la ultima fila de pixeles y el resto de la franja se quedaba en
+   ~#f4f2ed; ahora el ultimo 12% es crema exacto y ese es el tono mas claro. */
 .hero-fade {
   background: linear-gradient(
     to bottom,
     rgb(247 245 240 / 0) 0%,
-    rgb(247 245 240 / 0.1) 30%,
-    rgb(247 245 240 / 0.34) 58%,
-    rgb(247 245 240 / 0.72) 82%,
-    rgb(247 245 240 / 0.94) 95%,
+    rgb(247 245 240 / 0.12) 30%,
+    rgb(247 245 240 / 0.42) 55%,
+    rgb(247 245 240 / 0.8) 74%,
+    rgb(247 245 240 / 1) 88%,
     rgb(247 245 240 / 1) 100%
   );
 }
@@ -950,8 +956,17 @@ button {
   max-width: 1180px;
 }
 
+/* El padding inferior de .section deja un hueco entre el ultimo servicio y la
+   seccion siguiente: lo pasamos a la lista para que ese tramo final siga en
+   crema (--warm) en vez del blanco de la pagina. */
+.services {
+  padding-bottom: 0;
+}
+
 .services-scroll-list {
+  background: var(--warm);
   margin-inline: calc(-1 * clamp(22px, 5vw, 72px));
+  padding-bottom: clamp(58px, 8vw, 94px);
 }
 
 .service-scroll-item {
