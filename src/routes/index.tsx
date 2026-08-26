@@ -196,7 +196,18 @@ function Home() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    // Segunda pasada en el frame siguiente: al entrar desde otra ruta la salida
+    // animada mantiene la pagina anterior montada un instante, asi que la
+    // primera lectura puede caer con el scroll aun sin resetear y dejar el hero
+    // pintado como si ya se hubiera scrolleado.
+    const raf = requestAnimationFrame(handleScroll)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', handleScroll)
+      // --hero-fill vive en <html> y sobrevive al cambio de ruta: sin limpiarlo,
+      // contacto arrancaria con el blanco del final del scroll de la home.
+      document.documentElement.style.removeProperty('--hero-fill')
+    }
   }, [skipAnimation])
 
   useEffect(() => {

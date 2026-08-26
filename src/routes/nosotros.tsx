@@ -66,7 +66,7 @@ export const TABS = [
   {
     label: 'Misión',
     content:
-      'Ofrecer una experiencia inmobiliaria excepcional, donde cada cliente se sienta acompañado, asesorado y respaldado en una de las decisiones más importantes de su vida. Transformar el sector con cercanía, profesionalidad y atención al detalle.',
+      'Que nuestros clientes encuentren en Group Casas todo lo que necesitan para su vivienda y la tranquilidad de saber que están en las mejores manos. Acompañarlos en cada etapa, cuidar cada detalle y trabajar con la excelencia que nos define, para que al final del camino su felicidad sea también la nuestra.',
   },
   {
     label: 'Visión',

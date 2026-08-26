@@ -5,6 +5,9 @@
 :root {
   --gold: #a47b36;
   --hero-fill: #a47b36;
+  /* Dorado de arranque del hint del hero de contacto (mas apagado que
+     --hero-fill); el scroll lo interpola hasta el blanco calido. */
+  --hero-hint-fill: rgb(120 96 52);
   --gold-soft: #f9f4ea;
   --ink: #1a1a18;
   --muted: #7a7a74;
@@ -636,11 +639,20 @@ button {
 }
 
 /* En contacto el hint usa la misma tipografía que el scroll de los heroes de
-   servicios (.sum-hero-scroll): más tracking y un punto menos de contraste. */
+   servicios (.sum-hero-scroll): más tracking.
+   El color lo lleva --hero-hint-fill, que el scroll de contacto interpola de
+   dorado apagado a blanco calido igual que la marca. */
 .contact-page .hero-scroll-hint {
-  color: rgba(248, 242, 231, 0.6);
+  color: var(--hero-hint-fill);
+  color: color-mix(in srgb, var(--hero-hint-fill) 75%, transparent);
   gap: 12px;
   letter-spacing: 0.2em;
+}
+
+/* La linea del pulso trae un degradado crema fijo; sobre el esfumado blanco
+   tiene que seguir al color del hint. */
+.contact-page .scroll-pulse-line {
+  background: linear-gradient(currentColor, transparent);
 }
 
 .scroll-arrow {
@@ -1801,7 +1813,25 @@ button {
 }
 
 .contact-page .hero-scroll-wrapper {
+  background: var(--paper);
   height: 180vh;
+}
+
+/* Contacto reutiliza el esfumado del pie del hero de la home, pero fundiendo
+   hacia --paper (el fondo de .contact-page) en vez de --warm. Al ser blanco no
+   hace falta la capa de multiply (.hero-fade-tint): ningun pixel de la foto
+   puede quedar mas claro que el blanco, asi que el fundido en alpha ya deja la
+   union con la seccion siguiente invisible. */
+.contact-page .hero-fade {
+  background: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0) 0%,
+    rgb(255 255 255 / 0.12) 30%,
+    rgb(255 255 255 / 0.42) 55%,
+    rgb(255 255 255 / 0.8) 74%,
+    rgb(255 255 255 / 1) 88%,
+    rgb(255 255 255 / 1) 100%
+  );
 }
 
 .contact-page .hero-content {

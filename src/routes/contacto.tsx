@@ -219,6 +219,15 @@ function ContactPage() {
       const b = Math.round(54 + 187 * colorT)
       document.documentElement.style.setProperty('--hero-fill', `rgb(${r},${g},${b})`)
 
+      // El hint ("ver mas" + linea) hace el mismo recorrido pero arrancando en
+      // un dorado mas apagado que la marca: queda sobre el esfumado claro del
+      // pie del hero, donde el dorado de la marca se lee demasiado brillante.
+      // Termina en el mismo blanco calido, rgb(250,247,241).
+      const hr = Math.round(120 + 130 * colorT)
+      const hg = Math.round(96 + 151 * colorT)
+      const hb = Math.round(52 + 189 * colorT)
+      document.documentElement.style.setProperty('--hero-hint-fill', `rgb(${hr},${hg},${hb})`)
+
       // Tagline + CTA fade in once the photo has turned gold
       const uiT = phase(p, 0.3, 0.6)
       if (heroUiRef.current) {
@@ -229,7 +238,20 @@ function ContactPage() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    // Segunda pasada en el frame siguiente: al entrar desde otra ruta la salida
+    // animada mantiene la pagina anterior montada un instante, asi que la
+    // primera lectura puede caer con el scroll aun sin resetear y dejar el hero
+    // pintado como si ya se hubiera scrolleado.
+    const raf = requestAnimationFrame(handleScroll)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', handleScroll)
+      // Las dos variables viven en <html>, asi que sobreviven al cambio de
+      // ruta: sin limpiarlas, la proxima visita arranca con el blanco del final
+      // del scroll en vez del dorado que define :root.
+      document.documentElement.style.removeProperty('--hero-fill')
+      document.documentElement.style.removeProperty('--hero-hint-fill')
+    }
   }, [])
 
   return (
@@ -247,6 +269,9 @@ function ContactPage() {
         <section className="hero" id="contacto-top">
           <div className="hero-gold-bg" ref={heroGoldRef} />
           <div className="hero-media" ref={heroMediaRef} />
+          {/* Esfumado del pie del hero hacia el fondo de la seccion siguiente,
+              igual que en la home (ver .hero-fade en index.css). */}
+          <div className="hero-fade" aria-hidden="true" />
           <div className="hero-content">
             {/* H1 semántico. La marca visible (hero-brand "HABLEMOS") es un div
                 animado, así que el encabezado real va oculto pero accesible. */}
