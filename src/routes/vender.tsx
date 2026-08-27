@@ -54,7 +54,7 @@ const PROCESO = [
   {
     num: '4',
     title: 'Venta de tu vivienda',
-    desc: 'Si tras la valoración decides vender, te acompañamos hasta la firma.',
+    desc: 'Una vez analizada la información, si decides vender, comenzamos a trabajar para gestionar todo el proceso de venta de principio a fin.',
   },
 ]
 
