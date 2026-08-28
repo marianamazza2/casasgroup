@@ -73,11 +73,6 @@ export const TABS = [
     content:
       'Nuestra visión es transformar la manera de vivir el sector inmobiliario, ofreciendo una experiencia integral en todo lo relacionado con la vivienda. Queremos construir un futuro en el que nuestros clientes no tengan que recurrir a distintos lugares para resolver cada necesidad, sino que puedan encontrar en Group Casas un único equipo capaz de acompañarlos en todo el proceso. Porque todo lo relacionado con tu vivienda puede empezar y terminar en un mismo lugar: Group Casas.',
   },
-  {
-    label: 'Propósito',
-    content:
-      'Creemos que encontrar un hogar es mucho más que una transacción. Es un momento vital. Por eso existimos: para que ese momento sea tan especial como merece.',
-  },
 ]
 
 export const TEAM = [

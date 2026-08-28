@@ -40,7 +40,7 @@ export function MisionTabs({ tabs }: { tabs: Tab[] }) {
   const fill = useMotionValue(0)
   const fillClip = useTransform(fill, (v) => `inset(${(1 - v) * 100}% 0 0 0)`)
 
-  // Mapear el progreso de scroll a la pestaña activa (0 → 1 → 2) y al relleno.
+  // Mapear el progreso de scroll a la pestaña activa y al relleno.
   useMotionValueEvent(scrollYProgress, 'change', (p) => {
     if (!pinned) return
     const scaled = p * tabs.length
@@ -117,7 +117,7 @@ export function MisionTabs({ tabs }: { tabs: Tab[] }) {
             </AnimatePresence>
           </div>
 
-          <div className="mision-tablist" role="tablist" aria-label="Misión, visión y propósito">
+          <div className="mision-tablist" role="tablist" aria-label="Misión y visión">
             {tabs.map((t, i) => {
               const isActive = i === active
               return (
