@@ -68,7 +68,7 @@ const services = [
   },
   {
     icon: 'AD',
-    title: 'Comunidades',
+    title: 'Administrar',
     description: 'Ofrecemos una gestion integral de comunidades basada en la excelencia operativa: administracion, mantenimiento, atencion a propietarios y coordinacion de todos los servicios.',
     image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
     tag: 'Comunidades',
