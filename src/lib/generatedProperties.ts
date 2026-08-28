@@ -45,6 +45,113 @@ export const generatedProperties: Property[] = [
     "dateAdded": "2026-02-26"
   },
   {
+    "id": 9,
+    "city": "Esplugues de Llobregat",
+    "zone": "Can Vidalet",
+    "title": "Piso en venta en Calle de la Maladeta, Can Vidalet - Esplugues de Llobregat",
+    "beds": 3,
+    "baths": 1,
+    "m2": 60,
+    "price": 140000,
+    "priceLabel": "140.000 €",
+    "mode": "compra",
+    "category": "piso",
+    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_iqca85",
+    "desc": "Group Casas presenta piso en venta exterior luminoso en buen estado en la zona de Can Vidalet, Esplugues de Llobregat. A tan solo un minuto de la linea azul, Can Vidalet (L5), y 5 minutos del tranvía parada Can Oliveres, rodeado de zonas verdes, supermercados y escuelas.\n\nConsta de: 60 m2 construidos que se dividen en un amplio salón comedor luminoso y cocina, tres habitaciones, dos dobles y una individual y un baño.\nFinca sin ascensor.\n// Vivienda actualmente alquilada, renovable año a año// // Las imágenes mostradas son una propuesta visual de cómo podría verse la vivienda decorada. La estructura, distribución y espacios del piso pueden ser exactamente iguales //\n\nNo te pierdas esta oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "features": [],
+    "images": [
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_iqca85",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/1.salon_rmovie",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/2.habitacion_u7oijg",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/3.habitacion_iqvccn",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/4.habitación_vjtbce",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/5.habitación_uigeju"
+    ],
+    "coords": {
+      "lat": 41.375,
+      "lng": 2.088
+    },
+    "status": "EN VENTA",
+    "dateAdded": "2026-01-26"
+  },
+  {
+    "id": 13,
+    "city": "Barcelona",
+    "zone": "Pedralbes",
+    "title": "Casa / Chalet independiente en venta en Avenida de Pearson 49 - Pedralbes",
+    "beds": 7,
+    "baths": 5,
+    "m2": 700,
+    "price": 8500000,
+    "priceLabel": "8.500.000 €",
+    "mode": "compra",
+    "category": "chalet",
+    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_xx2gpc",
+    "desc": "Redcasas presenta este excepcional chalet independiente en Pedralbes, una de las zonas residenciales más prestigiosas y codiciadas de Barcelona.\nSe trata de una villa única, de marcada personalidad arquitectónica, proyectada por Francesc Mitjans, uno de los arquitectos más influyentes y reconocidos de la ciudad.\n\nLa vivienda disfruta de maravillosas vistas abiertas sobre toda la ciudad y se asienta sobre una parcela completamente llana, un valor excepcional en la zona, que permite disfrutar plenamente del jardín y de la vida exterior.\n\nDistribución:\n\nEn planta baja, la casa se organiza en torno a un sofisticado conjunto de salón–comedor–biblioteca y cocina, con amplios ventanales y una agradable continuidad hacia el exterior. Desde esta zona se accede directamente al jardín privado, uno de los grandes atractivos de la propiedad, que integra piscina, zonas de descanso y espacios ideales para reuniones sociales y eventos.\n\nEn esta misma planta se encuentra una zona de invitados independiente, compuesta por salón privado y dos dormitorios en suite, que garantiza total privacidad y confort.\n\nLa planta superior alberga la espectacular master suite, con dos vestidores, un acogedor salón privado y vistas despejadas, además de dos dormitorios adicionales en suite.\nUna escalera de diseño, premiada arquitectónicamente, conecta las plantas y refuerza el carácter singular y exclusivo de la vivienda.\n\nEn total, la casa dispone de 7 dormitorios, 5 baños completos y 2 aseos de cortesía, además de una zona de servicio con lavandería, plancha y entrada independiente, situada junto a una espectacular cocina pensada para el día a día y para grandes recepciones.\n\nComodidades y exteriores:\n\nLa propiedad cuenta con dos áreas de aparcamiento diferenciadas, una para residentes y otra para visitantes, con capacidad para más de cinco vehículos, aportando comodidad y discreción.\n\nEl jardín, totalmente llano, con piscina y diversas zonas de relax, convierte esta vivienda en un auténtico oasis urbano, perfecto para quienes desean disfrutar del exterior sin renunciar a la cercanía del centro de la ciudad.\n\nUbicación:\n\nSituada en Avenida Pearson, considerada la calle más exclusiva de Barcelona, la casa se encuentra a pocos minutos de los mejores colegios internacionales (St. Paul’s, St. Peter’s, Liceo Francés), de las escuelas de negocio de referencia como IESE y ESADE, así como de clubes deportivos, zonas verdes y jardines emblemáticos.\n\nNo te pierdas esta oportunidad ¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "features": [],
+    "images": [
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_xx2gpc",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/1.fachada_gstuc7",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/2.fachada_mgqr78",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/3.salon_hediuy",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/4.salon_izlud7",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/5.salon_mr07er",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/6.salon_xtwdtv",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/7.salon_rtmgvk",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/8.pasillo_oqws7u",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/9.pasillo_f1xivi",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/10.lavado_x3x5ou",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/11.lavado_ffoksl",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/12.habitacion_utfgig",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/13.habitacion_bu6ckq",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/14.habitacion_dawji3",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/15.habitacion_fzsqyw",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/16.habitacion_nkbodh",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/17.balcon_jgalir",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/18.lavado_s45rgc",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/19.lavado_cnttfx",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/20.balcon_djwlmt",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/21.balcon_vgwhlo",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/22.zona_exterior_il39im",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/23.zona_exterior_thvwgh",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/24.vista_mnywzz"
+    ],
+    "coords": {
+      "lat": 41.391,
+      "lng": 2.113
+    },
+    "status": "EN VENTA",
+    "dateAdded": "2026-02-06"
+  },
+  {
+    "id": 17,
+    "city": "Esplugues de Llobregat",
+    "zone": "Can Vidalet",
+    "title": "Garaje en venta en Calle del Moli - Can Vidalet - Esplugues de Llobregat",
+    "beds": 0,
+    "baths": 0,
+    "m2": 0,
+    "price": 15000,
+    "priceLabel": "15.000 €",
+    "mode": "compra",
+    "category": "parking",
+    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_q0wy9u",
+    "desc": "Group Casas presenta en venta DOS PLAZAS de parking, ubicada en Calle Molino, de Esplugues de Llobregat (zona metro Can Vidalet). Situada en Planta -2. Vigilancia 24h con personal de seguridad. Acceso con mando y llave. No te pierdas esta gran oportunidad. ¡Ven a verlo! Honorarios de la agencia y gastos de compra venta no están incluidos en el precio.",
+    "features": [],
+    "tag": "REBAJADO",
+    "images": [
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_q0wy9u",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/1.parking_yvpzgm",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/2.parking_ajzz2y"
+    ],
+    "coords": {
+      "lat": 41.374,
+      "lng": 2.088
+    },
+    "status": "EN VENTA",
+    "dateAdded": "2025-12-01"
+  },
+  {
     "id": 21,
     "city": "Hospitalet de Llobregat",
     "zone": "La Torrasa",
@@ -114,42 +221,6 @@ export const generatedProperties: Property[] = [
     }
   },
   {
-    "id": 24,
-    "city": "Esplugues de Llobregat",
-    "zone": "Can Vidalet",
-    "title": "Piso en venta en Can Vidalet",
-    "beds": 4,
-    "baths": 1,
-    "m2": 91,
-    "price": 290000,
-    "priceLabel": "290.000 €",
-    "mode": "compra",
-    "category": "piso",
-    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_o0lgc9",
-    "desc": "Redcasas presenta este espectacular piso en la zona de Can Vidalet (Esplugues de Llobregat), a tan solo diez minutos del centro comercial Finestrelles y del tranvía, este encantador piso ofrece una ubicación inmejorable. Rodeado de escuelas, supermercados a tan solo tres minutos del metro de Can Vidalet (L5) y a cinco minutos del metro de Can Serra (L1).\nLa vivienda cuenta con 91 m' muy bien distribuidos. Dispone de un amplio salón-comedor con salida a una acogedora terraza, una cocina independiente y funcional con acceso a una amplia galería, cuatro habitaciones amplias y dobles, además de dos baños completos y modernos.\nNo te pierdas esta oportunidad. ¡Ven a verlo! Los honorarios de la agencia intermediadora y los gastos de compra-venta no están incluidos en el precio.",
-    "features": [
-      "Galería"
-    ],
-    "images": [
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_o0lgc9",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/01-salon_cfbtxa",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/02-habitacion_n6oi3v",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/03-habitacion_qjutst",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/04-habitacion_kv1pgx",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/05-habitacion_baxrge",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/06-habitacion_bxkocb",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/07-cocina_fyefdc",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/08-patio_wghzme",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/09-baño_ccfljx",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/10-baño1_w4ocpf"
-    ],
-    "floor": "1",
-    "coords": {
-      "lat": 41.375,
-      "lng": 2.088
-    }
-  },
-  {
     "id": 25,
     "city": "Hospitalet de Llobregat",
     "zone": "Can Serra, Pubilla Cases",
@@ -157,32 +228,32 @@ export const generatedProperties: Property[] = [
     "beds": 4,
     "baths": 1,
     "m2": 88,
-    "price": 225000,
-    "priceLabel": "225.000 €",
+    "price": 219000,
+    "priceLabel": "219.000 €",
     "mode": "compra",
     "category": "piso",
-    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_15_54_s8akac",
+    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_x4pxte",
     "desc": "Group Casas presenta esta luminosa vivienda totalmente exterior en venta en la zona de Pubilla\nCasas (Hospitalet de Llobregat), ubicada a pocos metros del metro L5 Can Vidalet, del centro comercial Finestrelles y rodeada de colegios, supermercados y todo tipo de servicios, lo que garantiza comodidad y una excelente calidad de vida.\nLa vivienda cuenta con aproximadamente 88 m' distribuidos en 4 habitaciones (dos dobles y dos individuales), una amplia cocina independiente y un baño completo. El salón-comedor tiene salida a un amplio balcón, al que también se accede desde la habitación principal, aportando luminosidad y amplitud a la vivienda.\nTodas las estancias disponen además de aire acondicionado con bomba de frio y calor para mayor confort durante todo el año. La finca no dispone de ascensor.\n//Las imágenes mostradas son una propuesta visual de cómo podría verse la vivienda decorada.\nLa estructura, distribución y espacios del piso se mantienen exactamente iguales. //\nNo te pierdas esta oportunidad ¡Ven a verlo!\nHonorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [
       "Balcón",
       "Galería"
     ],
     "images": [
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_15_54_s8akac",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_33_45_hyr9de",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_18_08_j27wcl",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_19_06_tjnpim",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_35_11_tucivy",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_32_44_ebmu7l",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_45_30_esgakl",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_31_52_uqybmc",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_46_41_i5q3ng",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_25_07_x1rhhx",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_29_52_phiskx",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_28_38_y9dryp",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_7_jul_2026_20_25_55_bshuqc",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_36_15_rcd8wu",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/ChatGPT_Image_8_jul_2026_08_43_15_urctt2"
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_x4pxte",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/1.salon_bjycda",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/2.salon_dmykti",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/3.salon_ukk99p",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/4.habitacion_e5lbrm",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/5.habitacion_zsuf0x",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/6.habitacion_jeedez",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/7.habitacion_uy0zxv",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/8.habitacion_iinpaw",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/9.habitacion_vzsyih",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/10.habitacion_gfac5f",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/11.habitacion_fphrpe",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/12.cocina_sbcvl2",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/13.lavado_rcrpnt",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/14.lavado_fyncpt"
     ],
     "floor": "4",
     "coords": {
@@ -292,8 +363,8 @@ export const generatedProperties: Property[] = [
     ],
     "floor": "3",
     "coords": {
-      "lat": 41.371,
-      "lng": 2.101
+      "lat": 41.366,
+      "lng": 2.1
     }
   },
   {
@@ -339,23 +410,22 @@ export const generatedProperties: Property[] = [
     "priceLabel": "190.000 €",
     "mode": "compra",
     "category": "piso",
-    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_gptonx",
-    "desc": "Group Casas presenta este piso ubicado en una zona muy bien comunicada de Santa Eulàlia, cerca de metro L1, autobuses y acceso rápido a las principales vías que conectan con Barcelona y alrededores. Las paradas Torrassa L1 y Can Tries | Gornal L9S-L10S se encuentran a pocos minutos caminando. La zona cuenta con centro de salud, farmacias, supermercados, institutos y todos los servicios básicos.\n\nLa vivienda dispone de una superficie aproximada de 70m², actualmente distribuida en salón comedor con salida a un balcón, cocina independiente, tres habitaciones (una de ella también con salida al balcón), y un baño.\n\nLa finca dispone de ascensor.\nNo te pierdas esta oportunidad.\n¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
+    "image": "https://res.cloudinary.com/clkttf37/image/upload/c_fill,ar_4:3,w_900,f_auto,q_auto/cover_vbls8d",
+    "desc": "Group Casas presenta este piso ubicado en una zona muy bien comunicada de Santa Eulàlia, cerca de metro L1, autobuses y acceso rápido a las principales vías que conectan con Barcelona y alrededores. Las paradas Torrassa L1 y Can Tries | Gornal L9S-L10S se encuentran a pocos minutos caminando. La zona cuenta con centro de salud, farmacias, supermercados, institutos y todos los servicios básicos.\n\nLa vivienda dispone de una superficie aproximada de 70m², actualmente distribuida en salón comedor con salida a un balcón, cocina independiente, tres habitaciones (una de ella también con salida al balcón) y un baño.\n\nLa finca dispone de ascensor.\nNo te pierdas esta oportunidad.\n¡Ven a verlo! Honorarios de la agencia y gastos de compraventa no están incluidos en el precio.",
     "features": [
       "Ascensor",
       "Terraza"
     ],
     "images": [
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_gptonx",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/01-salon_d5a8yq",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/02-balcon_gbpncs",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/03-balcon_ivcuxb",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/04-cocina_saqh3e",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/05-habitacion_iqdiov",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/06-habitacion_ikvbcx",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/07-balcon2_uizzgr",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/08-baño_ustpvz",
-      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/10-galeria_suljep"
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/cover_vbls8d",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/1.balcon_xvzshn",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/2.balcon_hh8qky",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/3.balcon_h6fxau",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/4.habitacion_csi5zm",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/5.habitacion_ni2mc7",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/6.cocina_kcbzrw",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/7.zona_lavado_o6epam",
+      "https://res.cloudinary.com/clkttf37/image/upload/c_limit,w_1600,f_auto,q_auto/8.lavado_ivjitk"
     ],
     "floor": "5",
     "coords": {
