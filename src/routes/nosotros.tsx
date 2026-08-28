@@ -71,7 +71,7 @@ export const TABS = [
   {
     label: 'Visión',
     content:
-      'Nuestra visión es transformar el sector inmobiliario para ofrecer la mejor experiencia en todo lo relacionado con la vivienda. Un futuro en el que nuestros clientes no tengan que buscar en diferentes lugares cada servicio, sino encontrar en nosotros todo lo que necesitan. Porque creemos que todo lo relacionado con tu vivienda puede empezar y terminar en un mismo lugar: en Group Casas.',
+      'Nuestra visión es transformar el sector inmobiliario para ofrecer la mejor experiencia en todo lo relacionado con la vivienda. Un futuro en el que nuestros clientes no tengan que buscar en diferentes lugares cada servicio, sino encontrarnos en todo lo que necesitan. Porque todo lo relacionado con tu vivienda puede empezar y terminar en un mismo lugar en Group Casas.',
   },
   {
     label: 'Propósito',
