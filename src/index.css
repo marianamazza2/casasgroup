@@ -2583,10 +2583,6 @@ button {
     padding-inline: clamp(20px, 5vw, 72px);
   }
 
-  .why-story-text {
-    text-align: left;
-  }
-
   .valuation-media {
     min-height: min(56vw, 420px);
   }
