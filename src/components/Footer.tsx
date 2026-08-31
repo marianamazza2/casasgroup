@@ -44,12 +44,12 @@ export function Footer() {
           <p>Tu hogar empieza aqui.</p>
         </div>
         <FooterSection title="Servicios" className="footer-col-services">
-          <Link to="/servicios/administracion-de-fincas">Administración de fincas</Link>
+          <Link to="/servicios/administracion-de-fincas">Administrar</Link>
           <Link to="/servicios/alarmas">Alarmas</Link>
-          <Link to="/servicios/cambio-de-suministros">Cambio de suministros</Link>
           <Link to="/servicios/hipotecas">Hipotecas</Link>
           <Link to="/servicios/reformas">Reformas</Link>
           <Link to="/servicios/seguros">Seguros</Link>
+          <Link to="/servicios/cambio-de-suministros">Suministros</Link>
         </FooterSection>
         <FooterSection title="Inmuebles">
           <a href="/#propiedades">Alquilar</a>

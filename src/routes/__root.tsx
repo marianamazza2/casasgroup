@@ -6,13 +6,13 @@ import { useScrollRestoreRetry } from '../hooks/useScrollRestoreRetry'
 import { absoluteUrl } from '../lib/structuredData'
 
 const subMenuServices = [
-  { label: 'Administracion de comunidades', gold: false, to: '/servicios/administracion-de-fincas' },
+  { label: 'Administrar', gold: false, to: '/servicios/administracion-de-fincas' },
   { label: 'Alarmas', gold: false, to: '/servicios/alarmas' },
   { label: 'Alquilar', gold: false, to: '/propiedades', search: { query: '', mode: 'alquiler' as const } },
-  { label: 'Cambio de suministros', gold: false, to: '/servicios/cambio-de-suministros' },
   { label: 'Hipotecas', gold: false, to: '/servicios/hipotecas' },
   { label: 'Reformas', gold: false, to: '/servicios/reformas' },
   { label: 'Seguros', gold: false, to: '/servicios/seguros' },
+  { label: 'Suministros', gold: false, to: '/servicios/cambio-de-suministros' },
 ]
 
 function SiteNav() {

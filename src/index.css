@@ -5709,230 +5709,53 @@ button {
 }
 
 /* ============================================================
-   Nuestros valores — scroll pinned (01 → 02 → 03 → 04)
+   Nuestros valores — banda de texto corrido
+   Misma composición que la banda de marca de la home (.why-story): titular
+   centrado en serif dorado y un único texto debajo, con mucho aire entre
+   párrafos para que el bloque largo siga siendo cómodo de leer.
    ============================================================ */
 .valores {
   background: var(--paper);
+  padding-inline: 0;
 }
 
-.valores-sticky {
-  padding: clamp(40px, 5vw, 72px) clamp(22px, 5vw, 56px);
+.valores-story {
+  margin: 0 auto;
+  max-width: 1120px;
+  padding-inline: clamp(40px, 6vw, 80px);
+  text-align: center;
 }
 
-/* En desktop la sección se fija bajo el nav y ocupa una pantalla. El alto
-   extra del wrapper (.valores) genera el recorrido de scroll que hace avanzar
-   entre valores antes de liberar hacia la siguiente sección. */
-.valores-sticky.is-pinned {
-  display: flex;
-  flex-direction: column;
-  height: calc(100svh - var(--nav-h));
-  justify-content: center;
-  overflow: hidden;
-  position: sticky;
-  top: var(--nav-h);
-}
-
-.valores-header {
-  align-items: center;
-  display: flex;
-  flex-shrink: 0;
-  justify-content: space-between;
-  margin-bottom: clamp(20px, 3vh, 32px);
-  margin-inline: auto;
-  max-width: 1180px;
-  width: 100%;
-}
-
-.valores-progress {
-  display: flex;
-  gap: 8px;
-}
-
-.valores-progress-dot {
-  background: var(--line);
-  border-radius: 999px;
-  height: 4px;
-  transition: background 0.4s ease, width 0.4s ease;
-  width: 18px;
-}
-
-.valores-progress-dot.is-done {
-  background: var(--gold-soft, rgba(176, 137, 60, 0.5));
-}
-
-.valores-progress-dot.is-active {
-  background: var(--gold);
-  width: 38px;
-}
-
-.valores-panel {
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  display: flex;
-  margin-inline: auto;
-  max-width: 1180px;
-  overflow: hidden;
-  width: 100%;
-}
-
-.is-pinned .valores-panel {
-  flex: 1;
-  min-height: 0;
-}
-
-.valores-list {
-  background: var(--warm);
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  width: 340px;
-}
-
-.valores-item {
-  align-items: center;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--line);
-  color: var(--ink);
-  display: flex;
-  gap: clamp(14px, 1.6vw, 20px);
-  padding: clamp(18px, 2.4vw, 26px) 24px;
-  position: relative;
-  text-align: left;
-  transition: background 0.2s, padding-left 320ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.valores-item:last-child {
-  border-bottom: none;
-}
-
-/* Barra dorada que crece desde la izquierda en el valor activo (igual que la
-   lista de seguros). */
-.valores-item::before {
-  background: var(--gold);
-  bottom: -1px;
-  content: '';
-  left: 0;
-  position: absolute;
-  top: -1px;
-  transform: scaleY(0);
-  transform-origin: center;
-  transition: transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
-  width: 2px;
-}
-
-.valores-item--active {
-  background: var(--paper);
-  padding-left: clamp(28px, 2.4vw, 34px);
-}
-
-.valores-item--active::before {
-  transform: scaleY(1);
-}
-
-.valores-item-num {
-  color: var(--muted);
-  font-family: var(--serif);
-  font-size: 14px;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  opacity: 0.6;
-  transition: color 240ms ease, opacity 240ms ease;
-}
-
-.valores-item--active .valores-item-num {
+/* Misma escala que el resto de titulares de sección (no la del wordmark). */
+.valores-title {
   color: var(--gold);
-  opacity: 1;
+  font-family: var(--serif);
+  font-size: clamp(34px, 5vw, 54px);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  margin: 0 0 20px;
+  text-transform: uppercase;
 }
 
-.valores-item-title {
+.valores-text {
   color: var(--text);
-  flex: 1;
-  font-family: var(--serif);
-  font-size: clamp(20px, 2vw, 26px);
-  font-weight: 500;
-  line-height: 1.15;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.95;
+  margin: clamp(24px, 3vw, 38px) auto 0;
+  max-width: 74ch;
 }
 
-.valores-item--active .valores-item-title {
-  color: var(--ink);
-}
-
-.valores-item-arrow {
-  color: var(--gold);
-  font-size: 18px;
-  opacity: 0;
-  transform: translateX(-6px);
-  transition: opacity 280ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.valores-item:hover .valores-item-arrow,
-.valores-item--active .valores-item-arrow {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Escenario donde los valores se apilan y hacen crossfade al hacer scroll. */
-.valores-stage {
-  flex: 1;
-  min-width: 0;
-  position: relative;
-}
-
-.valores-slide {
-  display: flex;
-  inset: 0;
-}
-
-.is-pinned .valores-slide {
-  position: absolute;
-}
-
-.valores-detail-text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(28px, 4vw, 48px) clamp(24px, 3.5vw, 44px);
-}
-
-.valores-detail-num {
-  color: var(--gold);
-  font-family: var(--serif);
-  font-size: 36px;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.valores-detail-text h3 {
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 500;
-  line-height: 1.3;
-  margin: 0 0 16px;
-}
-
-.valores-detail-text p {
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.8;
+/* El texto es continuo: los párrafos solo se separan con aire, sin sangría ni
+   viñetas, para que se lea como un mismo bloque. `balance` reparte las líneas
+   por igual y evita colas sueltas ("…a su lado.") al final del párrafo. */
+.valores-text p {
   margin: 0;
-  max-width: 480px;
+  text-wrap: balance;
 }
 
-.valores-photo {
-  background-color: #efede8;
-  background-position: center;
-  background-size: cover;
-  flex-shrink: 0;
-  width: 42%;
-}
-
-/* Dots del slider de valores — solo en móvil (ver media query). */
-.valores-dots {
-  display: none;
+.valores-text p + p {
+  margin-top: clamp(20px, 2.6vw, 32px);
 }
 
 .team {
@@ -6325,9 +6148,8 @@ button {
   }
 }
 
-/* Por debajo de 768px no se hace pin: los valores se convierten en un slider
-   horizontal con swipe + dots. Se oculta la columna lateral de índices y los
-   dots de progreso del header. */
+/* Ajustes de móvil: equipo con swipe, misión con dots y el texto de valores
+   a menor escala. */
 @media (max-width: 767px) {
   /* En móvil manda el dedo: las fotos asoman parcialmente para invitar a
      deslizar y las flechas sobran. */
@@ -6377,93 +6199,21 @@ button {
     width: 30px;
   }
 
-  .valores-progress {
+  /* En móvil el texto baja de tamaño y se ajusta el ancho de línea. */
+  .valores-text {
+    font-size: 15px;
+    line-height: 1.85;
+  }
+
+  /* El texto es largo para una pantalla de móvil: se deja el primer párrafo y
+     el resto se despliega con "Ver más". En desktop no aplica nada de esto. */
+  .valores-text.is-collapsed p + p {
     display: none;
   }
 
-  .valores-panel {
-    border: 0;
-    border-radius: 0;
-    overflow: visible;
-  }
-
-  .valores-list {
-    display: none;
-  }
-
-  /* Pista del slider: cada slide ocupa el ancho completo y hace scroll-snap. */
-  .valores-stage {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .valores-stage::-webkit-scrollbar {
-    display: none;
-  }
-
-  .valores-slide {
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    flex: 0 0 min(82vw, 320px);
-    flex-direction: column;
-    overflow: hidden;
-    scroll-snap-align: center;
-  }
-
-  .valores-photo {
-    aspect-ratio: 4 / 3;
-    min-height: 0;
-    order: -1;
-    width: 100%;
-  }
-
-  /* Texto más compacto en móvil para que la card no quede tan alta (igual
-     que las cards de administración de fincas). */
-  .valores-detail-text {
-    padding: clamp(18px, 5vw, 24px);
-  }
-
-  .valores-detail-num {
-    font-size: 26px;
-  }
-
-  .valores-detail-text h3 {
-    font-size: 22px;
-    margin-bottom: 10px;
-  }
-
-  .valores-detail-text p {
-    font-size: 13px;
-    line-height: 1.65;
-  }
-
-  /* Dots tipo "pill activo" debajo del slider. */
-  .valores-dots {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    justify-content: center;
-    margin-top: 22px;
-  }
-
-  .valores-dot {
-    background: rgba(164, 123, 54, 0.35);
-    border: 0;
-    border-radius: 999px;
-    cursor: pointer;
-    height: 8px;
-    padding: 0;
-    transition: background 0.3s ease, width 0.3s ease;
-    width: 8px;
-  }
-
-  .valores-dot.is-active {
-    background: var(--gold);
-    width: 30px;
+  .valores-toggle {
+    display: inline-flex;
+    margin-top: 18px;
   }
 }
 

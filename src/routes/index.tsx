@@ -1,9 +1,10 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
-import { animate, motion, useInView, useReducedMotion } from 'framer-motion'
+import { animate, useInView } from 'framer-motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { homeFeaturedProperties, properties } from '../lib/properties'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
+import { RevealTitle } from '../components/RevealTitle'
 import { organizationSchema, absoluteUrl } from '../lib/structuredData'
 import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
 import type { Location } from '../lib/locationSearch'
@@ -114,58 +115,12 @@ const services = [
 const WHY_TEXT =
   'En Group Casas te acompañamos en cada etapa. Te ayudamos a encontrar la mejor financiación para comprar tu vivienda, gestionamos el proceso de compraventa de principio a fin y, una vez adquirida, ponemos a tu disposición nuestro servicio de reformas para que esté perfecta desde el primer día. Además, administramos tu comunidad si así lo deseas. Todo lo que necesitas para tu vivienda, en un solo lugar.'
 
-// Entrada del wordmark: la misma receta que la foto del hero (@keyframes
-// hero-media-in) — desenfocada y al fondo, se acerca y se enfoca. Sin
-// desplazamiento vertical: la marca no sube, avanza. El viraje de champan a
-// dorado va despues, en un segundo tiempo (ver mas abajo).
-// Los colores van literales: framer-motion no interpola custom properties.
+// Entrada del wordmark: la comparte con el titular de "Nuestros valores" en
+// nosotros (ver componente RevealTitle).
 const WORDMARK_TEXT = 'Group Casas'
-const WORDMARK_FROM = '#e4d5b2'
-const WORDMARK_TO = '#a47b36'
-// El easing del hero.
-const WORDMARK_EASE = [0.16, 1, 0.3, 1] as const
-// El viraje al dorado es un segundo tiempo, no simultaneo: primero la marca
-// termina de acercarse y enfocarse, ya quieta y nitida, y recien ahi se dora.
-// Mezclados no se percibia el cambio de color, porque ocurria mientras el
-// texto todavia estaba desenfocado. El easing es plano (no el exponencial del
-// hero) para que el oscurecimiento sea parejo de principio a fin.
-const WORDMARK_COLOR_EASE = [0.37, 0, 0.63, 1] as const
-const WORDMARK_DURATION = 2.2
-const WORDMARK_COLOR_DELAY = 1.2
-const WORDMARK_COLOR_DURATION = 1.5
 
 function WhyWordmark() {
-  const reduceMotion = useReducedMotion()
-
-  if (reduceMotion) {
-    return <p className="why-wordmark">{WORDMARK_TEXT}</p>
-  }
-
-  return (
-    <motion.p
-      className="why-wordmark"
-      initial={{ opacity: 0, scale: 0.94, filter: 'blur(12px)', color: WORDMARK_FROM }}
-      whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)', color: WORDMARK_TO }}
-      // El margen inferior POSITIVO adelanta el disparo: la animacion arranca con
-      // la marca todavia un 12% de pantalla por debajo del pliegue, asi que
-      // cuando la seccion entra el titulo ya se esta formando y nunca se ve el
-      // hueco sin titulo. Con un umbral tardio la seccion llegaba vacia y el
-      // titulo tardaba un par de segundos en aparecer.
-      viewport={{ once: true, amount: 0, margin: '0px 0px 12% 0px' }}
-      transition={{
-        opacity: { duration: WORDMARK_DURATION, ease: WORDMARK_EASE },
-        scale: { duration: WORDMARK_DURATION, ease: WORDMARK_EASE },
-        filter: { duration: WORDMARK_DURATION, ease: WORDMARK_EASE },
-        color: {
-          duration: WORDMARK_COLOR_DURATION,
-          delay: WORDMARK_COLOR_DELAY,
-          ease: WORDMARK_COLOR_EASE,
-        },
-      }}
-    >
-      {WORDMARK_TEXT}
-    </motion.p>
-  )
+  return <RevealTitle text={WORDMARK_TEXT} className="why-wordmark" />
 }
 
 function Home() {

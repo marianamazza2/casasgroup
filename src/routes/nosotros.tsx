@@ -3,7 +3,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Footer } from '../components/Footer'
 import { MisionTabs } from '../components/nosotros/MisionTabs'
-import { ValoresSlider } from '../components/nosotros/ValoresSlider'
+import { ValoresManifiesto } from '../components/nosotros/ValoresManifiesto'
 import { TeamSlider } from '../components/nosotros/TeamSlider'
 import { JsonLd } from '../components/JsonLd'
 import { breadcrumbSchema, organizationSchema, absoluteUrl } from '../lib/structuredData'
@@ -36,31 +36,13 @@ export const TRABAJA_PUNTOS = [
   'Proyecto en crecimiento con marca propia',
 ]
 
-export const VALUES = [
-  {
-    title: 'Excelencia',
-    desc: 'No nos conformamos con lo bueno. Cada detalle, cada gestión, cada interacción está pensada para superar expectativas. Porque creemos que la excelencia no es un destino, es un hábito.',
-    image:
-      'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Cercanía',
-    desc: 'Detrás de cada operación hay personas. Te escuchamos, te entendemos y te acompañamos. No somos una empresa más, somos tu equipo.',
-    image:
-      'https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Transparencia',
-    desc: 'Sin letras pequeñas, sin sorpresas. Te contamos todo como es, con datos reales y honestidad absoluta. Tu confianza es nuestro mayor activo.',
-    image:
-      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Ambición',
-    desc: 'Nacimos con la visión de transformar el sector inmobiliario. No venimos a ser uno más. Venimos a ser los mejores. Y cada día trabajamos para demostrarlo.',
-    image:
-      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
-  },
+// Valores: un solo texto corrido (literal, tal y como lo aprobó Angie). Los
+// cortes de párrafo son solo para darle aire de lectura, no secciones.
+export const VALORES_TEXTO = [
+  'Creemos que la confianza se construye con hechos. Por eso trabajamos con honestidad y transparencia, cuidando cada detalle y tratando cada decisión con la responsabilidad que merece.',
+  'Nos mueve el amor por lo que hacemos, por lo que priorizamos estar cerca de las personas para escuchar, entender sus necesidades y acompañarlas con la tranquilidad de saber que siempre tendrán a alguien a su lado.',
+  'Nos implicamos en cada proceso como si fuera propio, buscando siempre lo mejor para nuestros clientes y actuando con respeto, profesionalidad y compromiso.',
+  'No nos conformamos con hacer las cosas bien; creemos en dar un paso más, en superarnos cada día y en ofrecer un servicio a la altura de la confianza que depositan en nosotros. Porque para Group Casas, la excelencia no es solo una forma de trabajar, es nuestra forma de hacer las cosas.',
 ]
 
 export const TABS = [
@@ -170,7 +152,7 @@ function NosotrosPage() {
 
       <MisionTabs tabs={TABS} />
 
-      <ValoresSlider values={VALUES} />
+      <ValoresManifiesto paragraphs={VALORES_TEXTO} />
 
       <section className="section team">
         <div className="section-heading section-heading--center">
