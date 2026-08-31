@@ -5495,9 +5495,36 @@ button {
 .mision-sticky.is-pinned {
   align-items: flex-start;
   height: 100vh;
-  padding-block: clamp(96px, 14vh, 160px);
+  padding-block: clamp(64px, 8vh, 110px);
   position: sticky;
   top: 0;
+}
+
+/* Con el pin, la banda solo dispone de una pantalla y la frase más larga
+   (Visión) desbordaba por abajo. Aquí las medidas se limitan también por
+   altura (vh) para que el bloque quepa entero y conserve aire al final. */
+.mision-sticky.is-pinned .mision-ghost {
+  height: min(18vw, 15vh, 250px);
+}
+
+.mision-sticky.is-pinned .mision-ghost-num {
+  font-size: min(16vw, 14vh, 230px);
+}
+
+.mision-sticky.is-pinned .mision-tab {
+  font-size: min(3.4vw, 4.2vh, 40px);
+}
+
+.mision-sticky.is-pinned .mision-tablist {
+  margin-bottom: min(7vw, 6vh, 92px);
+}
+
+.mision-sticky.is-pinned .mision-content {
+  font-size: min(2.4vw, 3vh, 34px);
+}
+
+.mision-sticky.is-pinned .mision-progress {
+  margin-top: min(5vw, 4vh, 60px);
 }
 
 .mision-feature-bg {
@@ -5916,16 +5943,122 @@ button {
   margin-bottom: 44px;
 }
 
-.team-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(4, 1fr);
+/* El equipo es un slider horizontal en todos los tamaños. La pista arranca
+   siempre en scrollLeft 0, así la primera vista muestra a Angie y Betsabé en
+   desktop y a Angie en móvil. Cuántas fichas caben lo decide --team-per-view;
+   el componente solo mide la pista para saber cuántas páginas hay. */
+.team-slider {
   margin-inline: auto;
   max-width: 1180px;
 }
 
+.team-track {
+  --team-gap: 24px;
+  --team-per-view: 3;
+  display: flex;
+  gap: var(--team-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.team-track::-webkit-scrollbar {
+  display: none;
+}
+
 .team-card {
+  flex: 0 0 calc(
+    (100% - (var(--team-per-view) - 1) * var(--team-gap)) / var(--team-per-view)
+  );
+  scroll-snap-align: start;
   text-align: center;
+}
+
+/* Flechas + dots en una sola fila bajo la pista, para no tapar las fotos. */
+.team-nav {
+  align-items: center;
+  display: flex;
+  gap: clamp(16px, 2vw, 26px);
+  justify-content: center;
+  margin-top: clamp(26px, 3vw, 38px);
+}
+
+.team-arrow {
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(164, 123, 54, 0.45);
+  border-radius: 50%;
+  color: var(--gold);
+  cursor: pointer;
+  display: flex;
+  height: clamp(40px, 4vw, 52px);
+  justify-content: center;
+  padding: 0;
+  transition: background-color 300ms ease, border-color 300ms ease,
+    opacity 300ms ease, transform 300ms ease;
+  width: clamp(40px, 4vw, 52px);
+}
+
+.team-arrow:hover:not(:disabled) {
+  background: rgba(164, 123, 54, 0.08);
+  border-color: var(--gold);
+}
+
+.team-arrow--prev:hover:not(:disabled) {
+  transform: translateX(-2px);
+}
+
+.team-arrow--next:hover:not(:disabled) {
+  transform: translateX(2px);
+}
+
+.team-arrow:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+/* Mismo pico fino que el carrusel de servicios; el translate compensa el
+   centro óptico del cuadrado rotado. */
+.team-arrow-chevron {
+  border-right: 1px solid currentColor;
+  border-top: 1px solid currentColor;
+  height: 9px;
+  width: 9px;
+}
+
+.team-arrow--next .team-arrow-chevron {
+  transform: translateX(-2px) rotate(45deg);
+}
+
+.team-arrow--prev .team-arrow-chevron {
+  transform: translateX(2px) rotate(-135deg);
+}
+
+.team-dots {
+  display: flex;
+  gap: 12px;
+}
+
+.team-dot {
+  background: transparent;
+  border: 1px solid rgba(164, 123, 54, 0.55);
+  border-radius: 50%;
+  cursor: pointer;
+  height: 9px;
+  padding: 0;
+  transition: background-color 300ms ease, transform 300ms ease;
+  width: 9px;
+}
+
+.team-dot:hover {
+  background: rgba(164, 123, 54, 0.35);
+}
+
+.team-dot.is-active {
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: scale(1.15);
 }
 
 .team-photo {
@@ -6187,8 +6320,8 @@ button {
     width: 100%;
   }
 
-  .team-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .team-track {
+    --team-per-view: 2;
   }
 }
 
@@ -6196,18 +6329,11 @@ button {
    horizontal con swipe + dots. Se oculta la columna lateral de índices y los
    dots de progreso del header. */
 @media (max-width: 767px) {
-  /* El equipo pasa a un slider horizontal de una sola fila: swipe con
-     scroll-snap y las fotos asoman parcialmente para invitar a deslizar. */
-  .team-grid {
+  /* En móvil manda el dedo: las fotos asoman parcialmente para invitar a
+     deslizar y las flechas sobran. */
+  .team-track {
     --team-pad: clamp(22px, 5vw, 72px);
-    display: flex;
-    grid-template-columns: none;
-    gap: 14px;
-    max-width: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    --team-gap: 14px;
     /* Sangra hasta el borde de la pantalla anulando el padding de .section
        y reaplicándolo como padding interno para alinear la primera card. */
     margin-inline: calc(var(--team-pad) * -1);
@@ -6215,13 +6341,12 @@ button {
     scroll-padding-left: var(--team-pad);
   }
 
-  .team-grid::-webkit-scrollbar {
-    display: none;
+  .team-card {
+    flex-basis: 64%;
   }
 
-  .team-card {
-    flex: 0 0 64%;
-    scroll-snap-align: start;
+  .team-nav {
+    display: none;
   }
 
   /* En móvil, la barra 01–03 se reemplaza por dots tipo "pill activo". */

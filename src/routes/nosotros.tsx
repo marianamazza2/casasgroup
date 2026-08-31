@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Footer } from '../components/Footer'
 import { MisionTabs } from '../components/nosotros/MisionTabs'
 import { ValoresSlider } from '../components/nosotros/ValoresSlider'
+import { TeamSlider } from '../components/nosotros/TeamSlider'
 import { JsonLd } from '../components/JsonLd'
 import { breadcrumbSchema, organizationSchema, absoluteUrl } from '../lib/structuredData'
 
@@ -83,22 +84,34 @@ export const TEAM = [
       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
   },
   {
-    name: 'Javi Gallego',
-    role: 'Director Comercial',
+    name: 'Betsabé Caballero',
+    role: 'Asesora Inmobiliaria',
+    image:
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80',
+  },
+  {
+    name: 'Rafael Caballero',
+    role: 'Administrador de Comunidades',
     image:
       'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
   },
   {
-    name: 'Nombre Apellido',
-    role: 'Agente Inmobiliario',
-    image:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    name: 'Nombre Apellido',
-    role: 'Administración',
+    name: 'Iker Rentero',
+    role: 'Asesor Financiero',
     image:
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
+  },
+  {
+    name: 'Marcos Gómez',
+    role: 'Asesor Inmobiliario',
+    image:
+      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80',
+  },
+  {
+    name: 'Nicolle Pinzón',
+    role: 'Administradora',
+    image:
+      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80',
   },
 ]
 
@@ -164,20 +177,7 @@ function NosotrosPage() {
           <h2>Nuestro equipo</h2>
           <p>Conoce las personas detrás de Group Casas</p>
         </div>
-        <div className="team-grid">
-          {TEAM.map((member, i) => (
-            <article className="team-card" key={`${member.name}-${i}`}>
-              <div
-                className="team-photo"
-                style={{ backgroundImage: `url(${member.image})` }}
-                role="img"
-                aria-label={member.name}
-              />
-              <h3 className="team-name">{member.name}</h3>
-              <p className="team-role">{member.role}</p>
-            </article>
-          ))}
-        </div>
+        <TeamSlider members={TEAM} />
       </section>
 
       <motion.section
