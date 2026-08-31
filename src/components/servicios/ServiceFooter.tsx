@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Footer } from '../Footer'
 
 type ServiceId =
-  | 'administracion-de-fincas'
+  | 'administracion-de-comunidades'
   | 'hipotecas'
   | 'cambio-de-suministros'
   | 'seguros'
@@ -24,12 +24,12 @@ type Service = {
 // siempre en cuatro tarjetas.
 const SERVICES: Service[] = [
   {
-    id: 'administracion-de-fincas',
-    label: 'Administración de fincas',
+    id: 'administracion-de-comunidades',
+    label: 'Administración de comunidades',
     tag: 'Comunidades',
     image:
       'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80',
-    to: '/servicios/administracion-de-fincas',
+    to: '/servicios/administracion-de-comunidades',
   },
   {
     id: 'hipotecas',

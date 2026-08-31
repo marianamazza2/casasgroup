@@ -38,7 +38,7 @@ const STATIC_ROUTES = [
   '/vender',
   '/nosotros',
   '/contacto',
-  '/servicios/administracion-de-fincas',
+  '/servicios/administracion-de-comunidades',
   '/servicios/alarmas',
   '/servicios/cambio-de-suministros',
   '/servicios/hipotecas',

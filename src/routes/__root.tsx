@@ -6,7 +6,7 @@ import { useScrollRestoreRetry } from '../hooks/useScrollRestoreRetry'
 import { absoluteUrl } from '../lib/structuredData'
 
 const subMenuServices = [
-  { label: 'Administrar', gold: false, to: '/servicios/administracion-de-fincas' },
+  { label: 'Administrar', gold: false, to: '/servicios/administracion-de-comunidades' },
   { label: 'Alarmas', gold: false, to: '/servicios/alarmas' },
   { label: 'Alquilar', gold: false, to: '/propiedades', search: { query: '', mode: 'alquiler' as const } },
   { label: 'Hipotecas', gold: false, to: '/servicios/hipotecas' },
@@ -235,7 +235,7 @@ export const Route = createRootRoute({
       {
         name: 'description',
         content:
-          'Inmobiliaria en Barcelona: compra, venta y alquiler de viviendas. Hipotecas, seguros y administración de fincas. Valoración gratuita.',
+          'Inmobiliaria en Barcelona: compra, venta y alquiler de viviendas. Hipotecas, seguros y administración de comunidades. Valoración gratuita.',
       },
       { property: 'og:site_name', content: 'Group Casas' },
       { property: 'og:type', content: 'website' },

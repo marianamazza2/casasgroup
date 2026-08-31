@@ -44,7 +44,7 @@ export function Footer() {
           <p>Tu hogar empieza aqui.</p>
         </div>
         <FooterSection title="Servicios" className="footer-col-services">
-          <Link to="/servicios/administracion-de-fincas">Administrar</Link>
+          <Link to="/servicios/administracion-de-comunidades">Administrar</Link>
           <Link to="/servicios/alarmas">Alarmas</Link>
           <Link to="/servicios/hipotecas">Hipotecas</Link>
           <Link to="/servicios/reformas">Reformas</Link>

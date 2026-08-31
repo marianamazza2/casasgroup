@@ -1,5 +1,12 @@
 {
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/servicios/administracion-de-fincas",
+      "destination": "/servicios/administracion-de-comunidades",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",

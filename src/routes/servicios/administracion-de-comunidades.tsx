@@ -5,26 +5,26 @@ import { QueIncluyeCarousel } from '../../components/servicios/QueIncluyeCarouse
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 import { absoluteUrl } from '../../lib/structuredData'
 
-export const Route = createFileRoute('/servicios/administracion-de-fincas')({
+export const Route = createFileRoute('/servicios/administracion-de-comunidades')({
   head: () => ({
     meta: [
-      { title: 'Administración de fincas en Barcelona | Group Casas' },
+      { title: 'Administración de comunidades en Barcelona | Group Casas' },
       {
         name: 'description',
         content:
           'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia, cercanía y todo bajo control con Group Casas.',
       },
-      { property: 'og:title', content: 'Administración de fincas en Barcelona | Group Casas' },
+      { property: 'og:title', content: 'Administración de comunidades en Barcelona | Group Casas' },
       {
         property: 'og:description',
         content:
           'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia y cercanía con Group Casas.',
       },
-      { property: 'og:url', content: absoluteUrl('/servicios/administracion-de-fincas') },
+      { property: 'og:url', content: absoluteUrl('/servicios/administracion-de-comunidades') },
     ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/administracion-de-fincas') }],
+    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/administracion-de-comunidades') }],
   }),
-  component: AdministracionDeFincasPage,
+  component: AdministracionDeComunidadesPage,
 })
 
 const heroContainer = {
@@ -40,7 +40,7 @@ const heroItem = {
   },
 }
 
-function AdministracionDeFincasPage() {
+function AdministracionDeComunidadesPage() {
   const ctaRef = useRef<HTMLElement>(null)
   const [ctaActive, setCtaActive] = useState(false)
 
@@ -91,7 +91,7 @@ function AdministracionDeFincasPage() {
         </div>
       </section>
 
-      <ServiceFooter currentId="administracion-de-fincas" />
+      <ServiceFooter currentId="administracion-de-comunidades" />
     </main>
   )
 }
@@ -128,7 +128,7 @@ function AdmHero() {
         animate="show"
       >
         <motion.span className="sum-hero-eyebrow" variants={heroItem}>
-          Administración de fincas
+          Administración de comunidades
         </motion.span>
         <motion.h1 className="sum-hero-title sum-hero-title--two-line" variants={heroItem}>
           Tu comunidad<br />en buenas manos

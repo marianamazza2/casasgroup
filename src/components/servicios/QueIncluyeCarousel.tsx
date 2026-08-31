@@ -39,7 +39,7 @@ const SLIDES: Slide[] = [
     title: 'Equipo especializado',
     desc: 'Contamos con un administrador de fincas, un abogado especializado y un asesor dedicado que trabajan de forma coordinada para proteger los intereses de la comunidad.',
     image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80',
-    alt: 'Equipo de administración de fincas de Group Casas',
+    alt: 'Equipo de administración de comunidades de Group Casas',
   },
   {
     title: 'Portal online 24 horas',
@@ -134,7 +134,7 @@ export function QueIncluyeCarousel() {
       className="qi-carousel"
       role="group"
       aria-roledescription="carrusel"
-      aria-label="Qué incluye el servicio de administración de fincas"
+      aria-label="Qué incluye el servicio de administración de comunidades"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}

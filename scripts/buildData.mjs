@@ -323,7 +323,7 @@ const STATIC_ROUTES = [
   { path: '/vender', changefreq: 'monthly', priority: '0.8' },
   { path: '/contacto', changefreq: 'monthly', priority: '0.7' },
   { path: '/nosotros', changefreq: 'monthly', priority: '0.6' },
-  { path: '/servicios/administracion-de-fincas', changefreq: 'monthly', priority: '0.7' },
+  { path: '/servicios/administracion-de-comunidades', changefreq: 'monthly', priority: '0.7' },
   { path: '/servicios/alarmas', changefreq: 'monthly', priority: '0.7' },
   { path: '/servicios/cambio-de-suministros', changefreq: 'monthly', priority: '0.7' },
   { path: '/servicios/hipotecas', changefreq: 'monthly', priority: '0.7' },

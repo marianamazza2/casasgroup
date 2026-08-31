@@ -16,13 +16,13 @@ export const Route = createFileRoute('/')({
       {
         name: 'description',
         content:
-          'Compra, venta y alquiler de viviendas en Barcelona. Te acompañamos en hipotecas, seguros y administración de fincas. Valoración gratuita.',
+          'Compra, venta y alquiler de viviendas en Barcelona. Te acompañamos en hipotecas, seguros y administración de comunidades. Valoración gratuita.',
       },
       { property: 'og:title', content: 'Group Casas | Inmobiliaria en Barcelona' },
       {
         property: 'og:description',
         content:
-          'Compra, venta y alquiler de viviendas en Barcelona. Hipotecas, seguros y administración de fincas. Valoración gratuita.',
+          'Compra, venta y alquiler de viviendas en Barcelona. Hipotecas, seguros y administración de comunidades. Valoración gratuita.',
       },
       { property: 'og:url', content: absoluteUrl('/') },
     ],
@@ -73,7 +73,7 @@ const services = [
     description: 'Ofrecemos una gestion integral de comunidades basada en la excelencia operativa: administracion, mantenimiento, atencion a propietarios y coordinacion de todos los servicios.',
     image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
     tag: 'Comunidades',
-    to: '/servicios/administracion-de-fincas',
+    to: '/servicios/administracion-de-comunidades',
   },
   {
     icon: 'SE',
