@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VenderRouteImport } from './routes/vender'
+import { Route as TrabajaConNosotrosRouteImport } from './routes/trabaja-con-nosotros'
 import { Route as NosotrosRouteImport } from './routes/nosotros'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as IndexRouteImport } from './routes/index'
@@ -25,6 +26,11 @@ import { Route as PropiedadesIdRouteImport } from './routes/propiedades/$id'
 const VenderRoute = VenderRouteImport.update({
   id: '/vender',
   path: '/vender',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrabajaConNosotrosRoute = TrabajaConNosotrosRouteImport.update({
+  id: '/trabaja-con-nosotros',
+  path: '/trabaja-con-nosotros',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NosotrosRoute = NosotrosRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
   '/nosotros': typeof NosotrosRoute
+  '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
   '/servicios/administracion-de-comunidades': typeof ServiciosAdministracionDeComunidadesRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
   '/nosotros': typeof NosotrosRoute
+  '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
   '/servicios/administracion-de-comunidades': typeof ServiciosAdministracionDeComunidadesRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
   '/nosotros': typeof NosotrosRoute
+  '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
   '/servicios/administracion-de-comunidades': typeof ServiciosAdministracionDeComunidadesRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contacto'
     | '/nosotros'
+    | '/trabaja-con-nosotros'
     | '/vender'
     | '/propiedades/$id'
     | '/servicios/administracion-de-comunidades'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contacto'
     | '/nosotros'
+    | '/trabaja-con-nosotros'
     | '/vender'
     | '/propiedades/$id'
     | '/servicios/administracion-de-comunidades'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/'
     | '/contacto'
     | '/nosotros'
+    | '/trabaja-con-nosotros'
     | '/vender'
     | '/propiedades/$id'
     | '/servicios/administracion-de-comunidades'
@@ -177,6 +189,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactoRoute: typeof ContactoRoute
   NosotrosRoute: typeof NosotrosRoute
+  TrabajaConNosotrosRoute: typeof TrabajaConNosotrosRoute
   VenderRoute: typeof VenderRoute
   PropiedadesIdRoute: typeof PropiedadesIdRoute
   ServiciosAdministracionDeComunidadesRoute: typeof ServiciosAdministracionDeComunidadesRoute
@@ -195,6 +208,13 @@ declare module '@tanstack/react-router' {
       path: '/vender'
       fullPath: '/vender'
       preLoaderRoute: typeof VenderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trabaja-con-nosotros': {
+      id: '/trabaja-con-nosotros'
+      path: '/trabaja-con-nosotros'
+      fullPath: '/trabaja-con-nosotros'
+      preLoaderRoute: typeof TrabajaConNosotrosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/nosotros': {
@@ -281,6 +301,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactoRoute: ContactoRoute,
   NosotrosRoute: NosotrosRoute,
+  TrabajaConNosotrosRoute: TrabajaConNosotrosRoute,
   VenderRoute: VenderRoute,
   PropiedadesIdRoute: PropiedadesIdRoute,
   ServiciosAdministracionDeComunidadesRoute:

@@ -179,11 +179,12 @@ button {
   transition: border-color 180ms ease, color 180ms ease;
 }
 
-/* El boton de Servicios usa la misma caja que los <a>: la etiqueta interna ya
-   aporta el padding-bottom de 3px, asi que quitamos el extra del boton para
-   que no quede mas arriba que el resto de opciones. */
+/* El boton de Servicios debe tener la misma altura de caja que los <a>: el
+   padding-bottom (3px) y el borde (1px) viven en el span interno, que al ser
+   inline no aporta altura, asi que los replicamos aqui. Si no, la caja queda
+   4px mas baja y align-items:center la empuja 2px hacia abajo. */
 .site-nav nav > .nav-services-wrapper > button {
-  padding-bottom: 0;
+  padding-bottom: 4px;
 }
 
 /* The underline sits on the text only, so the Servicios arrow is excluded */
@@ -5766,6 +5767,30 @@ button {
   margin-bottom: 44px;
 }
 
+/* Banda de cierre del equipo → /trabaja-con-nosotros. Comparte el crema de
+   .team (se lee como el final de ese bloque, no como una sección nueva) y se
+   separa con un filete. El CTA es el botón dorado estándar (.button-link),
+   igual que en el resto del sitio. */
+.nosotros-join {
+  align-items: center;
+  background: var(--warm);
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2.4vw, 26px);
+  padding: clamp(38px, 5vw, 60px) clamp(22px, 5vw, 72px);
+  text-align: center;
+}
+
+.nosotros-join-text {
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.2;
+  margin: 0;
+  max-width: 22ch;
+}
+
 /* El equipo es un slider horizontal en todos los tamaños. La pista arranca
    siempre en scrollLeft 0, así la primera vista muestra a Angie y Betsabé en
    desktop y a Angie en móvil. Cuántas fichas caben lo decide --team-per-view;
@@ -6049,91 +6074,224 @@ button {
 }
 
 /* ---------------------------------------------------------------------------
-   Trabaja con nosotros — bloque oscuro a dos columnas tras "Nuestro equipo".
-   Mismo lenguaje visual que la sección "Por qué con nosotros" de seguros. */
-.trabaja {
-  align-items: stretch;
+   Trabaja con nosotros (/trabaja-con-nosotros) — página propia. El texto largo
+   del cliente va en texto corrido con la pregunta como entradilla (.tcn-qa) y
+   el recorrido profesional en tres tarjetas numeradas (.tcn-puesto). */
+
+/* Cabecera editorial: mismos valores que .vender-why-head / .vender-why-title
+   ("Por qué vender con nosotros"), que es el tratamiento que aprobó el cliente
+   — antetítulo dorado, titular en tinta (no en dorado, ni en mayúsculas) y
+   filete dorado debajo. */
+.tcn-qa-section {
+  background:
+    radial-gradient(115% 60% at 50% -8%, rgba(164, 123, 54, 0.1) 0%, transparent 55%),
+    var(--warm);
+  padding: clamp(56px, 8vw, 104px) clamp(22px, 6vw, 80px);
+}
+
+.tcn-qa-head {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: clamp(40px, 6vw, 68px);
+  text-align: center;
+}
+
+.tcn-eyebrow {
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.tcn-qa-title {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 500;
+  margin: 0;
+}
+
+.tcn-line {
+  background: var(--gold);
+  display: block;
+  height: 1px;
+  width: 36px;
+}
+
+/* Texto corrido en una columna centrada; los párrafos se separan con el mismo
+   filete que el bloque editorial de vender. */
+.tcn-qa {
+  color: var(--text);
+  font-size: clamp(15px, 1.15vw, 16px);
+  line-height: 1.85;
+  margin-inline: auto;
+  max-width: 760px;
+}
+
+.tcn-qa p {
+  margin: 0;
+  padding-top: clamp(20px, 2.4vw, 28px);
+}
+
+.tcn-qa p:first-child {
+  padding-top: 0;
+}
+
+.tcn-qa p + p {
+  border-top: 1px solid var(--line);
+  margin-top: clamp(20px, 2.4vw, 28px);
+}
+
+/* La pregunta: mismo peso y cuerpo que el resto: solo cambia el color. */
+.tcn-qa strong {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* ── Los tres puestos ─────────────────────────────────────────────────── */
+.tcn-puestos {
   background:
     radial-gradient(120% 80% at 82% -10%, rgba(164, 123, 54, 0.16) 0%, transparent 55%),
     #1c1409;
-  display: grid;
-  grid-template-columns: 40% 1fr;
-  min-height: clamp(360px, 50vh, 480px);
-  overflow: hidden;
+  padding: clamp(58px, 8vw, 94px) clamp(22px, 5vw, 72px);
 }
 
-.trabaja-media {
-  overflow: hidden;
-  position: relative;
-}
-
-.trabaja-img {
-  background-position: center;
-  background-size: cover;
-  inset: -10% 0;
-  position: absolute;
-}
-
-.trabaja-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(48px, 5vw, 80px) clamp(28px, 5vw, 72px);
-}
-
-.trabaja-content .section-heading {
-  margin-bottom: clamp(18px, 3vh, 26px);
-}
-
-.trabaja-content .section-heading h2 {
+.tcn-puestos .section-heading h2 {
   color: #f7f1e6;
 }
 
-.trabaja-text {
+.tcn-puestos .section-heading p {
   color: rgba(247, 241, 230, 0.72);
-  font-size: 15px;
-  line-height: 1.7;
-  margin: 0 0 clamp(20px, 3vh, 28px);
-  max-width: 520px;
+  margin-inline: auto;
+  max-width: 58ch;
 }
 
-.trabaja-puntos {
-  list-style: none;
-  margin: 0 0 clamp(26px, 4vh, 36px);
-  max-width: 520px;
-  padding: 0;
+.tcn-puestos-grid {
+  display: grid;
+  gap: clamp(14px, 2vw, 22px);
+  grid-template-columns: repeat(3, 1fr);
+  margin: clamp(38px, 5vw, 58px) auto 0;
+  max-width: 1180px;
 }
 
-.trabaja-puntos li {
-  color: rgba(247, 241, 230, 0.82);
-  font-size: 14px;
-  line-height: 1.55;
-  padding: 9px 0 9px 26px;
+.tcn-puesto {
+  border: 1px solid rgba(247, 241, 230, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: clamp(380px, 42vw, 520px);
+  overflow: hidden;
   position: relative;
 }
 
-.trabaja-puntos li::before {
-  color: var(--gold);
-  content: '→';
-  left: 0;
+.tcn-puesto-img {
+  background-position: center;
+  background-size: cover;
+  inset: 0;
+  position: absolute;
+  transition: transform 900ms ease;
+}
+
+.tcn-puesto:hover .tcn-puesto-img {
+  transform: scale(1.05);
+}
+
+/* Degradado de abajo arriba: la foto respira arriba y el texto siempre tiene
+   contraste suficiente, sin depender del hover. */
+.tcn-puesto-overlay {
+  background: linear-gradient(
+    to top,
+    rgb(12 9 5 / 92%) 0%,
+    rgb(12 9 5 / 72%) 38%,
+    rgb(12 9 5 / 18%) 72%,
+    transparent 100%
+  );
+  inset: 0;
   position: absolute;
 }
 
-.trabaja-actions {
+.tcn-puesto-body {
+  padding: clamp(20px, 2.2vw, 26px);
+  position: relative;
+  z-index: 1;
+}
+
+.tcn-puesto-num {
+  color: var(--gold);
+  display: block;
+  font-family: var(--serif);
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin-bottom: 10px;
+  /* El número queda a media altura de la foto: donde la imagen aclara (p.ej.
+     una pared blanca) el degradado solo no basta para que se lea. */
+  text-shadow: 0 1px 10px rgb(12 9 5 / 85%);
+}
+
+/* 24px fijos: el nombre del puesto tiene que caber en una sola línea, así que
+   el cuerpo no escala con el viewport. Quien se adapta es la rejilla (abajo). */
+.tcn-puesto-title {
+  color: #f7f1e6;
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+.tcn-puesto-desc {
+  color: rgba(247, 241, 230, 0.78);
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── CTA final ────────────────────────────────────────────────────────── */
+.tcn-cta-actions {
+  align-items: center;
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  justify-content: center;
+}
+
+.tcn-cta-link {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 700ms ease;
+}
+
+.adm-cta.is-active .tcn-cta-link {
+  color: rgb(255 255 255 / 72%);
+}
+
+.tcn-cta-link:hover {
+  color: var(--gold);
+}
+
+/* Por debajo de 1280px las tres columnas dejan las cards demasiado estrechas
+   para "Responsable de equipo" en 24px, así que pasamos a una sola columna
+   antes de que el titular se parta. */
+@media (max-width: 1279px) {
+  .tcn-puestos-grid {
+    grid-template-columns: 1fr;
+    max-width: 760px;
+  }
+
+  .tcn-puesto {
+    min-height: clamp(320px, 62vw, 440px);
+  }
 }
 
 @media (max-width: 900px) {
-  .trabaja {
-    grid-template-columns: 1fr;
-  }
-
-  .trabaja-media {
-    min-height: 240px;
-    order: -1;
-  }
-
   .brand-story {
     flex-direction: column;
   }
@@ -6150,6 +6308,16 @@ button {
 
 /* Ajustes de móvil: equipo con swipe, misión con dots y el texto de valores
    a menor escala. */
+/* En pantallas estrechas 24px no dan para "Responsable de equipo" en una línea
+   (harían falta ~305px de hueco y hay 274). Bajamos lo justo el cuerpo y el
+   tracking en ese tramo para no partir el nombre del puesto. */
+@media (max-width: 430px) {
+  .tcn-puesto-title {
+    font-size: 21px;
+    letter-spacing: 0.02em;
+  }
+}
+
 @media (max-width: 767px) {
   /* En móvil manda el dedo: las fotos asoman parcialmente para invitar a
      deslizar y las flechas sobran. */

@@ -30,12 +30,6 @@ export const Route = createFileRoute('/nosotros')({
   component: NosotrosPage,
 })
 
-export const TRABAJA_PUNTOS = [
-  'Formación continua y plan de carrera',
-  'Un equipo cercano que apuesta por las personas',
-  'Proyecto en crecimiento con marca propia',
-]
-
 // Valores: un solo texto corrido (literal, tal y como lo aprobó Angie). Los
 // cortes de párrafo son solo para darle aire de lectura, no secciones.
 export const VALORES_TEXTO = [
@@ -162,50 +156,15 @@ function NosotrosPage() {
         <TeamSlider members={TEAM} />
       </section>
 
-      <motion.section
-        id="trabaja"
-        className="trabaja"
-        initial={{ opacity: 0, y: 28 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.25 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <div className="trabaja-media" aria-hidden="true">
-          <div
-            className="trabaja-img"
-            style={{
-              backgroundImage:
-                'url(https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80)',
-            }}
-          />
-        </div>
-
-        <div className="trabaja-content">
-          <div className="section-heading">
-            <span>Únete al equipo</span>
-            <h2>Trabaja con nosotros</h2>
-          </div>
-          <p className="trabaja-text">
-            Buscamos personas que compartan nuestra forma de entender el sector:
-            con ambición, cercanía y ganas de hacer las cosas excepcionalmente
-            bien. Si quieres crecer en un equipo que cuida cada detalle, queremos
-            conocerte.
-          </p>
-          <ul className="trabaja-puntos">
-            {TRABAJA_PUNTOS.map((punto) => (
-              <li key={punto}>{punto}</li>
-            ))}
-          </ul>
-          <div className="trabaja-actions">
-            <a
-              className="button-link"
-              href="mailto:rrhh@groupcasas.com?subject=Candidatura espontánea"
-            >
-              Envíanos tu CV →
-            </a>
-          </div>
-        </div>
-      </motion.section>
+      {/* Cierre del bloque de equipo: la puerta de entrada a /trabaja-con-nosotros. */}
+      <section className="nosotros-join">
+        <p className="nosotros-join-text">
+          ¿Te gustaría formar parte de este equipo?
+        </p>
+        <Link className="button-link" to="/trabaja-con-nosotros">
+          Trabaja con nosotros →
+        </Link>
+      </section>
 
       <TrayectoriaTimeline items={TIMELINE} />
 
