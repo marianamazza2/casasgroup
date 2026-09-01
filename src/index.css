@@ -8702,167 +8702,81 @@ button {
   margin: 0;
 }
 
-/* --- "Por qué vender con nosotros": split editorial (imagen sticky + lista) --- */
-.vw2-grid {
+/* --- "Por qué vender con nosotros": bloque editorial (foto sticky + texto) --- */
+/* Sin `align-items: start`: la columna de la foto tiene que estirarse a lo
+   alto de la fila para que el sticky tenga recorrido. */
+.vw3-grid {
   display: grid;
-  gap: clamp(28px, 5vw, 72px);
-  grid-template-columns: 0.9fr 1fr;
+  gap: clamp(32px, 5vw, 76px);
+  grid-template-columns: 0.85fr 1fr;
   margin: 0 auto;
-  max-width: 1100px;
+  max-width: 1120px;
 }
 
-.vw2-media-sticky {
+.vw3-media-sticky {
   position: sticky;
-  top: calc(var(--nav-h) + 28px);
+  top: calc(var(--nav-h) + 32px);
 }
 
-.vw2-img {
+/* La foto va acompañada de un marco dorado desplazado (queda detrás y asoma
+   por abajo-izquierda) para dar aire editorial sin recargar la sección. */
+.vw3-frame {
+  position: relative;
+}
+
+.vw3-frame-outline {
+  border: 1px solid rgb(164 123 54 / 45%);
+  border-radius: 18px;
+  bottom: clamp(-22px, -2vw, -14px);
+  left: clamp(-22px, -2vw, -14px);
+  position: absolute;
+  right: clamp(14px, 2vw, 22px);
+  top: clamp(14px, 2vw, 22px);
+}
+
+.vw3-img {
   background-position: center;
   background-size: cover;
   border-radius: 18px;
-  box-shadow: 0 30px 60px -34px rgba(20, 16, 10, 0.55);
-  height: min(74vh, 640px);
-  overflow: hidden;
+  box-shadow: 0 30px 60px -34px rgb(20 16 10 / 55%);
+  height: min(66vh, 560px);
   position: relative;
 }
 
-/* Degradado inferior para que el número/título resalten sobre la foto */
-.vw2-img::after {
-  background: linear-gradient(to top, rgba(20, 16, 10, 0.74) 0%, transparent 52%);
-  content: '';
-  inset: 0;
-  position: absolute;
+.vw3-copy {
+  padding-top: clamp(0px, 1vw, 10px);
 }
 
-.vw2-overlay {
-  bottom: clamp(20px, 3vw, 34px);
-  left: clamp(20px, 3vw, 34px);
-  position: absolute;
-  right: clamp(20px, 3vw, 34px);
-  z-index: 1;
-}
-
-.vw2-overlay-num {
-  color: #d8b057;
-  display: block;
-  font-family: var(--serif);
-  font-size: clamp(48px, 6vw, 84px);
-  font-weight: 500;
-  line-height: 0.9;
-}
-
-.vw2-overlay-title {
-  color: #f7f1e6;
-  display: block;
-  font-family: var(--serif);
-  font-size: clamp(18px, 2vw, 24px);
-  margin-top: 8px;
-  opacity: 0.92;
-}
-
-.vw2-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.vw2-item {
-  border-top: 1px solid var(--line);
-  display: flex;
-  gap: clamp(14px, 1.6vw, 22px);
-  opacity: 0.34;
-  padding: clamp(28px, 5vh, 56px) 0;
-  transition: opacity 400ms ease;
-}
-
-.vw2-item:last-child {
-  border-bottom: 1px solid var(--line);
-}
-
-.vw2-item.is-active {
-  opacity: 1;
-}
-
-.vw2-num {
-  -webkit-text-stroke: 1px rgba(164, 123, 54, 0.55);
-  color: transparent;
-  flex-shrink: 0;
-  font-family: var(--serif);
-  font-size: clamp(24px, 2.8vw, 34px);
-  font-weight: 500;
-  line-height: 1;
-  transition: color 400ms ease, -webkit-text-stroke-color 400ms ease;
-  width: clamp(38px, 4vw, 52px);
-}
-
-.vw2-item.is-active .vw2-num {
-  -webkit-text-stroke-color: var(--gold);
-  color: var(--gold);
-}
-
-.vw2-title {
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: clamp(21px, 2.4vw, 30px);
-  font-weight: 500;
-  line-height: 1.2;
-  margin: 0 0 8px;
-}
-
-.vw2-desc {
+.vw3-text {
   color: var(--text);
-  font-size: clamp(14px, 1.3vw, 16px);
-  line-height: 1.7;
+  font-size: clamp(15px, 1.15vw, 16px);
+  line-height: 1.85;
+}
+
+.vw3-text p {
   margin: 0;
-  max-width: 46ch;
-}
-
-/* Slider móvil: oculto en desktop (ahí manda el split sticky + lista) */
-.vw2-slider {
-  display: none;
-}
-
-.vw2-slide {
-  background-position: center;
-  background-size: cover;
-  border-radius: 12px;
-  /* La sombra tiene que caber en el padding inferior del slider (que recorta
-     por el overflow-x): con un desplazamiento grande se cortaba en seco y
-     dejaba una banda gris bajo las tarjetas. Extensión hacia abajo =
-     desplazamiento + blur/2 + spread = 14 + 14 - 18 = 10px. */
-  box-shadow: 0 14px 28px -18px rgba(20, 16, 10, 0.45);
-  flex: 0 0 82%;
-  height: clamp(260px, 44vh, 360px);
-  overflow: hidden;
+  padding-top: clamp(20px, 2.4vw, 28px);
   position: relative;
-  scroll-snap-align: center;
 }
 
-.vw2-slide-overlay .vw2-overlay-num {
-  color: #fff;
+.vw3-text p:first-child {
+  padding-top: 0;
 }
 
-.vw2-slide::after {
-  background: linear-gradient(to top, rgba(20, 16, 10, 0.78) 0%, transparent 56%);
-  content: '';
-  inset: 0;
-  position: absolute;
+.vw3-text p + p {
+  border-top: 1px solid var(--line);
+  margin-top: clamp(20px, 2.4vw, 28px);
 }
 
-.vw2-slide-overlay {
-  bottom: clamp(20px, 5vw, 30px);
-  left: clamp(20px, 5vw, 28px);
-  position: absolute;
-  right: clamp(20px, 5vw, 28px);
-  z-index: 1;
+/* Frase clave de cada párrafo: ancla visual para quien lee en diagonal, pero
+   sin romper el texto corrido que pidió el cliente (no es un listado). */
+.vw3-text strong {
+  color: var(--gold);
+  font-weight: 600;
 }
 
-.vw2-slide-desc {
-  color: #f0e8da;
-  font-size: 15px;
-  line-height: 1.6;
-  margin: 10px 0 0;
-  opacity: 0.88;
+.vw3-toggle {
+  display: none;
 }
 
 @media (max-width: 860px) {
@@ -8927,24 +8841,36 @@ button {
     overflow: hidden;
   }
 
-  /* En móvil ocultamos el split (imagen + lista) y mostramos el slider */
-  .vw2-grid {
+  /* En móvil el bloque pasa a una columna: foto arriba y texto debajo. */
+  .vw3-grid {
+    gap: clamp(28px, 7vw, 40px);
+    grid-template-columns: 1fr;
+  }
+
+  .vw3-media-sticky {
+    position: static;
+  }
+
+  .vw3-img {
+    height: clamp(220px, 40vh, 300px);
+  }
+
+  .vw3-frame-outline {
+    bottom: -12px;
+    left: -12px;
+    right: 12px;
+    top: 12px;
+  }
+
+  /* El texto es largo para una pantalla de móvil: se dejan los dos primeros
+     párrafos y el resto se despliega con "Ver más". */
+  .vw3-text.is-collapsed p:nth-child(n + 3) {
     display: none;
   }
 
-  .vw2-slider {
-    display: flex;
-    gap: 16px;
-    margin: 0 -20px;
-    overflow-x: auto;
-    padding: 4px 20px 20px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Ocultar la barra de scroll manteniendo el desplazamiento táctil */
-  .vw2-slider::-webkit-scrollbar {
-    display: none;
+  .vw3-toggle {
+    display: inline-flex;
+    margin-top: 18px;
   }
 }
 

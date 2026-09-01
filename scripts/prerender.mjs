@@ -42,6 +42,7 @@ const STATIC_ROUTES = [
   '/servicios/alarmas',
   '/servicios/cambio-de-suministros',
   '/servicios/hipotecas',
+  '/servicios/reformas',
   '/servicios/seguros',
 ]
 

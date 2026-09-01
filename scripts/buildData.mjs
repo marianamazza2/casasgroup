@@ -327,6 +327,7 @@ const STATIC_ROUTES = [
   { path: '/servicios/alarmas', changefreq: 'monthly', priority: '0.7' },
   { path: '/servicios/cambio-de-suministros', changefreq: 'monthly', priority: '0.7' },
   { path: '/servicios/hipotecas', changefreq: 'monthly', priority: '0.7' },
+  { path: '/servicios/reformas', changefreq: 'monthly', priority: '0.7' },
   { path: '/servicios/seguros', changefreq: 'monthly', priority: '0.7' },
 ]
 

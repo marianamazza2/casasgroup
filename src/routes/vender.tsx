@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
+import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
 import { Footer } from '../components/Footer'
 import { FormSelect } from '../components/vender/FormSelect'
+import { TextToggle } from '../components/TextToggle'
 import { absoluteUrl } from '../lib/structuredData'
 
 export const Route = createFileRoute('/vender')({
@@ -58,13 +59,30 @@ const PROCESO = [
   },
 ]
 
-const VENTAJAS = [
-  { icon: '★', title: 'Valoración profesional', desc: 'Estudio de mercado exhaustivo para determinar el precio óptimo.', img: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80' },
-  { icon: '⌂', title: 'Marketing premium', desc: 'Fotografía profesional, tours virtuales y difusión en portales.', img: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80' },
-  { icon: '♡', title: 'Gestión de visitas', desc: 'Filtramos y gestionamos visitas con compradores cualificados.', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80' },
-  { icon: '⚖', title: 'Asesoría legal', desc: 'Te acompañamos hasta la firma en notaría.', img: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=80' },
-  { icon: '✦', title: 'Negociación experta', desc: 'Conseguimos las mejores condiciones para tu venta.', img: 'https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=1200&q=80' },
-  { icon: '⚡', title: 'Rapidez', desc: 'Vendemos tu inmueble en el menor tiempo posible al mejor precio.', img: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1200&q=80' },
+// "Por qué vender con nosotros": el cliente pidió texto corrido en lugar de un
+// listado. Cada párrafo arranca con una frase clave (en dorado) que hace de
+// ancla para quien lee en diagonal, pero se lee como un solo texto.
+const WHY_PARRAFOS = [
+  {
+    key: 'portales',
+    lead: 'Publicación en los principales portales inmobiliarios de España.',
+    text: 'Tu vivienda se anuncia allí donde busca la mayoría de compradores del país, además de en nuestros propios canales y entre los clientes que ya tenemos en cartera, para que tenga la máxima visibilidad desde el primer día.',
+  },
+  {
+    key: 'asesor',
+    lead: 'Acompañamiento de un asesor personalizado durante todo el proceso.',
+    text: 'Una única persona que conoce tu vivienda, resuelve tus dudas, organiza las visitas y te mantiene informado desde la valoración hasta la firma en notaría.',
+  },
+  {
+    key: 'financiero',
+    lead: 'Colaboración estrecha con nuestro departamento financiero para seleccionar a los mejores compradores.',
+    text: 'Estudiamos junto a ellos la solvencia de cada interesado antes de aceptar una oferta, para cerrar con quien de verdad puede comprar y evitar operaciones que se caen semanas después.',
+  },
+  {
+    key: 'marketing',
+    lead: 'Realización de una campaña de marketing específica para cada vivienda.',
+    text: 'Ninguna casa se vende igual que la de al lado: fotografía profesional, presentación cuidada del inmueble y un mensaje pensado para el perfil de comprador que buscamos en cada caso.',
+  },
 ]
 
 function VenderPage() {
@@ -244,33 +262,15 @@ function VenderPage() {
   )
 }
 
-// "Por qué vender con nosotros": split editorial. La foto queda fija (sticky)
-// mientras la lista scrollea; la ventaja que cruza el centro del viewport se
-// resalta y el resto se atenúa. El número/título sobre la foto acompañan.
-const VW2_IMG =
+// "Por qué vender con nosotros": bloque editorial. Una foto en sticky a la
+// izquierda y, a la derecha, el texto corrido que explica el servicio (sin
+// listado, tal y como pidió el cliente). En móvil la foto pasa arriba y el
+// texto se colapsa tras el segundo párrafo con "Ver más".
+const VW3_IMG =
   'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80'
 
 function PorQueVender() {
-  const [active, setActive] = useState(0)
-  const itemRefs = useRef<Array<HTMLLIElement | null>>([])
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActive(Number((entry.target as HTMLElement).dataset.index))
-          }
-        }
-      },
-      // Banda de detección estrecha en el centro: solo una ventaja activa.
-      { rootMargin: '-45% 0px -45% 0px', threshold: 0 },
-    )
-    for (const el of itemRefs.current) {
-      if (el) observer.observe(el)
-    }
-    return () => observer.disconnect()
-  }, [])
+  const [expanded, setExpanded] = useState(false)
 
   return (
     <section className="vender-why">
@@ -280,72 +280,41 @@ function PorQueVender() {
         <span className="vender-line" aria-hidden="true" />
       </div>
 
-      <div className="vw2-grid">
-        <div className="vw2-media" aria-hidden="true">
-          <div className="vw2-media-sticky">
-            <div
-              className="vw2-img"
-              style={{ backgroundImage: `url(${VW2_IMG})` }}
-            >
-              <div className="vw2-overlay">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={active}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <span className="vw2-overlay-num">
-                      {String(active + 1).padStart(2, '0')}
-                    </span>
-                    <span className="vw2-overlay-title">{VENTAJAS[active].title}</span>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+      <div className="vw3-grid">
+        <div className="vw3-media">
+          <div className="vw3-media-sticky">
+            <div className="vw3-frame">
+              <span className="vw3-frame-outline" aria-hidden="true" />
+              <div className="vw3-img" style={{ backgroundImage: `url(${VW3_IMG})` }} />
             </div>
           </div>
         </div>
 
-        <ol className="vw2-list">
-          {VENTAJAS.map((item, i) => (
-            <li
-              key={item.title}
-              data-index={i}
-              ref={(el) => {
-                itemRefs.current[i] = el
-              }}
-              className={`vw2-item${active === i ? ' is-active' : ''}`}
-            >
-              <span className="vw2-num" aria-hidden="true">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <div className="vw2-body">
-                <h3 className="vw2-title">{item.title}</h3>
-                <p className="vw2-desc">{item.desc}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      {/* Móvil: slider horizontal de tarjetas (imagen + número/título/desc) */}
-      <div className="vw2-slider">
-        {VENTAJAS.map((item, i) => (
-          <article
-            key={item.title}
-            className="vw2-slide"
-            style={{ backgroundImage: `url(${item.img})` }}
+        <div className="vw3-copy">
+          <div
+            id="vender-why-text"
+            className={`vw3-text${expanded ? ' is-expanded' : ' is-collapsed'}`}
           >
-            <div className="vw2-slide-overlay">
-              <span className="vw2-overlay-num">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span className="vw2-overlay-title">{item.title}</span>
-              <p className="vw2-slide-desc">{item.desc}</p>
-            </div>
-          </article>
-        ))}
+            {WHY_PARRAFOS.map((item) => (
+              <motion.p
+                key={item.key}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <strong>{item.lead}</strong> {item.text}
+              </motion.p>
+            ))}
+          </div>
+
+          <TextToggle
+            expanded={expanded}
+            onToggle={() => setExpanded((v) => !v)}
+            controls="vender-why-text"
+            className="vw3-toggle"
+          />
+        </div>
       </div>
     </section>
   )
