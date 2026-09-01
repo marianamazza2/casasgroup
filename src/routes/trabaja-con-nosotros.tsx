@@ -189,6 +189,25 @@ function Preguntas() {
   )
 }
 
+// La entrada se dispara desde la pista, no desde cada card: en el slider de
+// móvil la segunda card solo asoma un ~28%, así que con un umbral propio por
+// card nunca llegaba a revelarse y el "peek" que invita a deslizar quedaba en
+// negro. Escalonando desde el contenedor se ven las tres y el desfase de
+// desktop se mantiene.
+const puestosTrack = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+}
+
+const puestoItem = {
+  hidden: { opacity: 0, y: 28 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+  },
+}
+
 // Los tres puestos, numerados como el recorrido que son: 01 → 02 → 03.
 function Puestos() {
   return (
@@ -203,19 +222,18 @@ function Puestos() {
         </p>
       </div>
 
-      <div className="tcn-puestos-grid">
+      <motion.div
+        className="tcn-puestos-grid"
+        variants={puestosTrack}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+      >
         {PUESTOS.map((puesto, i) => (
           <motion.article
             className="tcn-puesto"
             key={puesto.title}
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: 0.6,
-              delay: i * 0.1,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            variants={puestoItem}
           >
             <div
               className="tcn-puesto-img"
@@ -232,7 +250,7 @@ function Puestos() {
             </div>
           </motion.article>
         ))}
-      </div>
+      </motion.div>
     </section>
   )
 }

@@ -6179,6 +6179,8 @@ button {
 
 .tcn-puesto {
   border: 1px solid rgba(247, 241, 230, 0.12);
+  /* Mismo radio que .team-photo y .property-card. */
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -6291,6 +6293,52 @@ button {
   }
 }
 
+/* En móvil los tres puestos son un slider: se pasan con el dedo y la siguiente
+   card asoma por el borde para invitar a deslizar. Mismo recurso que el equipo
+   de /nosotros (.team-track), sin flechas ni dots: manda el gesto. */
+@media (max-width: 767px) {
+  .tcn-puestos-grid {
+    --tcn-pad: clamp(22px, 5vw, 72px);
+    display: flex;
+    gap: 14px;
+    max-width: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    /* Sangra hasta el borde de la pantalla anulando el padding de la sección y
+       reaplicándolo como padding interno para alinear la primera card. */
+    margin-inline: calc(var(--tcn-pad) * -1);
+    padding-inline: var(--tcn-pad);
+    scroll-padding-left: var(--tcn-pad);
+  }
+
+  .tcn-puestos-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tcn-puesto {
+    flex: 0 0 82%;
+    min-height: clamp(400px, 112vw, 470px);
+    scroll-snap-align: start;
+  }
+
+  /* La card del slider es más estrecha que la de una columna, así que el
+     cuerpo se ajusta para que el nombre del puesto siga en una sola línea. */
+  .tcn-puesto-body {
+    padding: 18px;
+  }
+
+  /* En el slider el ancho útil de la card es ~0,82 del viewport, así que el
+     titular escala con él en vez de encadenar breakpoints: es lo que mantiene
+     "Responsable de equipo" en una línea hasta 360px. Tope en los 24px de
+     desktop. */
+  .tcn-puesto-title {
+    font-size: clamp(15px, calc(6vw - 5px), 24px);
+    letter-spacing: 0.02em;
+  }
+}
+
 @media (max-width: 900px) {
   .brand-story {
     flex-direction: column;
@@ -6308,16 +6356,6 @@ button {
 
 /* Ajustes de móvil: equipo con swipe, misión con dots y el texto de valores
    a menor escala. */
-/* En pantallas estrechas 24px no dan para "Responsable de equipo" en una línea
-   (harían falta ~305px de hueco y hay 274). Bajamos lo justo el cuerpo y el
-   tracking en ese tramo para no partir el nombre del puesto. */
-@media (max-width: 430px) {
-  .tcn-puesto-title {
-    font-size: 21px;
-    letter-spacing: 0.02em;
-  }
-}
-
 @media (max-width: 767px) {
   /* En móvil manda el dedo: las fotos asoman parcialmente para invitar a
      deslizar y las flechas sobran. */
