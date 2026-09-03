@@ -5730,6 +5730,36 @@ button {
   padding-inline: 0;
 }
 
+/* En desktop la sección mide varias pantallas (altura inline desde el
+   componente) y esta caja se clava: la composición se queda quieta mientras el
+   scroll enciende las palabras, así el texto nunca se mete por debajo de la
+   navbar. El padding-top de aquí es el aire fijo entre el header y el bloque
+   mientras dura el pin. */
+.valores.is-pinned .valores-pin {
+  align-items: flex-start;
+  display: flex;
+  height: calc(100vh - var(--nav-h));
+  overflow: hidden;
+  padding-top: clamp(64px, 15vh, 180px);
+  position: sticky;
+  top: var(--nav-h);
+}
+
+/* Con el pin la sección ya reserva su propio recorrido: el padding vertical de
+   .section sobraría (lo suma a los 220vh y deja huecos de papel vacío). */
+.valores.is-pinned {
+  padding-block: 0;
+}
+
+/* Dentro del pin el titular no necesita ser sticky: nada se mueve. */
+.valores.is-pinned .valores-aside {
+  position: static;
+}
+
+.valores.is-pinned .valores-inner {
+  width: 100%;
+}
+
 .valores-inner {
   display: grid;
   gap: clamp(28px, 5vw, 88px);
@@ -5786,7 +5816,18 @@ button {
   font-size: clamp(16px, 1.2vw, 18px);
   line-height: 1.9;
   max-width: 62ch;
-  padding-top: clamp(4px, 1vw, 12px);
+  /* Alineación óptica con el titular: el texto no arranca en el borde de su
+     caja, sino a la altura en la que empiezan las mayúsculas de "NUESTROS".
+     Cada columna deja por encima de sus mayúsculas un trozo de interlineado
+     distinto (media línea + el hueco entre ascendente y altura de caja), y la
+     diferencia es este padding. Los factores salen de las métricas de las dos
+     fuentes: Cormorant Garamond (asc 1.0 / cap 0.613 / desc 0.3) con
+     line-height 1.05 deja 0.262em; DM Sans (asc 0.992 / cap 0.7 / desc 0.298)
+     con line-height 1.9 deja 0.597em. La capitular cae en ese mismo sitio. */
+  padding-top: max(
+    0px,
+    calc(0.262 * clamp(34px, 4.4vw, 58px) - 0.597 * clamp(16px, 1.2vw, 18px))
+  );
   position: relative;
   text-align: left;
   z-index: 1;
