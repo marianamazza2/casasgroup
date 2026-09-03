@@ -186,8 +186,8 @@ function ReformasHero() {
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
-          Proyecto, obra y acabados con presupuesto cerrado. Tú decides cómo
-          quieres vivir; del resto nos ocupamos nosotros.
+          Nos encargamos de todo. Tú imaginas cómo quieres vivirlo. Nosotros lo
+          hacemos realidad.
         </motion.p>
         <motion.div variants={heroItem}>
           <Link className="button-link" to="/contacto">
