@@ -217,7 +217,7 @@ function ContactPage() {
       const r = Math.round(164 + 86 * colorT)
       const g = Math.round(123 + 124 * colorT)
       const b = Math.round(54 + 187 * colorT)
-      document.documentElement.style.setProperty('--hero-fill', `rgb(${r},${g},${b})`)
+      wrapper.style.setProperty('--hero-fill', `rgb(${r},${g},${b})`)
 
       // El hint ("ver mas" + linea) hace el mismo recorrido pero arrancando en
       // un dorado mas apagado que la marca: queda sobre el esfumado claro del
@@ -226,7 +226,7 @@ function ContactPage() {
       const hr = Math.round(120 + 130 * colorT)
       const hg = Math.round(96 + 151 * colorT)
       const hb = Math.round(52 + 189 * colorT)
-      document.documentElement.style.setProperty('--hero-hint-fill', `rgb(${hr},${hg},${hb})`)
+      wrapper.style.setProperty('--hero-hint-fill', `rgb(${hr},${hg},${hb})`)
 
       // Tagline + CTA fade in once the photo has turned gold
       const uiT = phase(p, 0.3, 0.6)
@@ -246,11 +246,6 @@ function ContactPage() {
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('scroll', handleScroll)
-      // Las dos variables viven en <html>, asi que sobreviven al cambio de
-      // ruta: sin limpiarlas, la proxima visita arranca con el blanco del final
-      // del scroll en vez del dorado que define :root.
-      document.documentElement.style.removeProperty('--hero-fill')
-      document.documentElement.style.removeProperty('--hero-hint-fill')
     }
   }, [])
 

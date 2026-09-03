@@ -4,9 +4,12 @@
 
 :root {
   --gold: #a47b36;
+  /* Valores de arranque de los heros. El scroll los interpola hasta el blanco
+     calido, pero escribiendolos sobre el .hero-scroll-wrapper de cada ruta (no
+     sobre <html>): si vivieran en :root, la limpieza al desmontar una ruta
+     podria correr despues del montaje de la siguiente y dejarla en dorado. */
   --hero-fill: #a47b36;
-  /* Dorado de arranque del hint del hero de contacto (mas apagado que
-     --hero-fill); el scroll lo interpola hasta el blanco calido. */
+  /* Dorado del hint del hero de contacto, mas apagado que --hero-fill. */
   --hero-hint-fill: rgb(120 96 52);
   --gold-soft: #f9f4ea;
   --ink: #1a1a18;
@@ -5710,53 +5713,139 @@ button {
 }
 
 /* ============================================================
-   Nuestros valores — banda de texto corrido
-   Misma composición que la banda de marca de la home (.why-story): titular
-   centrado en serif dorado y un único texto debajo, con mucho aire entre
-   párrafos para que el bloque largo siga siendo cómodo de leer.
+   Nuestros valores — manifiesto editorial
+   Sigue siendo un único texto corrido, pero ya no clona la banda centrada de la
+   home (.why-story): composición asimétrica con el titular fijo (sticky) a la
+   izquierda, filigrana "GC" de fondo, capitular dorada y el texto encendiéndose
+   palabra a palabra al scroll (la opacidad la pone framer-motion inline, ver
+   ValoresManifiesto). Fondo blanco a propósito: .team ya es crema y un crema
+   aquí fundiría las dos secciones en una sola banda.
    ============================================================ */
 .valores {
   background: var(--paper);
+  /* La filigrana se sale de la caja y generaría scroll lateral. Tiene que ser
+     `clip` y no `hidden`: `hidden` convierte a .valores en scroll container y el
+     titular sticky de dentro se queda clavado a 144px sin recorrido. */
+  overflow-x: clip;
   padding-inline: 0;
 }
 
-.valores-story {
+.valores-inner {
+  display: grid;
+  gap: clamp(28px, 5vw, 88px);
+  grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.5fr);
   margin: 0 auto;
-  max-width: 1120px;
-  padding-inline: clamp(40px, 6vw, 80px);
-  text-align: center;
+  max-width: 1180px;
+  padding-inline: clamp(24px, 6vw, 80px);
+  position: relative;
+}
+
+/* El titular acompaña la lectura del texto largo en vez de perderse arriba.
+   `align-self: start` es imprescindible: sin él el grid estira la columna y el
+   sticky no tiene recorrido. */
+.valores-aside {
+  align-self: start;
+  position: sticky;
+  top: calc(var(--nav-h) + clamp(32px, 8vh, 84px));
+  text-align: left;
+}
+
+/* Filigrana de marca: la "GC" del isotipo, gigante, detrás del titular. */
+.valores-mark {
+  color: var(--gold);
+  font-family: var(--serif);
+  font-size: clamp(200px, 24vw, 360px);
+  font-weight: 600;
+  left: -0.07em;
+  letter-spacing: -0.05em;
+  line-height: 0.72;
+  opacity: 0.06;
+  pointer-events: none;
+  position: absolute;
+  top: -0.2em;
+  user-select: none;
+  z-index: 0;
 }
 
 /* Misma escala que el resto de titulares de sección (no la del wordmark). */
 .valores-title {
   color: var(--gold);
   font-family: var(--serif);
-  font-size: clamp(34px, 5vw, 54px);
+  font-size: clamp(34px, 4.4vw, 58px);
   font-weight: 500;
   letter-spacing: 0.02em;
   line-height: 1.05;
   margin: 0 0 20px;
+  position: relative;
   text-transform: uppercase;
+  z-index: 1;
 }
 
 .valores-text {
   color: var(--text);
-  font-size: clamp(15px, 1.15vw, 17px);
-  line-height: 1.95;
-  margin: clamp(24px, 3vw, 38px) auto 0;
-  max-width: 74ch;
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.9;
+  max-width: 62ch;
+  padding-top: clamp(4px, 1vw, 12px);
+  position: relative;
+  text-align: left;
+  z-index: 1;
 }
 
 /* El texto es continuo: los párrafos solo se separan con aire, sin sangría ni
-   viñetas, para que se lea como un mismo bloque. `balance` reparte las líneas
-   por igual y evita colas sueltas ("…a su lado.") al final del párrafo. */
+   viñetas, para que se lea como un mismo bloque. */
 .valores-text p {
   margin: 0;
-  text-wrap: balance;
 }
 
 .valores-text p + p {
-  margin-top: clamp(20px, 2.6vw, 32px);
+  margin-top: clamp(22px, 2.6vw, 34px);
+}
+
+/* Capitular dorada: la entrada al texto. Va sobre el bloque, así que funciona
+   aunque la primera letra viva dentro del <span> de la primera palabra. */
+.valores-text > p:first-child::first-letter {
+  color: var(--gold);
+  float: left;
+  font-family: var(--serif);
+  font-size: 4.2em;
+  font-weight: 500;
+  line-height: 0.76;
+  margin: 0.04em 0.1em 0 0;
+}
+
+/* Las palabras se pintan inline (nada de inline-block): si fuesen cajas
+   atómicas, ::first-letter dejaría de alcanzar la capitular. */
+.valores-word {
+  display: inline;
+}
+
+/* La expresión clave de cada valor, en dorado dentro del propio párrafo. */
+.valores-accent {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* Bajo 900px el titular ya no cabe en columna propia: se apila arriba y deja de
+   ser sticky (con una sola columna no tendría recorrido). */
+@media (max-width: 900px) {
+  .valores-inner {
+    gap: clamp(16px, 4vw, 26px);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .valores-aside {
+    position: static;
+  }
+
+  .valores-mark {
+    font-size: clamp(150px, 40vw, 240px);
+    top: -0.16em;
+  }
+
+  .valores-text {
+    max-width: none;
+  }
 }
 
 .team {
@@ -5933,144 +6022,6 @@ button {
   color: var(--text);
   font-size: 12px;
   margin: 0;
-}
-
-.timeline {
-  display: flex;
-  margin: 52px auto 0;
-  max-width: 1180px;
-  position: relative;
-}
-
-/* Riel base + relleno dorado que avanza hasta el hito activo */
-.timeline-line {
-  background: var(--line);
-  border-radius: 2px;
-  height: 2px;
-  left: 12%;
-  overflow: hidden;
-  position: absolute;
-  right: 12%;
-  top: 19px;
-}
-
-.timeline-line-fill {
-  background: linear-gradient(90deg, var(--gold), #d8b057);
-  border-radius: 2px;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-  top: 0;
-  transition: width 0.22s cubic-bezier(0.22, 1, 0.36, 1);
-  width: var(--p, 0%);
-}
-
-.timeline-item {
-  align-items: center;
-  appearance: none;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  font: inherit;
-  padding: 0;
-  position: relative;
-  text-align: center;
-  z-index: 1;
-}
-
-.timeline-dot {
-  align-items: center;
-  background: var(--paper);
-  border: 1.5px solid var(--line);
-  border-radius: 50%;
-  display: flex;
-  height: 40px;
-  justify-content: center;
-  margin-bottom: 16px;
-  transition:
-    border-color 0.5s ease,
-    box-shadow 0.5s ease,
-    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  width: 40px;
-}
-
-.timeline-dot-core {
-  background: var(--line);
-  border-radius: 50%;
-  height: 12px;
-  transform: scale(0.6);
-  transition:
-    background-color 0.5s ease,
-    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  width: 12px;
-}
-
-.timeline-item.is-done .timeline-dot {
-  border-color: var(--gold);
-}
-
-.timeline-item.is-done .timeline-dot-core {
-  background: var(--gold);
-  transform: scale(1);
-}
-
-.timeline-item.is-current .timeline-dot {
-  border-color: var(--gold);
-  box-shadow:
-    0 0 0 5px rgba(164, 123, 54, 0.16),
-    0 8px 22px rgba(164, 123, 54, 0.28);
-  transform: scale(1.16);
-}
-
-.timeline-item.is-current .timeline-dot-core {
-  animation: timelinePulse 1.8s ease-in-out infinite;
-  background: var(--gold);
-  transform: scale(1.05);
-}
-
-@keyframes timelinePulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(164, 123, 54, 0.45);
-  }
-  50% {
-    box-shadow: 0 0 0 7px rgba(164, 123, 54, 0);
-  }
-}
-
-.timeline-text {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.5;
-  max-width: 200px;
-  transition: color 0.5s ease;
-}
-
-.timeline-item.is-current .timeline-text {
-  color: var(--text);
-}
-
-.timeline-year {
-  color: var(--muted);
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 500;
-  margin-bottom: 6px;
-  transition:
-    color 0.5s ease,
-    transform 0.5s ease;
-}
-
-.timeline-item.is-done .timeline-year {
-  color: var(--ink);
-}
-
-.timeline-item.is-current .timeline-year {
-  color: var(--gold);
-  transform: translateY(-2px);
 }
 
 /* ---------------------------------------------------------------------------
@@ -6357,23 +6308,19 @@ button {
 /* Ajustes de móvil: equipo con swipe, misión con dots y el texto de valores
    a menor escala. */
 @media (max-width: 767px) {
-  /* En móvil manda el dedo: las fotos asoman parcialmente para invitar a
-     deslizar y las flechas sobran. */
+  /* En móvil manda el dedo, pero una ficha por vista y completa: nada de
+     segunda card cortada asomando por el borde (el resto de sliders de la web
+     — galería de la ficha, "Qué hacemos por ti" — funcionan igual). El gap va
+     a 0 para que cada ficha ocupe exactamente el ancho de la pista y los saltos
+     de los dots caigan clavados en cada una. */
   .team-track {
-    --team-pad: clamp(22px, 5vw, 72px);
-    --team-gap: 14px;
-    /* Sangra hasta el borde de la pantalla anulando el padding de .section
-       y reaplicándolo como padding interno para alinear la primera card. */
-    margin-inline: calc(var(--team-pad) * -1);
-    padding-inline: var(--team-pad);
-    scroll-padding-left: var(--team-pad);
+    --team-gap: 0px;
+    --team-per-view: 1;
   }
 
-  .team-card {
-    flex-basis: 64%;
-  }
-
-  .team-nav {
+  /* Las flechas sobran cuando se pasa con el dedo; los dots se quedan para
+     indicar cuántas personas hay y poder saltar. */
+  .team-arrow {
     display: none;
   }
 
@@ -6405,67 +6352,11 @@ button {
     width: 30px;
   }
 
-  /* En móvil el texto baja de tamaño y se ajusta el ancho de línea. */
+  /* En móvil el texto baja de tamaño y se ajusta el ancho de línea. Ya no se
+     colapsa con "Ver más": se lee entero, el encendido al scroll lo sostiene. */
   .valores-text {
-    font-size: 15px;
-    line-height: 1.85;
-  }
-
-  /* El texto es largo para una pantalla de móvil: se deja el primer párrafo y
-     el resto se despliega con "Ver más". En desktop no aplica nada de esto. */
-  .valores-text.is-collapsed p + p {
-    display: none;
-  }
-
-  .valores-toggle {
-    display: inline-flex;
-    margin-top: 18px;
-  }
-}
-
-@media (max-width: 640px) {
-  .timeline {
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .timeline-line {
-    bottom: 20px;
-    height: auto;
-    left: 20px;
-    right: auto;
-    top: 20px;
-    width: 2px;
-  }
-
-  .timeline-line-fill {
-    bottom: auto;
-    height: var(--p, 0%);
-    right: 0;
-    transition: height 0.7s cubic-bezier(0.65, 0, 0.35, 1);
-    width: 100%;
-  }
-
-  .timeline-item {
-    align-items: start;
-    column-gap: 16px;
-    display: grid;
-    flex-direction: initial;
-    grid-template-columns: 40px 1fr;
-    text-align: left;
-  }
-
-  .timeline-dot {
-    grid-row: 1 / span 2;
-    margin: 0;
-  }
-
-  .timeline-year {
-    margin-bottom: 2px;
-  }
-
-  .timeline-text {
-    max-width: none;
+    font-size: 16px;
+    line-height: 1.8;
   }
 }
 

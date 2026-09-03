@@ -154,7 +154,7 @@ function Home() {
   // Apply final state immediately for returning visitors
   useLayoutEffect(() => {
     if (!skipAnimation) return
-    document.documentElement.style.setProperty('--hero-fill', 'rgb(250,247,241)')
+    heroWrapperRef.current?.style.setProperty('--hero-fill', 'rgb(250,247,241)')
     if (heroMediaRef.current) {
       heroMediaRef.current.style.animation = 'none'
       heroMediaRef.current.style.opacity = '0'
@@ -193,7 +193,7 @@ function Home() {
       const r = Math.round(164 + 86 * colorT)
       const g = Math.round(123 + 124 * colorT)
       const b = Math.round(54 + 187 * colorT)
-      document.documentElement.style.setProperty('--hero-fill', `rgb(${r},${g},${b})`)
+      wrapper.style.setProperty('--hero-fill', `rgb(${r},${g},${b})`)
 
       // Phase 3 (42–72%): Tagline + tabs + search fade in
       const uiT = phase(p, 0.42, 0.72)
@@ -213,9 +213,6 @@ function Home() {
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('scroll', handleScroll)
-      // --hero-fill vive en <html> y sobrevive al cambio de ruta: sin limpiarlo,
-      // contacto arrancaria con el blanco del final del scroll de la home.
-      document.documentElement.style.removeProperty('--hero-fill')
     }
   }, [skipAnimation])
 

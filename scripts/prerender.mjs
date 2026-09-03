@@ -38,6 +38,7 @@ const STATIC_ROUTES = [
   '/vender',
   '/nosotros',
   '/contacto',
+  '/trabaja-con-nosotros',
   '/servicios/administracion-de-comunidades',
   '/servicios/alarmas',
   '/servicios/cambio-de-suministros',

@@ -32,11 +32,14 @@ export const Route = createFileRoute('/nosotros')({
 
 // Valores: un solo texto corrido (literal, tal y como lo aprobó Angie). Los
 // cortes de párrafo son solo para darle aire de lectura, no secciones.
+// Los tramos entre *asteriscos* son la expresión clave de cada valor: el
+// componente los pinta en dorado dentro del propio párrafo, para que los cuatro
+// valores se perciban al escanear sin convertir el texto en una lista.
 export const VALORES_TEXTO = [
-  'Creemos que la confianza se construye con hechos. Por eso trabajamos con honestidad y transparencia, cuidando cada detalle y tratando cada decisión con la responsabilidad que merece.',
-  'Nos mueve el amor por lo que hacemos, por lo que priorizamos estar cerca de las personas para escuchar, entender sus necesidades y acompañarlas con la tranquilidad de saber que siempre tendrán a alguien a su lado.',
-  'Nos implicamos en cada proceso como si fuera propio, buscando siempre lo mejor para nuestros clientes y actuando con respeto, profesionalidad y compromiso.',
-  'No nos conformamos con hacer las cosas bien; creemos en dar un paso más, en superarnos cada día y en ofrecer un servicio a la altura de la confianza que depositan en nosotros. Porque para Group Casas, la excelencia no es solo una forma de trabajar, es nuestra forma de hacer las cosas.',
+  'Creemos que la confianza se construye con hechos. Por eso trabajamos con *honestidad y transparencia*, cuidando cada detalle y tratando cada decisión con la responsabilidad que merece.',
+  'Nos mueve el amor por lo que hacemos, por lo que priorizamos *estar cerca de las personas* para escuchar, entender sus necesidades y acompañarlas con la tranquilidad de saber que siempre tendrán a alguien a su lado.',
+  'Nos implicamos en cada proceso como si fuera propio, buscando siempre lo mejor para nuestros clientes y actuando con *respeto, profesionalidad y compromiso*.',
+  'No nos conformamos con hacer las cosas bien; creemos en dar un paso más, en superarnos cada día y en ofrecer un servicio a la altura de la confianza que depositan en nosotros. Porque para Group Casas, la *excelencia* no es solo una forma de trabajar, es nuestra forma de hacer las cosas.',
 ]
 
 export const TABS = [
@@ -89,13 +92,6 @@ export const TEAM = [
     image:
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80',
   },
-]
-
-export const TIMELINE = [
-  { year: '2014', text: 'Nacimiento de Group Casas' },
-  { year: '2018', text: 'Expansión a nuevas zonas' },
-  { year: '2023', text: 'Más de 100 operaciones' },
-  { year: '2026', text: 'Rebranding: Group Casas' },
 ]
 
 function NosotrosPage() {
@@ -166,8 +162,6 @@ function NosotrosPage() {
         </Link>
       </section>
 
-      <TrayectoriaTimeline items={TIMELINE} />
-
       <section ref={ctaRef} className={`adm-cta nosotros-cta${ctaActive ? ' is-active' : ''}`}>
         <div
           className="adm-cta-bg"
@@ -191,74 +185,6 @@ function NosotrosPage() {
 
       <Footer />
     </main>
-  )
-}
-
-// Línea de tiempo "Nuestra trayectoria": avanza sola de un hito al siguiente
-// cuando entra en viewport. Se pausa fuera de pantalla y al pasar el ratón;
-// el usuario también puede saltar a un hito haciendo clic.
-function TrayectoriaTimeline({ items }: { items: typeof TIMELINE }) {
-  const ref = useRef<HTMLElement>(null)
-  const [active, setActive] = useState(0)
-  const [inView, setInView] = useState(false)
-  const [paused, setPaused] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold: 0.4 },
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    if (!inView || paused) return
-    const id = setInterval(() => {
-      setActive((prev) => (prev + 1) % items.length)
-    }, 1000)
-    return () => clearInterval(id)
-  }, [inView, paused, items.length])
-
-  const progress = items.length > 1 ? (active / (items.length - 1)) * 100 : 0
-
-  return (
-    <section className="section timeline-section" ref={ref}>
-      <div className="section-heading section-heading--center">
-        <h2>Nuestra trayectoria</h2>
-      </div>
-      <div
-        className="timeline"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
-        <div className="timeline-line" aria-hidden="true">
-          <span className="timeline-line-fill" style={{ '--p': `${progress}%` } as React.CSSProperties} />
-        </div>
-        {items.map((item, i) => {
-          const done = i <= active
-          const current = i === active
-          const state = current ? ' is-current' : done ? ' is-done' : ''
-          return (
-            <button
-              type="button"
-              className={`timeline-item${state}`}
-              key={item.year}
-              onClick={() => setActive(i)}
-              aria-current={current ? 'step' : undefined}
-            >
-              <span className="timeline-dot" aria-hidden="true">
-                <span className="timeline-dot-core" />
-              </span>
-              <span className="timeline-year">{item.year}</span>
-              <span className="timeline-text">{item.text}</span>
-            </button>
-          )
-        })}
-      </div>
-    </section>
   )
 }
 
