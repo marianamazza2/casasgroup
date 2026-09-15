@@ -4,6 +4,7 @@ import {
   motion,
   useMotionTemplate,
   useScroll,
+  useSpring,
   useTransform,
 } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
@@ -361,25 +362,37 @@ function Incluye() {
         </motion.h2>
 
         <ul className="alarmas-incluye-list">
-          {INCLUYE.map((item, i) => (
-            <motion.li
-              key={item}
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{
-                duration: 0.55,
-                // Escalonado por fila: las dos columnas entran a la vez
-                delay: (i % 4) * 0.09,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              {item}
-            </motion.li>
+          {INCLUYE.map((item) => (
+            <IncluyeItem key={item} texto={item} />
           ))}
         </ul>
       </div>
     </section>
+  )
+}
+
+// Cada prestación se revela ligada al scroll (no con un disparo al entrar en
+// viewport): sube desde abajo y se enciende mientras cruza la franja baja de la
+// pantalla, así aparecen de una en una a medida que se scrollea. El muelle
+// suaviza el progreso para que el movimiento no se sienta pegado al dedo.
+function IncluyeItem({ texto }: { texto: string }) {
+  const ref = useRef<HTMLLIElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start 96%', 'start 68%'],
+  })
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 24,
+    mass: 0.35,
+  })
+  const opacity = useTransform(progress, [0, 1], [0, 1])
+  const y = useTransform(progress, [0, 1], [26, 0])
+
+  return (
+    <motion.li ref={ref} style={{ opacity, y }}>
+      {texto}
+    </motion.li>
   )
 }
 
