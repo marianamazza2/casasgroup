@@ -35,51 +35,66 @@ export const Route = createFileRoute('/servicios/alarmas')({
 
 export const TIPOS_ALARMA = [
   {
-    title: 'Alarma con vigilancia',
-    desc: 'Conexión a central receptora 24/7 y aviso inmediato a las fuerzas de seguridad ante cualquier salto.',
-    icon: 'shield',
-    tag: 'La más completa',
-    image:
-      'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    title: 'Alarma para el hogar',
-    desc: 'Sensores de movimiento, apertura y rotura de cristal para proteger tu vivienda y a tu familia.',
-    icon: 'home',
-    tag: 'El más contratado',
+    title: 'Tu vivienda',
+    headline: 'Protección para tu hogar, estés dentro o fuera.',
+    desc: 'Sistemas de alarma conectados 24/7 para detectar posibles intrusiones, verificar las alertas y actuar cuando sea necesario.',
     image:
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
   },
   {
-    title: 'Alarma para comunidades',
-    desc: 'Protección de portales, garajes y zonas comunes con control de accesos integrado.',
-    icon: 'building',
-    tag: 'Comunidades',
+    title: 'Tu local',
+    headline: 'Tu negocio protegido las 24 horas.',
+    desc: 'Sistemas de seguridad adaptados a tu local para detectar posibles intrusiones y actuar ante cualquier incidencia.',
+    image:
+      'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80',
+  },
+  {
+    title: 'Tu comunidad',
+    headline: 'Protección para los espacios que compartís.',
+    desc: 'Soluciones de seguridad adaptadas a accesos y zonas comunes para reforzar la protección de tu comunidad.',
     image:
       'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
   },
-  {
-    title: 'Videovigilancia',
-    desc: 'Cámaras con visión en directo desde el móvil, grabación y detección inteligente de intrusos.',
-    icon: 'camera',
-    tag: 'Control total',
-    image:
-      'https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=1200&q=80',
-  },
+] as const
+
+// Prestaciones que puede incluir el sistema, bajo el showcase de "¿Qué quieres
+// proteger?" como cierre de la sección.
+export const INCLUYE = [
+  'Conexión 24/7 a Central Receptora de Alarmas',
+  'Verificación de alertas',
+  'Aviso a Policía cuando proceda',
+  'Control desde el móvil',
+  'Detectores de movimiento y acceso',
+  'Cámaras y verificación por imagen',
+  'Protección frente a sabotajes e inhibición',
+  'Mantenimiento y supervisión del sistema',
 ] as const
 
 export const VENTAJAS = [
-  'Estudio de seguridad gratuito y a medida de tu vivienda',
-  'Instalación rápida, limpia y sin obras',
-  'Comparamos las mejores compañías del mercado',
-  'Te acompañamos en altas, bajas y cualquier incidencia',
-]
+  {
+    title: 'DETECCIÓN',
+    desc: 'El sistema detecta una posible intrusión y envía una señal de alerta.',
+  },
+  {
+    title: 'VERIFICACIÓN',
+    desc: 'La Central Receptora recibe la señal y comprueba qué está ocurriendo mediante los sistemas de verificación disponibles.',
+  },
+  {
+    title: 'ACTUACIÓN',
+    desc: 'Una vez analizada la alerta, se activa el protocolo de seguridad correspondiente y se contacta contigo cuando proceda.',
+  },
+  {
+    title: 'AVISO A LA POLICÍA',
+    desc: 'Una vez verificada la alarma y confirmada una posible intrusión, se avisa inmediatamente a la Policía, facilitando la información necesaria para que pueda intervenir lo antes posible.',
+  },
+] as const
 
 function AlarmasPage() {
   return (
     <main className="servicio-page">
       <AlarmasHero />
       <TiposAlarma />
+      <Incluye />
       <PorQueNosotros />
       <CtaBanner />
       <ServiceFooter currentId="alarmas" />
@@ -234,11 +249,11 @@ function TiposAlarma() {
       <div className="services-inner">
         <div className="section-heading section-heading--center">
           <span>Soluciones</span>
-          <h2>Sistemas de alarma</h2>
+          <h2>¿Qué quieres proteger?</h2>
         </div>
 
         <motion.div
-          className="seguros-showcase"
+          className="seguros-showcase alarmas-showcase"
           variants={showcaseReveal}
           initial="hidden"
           whileInView="show"
@@ -293,8 +308,10 @@ function TiposAlarma() {
                 />
                 <div className="seguros-preview-overlay" aria-hidden="true" />
                 <div className="seguros-preview-body">
-                  <span className="seguros-preview-tag">{item.tag}</span>
-                  <h3>{item.title}</h3>
+                  <span className="seguros-preview-tag">
+                    {String(active + 1).padStart(2, '0')} · {item.title}
+                  </span>
+                  <h3>{item.headline}</h3>
                   <p>{item.desc}</p>
                 </div>
               </motion.article>
@@ -325,7 +342,48 @@ function TiposAlarma() {
   )
 }
 
-// "Por qué con nosotros" — cada ventaja se revela UNA A UNA al entrar en
+// Banda a ancho completo que cierra el capítulo de "¿Qué quieres proteger?"
+// enumerando lo que puede llevar el sistema. Fondo blanco entre el showcase
+// (crema) y la sección oscura del protocolo, para que las tres bandas se
+// distingan entre sí.
+function Incluye() {
+  return (
+    <section className="alarmas-incluye">
+      <div className="alarmas-incluye-inner">
+        <motion.h2
+          className="alarmas-incluye-title"
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          Todo lo que puede incluir tu alarma
+        </motion.h2>
+
+        <ul className="alarmas-incluye-list">
+          {INCLUYE.map((item, i) => (
+            <motion.li
+              key={item}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{
+                duration: 0.55,
+                // Escalonado por fila: las dos columnas entran a la vez
+                delay: (i % 4) * 0.09,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              {item}
+            </motion.li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+// "¿Qué pasa cuando salta la alarma?" — cada paso se revela UNO A UNO al entrar en
 // pantalla (con `once: true` quedan visibles para siempre) y muestra el mismo
 // número que la sección "En cuatro simples pasos" (outline + relleno dorado que
 // se "dibuja" con el scroll).
@@ -344,14 +402,14 @@ function PorQueNosotros() {
 
       <div className="seguros-porque-content">
         <div className="section-heading">
-          <span>Por qué con nosotros</span>
-          <h2>Tu seguridad gestionada por quien conoce tu vivienda</h2>
+          <h2>¿Qué pasa cuando salta la alarma?</h2>
         </div>
         <ul className="seguros-ventajas">
           {VENTAJAS.map((item, i) => (
             <VentajaRow
-              key={item}
-              texto={item}
+              key={item.title}
+              titulo={item.title}
+              texto={item.desc}
               num={String(i + 1).padStart(2, '0')}
             />
           ))}
@@ -361,7 +419,15 @@ function PorQueNosotros() {
   )
 }
 
-function VentajaRow({ texto, num }: { texto: string; num: string }) {
+function VentajaRow({
+  titulo,
+  texto,
+  num,
+}: {
+  titulo: string
+  texto: string
+  num: string
+}) {
   const ref = useRef<HTMLLIElement>(null)
   // Mismo relleno que PasoStep: el número se "dibuja" en dorado cuando el scroll
   // lo alcanza y luego queda relleno (clamp).
@@ -387,7 +453,10 @@ function VentajaRow({ texto, num }: { texto: string; num: string }) {
           {num}
         </motion.span>
       </span>
-      <span className="seguros-ventaja-text">{texto}</span>
+      <span className="seguros-ventaja-body">
+        <span className="seguros-ventaja-title">{titulo}</span>
+        <span className="seguros-ventaja-text">{texto}</span>
+      </span>
     </motion.li>
   )
 }

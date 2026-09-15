@@ -8322,6 +8322,96 @@ button {
   max-width: 42ch;
 }
 
+/* Alarmas: el panel de imagen es más bajo que en seguros para que el titular y
+   el texto del pie entren en pantalla sin tener que scrollear (al hacerlo, el
+   scroll-sync ya saltaría a la siguiente opción). */
+.alarmas-showcase .seguros-preview {
+  align-self: center;
+  aspect-ratio: 4 / 3;
+  /* Limitamos el ancho (no el alto) para que la relación 4/3 se respete
+     siempre: si el tope de altura entra en juego, la tarjeta se estrecha y
+     queda centrada en su columna en vez de deformarse. */
+  justify-self: center;
+  max-width: min(100%, calc(min(62vh, 520px) * 4 / 3));
+  width: 100%;
+}
+
+/* ── Todo lo que puede incluir tu alarma ──────────────────────────────────
+   Banda propia entre el showcase y "¿Qué pasa cuando salta la alarma?". Va en
+   blanco (--paper) y no en crema: el showcase de arriba ya es --warm y la
+   sección de abajo es oscura, así el ritmo queda crema → blanco → oscuro en vez
+   de dos bandas seguidas del mismo tono. */
+.alarmas-incluye {
+  background: var(--paper);
+  overflow: hidden;
+  padding: clamp(64px, 9vh, 112px) clamp(24px, 6vw, 80px);
+}
+
+.alarmas-incluye-inner {
+  margin-inline: auto;
+  max-width: 1080px;
+}
+
+/* Mismo tratamiento que los titulares de sección sobre fondo claro. */
+.alarmas-incluye-title {
+  color: var(--gold);
+  font-family: var(--serif);
+  font-size: clamp(30px, 4.2vw, 52px);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  margin: 0 auto clamp(34px, 5vh, 58px);
+  max-width: 16ch;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Relleno por columnas (1-4 a la izquierda, 5-8 a la derecha) para que se lea
+   en el orden en que están escritas. */
+.alarmas-incluye-list {
+  column-gap: clamp(32px, 6vw, 88px);
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(4, auto);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.alarmas-incluye-list li {
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.55;
+  padding: clamp(14px, 2vh, 20px) 0;
+  text-align: center;
+}
+
+/* La última fila de cada columna cierra sin línea. */
+.alarmas-incluye-list li:nth-child(4n) {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+@media (max-width: 680px) {
+  .alarmas-incluye-list {
+    grid-auto-flow: row;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .alarmas-incluye-list li:nth-child(4n) {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: clamp(14px, 2vh, 20px);
+  }
+
+  .alarmas-incluye-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
 /* Por qué con nosotros — split invertido (foto a la derecha) */
 /* Mismos colores que "En cuatro simples pasos": fondo oscuro + resplandor
    dorado, eyebrow dorado, título crema y texto/líneas en crema translúcido. */
@@ -8373,7 +8463,7 @@ button {
 }
 
 .seguros-ventaja {
-  align-items: center;
+  align-items: flex-start;
   color: rgba(247, 241, 230, 0.72);
   display: flex;
   gap: clamp(16px, 2vw, 26px);
@@ -8386,6 +8476,22 @@ button {
   flex-shrink: 0;
   text-align: center;
   width: clamp(58px, 8vw, 104px);
+}
+
+.seguros-ventaja-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: clamp(4px, 0.8vw, 10px);
+}
+
+/* Etiqueta del paso: mismo tratamiento que los eyebrow dorados de la página */
+.seguros-ventaja-title {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .seguros-ventaja-text {
@@ -8424,6 +8530,11 @@ button {
   .seguros-preview {
     aspect-ratio: 16 / 11;
     touch-action: pan-y;
+  }
+
+  .alarmas-showcase .seguros-preview {
+    aspect-ratio: 4 / 3;
+    max-height: none;
   }
 
   .seguros-dots {
