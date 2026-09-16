@@ -152,16 +152,6 @@ function NosotrosPage() {
         <TeamSlider members={TEAM} />
       </section>
 
-      {/* Cierre del bloque de equipo: la puerta de entrada a /trabaja-con-nosotros. */}
-      <section className="nosotros-join">
-        <p className="nosotros-join-text">
-          ¿Te gustaría formar parte de este equipo?
-        </p>
-        <Link className="button-link" to="/trabaja-con-nosotros">
-          Trabaja con nosotros →
-        </Link>
-      </section>
-
       <section ref={ctaRef} className={`adm-cta nosotros-cta${ctaActive ? ' is-active' : ''}`}>
         <div
           className="adm-cta-bg"
@@ -172,13 +162,10 @@ function NosotrosPage() {
           }}
         />
         <div className="adm-cta-inner">
-          <span className="adm-cta-eyebrow">Conócenos</span>
-          <h2 className="adm-cta-title">¿Quieres conocernos en persona?</h2>
-          <p className="adm-cta-text">
-            Visítanos en nuestra oficina o contáctanos. Estaremos encantados de ayudarte.
-          </p>
-          <Link className="button-link" to="/contacto">
-            Contáctanos →
+          <span className="adm-cta-eyebrow">Únete al equipo</span>
+          <h2 className="adm-cta-title">¿Te gustaría formar parte de este equipo?</h2>
+          <Link className="button-link" to="/trabaja-con-nosotros">
+            Trabaja con nosotros →
           </Link>
         </div>
       </section>

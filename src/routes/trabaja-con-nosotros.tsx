@@ -12,7 +12,7 @@ export const Route = createFileRoute('/trabaja-con-nosotros')({
       {
         name: 'description',
         content:
-          'Únete a Group Casas: formación continua, acompañamiento y un plan de carrera real como asesor, responsable de equipo o franquiciado en Barcelona.',
+          'Únete a Group Casas: formación continua, acompañamiento y un plan de carrera real como asesor, responsable o franquiciado en Barcelona.',
       },
       { property: 'og:title', content: 'Trabaja con nosotros | Group Casas' },
       {
@@ -59,7 +59,7 @@ export const PUESTOS = [
     image: '/trabaja-con-nosotros/asesor.webp',
   },
   {
-    title: 'Responsable de equipo',
+    title: 'Responsable',
     desc: 'El siguiente paso. Formas, lideras y haces crecer a tu propio equipo de asesores con la metodología y el acompañamiento de Group Casas.',
     image: '/trabaja-con-nosotros/responsable.webp',
   },
