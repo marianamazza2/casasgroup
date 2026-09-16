@@ -36,28 +36,48 @@ export const Route = createFileRoute('/servicios/reformas')({
 export const TIPOS_REFORMA = [
   {
     title: 'Reforma integral',
-    desc: 'Renovamos la vivienda completa: distribución, instalaciones, acabados y mobiliario. Un solo equipo, un solo presupuesto y una única fecha de entrega.',
+    desc: 'Transformamos tu vivienda de principio a fin, coordinando todos los trabajos necesarios para llevar a cabo la reforma y gestionando cada fase del proyecto hasta su finalización.',
     image: '/reformas/reforma_integral.webp',
   },
   {
-    title: 'Cocinas',
-    desc: 'Diseñamos y ejecutamos la cocina de principio a fin: mobiliario, encimeras, electrodomésticos e iluminación, aprovechando cada centímetro del espacio.',
-    image: '/reformas/reforma_cocina.webp',
+    title: 'Interiorismo',
+    desc: 'Diseñamos cada espacio teniendo en cuenta tus gustos, necesidades y forma de vivir. Te asesoramos en distribución, materiales, colores, iluminación y acabados para dar forma a tu proyecto.',
+    image: '/reformas/cocina-despues.webp',
   },
   {
-    title: 'Baños',
-    desc: 'Cambiamos sanitarios, alicatados y fontanería con soluciones que ganan espacio, reducen el consumo de agua y se mantienen impecables con los años.',
-    image: '/reformas/reforma_bano.webp',
+    title: 'Suelos',
+    desc: 'Instalamos y renovamos todo tipo de pavimentos, ofreciendo diferentes materiales y soluciones para encontrar la opción más adecuada para cada espacio.',
+    image: '/reformas/suelos.jpg',
   },
   {
-    title: 'Pintura y acabados',
-    desc: 'Alisado de paredes, pintura, parquet, puertas y carpintería. La reforma más rápida y la que más cambia la sensación de tu casa.',
+    title: 'Pintura',
+    desc: 'Preparamos, alisamos y pintamos paredes y techos, trabajando cada superficie para conseguir un acabado cuidado y profesional.',
     image: '/reformas/pintura.webp',
   },
   {
-    title: 'Zonas comunes',
-    desc: 'Rehabilitación de portales, escaleras, fachadas y ascensores, coordinada con la administración de la finca y con los plazos acordados en junta.',
-    image: '/reformas/zonas_comunes.webp',
+    title: 'Electricidad',
+    desc: 'Renovamos y adecuamos la instalación eléctrica de tu vivienda, incluyendo mecanismos, enchufes, puntos de luz y las necesidades eléctricas de cada espacio.',
+    image: '/reformas/electricidad.jpg',
+  },
+  {
+    title: 'Fontanería',
+    desc: 'Realizamos instalaciones y renovaciones de fontanería, incluyendo tuberías, grifería, sanitarios, duchas y las conexiones necesarias para cocinas y baños.',
+    image: '/reformas/fontaneria.jpg',
+  },
+  {
+    title: 'Carpintería',
+    desc: 'Instalamos puertas, armarios, mobiliario de cocina y soluciones a medida para aprovechar mejor los espacios y completar tu reforma.',
+    image: '/reformas/carpinteria.jpg',
+  },
+  {
+    title: 'Climatización',
+    desc: 'Instalamos y renovamos sistemas de climatización para conseguir una temperatura confortable en tu vivienda durante todo el año.',
+    image: '/reformas/climatizacion.jpg',
+  },
+  {
+    title: 'Cerramientos',
+    desc: 'Instalamos y renovamos ventanas y cerramientos para mejorar el aislamiento térmico y acústico, la seguridad y el confort de tu vivienda.',
+    image: '/reformas/cerramientos.jpg',
   },
 ] as const
 

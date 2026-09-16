@@ -9139,7 +9139,8 @@ button {
 }
 
 .ref-panel.is-active {
-  flex-grow: 3.2;
+  /* Con nueve paneles el activo necesita más peso para que el texto respire */
+  flex-grow: 4.2;
 }
 
 .ref-panel-img {
@@ -9263,7 +9264,7 @@ button {
   .ref-panel {
     flex: none;
     /* Los pesos suman 1, así que el alto total del bloque es constante. */
-    height: calc(132px + 188px * var(--w, 0));
+    height: calc(88px + 232px * var(--w, 0));
     transition: none;
     will-change: height;
   }
