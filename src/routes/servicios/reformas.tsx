@@ -152,23 +152,23 @@ export const PROYECTOS = [
 export const PASOS = [
   {
     num: '1',
-    title: 'Visita y medición',
-    desc: 'Vamos a tu vivienda, tomamos medidas y escuchamos qué quieres conseguir.',
+    title: 'Valoración',
+    desc: 'Visitamos tu vivienda para conocer el espacio, entender la reforma que quieres realizar y valorar todas sus posibilidades.',
   },
   {
     num: '2',
-    title: 'Proyecto y presupuesto',
-    desc: 'Te presentamos la propuesta con materiales, plazos y un precio cerrado.',
+    title: 'Propuesta',
+    desc: 'Preparamos una propuesta adaptada a tu vivienda, definiendo la distribución, los trabajos, materiales y acabados.',
   },
   {
     num: '3',
-    title: 'Ejecución de la obra',
-    desc: 'Coordinamos a todos los gremios y te informamos del avance cada semana.',
+    title: 'Reforma',
+    desc: 'Nos encargamos de llevar a cabo el proyecto y de coordinar cada fase, cuidando que todo se ejecute según lo previsto.',
   },
   {
     num: '4',
-    title: 'Entrega y garantía',
-    desc: 'Revisamos contigo cada detalle y te entregamos la vivienda lista para vivir.',
+    title: 'Entrega',
+    desc: 'Revisamos cada detalle antes de finalizar y te entregamos tu vivienda terminada, cumpliendo los plazos acordados y con todas las garantías.',
   },
 ]
 
