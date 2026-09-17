@@ -82,11 +82,31 @@ export const TIPOS_REFORMA = [
 ] as const
 
 export const VENTAJAS = [
-  'Presupuesto cerrado y por escrito: sabes lo que cuesta antes de empezar',
-  'Un único interlocutor que coordina a todos los gremios',
-  'Plazos de entrega comprometidos por contrato',
-  'Garantía sobre materiales y mano de obra al terminar la obra',
-]
+  {
+    title: 'Presupuesto a tu medida',
+    desc: 'Elige entre presupuesto cerrado o abierto, conociendo desde el inicio el coste y las condiciones de tu reforma.',
+  },
+  {
+    title: 'Un único equipo para todo',
+    desc: 'Coordinamos profesionales, materiales y trabajos para que tú no tengas que preocuparte de nada.',
+  },
+  {
+    title: 'Seguimiento de principio a fin',
+    desc: 'Supervisamos cada fase de la reforma y te mantenemos informado durante todo el proceso.',
+  },
+  {
+    title: 'Plazos de entrega comprometidos',
+    desc: 'Establecemos los plazos de ejecución y entrega por contrato para que sepas desde el principio cuándo estará finalizada tu reforma.',
+  },
+  {
+    title: 'Garantía y mantenimiento',
+    desc: 'Te ofrecemos garantía sobre los materiales y trabajos realizados, además de mantenimiento una vez finalizada la obra.',
+  },
+  {
+    title: 'Cuidamos cada detalle',
+    desc: 'Trabajamos cada proyecto buscando un resultado funcional, cuidado y acorde a lo que has imaginado.',
+  },
+] as const
 
 // Proyectos del comparador: los tres son pares antes/después reales del mismo
 // espacio, con las fotos del cliente en /public/reformas. El baño va primero
@@ -387,8 +407,9 @@ function PorQueNosotros() {
         <ul className="seguros-ventajas">
           {VENTAJAS.map((item, i) => (
             <VentajaRow
-              key={item}
-              texto={item}
+              key={item.title}
+              titulo={item.title}
+              texto={item.desc}
               num={String(i + 1).padStart(2, '0')}
             />
           ))}
@@ -398,7 +419,15 @@ function PorQueNosotros() {
   )
 }
 
-function VentajaRow({ texto, num }: { texto: string; num: string }) {
+function VentajaRow({
+  titulo,
+  texto,
+  num,
+}: {
+  titulo: string
+  texto: string
+  num: string
+}) {
   const ref = useRef<HTMLLIElement>(null)
   // Mismo relleno que PasoStep: el número se "dibuja" en dorado cuando el scroll
   // lo alcanza y luego queda relleno (clamp).
@@ -424,7 +453,10 @@ function VentajaRow({ texto, num }: { texto: string; num: string }) {
           {num}
         </motion.span>
       </span>
-      <span className="seguros-ventaja-text">{texto}</span>
+      <span className="seguros-ventaja-body">
+        <span className="seguros-ventaja-title">{titulo}</span>
+        <span className="seguros-ventaja-text">{texto}</span>
+      </span>
     </motion.li>
   )
 }
