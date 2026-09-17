@@ -108,9 +108,9 @@ export const VENTAJAS = [
   },
 ] as const
 
-// Proyectos del comparador: los tres son pares antes/después reales del mismo
-// espacio, con las fotos del cliente en /public/reformas. El baño va primero
-// porque es el que se muestra al abrir la página.
+// Proyectos del comparador: cada uno es un par antes/después del mismo espacio,
+// con las fotos en /public/reformas. El baño va primero porque es el que se
+// muestra al abrir la página.
 export const PROYECTOS = [
   {
     label: 'Baño',
@@ -120,18 +120,32 @@ export const PROYECTOS = [
     despues: '/reformas/bano-despues.webp',
   },
   {
-    label: 'Reforma',
+    label: 'Cocina',
+    zona: 'Gràcia, Barcelona',
+    meta: '14 m² · 4 semanas',
+    antes: '/reformas/cocina-antes.webp',
+    despues: '/reformas/cocina-despues.webp',
+  },
+  {
+    label: 'Salón',
     zona: 'Eixample, Barcelona',
     meta: '92 m² · 9 semanas',
     antes: '/reformas/salon-antes.webp',
     despues: '/reformas/salon-despues.webp',
   },
   {
-    label: 'Cocina',
-    zona: 'Gràcia, Barcelona',
-    meta: '14 m² · 4 semanas',
-    antes: '/reformas/cocina-antes.webp',
-    despues: '/reformas/cocina-despues.webp',
+    label: 'Habitación',
+    zona: 'Sants, Barcelona',
+    meta: '12 m² · 2 semanas',
+    antes: '/reformas/habitacion-antes.webp',
+    despues: '/reformas/habitacion-despues.webp',
+  },
+  {
+    label: 'Terraza',
+    zona: 'Poblenou, Barcelona',
+    meta: '18 m² · 3 semanas',
+    antes: '/reformas/terraza-antes.webp',
+    despues: '/reformas/terraza-despues.webp',
   },
 ] as const
 
@@ -582,7 +596,7 @@ function AntesDespues() {
           <h2>El cambio, en una foto</h2>
         </div>
 
-        <div className="ref-ba-tabs" role="tablist" aria-label="Proyectos">
+        <div className="ref-ba-tabs" role="tablist" aria-label="Espacios reformados">
           {PROYECTOS.map((p, i) => (
             <button
               key={p.label}
