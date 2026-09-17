@@ -2588,8 +2588,11 @@ button {
     margin-right: clamp(20px, 5vw, 72px);
   }
 
+  /* El suelo es mayor que el de .section (22px) a proposito: el parrafo va
+     justificado y todas sus lineas llegan a los dos bordes, asi que con el
+     inset del resto de secciones el texto parece pegado a la pantalla. */
   .why-story {
-    padding-inline: clamp(20px, 5vw, 72px);
+    padding-inline: clamp(30px, 5vw, 72px);
   }
 
   .valuation-media {
