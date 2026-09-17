@@ -1256,7 +1256,12 @@ button {
   line-height: 1.9;
   margin: clamp(24px, 3vw, 38px) auto 0;
   max-width: 74ch;
-  text-align: center;
+  /* Justificado para que el bloque tenga los dos bordes rectos. La ultima linea
+     no se justifica nunca (quedaria con huecos enormes): va centrada, que es
+     como estaba antes todo el parrafo. Sin `hyphens: auto` a proposito: las
+     palabras no se parten, a cambio de huecos algo mas visibles entre ellas. */
+  text-align: justify;
+  text-align-last: center;
 }
 
 .why-story-cta {

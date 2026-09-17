@@ -56,10 +56,10 @@ export function Footer() {
           <a href="/#propiedades">Comprar</a>
           <a href="/#valoracion">Vender</a>
         </FooterSection>
-        <FooterSection title="Contacto">
+        <FooterSection title="Group Casas">
+          <Link to="/trabaja-con-nosotros">Trabaja con nosotros</Link>
           <a href="mailto:info@groupcasas.com">info@groupcasas.com</a>
           <a href="tel:+34930119056">+34 930 119 056</a>
-          <Link to="/trabaja-con-nosotros">Trabaja con nosotros</Link>
         </FooterSection>
       </div>
       <div className="footer-legal">
