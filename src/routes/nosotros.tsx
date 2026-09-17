@@ -163,7 +163,7 @@ function NosotrosPage() {
         />
         <div className="adm-cta-inner">
           <span className="adm-cta-eyebrow">Únete al equipo</span>
-          <h2 className="adm-cta-title">¿Te gustaría formar parte de este equipo?</h2>
+          <h2 className="adm-cta-title">¿Te gustaría formar parte?</h2>
           <Link className="button-link" to="/trabaja-con-nosotros">
             Trabaja con nosotros →
           </Link>
