@@ -1,6 +1,7 @@
 import { HeadContent, Link, createRootRoute, useRouterState } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { AnimatedOutlet } from '../components/AnimatedOutlet'
+import { CookieBanner } from '../components/CookieBanner'
 import { RouteProgress } from '../components/RouteProgress'
 import { useScrollRestoreRetry } from '../hooks/useScrollRestoreRetry'
 import { absoluteUrl } from '../lib/structuredData'
@@ -158,7 +159,6 @@ function SiteNav() {
       <nav id="site-nav-menu" aria-label="Navegacion principal">
         <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>Comprar</Link>
         <Link to="/vender" className="nav-link--quiet">Vender</Link>
-        <Link to="/nosotros">Nosotros</Link>
         <div
           className="nav-services-wrapper"
           onMouseEnter={isDesktop ? () => setServicesOpen(true) : undefined}
@@ -200,6 +200,7 @@ function SiteNav() {
             </div>
           )}
         </div>
+        <Link to="/nosotros">Nosotros</Link>
         <Link to="/contacto">Contacto</Link>
       </nav>
     </header>
@@ -218,6 +219,7 @@ function RootLayout() {
       <RouteProgress />
       <SiteNav />
       <AnimatedOutlet />
+      <CookieBanner />
     </>
   )
 }

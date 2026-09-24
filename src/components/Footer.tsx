@@ -42,6 +42,19 @@ export function Footer() {
             <span>CASAS</span>
           </Link>
           <p>Tu hogar empieza aqui.</p>
+          <a
+            className="footer-social"
+            href="https://www.instagram.com/groupcasas/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+            </svg>
+            @groupcasas
+          </a>
         </div>
         <FooterSection title="Servicios" className="footer-col-services">
           <Link to="/servicios/administracion-de-comunidades">Administrar</Link>
@@ -67,7 +80,7 @@ export function Footer() {
           © {new Date().getFullYear()} Group Casas. Todos los derechos reservados.
         </span>
         <nav className="footer-legal-links" aria-label="Páginas legales">
-          <a href="/aviso-legal">Aviso legal</a>
+          <Link to="/aviso-legal">Aviso legal</Link>
           <a href="/politica-de-cookies">Política de cookies</a>
           <a href="/politica-de-privacidad">Política de privacidad</a>
         </nav>

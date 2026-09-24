@@ -11,8 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VenderRouteImport } from './routes/vender'
 import { Route as TrabajaConNosotrosRouteImport } from './routes/trabaja-con-nosotros'
+import { Route as PoliticaDePrivacidadRouteImport } from './routes/politica-de-privacidad'
+import { Route as PoliticaDeCookiesRouteImport } from './routes/politica-de-cookies'
 import { Route as NosotrosRouteImport } from './routes/nosotros'
 import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as AvisoLegalRouteImport } from './routes/aviso-legal'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropiedadesIndexRouteImport } from './routes/propiedades/index'
 import { Route as ServiciosSegurosRouteImport } from './routes/servicios/seguros'
@@ -33,6 +36,16 @@ const TrabajaConNosotrosRoute = TrabajaConNosotrosRouteImport.update({
   path: '/trabaja-con-nosotros',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoliticaDePrivacidadRoute = PoliticaDePrivacidadRouteImport.update({
+  id: '/politica-de-privacidad',
+  path: '/politica-de-privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliticaDeCookiesRoute = PoliticaDeCookiesRouteImport.update({
+  id: '/politica-de-cookies',
+  path: '/politica-de-cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NosotrosRoute = NosotrosRouteImport.update({
   id: '/nosotros',
   path: '/nosotros',
@@ -41,6 +54,11 @@ const NosotrosRoute = NosotrosRouteImport.update({
 const ContactoRoute = ContactoRouteImport.update({
   id: '/contacto',
   path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AvisoLegalRoute = AvisoLegalRouteImport.update({
+  id: '/aviso-legal',
+  path: '/aviso-legal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -93,8 +111,11 @@ const PropiedadesIdRoute = PropiedadesIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/aviso-legal': typeof AvisoLegalRoute
   '/contacto': typeof ContactoRoute
   '/nosotros': typeof NosotrosRoute
+  '/politica-de-cookies': typeof PoliticaDeCookiesRoute
+  '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
@@ -108,8 +129,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/aviso-legal': typeof AvisoLegalRoute
   '/contacto': typeof ContactoRoute
   '/nosotros': typeof NosotrosRoute
+  '/politica-de-cookies': typeof PoliticaDeCookiesRoute
+  '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
@@ -124,8 +148,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/aviso-legal': typeof AvisoLegalRoute
   '/contacto': typeof ContactoRoute
   '/nosotros': typeof NosotrosRoute
+  '/politica-de-cookies': typeof PoliticaDeCookiesRoute
+  '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/vender': typeof VenderRoute
   '/propiedades/$id': typeof PropiedadesIdRoute
@@ -141,8 +168,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/aviso-legal'
     | '/contacto'
     | '/nosotros'
+    | '/politica-de-cookies'
+    | '/politica-de-privacidad'
     | '/trabaja-con-nosotros'
     | '/vender'
     | '/propiedades/$id'
@@ -156,8 +186,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/aviso-legal'
     | '/contacto'
     | '/nosotros'
+    | '/politica-de-cookies'
+    | '/politica-de-privacidad'
     | '/trabaja-con-nosotros'
     | '/vender'
     | '/propiedades/$id'
@@ -171,8 +204,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/aviso-legal'
     | '/contacto'
     | '/nosotros'
+    | '/politica-de-cookies'
+    | '/politica-de-privacidad'
     | '/trabaja-con-nosotros'
     | '/vender'
     | '/propiedades/$id'
@@ -187,8 +223,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AvisoLegalRoute: typeof AvisoLegalRoute
   ContactoRoute: typeof ContactoRoute
   NosotrosRoute: typeof NosotrosRoute
+  PoliticaDeCookiesRoute: typeof PoliticaDeCookiesRoute
+  PoliticaDePrivacidadRoute: typeof PoliticaDePrivacidadRoute
   TrabajaConNosotrosRoute: typeof TrabajaConNosotrosRoute
   VenderRoute: typeof VenderRoute
   PropiedadesIdRoute: typeof PropiedadesIdRoute
@@ -217,6 +256,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrabajaConNosotrosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/politica-de-privacidad': {
+      id: '/politica-de-privacidad'
+      path: '/politica-de-privacidad'
+      fullPath: '/politica-de-privacidad'
+      preLoaderRoute: typeof PoliticaDePrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/politica-de-cookies': {
+      id: '/politica-de-cookies'
+      path: '/politica-de-cookies'
+      fullPath: '/politica-de-cookies'
+      preLoaderRoute: typeof PoliticaDeCookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/nosotros': {
       id: '/nosotros'
       path: '/nosotros'
@@ -229,6 +282,13 @@ declare module '@tanstack/react-router' {
       path: '/contacto'
       fullPath: '/contacto'
       preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aviso-legal': {
+      id: '/aviso-legal'
+      path: '/aviso-legal'
+      fullPath: '/aviso-legal'
+      preLoaderRoute: typeof AvisoLegalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -299,8 +359,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AvisoLegalRoute: AvisoLegalRoute,
   ContactoRoute: ContactoRoute,
   NosotrosRoute: NosotrosRoute,
+  PoliticaDeCookiesRoute: PoliticaDeCookiesRoute,
+  PoliticaDePrivacidadRoute: PoliticaDePrivacidadRoute,
   TrabajaConNosotrosRoute: TrabajaConNosotrosRoute,
   VenderRoute: VenderRoute,
   PropiedadesIdRoute: PropiedadesIdRoute,

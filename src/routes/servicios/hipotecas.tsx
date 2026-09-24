@@ -236,8 +236,8 @@ function HipotecasHero() {
         <motion.span className="sum-hero-eyebrow" variants={heroItem}>
           Hipotecas
         </motion.span>
-        <motion.h1 className="sum-hero-title" variants={heroItem}>
-          Te conseguimos la mejor hipoteca
+        <motion.h1 className="sum-hero-title sum-hero-title--two-line" variants={heroItem}>
+          Te conseguimos<br />la mejor<br />hipoteca
         </motion.h1>
         <motion.div className="sum-hero-line" variants={heroItem} />
         <motion.p className="sum-hero-subtitle" variants={heroItem}>
