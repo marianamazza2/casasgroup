@@ -75,8 +75,6 @@ function HipotecasPage() {
     <main className="servicio-page">
       <HipotecasHero />
 
-      <QueHacemos />
-
       <section className="cf">
         <div className="cf-glow" aria-hidden="true" />
         <div className="cf-head">
@@ -107,6 +105,8 @@ function HipotecasPage() {
           ))}
         </motion.ol>
       </section>
+
+      <QueHacemos />
 
       <section ref={ctaRef} className={`adm-cta${ctaActive ? ' is-active' : ''}`}>
         <div

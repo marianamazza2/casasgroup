@@ -46,12 +46,12 @@ export const TABS = [
   {
     label: 'Misión',
     content:
-      'Que nuestros clientes encuentren en Group Casas todo lo que necesitan para su vivienda y la tranquilidad de saber que están en las mejores manos. Acompañarlos en cada etapa, cuidar cada detalle y trabajar con la excelencia que nos define, para que al final del camino su felicidad sea también la nuestra.',
+      'Nuestra misión es que nuestros clientes encuentren en Group Casas todo lo que necesitan para su vivienda, sabiendo que están en las mejores manos. Los acompañamos en cada etapa, cuidando cada detalle y trabajando con la excelencia que nos define, para que al final del camino su felicidad sea también la nuestra.',
   },
   {
     label: 'Visión',
     content:
-      'Nuestra visión es transformar la manera de vivir el sector inmobiliario, ofreciendo una experiencia integral en todo lo relacionado con la vivienda. Queremos construir un futuro en el que nuestros clientes no tengan que recurrir a distintos lugares para resolver cada necesidad, sino que puedan encontrar en Group Casas un único equipo capaz de acompañarlos en todo el proceso. Porque todo lo relacionado con tu vivienda puede empezar y terminar en un mismo lugar: Group Casas.',
+      'Nuestra visión es aspirar a transformar la manera de vivir y crecer en el sector inmobiliario sin perder la esencia que nos caracteriza. Ofreciendo una experiencia integral, buscamos que todo lo relacionado con la vivienda pueda empezar y terminar en un mismo lugar: el equipo de Group Casas.',
   },
 ]
 
