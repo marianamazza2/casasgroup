@@ -15,52 +15,54 @@ type Service = {
   label: string
   tag: string
   image: string
+  // object-position del recorte 3:4 cuando lo importante no está centrado
+  imagePosition?: string
   to?: string
 }
 
 // Servicios promocionados en "Seguimos a tu lado". Cambio de suministros sigue
 // siendo una página válida (y pasa su propio currentId), pero no se muestra
-// como tarjeta. Como cada página se excluye a sí misma, la rejilla queda
-// siempre en cuatro tarjetas.
+// como tarjeta. Cada página se excluye a sí misma y la rejilla se limita a
+// cuatro tarjetas (en Cambio de suministros no hay nada que excluir).
 const SERVICES: Service[] = [
   {
     id: 'administracion-de-comunidades',
     label: 'Comunidades',
     tag: 'Administración',
-    image:
-      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80',
+    image: '/administrar/card.jpg',
+    imagePosition: '75% center',
     to: '/servicios/administracion-de-comunidades',
   },
   {
     id: 'hipotecas',
     label: 'Hipotecas',
     tag: 'Financiación',
-    image:
-      'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1000&q=80',
+    image: '/hipotecas/card.webp',
+    imagePosition: '70% center',
     to: '/servicios/hipotecas',
   },
   {
     id: 'reformas',
     label: 'Reformas',
     tag: 'Obras',
-    image:
-      'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?auto=format&fit=crop&w=1000&q=80',
+    image: '/reformas/card.webp',
+    imagePosition: '65% center',
     to: '/servicios/reformas',
   },
   {
     id: 'seguros',
     label: 'Seguros',
     tag: 'Protección',
-    image:
-      'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1000&q=80',
+    image: '/seguros/vida.jpg',
+    imagePosition: '65% center',
     to: '/servicios/seguros',
   },
   {
     id: 'alarmas',
     label: 'Alarmas',
     tag: 'Seguridad',
-    image:
-      'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1000&q=80',
+    image: '/alarmas/card.jpg',
+    imagePosition: '90% center',
     to: '/servicios/alarmas',
   },
 ]
@@ -80,7 +82,10 @@ const cardVariants = {
 }
 
 export function ServiceFooter({ currentId }: { currentId: ServiceId }) {
-  const otherServices = SERVICES.filter((svc) => svc.id !== currentId)
+  const otherServices = SERVICES.filter((svc) => svc.id !== currentId).slice(
+    0,
+    4,
+  )
 
   return (
     <>
@@ -98,7 +103,16 @@ export function ServiceFooter({ currentId }: { currentId: ServiceId }) {
             const inner = (
               <>
                 <div className="otros-servicio-media">
-                  <img src={svc.image} alt="" loading="lazy" />
+                  <img
+                    src={svc.image}
+                    alt=""
+                    loading="lazy"
+                    style={
+                      svc.imagePosition
+                        ? { objectPosition: svc.imagePosition }
+                        : undefined
+                    }
+                  />
                   <span className="otros-servicio-tag">{svc.tag}</span>
                 </div>
                 <div className="otros-servicio-foot">
