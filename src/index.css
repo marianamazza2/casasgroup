@@ -1490,6 +1490,7 @@ button {
 .about-strip img {
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  object-position: 75% center;
   width: 100%;
 }
 

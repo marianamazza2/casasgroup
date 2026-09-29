@@ -26,26 +26,26 @@ const SLIDES: Slide[] = [
   {
     title: 'Gestión económica',
     desc: 'Elaboramos el presupuesto anual, controlamos ingresos y gastos, emitimos y gestionamos recibos, pagamos a proveedores y reclamamos impagos de forma diligente.',
-    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1600&q=80',
-    alt: 'Documentación económica y cuentas anuales de una comunidad de propietarios',
+    image: '/administrar/gestion-economica.webp',
+    alt: 'Documentación firmada y llave sobre una mesa de madera',
   },
   {
     title: 'Reuniones y acuerdos',
     desc: 'Convocamos y coordinamos las juntas de propietarios, redactamos las actas y ejecutamos los acuerdos adoptados, optimizando recursos y reduciendo costes.',
-    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1600&q=80',
-    alt: 'Junta de propietarios reunida en una sala luminosa',
+    image: '/administrar/reuniones-acuerdos.webp',
+    alt: 'Administradora presentando ante la junta de propietarios en una sala luminosa',
   },
   {
     title: 'Equipo especializado',
     desc: 'Contamos con un administrador de fincas, un abogado especializado y un asesor dedicado que trabajan de forma coordinada para proteger los intereses de la comunidad.',
-    image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80',
+    image: '/administrar/equipo-especializado.webp',
     alt: 'Equipo de administración de comunidades de Group Casas',
   },
   {
     title: 'Portal online 24 horas',
     desc: 'Ponemos a disposición de todos los propietarios un portal online seguro donde consultar la documentación de la comunidad, actas, estados de cuenta, recibos e incidencias en cualquier momento.',
-    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=80',
-    alt: 'Portal online de la comunidad abierto en un ordenador portátil',
+    image: '/administrar/portal-online.webp',
+    alt: 'Reunión de trabajo con el portal online abierto en un ordenador portátil',
   },
 ]
 

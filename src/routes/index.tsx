@@ -55,7 +55,7 @@ const services = [
     icon: 'HI',
     title: 'Financiar',
     description: 'Te conseguimos las mejores opciones de financiacion del mercado. Trabajamos con diferentes entidades financieras para encontrar las condiciones mas competitivas segun tu perfil y tus objetivos.',
-    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80',
+    image: '/home/financiar.webp',
     tag: 'Financiar',
     to: '/servicios/hipotecas',
   },
@@ -553,7 +553,7 @@ function Home() {
       </section>
 
       <section className="section about-strip" id="nosotros">
-        <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80" alt="" loading="lazy" />
+        <img src="/home/nosotros.webp" alt="" loading="lazy" />
         <div>
           <blockquote>Porque comprendimos que el sector no necesitaba mas de lo mismo.</blockquote>
           <p>Una marca pensada para superar expectativas, transformar la experiencia inmobiliaria y cuidar cada detalle con excelencia.</p>

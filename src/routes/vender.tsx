@@ -242,7 +242,7 @@ function VenderPage() {
           aria-hidden="true"
           style={{
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80)',
+              'url(/vender/cuanto-vale.webp)',
           }}
         />
         <div className="adm-cta-inner">
@@ -389,7 +389,7 @@ function VenderHero({ onCta }: { onCta: () => void }) {
           className="sum-hero-bg-img"
           style={{
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80)',
+              'url(/vender/hero.webp)',
           }}
         />
       </motion.div>
