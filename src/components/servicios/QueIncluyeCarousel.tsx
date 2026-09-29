@@ -27,7 +27,7 @@ const SLIDES: Slide[] = [
     title: 'Gestión económica',
     desc: 'Elaboramos el presupuesto anual, controlamos ingresos y gastos, emitimos y gestionamos recibos, pagamos a proveedores y reclamamos impagos de forma diligente.',
     image: '/administrar/gestion-economica.webp',
-    alt: 'Documentación firmada y llave sobre una mesa de madera',
+    alt: 'Revisión de cuentas y presupuestos de la comunidad sobre una mesa de trabajo',
   },
   {
     title: 'Reuniones y acuerdos',
