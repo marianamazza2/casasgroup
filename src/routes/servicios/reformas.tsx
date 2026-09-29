@@ -408,7 +408,7 @@ function PorQueNosotros() {
           className="seguros-porque-img"
           style={{
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80)',
+              'url(/reformas/por-que-nosotros.webp)',
           }}
         />
       </div>
@@ -769,7 +769,7 @@ function CtaBanner() {
         aria-hidden="true"
         style={{
           backgroundImage:
-            'url(https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=1600&q=80)',
+            'url(/reformas/cta-reforma.webp)',
         }}
       />
       <div className="adm-cta-inner">

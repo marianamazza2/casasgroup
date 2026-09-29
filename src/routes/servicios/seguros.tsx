@@ -40,32 +40,28 @@ export const TIPOS_SEGURO = [
     desc: 'Protección para tu vida, seguridad para tu futuro.',
     icon: 'heart',
     tag: 'Tu familia',
-    image:
-      'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1200&q=80',
+    image: '/seguros/vida.jpg',
   },
   {
     title: 'Seguro de hogar',
     desc: 'Protección para tu hogar, seguridad en cada momento.',
     icon: 'home',
     tag: 'El más contratado',
-    image:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+    image: '/seguros/hogar.jpg',
   },
   {
     title: 'Seguro de impago',
     desc: 'Protección para tu alquiler y seguridad en el pago de cada mensualidad.',
     icon: 'shield',
     tag: 'Propietarios',
-    image:
-      'https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=1200&q=80',
+    image: '/seguros/impago.jpg',
   },
   {
     title: 'Seguro de comunidad',
     desc: 'Protección integral para tu comunidad.',
     icon: 'building',
     tag: 'Comunidades',
-    image:
-      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+    image: '/seguros/comunidad.jpg',
   },
 ] as const
 

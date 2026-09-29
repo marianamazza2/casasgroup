@@ -114,7 +114,7 @@ function HipotecasPage() {
           aria-hidden="true"
           style={{
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1600&q=80)',
+              'url(/hipotecas/cta.webp)',
           }}
         />
         <div className="adm-cta-inner">
@@ -220,7 +220,7 @@ function HipotecasHero() {
           className="sum-hero-bg-img"
           style={{
             backgroundImage:
-              'url(https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=1920&q=80)',
+              'url(/hipotecas/hero.webp)',
           }}
         />
       </motion.div>

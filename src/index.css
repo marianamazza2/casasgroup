@@ -8223,8 +8223,11 @@ button {
 
 /* — Panel de previsualización — */
 .seguros-preview {
-  aspect-ratio: 4 / 5;
+  align-self: center;
+  aspect-ratio: 5 / 4;
   border-radius: 12px;
+  /* Tope de alto para que la tarjeta entre completa en pantalla en desktop */
+  max-height: min(70vh, 560px);
   overflow: hidden;
   position: relative;
 }
@@ -8497,6 +8500,7 @@ button {
 
   .seguros-preview {
     aspect-ratio: 16 / 11;
+    max-height: none;
     touch-action: pan-y;
   }
 
