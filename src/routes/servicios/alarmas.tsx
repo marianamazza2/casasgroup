@@ -40,21 +40,21 @@ export const TIPOS_ALARMA = [
     headline: 'Protección para tu hogar, estés dentro o fuera.',
     desc: 'Sistemas de alarma conectados 24/7 para detectar posibles intrusiones, verificar las alertas y actuar cuando sea necesario.',
     image:
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+      '/alarmas/vivienda.webp',
   },
   {
     title: 'Tu local',
     headline: 'Tu negocio protegido las 24 horas.',
     desc: 'Sistemas de seguridad adaptados a tu local para detectar posibles intrusiones y actuar ante cualquier incidencia.',
     image:
-      'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80',
+      '/alarmas/local.webp',
   },
   {
     title: 'Tu comunidad',
     headline: 'Protección para los espacios que compartís.',
     desc: 'Soluciones de seguridad adaptadas a accesos y zonas comunes para reforzar la protección de tu comunidad.',
     image:
-      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+      '/alarmas/comunidad.webp',
   },
 ] as const
 
