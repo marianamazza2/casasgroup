@@ -56,7 +56,7 @@ export function CookieBanner() {
           // Safari descarta el backdrop-filter de un elemento que anima su
           // propia opacidad y el fondo se veria nitido. Ver .cookie-overlay.
           initial={veil(0, 'blur(0px) saturate(1)')}
-          animate={veil(0.32, 'blur(10px) saturate(0.9)')}
+          animate={veil(0.32, 'blur(7px) saturate(0.95)')}
           exit={veil(0, 'blur(0px) saturate(1)')}
           transition={{ duration: 0.45, ease: 'easeOut' }}
         >

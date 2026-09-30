@@ -9689,8 +9689,8 @@ button {
    que evita que Safari pinte el primer fotograma sin desenfoque. */
 .cookie-overlay {
   align-items: center;
-  backdrop-filter: blur(10px) saturate(0.9);
-  -webkit-backdrop-filter: blur(10px) saturate(0.9);
+  backdrop-filter: blur(7px) saturate(0.95);
+  -webkit-backdrop-filter: blur(7px) saturate(0.95);
   background: rgb(26 26 24 / 0.32);
   display: flex;
   inset: 0;
