@@ -117,12 +117,8 @@ function TrabajaHero() {
     <section className="sum-hero" ref={ref}>
       <motion.div className="sum-hero-bg" style={{ y: bgY }} aria-hidden="true">
         <div
-          className="sum-hero-bg-img"
-          style={{
-            backgroundImage: 'url(/trabaja-con-nosotros/hero.webp)',
-            // Encuadre desplazado hacia arriba: deja más aire sobre el rótulo
-            backgroundPosition: '64% 0%',
-          }}
+          className="sum-hero-bg-img sum-hero-bg-img--trabaja"
+          style={{ backgroundImage: 'url(/trabaja-con-nosotros/hero.webp)' }}
         />
       </motion.div>
       <div className="sum-hero-overlay" aria-hidden="true" />

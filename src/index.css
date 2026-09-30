@@ -6679,6 +6679,19 @@ button {
   animation: sum-hero-zoom 20s ease-in-out infinite alternate;
 }
 
+/* Trabaja con nosotros: en desktop, encuadre arriba para dejar aire sobre el
+   rótulo; en móvil se centra en la zona de trabajo (izquierda de la foto) para
+   que las letras del cartel no queden cortadas detrás del titular. */
+.sum-hero-bg-img--trabaja {
+  background-position: 64% 0%;
+}
+
+@media (max-width: 767px) {
+  .sum-hero-bg-img--trabaja {
+    background-position: 18% 0%;
+  }
+}
+
 @keyframes sum-hero-zoom {
   from {
     transform: scale(1.04);
