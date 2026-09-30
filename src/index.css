@@ -1179,7 +1179,7 @@ button {
 .valuation-media {
   background:
     linear-gradient(180deg, rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.12)),
-    url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1100&q=80') center/cover;
+    url('/home/valoracion.webp') center 85%/cover;
 }
 
 .why {
@@ -1482,13 +1482,14 @@ button {
   align-items: center;
   display: grid;
   gap: clamp(28px, 5vw, 62px);
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 1.15fr 0.85fr;
   margin-inline: auto;
-  max-width: 1180px;
+  max-width: 1360px;
 }
 
 .about-strip img {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 5 / 4;
+  border-radius: 12px;
   object-fit: cover;
   object-position: 75% center;
   width: 100%;
@@ -6565,7 +6566,7 @@ button {
 
 .otros-servicio-media {
   aspect-ratio: 3 / 4;
-  border-radius: 2px;
+  border-radius: 12px;
   overflow: hidden;
   position: relative;
 }
@@ -7996,7 +7997,7 @@ button {
 
   .otros-servicio-media {
     aspect-ratio: 1 / 1;
-    border-radius: 4px;
+    border-radius: 12px;
     flex: 0 0 auto;
     width: 52px;
   }
