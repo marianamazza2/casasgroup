@@ -6679,14 +6679,19 @@ button {
   animation: sum-hero-zoom 20s ease-in-out infinite alternate;
 }
 
-/* Trabaja con nosotros: en desktop, encuadre arriba para dejar aire sobre el
-   rótulo; en móvil se centra en la zona de trabajo (izquierda de la foto) para
+/* Heroes de Nosotros y Trabaja con nosotros: el rótulo "Group Casas" está a la
+   derecha de la foto. En móvil se encuadra la zona de oficina (izquierda) para
    que las letras del cartel no queden cortadas detrás del titular. */
+.sum-hero-bg-img--nosotros {
+  background-position: center 0%;
+}
+
 .sum-hero-bg-img--trabaja {
   background-position: 64% 0%;
 }
 
 @media (max-width: 767px) {
+  .sum-hero-bg-img--nosotros,
   .sum-hero-bg-img--trabaja {
     background-position: 18% 0%;
   }
