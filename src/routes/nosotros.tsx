@@ -207,8 +207,7 @@ function NosotrosHero() {
           className="sum-hero-bg-img"
           style={{
             backgroundImage: 'url(/nosotros/hero.webp)',
-            // Encuadre desplazado hacia arriba: deja más aire sobre el rótulo
-            backgroundPosition: '64% 0%',
+            backgroundPosition: 'center 0%',
           }}
         />
       </motion.div>

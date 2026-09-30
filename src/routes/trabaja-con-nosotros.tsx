@@ -119,8 +119,9 @@ function TrabajaHero() {
         <div
           className="sum-hero-bg-img"
           style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80)',
+            backgroundImage: 'url(/trabaja-con-nosotros/hero.webp)',
+            // Encuadre desplazado hacia arriba: deja más aire sobre el rótulo
+            backgroundPosition: '64% 0%',
           }}
         />
       </motion.div>
