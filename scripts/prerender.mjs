@@ -209,6 +209,30 @@ async function main() {
     process.exit(1)
   }
 
+  // El prerender NO es idempotente, y correrlo dos veces sobre el mismo dist
+  // rompe el SEO de todo el sitio en silencio. Motivo: el server estatico sirve
+  // dist/index.html como shell para todas las rutas, y la primera pasada
+  // sobrescribe ese fichero con la HOME ya renderizada (su <title> y su
+  // <link rel="canonical" href="https://groupcasas.com/"> incluidos). En la
+  // segunda pasada cada ruta arranca desde ese shell y le suma SUS PROPIAS
+  // etiquetas encima, quedando con dos <title> y dos canonical — y el de la home
+  // PRIMERO. Google leeria que /servicios/reformas es un duplicado de la home y
+  // la desindexaria, junto con el resto de paginas.
+  //
+  // `vite build` siempre regenera un index.html limpio, asi que en un build
+  // normal esto no pasa. El guard cubre el caso de ejecutar el script a mano dos
+  // veces, o de un dist cacheado entre builds.
+  const shell = await readFile(join(DIST, 'index.html'), 'utf8')
+  if (!/<div id="root"><\/div>/.test(shell)) {
+    console.error(
+      '[prerender] dist/index.html ya esta prerenderizado (o no es el shell de Vite).\n' +
+      '            Correr el prerender sobre un dist ya procesado duplica <title> y\n' +
+      '            <link rel="canonical">, y deja el canonical de la home primero.\n' +
+      '            Ejecuta `vite build` para regenerar el shell y vuelve a intentarlo.',
+    )
+    process.exit(1)
+  }
+
   const server = await startServer()
   const browser = await chromium.launch()
   const page = await browser.newPage()
