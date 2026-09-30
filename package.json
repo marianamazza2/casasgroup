@@ -7,7 +7,7 @@
     "dev": "vite",
     "data": "node scripts/buildData.mjs",
     "images": "node scripts/optimizeImages.mjs",
-    "build": "node scripts/buildData.mjs && tsc -b && vite build",
+    "build": "node scripts/buildData.mjs && tsc -b && vite build && node scripts/prerender.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

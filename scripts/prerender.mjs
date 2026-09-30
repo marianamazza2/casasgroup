@@ -10,8 +10,9 @@
 //      que el router de TanStack renderice el contenido real.
 //   3. Vuelca el DOM resultante a dist/<ruta>/index.html.
 //
-// Las fichas de propiedad (/propiedades/<id>) se descubren crawleando el listado,
-// así el prerender es agnóstico a VITE_DATA_SOURCE (hardcoded | sheet | merge).
+// Las fichas de propiedad (/propiedades/<id>) se descubren leyendo los ids de
+// src/lib/generatedProperties.ts (la fuente única de inmuebles), no crawleando el
+// listado: /propiedades recorta por el encuadre del mapa. Ver discoverPropertyRoutes.
 //
 // En producción (Vercel) el sistema de ficheros se resuelve ANTES que el rewrite
 // catch-all de vercel.json, de modo que cada ruta sirve su HTML prerenderizado y
@@ -31,7 +32,7 @@ const DIST = join(__dirname, '..', 'dist')
 const PORT = 4319 // puerto poco común para no chocar con dev/preview
 
 // Rutas estáticas conocidas (todas las del routeTree salvo la dinámica $id).
-// Las fichas de propiedad se añaden en runtime crawleando /propiedades.
+// Las fichas de propiedad se añaden en runtime desde los datos generados.
 const STATIC_ROUTES = [
   '/',
   '/propiedades',
@@ -113,7 +114,23 @@ async function waitForApp(page) {
     { timeout: 15000 },
   )
   // Margen para que asienten crossfade (framer-motion) y datos asincronos.
-  await page.waitForTimeout(600)
+  //
+  // OJO con el valor: los heroes de servicios entran con `heroItem`, cuya
+  // transicion dura hasta 2.8s desde opacity:0. Con una espera corta el DOM se
+  // snapshotea a media animacion y el HTML servido queda con
+  // `style="opacity: 0"` sobre el <h1> — texto invisible en el HTML crudo, justo
+  // lo que el prerender venia a evitar. 3.5s cubre la mas lenta con margen.
+  await page.waitForTimeout(3500)
+
+  // Red de seguridad: si aun quedara algun elemento a opacity 0 por una
+  // animacion que no disparo (p.ej. `whileInView` de una seccion bajo el
+  // pliegue), se fuerza visible antes de serializar. El JS de cliente vuelve a
+  // tomar el control al hidratar, asi que no altera lo que ve el usuario.
+  await page.evaluate(() => {
+    document.querySelectorAll('[style*="opacity: 0"]').forEach((el) => {
+      el.style.opacity = '1'
+    })
+  })
 }
 
 // Snapshotea una ruta y la escribe como <ruta>/index.html en dist/.
@@ -137,20 +154,50 @@ async function prerenderRoute(page, route) {
   return outPath
 }
 
-// Descubre las URLs de fichas de propiedad crawleando el listado.
+// Descubre las URLs de fichas de propiedad.
+//
+// Se leen de `src/lib/generatedProperties.ts`, que es la fuente unica de verdad
+// (buildData.mjs la regenera desde el Sheet antes de cada build, y properties.ts
+// se limita a reexportarla).
+//
+// ANTES esto se hacia crawleando los <a> del listado, y estaba MAL: /propiedades
+// recorta los resultados por el encuadre del mapa (`mapVisibleIds` en
+// propiedades/index.tsx), asi que solo salian los pines dentro del viewport
+// inicial. Con 20 inmuebles publicados se descubrian 3, y las otras 17 fichas se
+// publicaban como shell vacio — sin H1 ni og:image. Leer el dato no depende de
+// como quede encuadrado el mapa.
 async function discoverPropertyRoutes(page) {
-  await page.goto(`http://localhost:${PORT}/propiedades`, { waitUntil: 'networkidle', timeout: 30000 }).catch(() => {})
-  await waitForApp(page)
-  const hrefs = await page.evaluate(() => {
-    const set = new Set()
-    document.querySelectorAll('a[href^="/propiedades/"]').forEach((a) => {
-      const href = a.getAttribute('href') || ''
-      const m = href.match(/^\/propiedades\/\d+$/)
-      if (m) set.add(m[0])
+  const dataFile = join(__dirname, '..', 'src', 'lib', 'generatedProperties.ts')
+  const ids = new Set()
+  try {
+    const src = await readFile(dataFile, 'utf8')
+    for (const m of src.matchAll(/"id":\s*(\d+)/g)) ids.add(Number(m[1]))
+  } catch (err) {
+    console.warn(`[prerender] No pude leer generatedProperties.ts (${err.message}); crawleo el listado.`)
+  }
+
+  // Fallback / red de seguridad: union con lo que el listado enlace de verdad.
+  try {
+    await page.goto(`http://localhost:${PORT}/propiedades`, { waitUntil: 'networkidle', timeout: 30000 }).catch(() => {})
+    await waitForApp(page)
+    const hrefs = await page.evaluate(() => {
+      const set = new Set()
+      document.querySelectorAll('a[href^="/propiedades/"]').forEach((a) => {
+        const href = a.getAttribute('href') || ''
+        const m = href.match(/^\/propiedades\/\d+$/)
+        if (m) set.add(m[0])
+      })
+      return [...set]
     })
-    return [...set]
-  })
-  return hrefs.sort()
+    for (const h of hrefs) ids.add(Number(h.split('/').pop()))
+  } catch {
+    // Si el listado falla pero tenemos ids del fichero, seguimos igual.
+  }
+
+  if (ids.size === 0) {
+    console.warn('[prerender] ⚠️  0 fichas descubiertas: se publicaran sin prerenderizar.')
+  }
+  return [...ids].sort((a, b) => a - b).map((id) => `/propiedades/${id}`)
 }
 
 async function main() {
