@@ -157,8 +157,9 @@ function NosotrosPage() {
           className="adm-cta-bg"
           aria-hidden="true"
           style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=80)',
+            backgroundImage: 'url(/nosotros/equipo-cta.webp)',
+            // Encuadre desplazado hacia arriba para que la foto se vea más baja
+            backgroundPosition: 'center 28%',
           }}
         />
         <div className="adm-cta-inner">
@@ -206,8 +207,9 @@ function NosotrosHero() {
         <div
           className="sum-hero-bg-img"
           style={{
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80)',
+            backgroundImage: 'url(/nosotros/hero.webp)',
+            // Encuadre desplazado hacia arriba: deja más aire sobre el rótulo
+            backgroundPosition: '64% 0%',
           }}
         />
       </motion.div>

@@ -7,6 +7,7 @@ import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
 import { breadcrumbSchema, organizationSchema, absoluteUrl } from '../lib/structuredData'
 import { properties } from '../lib/properties'
+import { FORMSPREE_FORMS, submitToFormspree } from '../lib/formspree'
 import Map, { Marker } from 'react-map-gl/maplibre'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
@@ -139,6 +140,9 @@ function ContactPage() {
 
   const [isPanelOpen, setIsPanelOpen] = useState(() => Boolean(property))
   const [reason, setReason] = useState(contactReasons[0])
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   // Devuelve el href del canal directo con el mensaje sobre el inmueble.
   const hrefForProperty = (card: ContactCard) => {
@@ -424,7 +428,35 @@ function ContactPage() {
                 x
               </button>
             </div>
-            <form className="contact-form" onSubmit={(event) => event.preventDefault()}>
+            {submitted ? (
+              <div className="contact-form-done" role="status">
+                <span className="vender-form-done-icon" aria-hidden="true">
+                  ✓
+                </span>
+                <h3>¡Mensaje enviado!</h3>
+                <p>Gracias por escribirnos. Te responderemos lo antes posible.</p>
+              </div>
+            ) : (
+            <form
+              className="contact-form"
+              onSubmit={async (event) => {
+                event.preventDefault()
+                setSending(true)
+                setSendError(false)
+                try {
+                  await submitToFormspree(FORMSPREE_FORMS.contacto, event.currentTarget, {
+                    _subject: property
+                      ? `Consulta: ${propertyLabel} — Group Casas`
+                      : `Nuevo contacto (${reason}) — Group Casas`,
+                  })
+                  setSubmitted(true)
+                } catch {
+                  setSendError(true)
+                } finally {
+                  setSending(false)
+                }
+              }}
+            >
               <label>
                 Nombre *
                 <input name="name" placeholder="Tu nombre" required />
@@ -453,8 +485,16 @@ function ContactPage() {
                 Mensaje
                 <textarea name="message" placeholder="Escribe tu mensaje..." rows={5} defaultValue={propertyMessage} />
               </label>
-              <button type="submit">Enviar mensaje</button>
+              {/* Honeypot anti-spam de Formspree: invisible para personas. */}
+              <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" className="form-honeypot" aria-hidden="true" />
+              {sendError ? (
+                <p className="form-error" role="alert">
+                  No se pudo enviar. Inténtalo de nuevo o escríbenos a info@groupcasas.com.
+                </p>
+              ) : null}
+              <button type="submit" disabled={sending}>{sending ? 'Enviando…' : 'Enviar mensaje'}</button>
             </form>
+            )}
           </aside>
             </div>,
             document.body,

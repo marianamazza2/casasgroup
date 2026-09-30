@@ -5,6 +5,7 @@ import { Footer } from '../components/Footer'
 import { FormSelect } from '../components/vender/FormSelect'
 import { TextToggle } from '../components/TextToggle'
 import { absoluteUrl } from '../lib/structuredData'
+import { FORMSPREE_FORMS, submitToFormspree } from '../lib/formspree'
 
 export const Route = createFileRoute('/vender')({
   head: () => ({
@@ -90,6 +91,8 @@ function VenderPage() {
   const ctaRef = useRef<HTMLElement>(null)
   const [ctaActive, setCtaActive] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState(false)
   const [formOpen, setFormOpen] = useState(false)
   const [propertyType, setPropertyType] = useState(PROPERTY_TYPES[0])
 
@@ -169,9 +172,20 @@ function VenderPage() {
                 <div className="vender-form-reveal-inner">
             <form
               className="vender-form"
-              onSubmit={(event) => {
+              onSubmit={async (event) => {
                 event.preventDefault()
-                setSubmitted(true)
+                setSending(true)
+                setSendError(false)
+                try {
+                  await submitToFormspree(FORMSPREE_FORMS.vender, event.currentTarget, {
+                    _subject: 'Nueva solicitud de valoración — Group Casas',
+                  })
+                  setSubmitted(true)
+                } catch {
+                  setSendError(true)
+                } finally {
+                  setSending(false)
+                }
               }}
             >
               <div className="vender-form-head">
@@ -204,7 +218,14 @@ function VenderPage() {
                 Dirección del inmueble *
                 <input name="address" placeholder="Calle, número, ciudad..." required />
               </label>
-              <button type="submit">Enviar →</button>
+              {/* Honeypot anti-spam de Formspree: invisible para personas. */}
+              <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" className="form-honeypot" aria-hidden="true" />
+              {sendError ? (
+                <p className="form-error" role="alert">
+                  No se pudo enviar. Inténtalo de nuevo o escríbenos a info@groupcasas.com.
+                </p>
+              ) : null}
+              <button type="submit" disabled={sending}>{sending ? 'Enviando…' : 'Enviar →'}</button>
               <p className="vender-form-fine">Sin compromiso de venta. Solo para propietarios.</p>
             </form>
                 </div>
