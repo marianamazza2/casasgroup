@@ -43,9 +43,24 @@ export function CookieBanner() {
       {open && (
         <motion.div
           className="cookie-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          // Se animan el velo y el desenfoque, no la opacidad del contenedor:
+          // Safari descarta el backdrop-filter de un elemento que anima su
+          // propia opacidad y el fondo se veria nitido. Ver .cookie-overlay.
+          initial={{
+            backgroundColor: 'rgba(26, 26, 24, 0)',
+            backdropFilter: 'blur(0px) saturate(1)',
+            WebkitBackdropFilter: 'blur(0px) saturate(1)',
+          }}
+          animate={{
+            backgroundColor: 'rgba(26, 26, 24, 0.32)',
+            backdropFilter: 'blur(10px) saturate(0.9)',
+            WebkitBackdropFilter: 'blur(10px) saturate(0.9)',
+          }}
+          exit={{
+            backgroundColor: 'rgba(26, 26, 24, 0)',
+            backdropFilter: 'blur(0px) saturate(1)',
+            WebkitBackdropFilter: 'blur(0px) saturate(1)',
+          }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
         >
           <motion.div

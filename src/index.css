@@ -9679,16 +9679,24 @@ button {
 /* Tarjeta blanca centrada sobre un velo tinta muy suave y difuminado. Acentos
    en dorado; los dos botones comparten tamaño para dar el mismo peso a
    aceptar y rechazar. */
+/* El velo y el desenfoque los anima framer-motion (background-color +
+   backdrop-filter), nunca la opacidad del propio velo: Safari saca a su
+   propia capa el elemento que anima opacidad y entonces el backdrop-filter
+   se queda sin fondo que filtrar y no se ve ningun desenfoque. Los valores
+   de aqui son el estado final y sirven de fallback si el JS no anima.
+   translateZ(0) fuerza la capa compuesta desde el primer frame, que es lo
+   que evita que Safari pinte el primer fotograma sin desenfoque. */
 .cookie-overlay {
   align-items: center;
-  backdrop-filter: blur(6px) saturate(0.9);
-  -webkit-backdrop-filter: blur(6px) saturate(0.9);
+  backdrop-filter: blur(10px) saturate(0.9);
+  -webkit-backdrop-filter: blur(10px) saturate(0.9);
   background: rgb(26 26 24 / 0.32);
   display: flex;
   inset: 0;
   justify-content: center;
   padding: 20px;
   position: fixed;
+  transform: translateZ(0);
   z-index: 1500;
 }
 
