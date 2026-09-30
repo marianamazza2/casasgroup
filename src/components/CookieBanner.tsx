@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, type TargetAndTransition } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import {
   COOKIE_CONSENT_OPEN_EVENT,
@@ -7,6 +7,15 @@ import {
   setCookieConsent,
   type CookieConsentValue,
 } from '../lib/cookieConsent'
+
+// Estado del velo. WebkitBackdropFilter no está en los tipos de framer-motion,
+// pero Safari lo necesita, así que se fuerza el tipo.
+const veil = (alpha: number, filter: string) =>
+  ({
+    backgroundColor: `rgba(26, 26, 24, ${alpha})`,
+    backdropFilter: filter,
+    WebkitBackdropFilter: filter,
+  }) as TargetAndTransition
 
 // Aviso de consentimiento: tarjeta centrada sobre un velo difuminado. Solo dos
 // opciones con el mismo peso visual y el mismo tamaño (la AEPD exige que
@@ -46,21 +55,9 @@ export function CookieBanner() {
           // Se animan el velo y el desenfoque, no la opacidad del contenedor:
           // Safari descarta el backdrop-filter de un elemento que anima su
           // propia opacidad y el fondo se veria nitido. Ver .cookie-overlay.
-          initial={{
-            backgroundColor: 'rgba(26, 26, 24, 0)',
-            backdropFilter: 'blur(0px) saturate(1)',
-            WebkitBackdropFilter: 'blur(0px) saturate(1)',
-          }}
-          animate={{
-            backgroundColor: 'rgba(26, 26, 24, 0.32)',
-            backdropFilter: 'blur(10px) saturate(0.9)',
-            WebkitBackdropFilter: 'blur(10px) saturate(0.9)',
-          }}
-          exit={{
-            backgroundColor: 'rgba(26, 26, 24, 0)',
-            backdropFilter: 'blur(0px) saturate(1)',
-            WebkitBackdropFilter: 'blur(0px) saturate(1)',
-          }}
+          initial={veil(0, 'blur(0px) saturate(1)')}
+          animate={veil(0.32, 'blur(10px) saturate(0.9)')}
+          exit={veil(0, 'blur(0px) saturate(1)')}
           transition={{ duration: 0.45, ease: 'easeOut' }}
         >
           <motion.div
