@@ -87,7 +87,7 @@ export const TEAM = [
     image: '/nosotros/equipo/marcos-gomez.webp',
   },
   {
-    name: 'Lucciana Canepa',
+    name: 'Lucciana Cànepa',
     role: 'Marketing',
     image: '/nosotros/equipo/lucciana-canepa.webp',
   },
