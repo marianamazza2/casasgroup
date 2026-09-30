@@ -200,6 +200,22 @@ async function discoverPropertyRoutes(page) {
   return [...ids].sort((a, b) => a - b).map((id) => `/propiedades/${id}`)
 }
 
+// En Vercel no existe el Chromium que descarga `playwright install`, y la imagen
+// de build (Amazon Linux) no trae sus librerias de sistema. Alli se usa el
+// binario de @sparticuz/chromium, empaquetado para ese entorno. En local se usa
+// el Chromium normal de Playwright.
+async function launchBrowser() {
+  if (process.env.VERCEL) {
+    const { default: serverlessChromium } = await import('@sparticuz/chromium')
+    return chromium.launch({
+      executablePath: await serverlessChromium.executablePath(),
+      args: serverlessChromium.args,
+      headless: true,
+    })
+  }
+  return chromium.launch()
+}
+
 async function main() {
   // Verifica que exista un build.
   try {
@@ -234,7 +250,7 @@ async function main() {
   }
 
   const server = await startServer()
-  const browser = await chromium.launch()
+  const browser = await launchBrowser()
   const page = await browser.newPage()
 
   try {
