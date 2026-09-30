@@ -117,8 +117,11 @@ function TrabajaHero() {
     <section className="sum-hero" ref={ref}>
       <motion.div className="sum-hero-bg" style={{ y: bgY }} aria-hidden="true">
         <div
-          className="sum-hero-bg-img tcn-hero-bg-img"
-          style={{ backgroundImage: 'url(/trabaja-con-nosotros/hero.webp)' }}
+          className="sum-hero-bg-img"
+          style={{
+            backgroundImage:
+              'url(https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1920&q=80)',
+          }}
         />
       </motion.div>
       <div className="sum-hero-overlay" aria-hidden="true" />

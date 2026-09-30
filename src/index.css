@@ -6688,15 +6688,6 @@ button {
   }
 }
 
-/* Trabaja con nosotros: el letrero de la foto está arriba, así que la
-   imagen arranca en el borde superior del hero (compensa el -8% de
-   .sum-hero-bg) y el zoom crece desde arriba para no recortarlo. */
-.tcn-hero-bg-img {
-  background-position: 65% top;
-  inset: 7.4% -2% -6% -10%;
-  transform-origin: center top;
-}
-
 /* Exactamente los mismos degradados que el hero de la home:
    velo (.hero::after) sobre el lavado dorado (.hero-gold-bg). */
 .sum-hero-overlay {

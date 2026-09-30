@@ -10,9 +10,8 @@
 //      que el router de TanStack renderice el contenido real.
 //   3. Vuelca el DOM resultante a dist/<ruta>/index.html.
 //
-// Las fichas de propiedad (/propiedades/<id>) se descubren leyendo los ids de
-// src/lib/generatedProperties.ts (la fuente única de inmuebles), no crawleando el
-// listado: /propiedades recorta por el encuadre del mapa. Ver discoverPropertyRoutes.
+// Las fichas de propiedad (/propiedades/<id>) se descubren crawleando el listado,
+// así el prerender es agnóstico a VITE_DATA_SOURCE (hardcoded | sheet | merge).
 //
 // En producción (Vercel) el sistema de ficheros se resuelve ANTES que el rewrite
 // catch-all de vercel.json, de modo que cada ruta sirve su HTML prerenderizado y
@@ -32,7 +31,7 @@ const DIST = join(__dirname, '..', 'dist')
 const PORT = 4319 // puerto poco común para no chocar con dev/preview
 
 // Rutas estáticas conocidas (todas las del routeTree salvo la dinámica $id).
-// Las fichas de propiedad se añaden en runtime desde los datos generados.
+// Las fichas de propiedad se añaden en runtime crawleando /propiedades.
 const STATIC_ROUTES = [
   '/',
   '/propiedades',
@@ -114,23 +113,7 @@ async function waitForApp(page) {
     { timeout: 15000 },
   )
   // Margen para que asienten crossfade (framer-motion) y datos asincronos.
-  //
-  // OJO con el valor: los heroes de servicios entran con `heroItem`, cuya
-  // transicion dura hasta 2.8s desde opacity:0. Con una espera corta el DOM se
-  // snapshotea a media animacion y el HTML servido queda con
-  // `style="opacity: 0"` sobre el <h1> — texto invisible en el HTML crudo, justo
-  // lo que el prerender venia a evitar. 3.5s cubre la mas lenta con margen.
-  await page.waitForTimeout(3500)
-
-  // Red de seguridad: si aun quedara algun elemento a opacity 0 por una
-  // animacion que no disparo (p.ej. `whileInView` de una seccion bajo el
-  // pliegue), se fuerza visible antes de serializar. El JS de cliente vuelve a
-  // tomar el control al hidratar, asi que no altera lo que ve el usuario.
-  await page.evaluate(() => {
-    document.querySelectorAll('[style*="opacity: 0"]').forEach((el) => {
-      el.style.opacity = '1'
-    })
-  })
+  await page.waitForTimeout(600)
 }
 
 // Snapshotea una ruta y la escribe como <ruta>/index.html en dist/.
@@ -154,66 +137,20 @@ async function prerenderRoute(page, route) {
   return outPath
 }
 
-// Descubre las URLs de fichas de propiedad.
-//
-// Se leen de `src/lib/generatedProperties.ts`, que es la fuente unica de verdad
-// (buildData.mjs la regenera desde el Sheet antes de cada build, y properties.ts
-// se limita a reexportarla).
-//
-// ANTES esto se hacia crawleando los <a> del listado, y estaba MAL: /propiedades
-// recorta los resultados por el encuadre del mapa (`mapVisibleIds` en
-// propiedades/index.tsx), asi que solo salian los pines dentro del viewport
-// inicial. Con 20 inmuebles publicados se descubrian 3, y las otras 17 fichas se
-// publicaban como shell vacio — sin H1 ni og:image. Leer el dato no depende de
-// como quede encuadrado el mapa.
+// Descubre las URLs de fichas de propiedad crawleando el listado.
 async function discoverPropertyRoutes(page) {
-  const dataFile = join(__dirname, '..', 'src', 'lib', 'generatedProperties.ts')
-  const ids = new Set()
-  try {
-    const src = await readFile(dataFile, 'utf8')
-    for (const m of src.matchAll(/"id":\s*(\d+)/g)) ids.add(Number(m[1]))
-  } catch (err) {
-    console.warn(`[prerender] No pude leer generatedProperties.ts (${err.message}); crawleo el listado.`)
-  }
-
-  // Fallback / red de seguridad: union con lo que el listado enlace de verdad.
-  try {
-    await page.goto(`http://localhost:${PORT}/propiedades`, { waitUntil: 'networkidle', timeout: 30000 }).catch(() => {})
-    await waitForApp(page)
-    const hrefs = await page.evaluate(() => {
-      const set = new Set()
-      document.querySelectorAll('a[href^="/propiedades/"]').forEach((a) => {
-        const href = a.getAttribute('href') || ''
-        const m = href.match(/^\/propiedades\/\d+$/)
-        if (m) set.add(m[0])
-      })
-      return [...set]
+  await page.goto(`http://localhost:${PORT}/propiedades`, { waitUntil: 'networkidle', timeout: 30000 }).catch(() => {})
+  await waitForApp(page)
+  const hrefs = await page.evaluate(() => {
+    const set = new Set()
+    document.querySelectorAll('a[href^="/propiedades/"]').forEach((a) => {
+      const href = a.getAttribute('href') || ''
+      const m = href.match(/^\/propiedades\/\d+$/)
+      if (m) set.add(m[0])
     })
-    for (const h of hrefs) ids.add(Number(h.split('/').pop()))
-  } catch {
-    // Si el listado falla pero tenemos ids del fichero, seguimos igual.
-  }
-
-  if (ids.size === 0) {
-    console.warn('[prerender] ⚠️  0 fichas descubiertas: se publicaran sin prerenderizar.')
-  }
-  return [...ids].sort((a, b) => a - b).map((id) => `/propiedades/${id}`)
-}
-
-// En Vercel no existe el Chromium que descarga `playwright install`, y la imagen
-// de build (Amazon Linux) no trae sus librerias de sistema. Alli se usa el
-// binario de @sparticuz/chromium, empaquetado para ese entorno. En local se usa
-// el Chromium normal de Playwright.
-async function launchBrowser() {
-  if (process.env.VERCEL) {
-    const { default: serverlessChromium } = await import('@sparticuz/chromium')
-    return chromium.launch({
-      executablePath: await serverlessChromium.executablePath(),
-      args: serverlessChromium.args,
-      headless: true,
-    })
-  }
-  return chromium.launch()
+    return [...set]
+  })
+  return hrefs.sort()
 }
 
 async function main() {
@@ -225,32 +162,8 @@ async function main() {
     process.exit(1)
   }
 
-  // El prerender NO es idempotente, y correrlo dos veces sobre el mismo dist
-  // rompe el SEO de todo el sitio en silencio. Motivo: el server estatico sirve
-  // dist/index.html como shell para todas las rutas, y la primera pasada
-  // sobrescribe ese fichero con la HOME ya renderizada (su <title> y su
-  // <link rel="canonical" href="https://groupcasas.com/"> incluidos). En la
-  // segunda pasada cada ruta arranca desde ese shell y le suma SUS PROPIAS
-  // etiquetas encima, quedando con dos <title> y dos canonical — y el de la home
-  // PRIMERO. Google leeria que /servicios/reformas es un duplicado de la home y
-  // la desindexaria, junto con el resto de paginas.
-  //
-  // `vite build` siempre regenera un index.html limpio, asi que en un build
-  // normal esto no pasa. El guard cubre el caso de ejecutar el script a mano dos
-  // veces, o de un dist cacheado entre builds.
-  const shell = await readFile(join(DIST, 'index.html'), 'utf8')
-  if (!/<div id="root"><\/div>/.test(shell)) {
-    console.error(
-      '[prerender] dist/index.html ya esta prerenderizado (o no es el shell de Vite).\n' +
-      '            Correr el prerender sobre un dist ya procesado duplica <title> y\n' +
-      '            <link rel="canonical">, y deja el canonical de la home primero.\n' +
-      '            Ejecuta `vite build` para regenerar el shell y vuelve a intentarlo.',
-    )
-    process.exit(1)
-  }
-
   const server = await startServer()
-  const browser = await launchBrowser()
+  const browser = await chromium.launch()
   const page = await browser.newPage()
 
   try {
