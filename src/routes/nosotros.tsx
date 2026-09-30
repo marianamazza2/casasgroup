@@ -59,38 +59,37 @@ export const TEAM = [
   {
     name: 'Angie Caballero',
     role: 'Fundadora & CEO',
-    image:
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+    image: '/nosotros/equipo/angie-caballero.webp',
   },
   {
     name: 'Betsabé Caballero',
     role: 'Asesora Inmobiliaria',
-    image:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80',
+    image: '/nosotros/equipo/betsabe-caballero.webp',
   },
   {
     name: 'Rafael Caballero',
     role: 'Administrador de Comunidades',
-    image:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
+    image: '/nosotros/equipo/rafael-caballero.webp',
   },
   {
     name: 'Iker Rentero',
     role: 'Asesor Financiero',
-    image:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    name: 'Marcos Gómez',
-    role: 'Asesor Inmobiliario',
-    image:
-      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80',
+    image: '/nosotros/equipo/iker-rentero.webp',
   },
   {
     name: 'Nicolle Pinzón',
     role: 'Administradora',
-    image:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=600&q=80',
+    image: '/nosotros/equipo/nicolle-pinzon.webp',
+  },
+  {
+    name: 'Marcos Gómez',
+    role: 'Asesor Inmobiliario',
+    image: '/nosotros/equipo/marcos-gomez.webp',
+  },
+  {
+    name: 'Lucciana Canepa',
+    role: 'Marketing',
+    image: '/nosotros/equipo/lucciana-canepa.webp',
   },
 ]
 

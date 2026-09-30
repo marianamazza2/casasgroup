@@ -8,6 +8,16 @@ type Member = {
 
 const MOBILE_QUERY = '(max-width: 767px)'
 
+// La última página es parcial: el navegador limita el scroll a
+// scrollWidth - clientWidth, así que al llegar al tope la damos por última.
+function currentPage(el: HTMLElement) {
+  const max = el.scrollWidth - el.clientWidth
+  if (max > 0 && el.scrollLeft >= max - 2) {
+    return Math.ceil(el.scrollWidth / el.clientWidth - 0.05) - 1
+  }
+  return Math.round(el.scrollLeft / el.clientWidth)
+}
+
 /**
  * Equipo como slider horizontal en todos los tamaños. La pista arranca siempre
  * en scrollLeft 0, así que la primera vista es la que manda: en mobile se
@@ -43,8 +53,10 @@ export function TeamSlider({ members }: { members: Member[] }) {
   const measure = useCallback(() => {
     const el = trackRef.current
     if (!el || el.clientWidth === 0) return
-    setPages(Math.max(1, Math.round(el.scrollWidth / el.clientWidth)))
-    setPage(Math.round(el.scrollLeft / el.clientWidth))
+    // ceil (con margen para el último gap) y no round: con 7 fichas de 3 en 3
+    // salen 2,33 vistas y la última página parcial también tiene que contar.
+    setPages(Math.max(1, Math.ceil(el.scrollWidth / el.clientWidth - 0.05)))
+    setPage(currentPage(el))
   }, [])
 
   useEffect(() => {
@@ -59,7 +71,7 @@ export function TeamSlider({ members }: { members: Member[] }) {
   const onScroll = () => {
     const el = trackRef.current
     if (!el) return
-    setPage(Math.round(el.scrollLeft / el.clientWidth))
+    setPage(currentPage(el))
   }
 
   const goTo = (next: number) => {
