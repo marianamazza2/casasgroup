@@ -6,6 +6,7 @@ import { MisionTabs } from '../components/nosotros/MisionTabs'
 import { ValoresManifiesto } from '../components/nosotros/ValoresManifiesto'
 import { TeamSlider } from '../components/nosotros/TeamSlider'
 import { JsonLd } from '../components/JsonLd'
+import { RevealTitle } from '../components/RevealTitle'
 import { breadcrumbSchema, organizationSchema, absoluteUrl } from '../lib/structuredData'
 
 export const Route = createFileRoute('/nosotros')({
@@ -119,29 +120,21 @@ function NosotrosPage() {
       />
       <NosotrosHero />
 
+      {/* Mismo estilo que el bloque de marca de la home (.why-story), con el texto propio de nosotros. */}
       <section className="brand-story">
-        <figure className="brand-story-figure">
-          <div className="brand-story-photo">
-            <img src={TEAM[0].image} alt="Angie Caballero, fundadora de Group Casas" loading="lazy" />
-          </div>
-          <figcaption>
-            <p className="team-name">{TEAM[0].name}</p>
-            <p className="team-role">{TEAM[0].role}</p>
-          </figcaption>
-        </figure>
-        <div className="brand-story-text">
+        <div className="why-story">
           <span className="brand-story-eyebrow">La marca</span>
-          <h2>Group Casas</h2>
-          <div className="nosotros-gold-line nosotros-gold-line--left" />
-          <p>
+          <RevealTitle text="Group Casas" className="why-wordmark" />
+          <div className="nosotros-gold-line" />
+          <p className="why-story-text">
             Group Casas nace con un propósito: transformar la forma en la que las personas viven una de las
             decisiones más importantes de su vida.
           </p>
-          <p>
+          <p className="why-story-text">
             No queríamos crear una inmobiliaria más. Queríamos construir una marca capaz de transformar la
             experiencia de comprar, vender, financiar, reformar o administrar una vivienda.
           </p>
-          <p>
+          <p className="why-story-text">
             Todo lo que necesitas para tu vivienda, en un solo lugar.
           </p>
         </div>

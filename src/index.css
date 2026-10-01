@@ -5422,55 +5422,12 @@ button {
 }
 
 .brand-story {
-  display: flex;
-  gap: clamp(32px, 5vw, 72px);
-  /* Mismo aire vertical que .section para que la foto no quede pegada al
-     hero; en horizontal se centra a 1180px como el resto de contenidos. */
-  padding: clamp(58px, 8vw, 94px) max(clamp(22px, 5vw, 72px), calc((100% - 1180px) / 2));
+  /* Mismo aire vertical que .section; el ancho y los márgenes laterales los
+     pone .why-story, igual que en la home. */
+  padding-block: clamp(58px, 8vw, 94px);
 }
 
-/* Foto + nombre/puesto debajo, con el mismo pie que las tarjetas de equipo
-   (.team-name / .team-role). */
-.brand-story-figure {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  gap: 14px;
-  margin: 0;
-  text-align: center;
-  width: 45%;
-}
-
-.brand-story-photo {
-  background: #efede8;
-  border-radius: 12px;
-  flex: 1;
-  min-height: 600px;
-  overflow: hidden;
-  position: relative;
-}
-
-/* La foto es vertical y la columna puede ser más ancha que alta: se recorta
-   por arriba/abajo. Se ancla arriba (20%) para que no se corte el letrero
-   "Group Casas" que está en el tercio superior de la foto. */
-.brand-story-photo img {
-  display: block;
-  height: 100%;
-  inset: 0;
-  object-fit: cover;
-  object-position: center 20%;
-  position: absolute;
-  width: 100%;
-}
-
-.brand-story-text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(24px, 4vw, 48px) 0;
-}
-
+/* Eyebrow + línea dorada del bloque original, centrados como el wordmark. */
 .brand-story-eyebrow {
   color: var(--gold);
   display: block;
@@ -5481,21 +5438,19 @@ button {
   text-transform: uppercase;
 }
 
-.brand-story-text h2 {
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: clamp(26px, 3vw, 34px);
-  font-weight: 500;
-  line-height: 1.3;
-  margin: 0 0 16px;
+.brand-story .nosotros-gold-line {
+  margin: clamp(18px, 2.4vw, 28px) auto 0;
 }
 
-.brand-story-text p {
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.8;
-  margin: 0 0 12px;
-  max-width: 520px;
+/* Algo más estrecho que en la home (74ch). */
+.brand-story .why-story-text {
+  max-width: 56ch;
+}
+
+/* Aquí son varios párrafos: el primero se separa del wordmark como en la home
+   y los siguientes van más juntos. */
+.brand-story .why-story-text + .why-story-text {
+  margin-top: 0.9em;
 }
 
 /* Banda editorial oscura: fondo con imagen + velo, número en contorno,
@@ -6327,28 +6282,6 @@ button {
 }
 
 @media (max-width: 900px) {
-  .brand-story {
-    flex-direction: column;
-  }
-
-  /* Vertical en móvil para que se vea a Angie entera; tope en tablet para que
-     la foto no ocupe más de una pantalla. */
-  .brand-story-figure {
-    width: 100%;
-  }
-
-  .brand-story-photo {
-    aspect-ratio: 4 / 5;
-    flex: none;
-    max-height: 560px;
-    min-height: 0;
-    width: 100%;
-  }
-
-  .brand-story-text {
-    padding: 0;
-  }
-
   .team-track {
     --team-per-view: 2;
   }
