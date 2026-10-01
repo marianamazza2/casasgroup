@@ -15,10 +15,15 @@ export const config = {
 
 const COOKIE = 'gc_preview'
 const PARAM = 'acceso'
+// Dominio de Vercel que usa el cliente para revisar: queda abierto (su noindex
+// va en vercel.json, para que Google no lo indexe como duplicado).
+const OPEN_HOSTS = ['casasgroup.vercel.app']
 
 export default function middleware(request: Request): Response | undefined {
   const key = process.env.PREVIEW_KEY
   const url = new URL(request.url)
+
+  if (OPEN_HOSTS.includes(url.hostname)) return undefined
 
   if (key) {
     // Entrada por el link secreto: guarda la cookie y limpia la URL.
