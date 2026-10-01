@@ -10,7 +10,8 @@ import { PropertyMap } from '../../components/property/PropertyMap'
 import { JsonLd } from '../../components/JsonLd'
 import { TextToggle } from '../../components/TextToggle'
 import { Seo } from '../../components/Seo'
-import { absoluteUrl, breadcrumbSchema, realEstateListingSchema } from '../../lib/structuredData'
+import { propertySeo } from '../../lib/pageMeta'
+import { breadcrumbSchema, realEstateListingSchema } from '../../lib/structuredData'
 
 export const Route = createFileRoute('/propiedades/$id')({
   component: PropertyDetailPage,
@@ -43,20 +44,16 @@ function PropertyDetailPage() {
   }
 
   const propertyRef = `GC-${String(p.id).padStart(4, '0')}`
-  const locality = p.zone || p.city
-  const canonical = absoluteUrl(`/propiedades/${p.id}`)
-  // title/description desde los datos del inmueble (§4.3.2); OG con la foto de
-  // portada (p.image = cover) — clave para la miniatura al compartir por WhatsApp.
-  const seoTitle = `${p.title} en ${locality} | Group Casas`
-  const seoDescription = `${p.title} en ${locality}. ${p.priceLabel} · ${p.m2} m² · ${p.beds} hab. Descúbrelo y agenda tu visita con Group Casas.`
+  const seo = propertySeo(p)
+  const canonical = seo.canonical
 
   return (
     <article className="property-detail">
       <Seo
-        title={seoTitle}
-        description={seoDescription}
+        title={seo.title}
+        description={seo.description}
         canonical={canonical}
-        image={p.image}
+        image={seo.image}
         url={canonical}
       />
       <JsonLd data={realEstateListingSchema(p)} />

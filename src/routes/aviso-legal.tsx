@@ -2,27 +2,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
-import { breadcrumbSchema, absoluteUrl } from '../lib/structuredData'
+import { breadcrumbSchema } from '../lib/structuredData'
+import { pageHead } from '../lib/pageMeta'
 
 export const Route = createFileRoute('/aviso-legal')({
-  head: () => ({
-    meta: [
-      { title: 'Aviso legal | Group Casas' },
-      {
-        name: 'description',
-        content:
-          'Aviso legal de Group Casas: datos identificativos del titular, condiciones de uso del sitio web, propiedad intelectual y legislación aplicable.',
-      },
-      { property: 'og:title', content: 'Aviso legal | Group Casas' },
-      {
-        property: 'og:description',
-        content:
-          'Datos identificativos del titular, condiciones de uso, propiedad intelectual y legislación aplicable del sitio web de Group Casas.',
-      },
-      { property: 'og:url', content: absoluteUrl('/aviso-legal') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/aviso-legal') }],
-  }),
+  head: () => pageHead('/aviso-legal'),
   component: AvisoLegalPage,
 })
 

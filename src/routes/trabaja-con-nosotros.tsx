@@ -3,27 +3,11 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
-import { breadcrumbSchema, absoluteUrl } from '../lib/structuredData'
+import { breadcrumbSchema } from '../lib/structuredData'
+import { pageHead } from '../lib/pageMeta'
 
 export const Route = createFileRoute('/trabaja-con-nosotros')({
-  head: () => ({
-    meta: [
-      { title: 'Trabaja con nosotros | Group Casas' },
-      {
-        name: 'description',
-        content:
-          'Únete a Group Casas: formación continua, acompañamiento y un plan de carrera real como asesor, responsable o franquiciado en Barcelona.',
-      },
-      { property: 'og:title', content: 'Trabaja con nosotros | Group Casas' },
-      {
-        property: 'og:description',
-        content:
-          'Crece con nosotros: formación continua, acompañamiento y un plan de carrera real dentro del sector inmobiliario.',
-      },
-      { property: 'og:url', content: absoluteUrl('/trabaja-con-nosotros') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/trabaja-con-nosotros') }],
-  }),
+  head: () => pageHead('/trabaja-con-nosotros'),
   component: TrabajaPage,
 })
 

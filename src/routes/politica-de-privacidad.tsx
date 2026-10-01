@@ -1,27 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Footer } from '../components/Footer'
-import { absoluteUrl } from '../lib/structuredData'
+import { pageHead } from '../lib/pageMeta'
 import { openCookieSettings } from '../lib/cookieConsent'
 
 export const Route = createFileRoute('/politica-de-privacidad')({
-  head: () => ({
-    meta: [
-      { title: 'Política de privacidad | Group Casas' },
-      {
-        name: 'description',
-        content:
-          'Política de privacidad de Group Casas: quién trata tus datos personales, con qué finalidad y base jurídica, cuánto tiempo se conservan y cómo ejercer tus derechos.',
-      },
-      { property: 'og:title', content: 'Política de privacidad | Group Casas' },
-      {
-        property: 'og:description',
-        content:
-          'Qué datos personales tratamos, para qué, durante cuánto tiempo, con quién los compartimos y cómo ejercer tus derechos de acceso, rectificación y supresión.',
-      },
-      { property: 'og:url', content: absoluteUrl('/politica-de-privacidad') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/politica-de-privacidad') }],
-  }),
+  head: () => pageHead('/politica-de-privacidad'),
   component: PoliticaPrivacidadPage,
 })
 

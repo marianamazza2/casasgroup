@@ -4,28 +4,11 @@ import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motio
 import { Footer } from '../components/Footer'
 import { FormSelect } from '../components/vender/FormSelect'
 import { TextToggle } from '../components/TextToggle'
-import { absoluteUrl } from '../lib/structuredData'
+import { pageHead } from '../lib/pageMeta'
 import { FORMSPREE_FORMS, submitToFormspree } from '../lib/formspree'
 
 export const Route = createFileRoute('/vender')({
-  head: () => ({
-    meta: [
-      { title: 'Vende tu vivienda | Valoración gratis | Group Casas' },
-      {
-        name: 'description',
-        content:
-          '¿Quieres vender tu casa en Barcelona? Te damos una valoración gratuita y te acompañamos en todo el proceso. Descubre cuánto vale.',
-      },
-      { property: 'og:title', content: 'Vende tu vivienda | Valoración gratis | Group Casas' },
-      {
-        property: 'og:description',
-        content:
-          'Valoración gratuita y sin compromiso de tu vivienda en Barcelona. Te acompañamos en todo el proceso de venta.',
-      },
-      { property: 'og:url', content: absoluteUrl('/vender') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/vender') }],
-  }),
+  head: () => pageHead('/vender'),
   component: VenderPage,
 })
 

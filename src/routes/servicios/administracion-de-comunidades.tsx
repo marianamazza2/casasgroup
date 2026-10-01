@@ -3,27 +3,10 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { QueIncluyeCarousel } from '../../components/servicios/QueIncluyeCarousel'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
-import { absoluteUrl } from '../../lib/structuredData'
+import { pageHead } from '../../lib/pageMeta'
 
 export const Route = createFileRoute('/servicios/administracion-de-comunidades')({
-  head: () => ({
-    meta: [
-      { title: 'Administración de comunidades en Barcelona | Group Casas' },
-      {
-        name: 'description',
-        content:
-          'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia, cercanía y todo bajo control con Group Casas.',
-      },
-      { property: 'og:title', content: 'Administración de comunidades en Barcelona | Group Casas' },
-      {
-        property: 'og:description',
-        content:
-          'Gestión profesional de comunidades de propietarios en Barcelona. Transparencia y cercanía con Group Casas.',
-      },
-      { property: 'og:url', content: absoluteUrl('/servicios/administracion-de-comunidades') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/administracion-de-comunidades') }],
-  }),
+  head: () => pageHead('/servicios/administracion-de-comunidades'),
   component: AdministracionDeComunidadesPage,
 })
 

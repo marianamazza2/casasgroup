@@ -1,21 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Footer } from '../components/Footer'
-import { absoluteUrl } from '../lib/structuredData'
+import { pageHead } from '../lib/pageMeta'
 
 export const Route = createFileRoute('/politica-de-cookies')({
-  head: () => ({
-    meta: [
-      { title: 'Política de cookies | Group Casas' },
-      {
-        name: 'description',
-        content:
-          'Información sobre las cookies y tecnologías de almacenamiento que utiliza la web de Group Casas y cómo gestionarlas.',
-      },
-      { property: 'og:title', content: 'Política de cookies | Group Casas' },
-      { property: 'og:url', content: absoluteUrl('/politica-de-cookies') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/politica-de-cookies') }],
-  }),
+  head: () => pageHead('/politica-de-cookies'),
   component: PoliticaCookiesPage,
 })
 

@@ -5,29 +5,13 @@ import { homeFeaturedProperties, properties } from '../lib/properties'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
 import { RevealTitle } from '../components/RevealTitle'
-import { organizationSchema, absoluteUrl } from '../lib/structuredData'
+import { organizationSchema } from '../lib/structuredData'
+import { pageHead } from '../lib/pageMeta'
 import { LocationAutocomplete } from '../components/search/LocationAutocomplete'
 import type { Location } from '../lib/locationSearch'
 
 export const Route = createFileRoute('/')({
-  head: () => ({
-    meta: [
-      { title: 'Group Casas | Inmobiliaria en Barcelona' },
-      {
-        name: 'description',
-        content:
-          'Compra, venta y alquiler de viviendas en Barcelona. Te acompañamos en hipotecas, seguros y administración de comunidades. Valoración gratuita.',
-      },
-      { property: 'og:title', content: 'Group Casas | Inmobiliaria en Barcelona' },
-      {
-        property: 'og:description',
-        content:
-          'Compra, venta y alquiler de viviendas en Barcelona. Hipotecas, seguros y administración de comunidades. Valoración gratuita.',
-      },
-      { property: 'og:url', content: absoluteUrl('/') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/') }],
-  }),
+  head: () => pageHead('/'),
   component: Home,
 })
 

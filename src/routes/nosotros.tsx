@@ -7,27 +7,11 @@ import { ValoresManifiesto } from '../components/nosotros/ValoresManifiesto'
 import { TeamSlider } from '../components/nosotros/TeamSlider'
 import { JsonLd } from '../components/JsonLd'
 import { RevealTitle } from '../components/RevealTitle'
-import { breadcrumbSchema, organizationSchema, absoluteUrl } from '../lib/structuredData'
+import { breadcrumbSchema, organizationSchema } from '../lib/structuredData'
+import { pageHead } from '../lib/pageMeta'
 
 export const Route = createFileRoute('/nosotros')({
-  head: () => ({
-    meta: [
-      { title: 'Sobre nosotros | Group Casas' },
-      {
-        name: 'description',
-        content:
-          'Conoce a Group Casas: nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
-      },
-      { property: 'og:title', content: 'Sobre nosotros | Group Casas' },
-      {
-        property: 'og:description',
-        content:
-          'Group Casas: nuestro equipo, nuestra trayectoria y cómo trabajamos en el sector inmobiliario en Barcelona.',
-      },
-      { property: 'og:url', content: absoluteUrl('/nosotros') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/nosotros') }],
-  }),
+  head: () => pageHead('/nosotros'),
   component: NosotrosPage,
 })
 

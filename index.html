@@ -26,7 +26,8 @@
     <!-- El <title> y las metas los gestiona TanStack Router por ruta vía
          <HeadContent /> (ver src/routes/__root.tsx, auditoría-seo §1.2). No poner
          un <title> estático aquí: quedaría primero en el DOM y document.title lo
-         elegiría, anulando el head() de cada ruta. -->
+         elegiría, anulando el head() de cada ruta. Para crawlers, el build
+         inyecta las metas de cada ruta en su propio HTML (scripts/staticHead.ts). -->
   </head>
   <body>
     <div id="root"></div>

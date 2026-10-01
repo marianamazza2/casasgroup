@@ -5,6 +5,11 @@ import { routeTree } from './routeTree.gen'
 import { NotFound } from './components/NotFound'
 import './index.css'
 
+// El build escribe un HTML por ruta con title/metas en el <head> para crawlers y
+// previews (scripts/staticHead.ts). Ya en el navegador los gestionan
+// <HeadContent /> y <Seo>; se quitan para no dejar title/description duplicados.
+document.head.querySelectorAll('[data-static-head]').forEach((el) => el.remove())
+
 const router = createRouter({
   routeTree,
   // Precarga la ruta al pasar el cursor/foco por el link → navegación instantánea

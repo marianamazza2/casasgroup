@@ -2,27 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
-import { absoluteUrl } from '../../lib/structuredData'
+import { pageHead } from '../../lib/pageMeta'
 
 export const Route = createFileRoute('/servicios/hipotecas')({
-  head: () => ({
-    meta: [
-      { title: 'Hipotecas en Barcelona | Group Casas' },
-      {
-        name: 'description',
-        content:
-          'Te acompañamos en tu hipoteca en cuatro pasos. Descubre cuánto puedes financiar para comprar tu vivienda en Barcelona. Group Casas.',
-      },
-      { property: 'og:title', content: 'Hipotecas en Barcelona | Group Casas' },
-      {
-        property: 'og:description',
-        content:
-          'Te acompañamos en tu hipoteca en cuatro pasos. Descubre cuánto puedes financiar para comprar tu vivienda en Barcelona.',
-      },
-      { property: 'og:url', content: absoluteUrl('/servicios/hipotecas') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/hipotecas') }],
-  }),
+  head: () => pageHead('/servicios/hipotecas'),
   component: HipotecasPage,
 })
 

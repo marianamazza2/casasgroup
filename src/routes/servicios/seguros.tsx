@@ -10,27 +10,11 @@ import { useEffect, useRef, useState } from 'react'
 import type { TouchEvent } from 'react'
 import { ServiceFooter } from '../../components/servicios/ServiceFooter'
 import { JsonLd } from '../../components/JsonLd'
-import { breadcrumbSchema, absoluteUrl } from '../../lib/structuredData'
+import { breadcrumbSchema } from '../../lib/structuredData'
+import { pageHead } from '../../lib/pageMeta'
 
 export const Route = createFileRoute('/servicios/seguros')({
-  head: () => ({
-    meta: [
-      { title: 'Seguros de hogar en Barcelona | Group Casas' },
-      {
-        name: 'description',
-        content:
-          'Gestiona tus seguros con quien conoce tu vivienda. Protege tu hogar en Barcelona con la cercanía de Group Casas.',
-      },
-      { property: 'og:title', content: 'Seguros de hogar en Barcelona | Group Casas' },
-      {
-        property: 'og:description',
-        content:
-          'Gestiona tus seguros con quien conoce tu vivienda. Protege tu hogar en Barcelona con Group Casas.',
-      },
-      { property: 'og:url', content: absoluteUrl('/servicios/seguros') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/servicios/seguros') }],
-  }),
+  head: () => pageHead('/servicios/seguros'),
   component: SegurosPage,
 })
 

@@ -5,7 +5,8 @@ import { motion } from 'framer-motion'
 import type { ReactElement } from 'react'
 import { Footer } from '../components/Footer'
 import { JsonLd } from '../components/JsonLd'
-import { breadcrumbSchema, organizationSchema, absoluteUrl } from '../lib/structuredData'
+import { breadcrumbSchema, organizationSchema } from '../lib/structuredData'
+import { pageHead } from '../lib/pageMeta'
 import { properties } from '../lib/properties'
 import { FORMSPREE_FORMS, submitToFormspree } from '../lib/formspree'
 import Map, { Marker } from 'react-map-gl/maplibre'
@@ -34,24 +35,7 @@ export const Route = createFileRoute('/contacto')({
     const id = typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw) : NaN
     return { inmueble: Number.isFinite(id) ? id : undefined }
   },
-  head: () => ({
-    meta: [
-      { title: 'Contacto | Group Casas Barcelona' },
-      {
-        name: 'description',
-        content:
-          'Contacta con Group Casas. Visítanos en nuestra oficina o escríbenos y te ayudamos con tu compra, venta o alquiler en Barcelona.',
-      },
-      { property: 'og:title', content: 'Contacto | Group Casas Barcelona' },
-      {
-        property: 'og:description',
-        content:
-          'Escríbenos o visítanos en nuestra oficina en Barcelona. Te ayudamos con tu compra, venta o alquiler.',
-      },
-      { property: 'og:url', content: absoluteUrl('/contacto') },
-    ],
-    links: [{ rel: 'canonical', href: absoluteUrl('/contacto') }],
-  }),
+  head: () => pageHead('/contacto'),
   component: ContactPage,
 })
 
