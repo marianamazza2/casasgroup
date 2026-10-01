@@ -6,8 +6,6 @@ type Member = {
   image: string
 }
 
-const MOBILE_QUERY = '(max-width: 767px)'
-
 // La última página es parcial: el navegador limita el scroll a
 // scrollWidth - clientWidth, así que al llegar al tope la damos por última.
 function currentPage(el: HTMLElement) {
@@ -20,9 +18,9 @@ function currentPage(el: HTMLElement) {
 
 /**
  * Equipo como slider horizontal en todos los tamaños. La pista arranca siempre
- * en scrollLeft 0, así que la primera vista es la que manda: en mobile se
- * respeta el orden del array (Angie primera) y en desktop se intercambian las
- * dos primeras fichas para que Angie quede en el centro de la fila.
+ * en scrollLeft 0, así que la primera vista es la que manda: se intercambian
+ * las dos primeras fichas para que en desktop Angie quede en el centro de la
+ * fila y en mobile no abra el slider (ya sale justo encima, en "La marca").
  *
  * Las páginas no se calculan a partir de cuántas fichas caben (eso lo decide el
  * CSS con --team-per-view), sino midiendo la pista: scrollWidth / clientWidth.
@@ -32,23 +30,8 @@ export function TeamSlider({ members }: { members: Member[] }) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [pages, setPages] = useState(1)
   const [page, setPage] = useState(0)
-  // Arrancamos en desktop para que la vista ancha no parpadee al hidratar.
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const mq = window.matchMedia(MOBILE_QUERY)
-    const update = () => setIsMobile(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
-
-  // En desktop Angie va al centro de la primera vista de tres, no a la
-  // izquierda; en mobile, donde solo se ve una ficha, sigue siendo la primera.
   const ordered =
-    isMobile || members.length < 2
-      ? members
-      : [members[1], members[0], ...members.slice(2)]
+    members.length < 2 ? members : [members[1], members[0], ...members.slice(2)]
 
   const measure = useCallback(() => {
     const el = trackRef.current

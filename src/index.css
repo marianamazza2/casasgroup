@@ -5423,18 +5423,44 @@ button {
 
 .brand-story {
   display: flex;
-  min-height: 440px;
+  gap: clamp(32px, 5vw, 72px);
+  /* Mismo aire vertical que .section para que la foto no quede pegada al
+     hero; en horizontal se centra a 1180px como el resto de contenidos. */
+  padding: clamp(58px, 8vw, 94px) max(clamp(22px, 5vw, 72px), calc((100% - 1180px) / 2));
+}
+
+/* Foto + nombre/puesto debajo, con el mismo pie que las tarjetas de equipo
+   (.team-name / .team-role). */
+.brand-story-figure {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 14px;
+  margin: 0;
+  text-align: center;
+  width: 45%;
 }
 
 .brand-story-photo {
-  align-items: center;
   background: #efede8;
-  color: var(--muted);
-  display: flex;
-  flex-shrink: 0;
-  font-size: 12px;
-  justify-content: center;
-  width: 45%;
+  border-radius: 12px;
+  flex: 1;
+  min-height: 600px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* La foto es vertical y la columna puede ser más ancha que alta: se recorta
+   por arriba/abajo. Se ancla arriba (20%) para que no se corte el letrero
+   "Group Casas" que está en el tercio superior de la foto. */
+.brand-story-photo img {
+  display: block;
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  object-position: center 20%;
+  position: absolute;
+  width: 100%;
 }
 
 .brand-story-text {
@@ -5442,7 +5468,7 @@ button {
   flex: 1;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(48px, 6vw, 80px) clamp(22px, 5vw, 72px);
+  padding: clamp(24px, 4vw, 48px) 0;
 }
 
 .brand-story-eyebrow {
@@ -6305,9 +6331,22 @@ button {
     flex-direction: column;
   }
 
-  .brand-story-photo {
-    min-height: 280px;
+  /* Vertical en móvil para que se vea a Angie entera; tope en tablet para que
+     la foto no ocupe más de una pantalla. */
+  .brand-story-figure {
     width: 100%;
+  }
+
+  .brand-story-photo {
+    aspect-ratio: 4 / 5;
+    flex: none;
+    max-height: 560px;
+    min-height: 0;
+    width: 100%;
+  }
+
+  .brand-story-text {
+    padding: 0;
   }
 
   .team-track {

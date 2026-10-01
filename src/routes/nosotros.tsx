@@ -120,7 +120,15 @@ function NosotrosPage() {
       <NosotrosHero />
 
       <section className="brand-story">
-        <div className="brand-story-photo">Foto Angie / fundadora</div>
+        <figure className="brand-story-figure">
+          <div className="brand-story-photo">
+            <img src={TEAM[0].image} alt="Angie Caballero, fundadora de Group Casas" loading="lazy" />
+          </div>
+          <figcaption>
+            <p className="team-name">{TEAM[0].name}</p>
+            <p className="team-role">{TEAM[0].role}</p>
+          </figcaption>
+        </figure>
         <div className="brand-story-text">
           <span className="brand-story-eyebrow">La marca</span>
           <h2>Group Casas</h2>
