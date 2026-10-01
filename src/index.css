@@ -5447,6 +5447,16 @@ button {
   max-width: 56ch;
 }
 
+/* En móvil, un pelín más estrecho para que la última palabra de un párrafo
+   no quede sola en su línea ("lugar."); text-wrap: pretty lo refuerza donde
+   el navegador lo soporta. */
+@media (max-width: 600px) {
+  .brand-story .why-story-text {
+    max-width: 86%;
+    text-wrap: pretty;
+  }
+}
+
 /* Aquí son varios párrafos: el primero se separa del wordmark como en la home
    y los siguientes van más juntos. */
 .brand-story .why-story-text + .why-story-text {
