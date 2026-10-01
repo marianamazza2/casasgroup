@@ -5882,8 +5882,8 @@ button {
 }
 
 /* El equipo es un slider horizontal en todos los tamaños. La pista arranca
-   siempre en scrollLeft 0, así la primera vista muestra a Angie y Betsabé en
-   desktop y a Angie en móvil. Cuántas fichas caben lo decide --team-per-view;
+   siempre en scrollLeft 0, así la primera vista muestra a Betsabé, Angie y
+   Rafael en desktop (Angie al centro) y a Angie sola en móvil. Cuántas fichas caben lo decide --team-per-view;
    el componente solo mide la pista para saber cuántas páginas hay. */
 .team-slider {
   margin-inline: auto;
@@ -6308,6 +6308,13 @@ button {
   .team-track {
     --team-gap: 0px;
     --team-per-view: 1;
+  }
+
+  /* El componente intercambia las dos primeras fichas para centrar a Angie en
+     desktop; con una ficha por vista eso la dejaría segunda, así que aquí
+     vuelve a abrir el slider. */
+  .team-card--lead {
+    order: -1;
   }
 
   /* Las flechas sobran cuando se pasa con el dedo; los dots se quedan para

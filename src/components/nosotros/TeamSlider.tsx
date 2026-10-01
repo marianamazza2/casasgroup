@@ -20,7 +20,8 @@ function currentPage(el: HTMLElement) {
  * Equipo como slider horizontal en todos los tamaños. La pista arranca siempre
  * en scrollLeft 0, así que la primera vista es la que manda: se intercambian
  * las dos primeras fichas para que en desktop Angie quede en el centro de la
- * fila y en mobile no abra el slider (ya sale justo encima, en "La marca").
+ * fila; en móvil (una ficha por vista) el CSS la devuelve al principio con
+ * `order` vía .team-card--lead.
  *
  * Las páginas no se calculan a partir de cuántas fichas caben (eso lo decide el
  * CSS con --team-per-view), sino midiendo la pista: scrollWidth / clientWidth.
@@ -68,7 +69,10 @@ export function TeamSlider({ members }: { members: Member[] }) {
     <div className="team-slider">
       <div className="team-track" ref={trackRef} onScroll={onScroll}>
         {ordered.map((member, i) => (
-          <article className="team-card" key={`${member.name}-${i}`}>
+          <article
+            className={`team-card${member === members[0] ? ' team-card--lead' : ''}`}
+            key={`${member.name}-${i}`}
+          >
             <div
               className="team-photo"
               style={{ backgroundImage: `url(${member.image})` }}
