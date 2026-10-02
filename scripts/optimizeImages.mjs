@@ -35,7 +35,7 @@ const SKIP = new Set([
   'apple-touch-icon.png',
   'icon-192.png',
   'icon-512.png',
-  'og-group-casas.jpg',
+  'og-group-casas-2.jpg',
 ])
 
 /** Lista recursiva de archivos bajo `dir`. */

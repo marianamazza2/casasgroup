@@ -244,11 +244,11 @@ export const Route = createRootRoute({
       { property: 'og:locale', content: 'es_ES' },
       // Imagen por defecto al compartir (WhatsApp/Facebook/X). Las rutas con foto
       // propia (p.ej. la ficha = foto de portada) la sobrescriben vía <Seo image>.
-      { property: 'og:image', content: absoluteUrl('/og-group-casas.jpg') },
+      { property: 'og:image', content: absoluteUrl('/og-group-casas-2.jpg') },
       { property: 'og:image:width', content: '1200' },
       { property: 'og:image:height', content: '630' },
       { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:image', content: absoluteUrl('/og-group-casas.jpg') },
+      { name: 'twitter:image', content: absoluteUrl('/og-group-casas-2.jpg') },
     ],
   }),
   component: RootLayout,

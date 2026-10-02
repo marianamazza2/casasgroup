@@ -56,7 +56,7 @@ function headTags(h: Head): string {
   meta('property', 'og:site_name', 'Group Casas')
   meta('property', 'og:type', 'website')
   meta('property', 'og:locale', 'es_ES')
-  meta('property', 'og:image', h.image ?? absoluteUrl('/og-group-casas.jpg'))
+  meta('property', 'og:image', h.image ?? absoluteUrl('/og-group-casas-2.jpg'))
   meta('name', 'twitter:card', 'summary_large_image')
   return tags.map((t) => `    ${t}`).join('\n')
 }

@@ -51,7 +51,7 @@ export function organizationSchema(): Record<string, unknown> {
     url: SITE_URL,
     // Google prefiere logo raster (PNG/JPG) a SVG para el knowledge panel.
     logo: absoluteUrl('/icon-512.png'),
-    image: absoluteUrl('/og-group-casas.jpg'),
+    image: absoluteUrl('/og-group-casas-2.jpg'),
     telephone: BUSINESS.telephone,
     email: BUSINESS.email,
     address: {
