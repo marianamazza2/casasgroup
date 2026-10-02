@@ -47,15 +47,15 @@ await ogPage.setContent(`
                 align-items:center;justify-content:center;font-family:Georgia,'Times New Roman',serif;color:${CREAM}">
       <div style="width:132px;height:132px;border-radius:30px;background:${GOLD};display:flex;
                   align-items:center;justify-content:center;font-size:70px;font-weight:600;
-                  letter-spacing:-2px;color:${CREAM};margin-bottom:38px">CG</div>
-      <div style="font-size:66px;font-weight:600;letter-spacing:8px">CASAS GROUP</div>
+                  letter-spacing:-2px;color:${CREAM};margin-bottom:38px">GC</div>
+      <div style="font-size:66px;font-weight:600;letter-spacing:8px">GROUP CASAS</div>
       <div style="font-size:30px;letter-spacing:1px;color:${GOLD};margin-top:14px;font-family:'DM Sans',Arial,sans-serif">
         Inmobiliaria en Barcelona
       </div>
     </div>
   </body>`)
 const ogBuf = await ogPage.screenshot({ type: 'jpeg', quality: 88 })
-await writeFile(join(PUB, 'og-default.jpg'), ogBuf)
-console.log('✔ og-default.jpg (1200×630)')
+await writeFile(join(PUB, 'og-group-casas.jpg'), ogBuf)
+console.log('✔ og-group-casas.jpg (1200×630)')
 
 await browser.close()
