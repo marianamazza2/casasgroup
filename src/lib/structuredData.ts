@@ -27,7 +27,7 @@ const BUSINESS = {
   name: 'Group Casas',
   telephone: '+34 930 119 056',
   email: 'info@groupcasas.com',
-  street: 'Calle Verge de la Merce 49, local 16',
+  street: 'Calle Verge de la Mercè 49, local 16',
   postalCode: '08950',
   locality: 'Esplugues de Llobregat',
   region: 'Barcelona',

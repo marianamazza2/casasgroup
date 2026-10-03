@@ -39,7 +39,7 @@ export const Route = createFileRoute('/contacto')({
   component: ContactPage,
 })
 
-const contactReasons = ['Comprar', 'Alquilar', 'Vender', 'Reformas', 'Hipotecas', 'Administracion', 'Otro']
+const contactReasons = ['Comprar', 'Alquilar', 'Vender', 'Reformas', 'Hipotecas', 'Administración', 'Otro']
 
 type ContactCard = {
   label: string
@@ -64,7 +64,7 @@ const contactCards: ContactCard[] = [
     icon: 'mail',
   },
   {
-    label: 'Telefono',
+    label: 'Teléfono',
     value: '+34 930 119 056',
     href: 'tel:+34930119056',
     icon: 'phone',
@@ -78,7 +78,7 @@ const contactCards: ContactCard[] = [
   {
     label: 'Horario',
     value: 'Lun - Vie: 09:30 - 20:30 hs.',
-    detail: 'Sab: 10:00 - 20:00 hs.',
+    detail: 'Sáb: 10:00 - 20:00 hs.',
     icon: 'clock',
   },
 ]
@@ -268,9 +268,9 @@ function ContactPage() {
             </div>
             <div className="hero-ui" ref={heroUiRef}>
               <p className="contact-hero-tagline">
-                Estamos aqui para ayudarte en cada paso.
+                Estamos aquí para ayudarte en cada paso.
                 <br />
-                Cuentanos que necesitas y te responderemos.
+                Cuéntanos qué necesitas y te responderemos.
               </p>
               <button type="button" className="button-link" onClick={() => setIsPanelOpen(true)}>
                 Rellenar formulario
@@ -278,7 +278,7 @@ function ContactPage() {
             </div>
           </div>
           <div className="hero-scroll-hint" aria-hidden="true">
-            <span>ver mas</span>
+            <span>ver más</span>
             <span className="scroll-pulse-line" />
           </div>
         </section>
@@ -287,7 +287,7 @@ function ContactPage() {
       <section className="contact-intro">
         <div className="contact-direct">
           <span className="contact-direct-eyebrow">Contacto directo</span>
-          <h2>Si lo prefieres, contactanos directamente.</h2>
+          <h2>Si lo prefieres, contáctanos directamente.</h2>
           <motion.div
             className="contact-card-grid"
             ref={cardsRef}
@@ -348,12 +348,12 @@ function ContactPage() {
 
       <section className="location-band">
         <div>
-          <span>Donde estamos</span>
-          <h2>Visitanos</h2>
+          <span>Dónde estamos</span>
+          <h2>Visítanos</h2>
           <address>
             <a className="location-address-link" href={OFFICE_MAPS_URL} target="_blank" rel="noopener noreferrer">
               <span className="location-address-lines">
-                Calle Verge de la Merce 49, local 16<br />
+                Calle Verge de la Mercè 49, local 16<br />
                 08950 Esplugues de Llobregat<br />
                 Barcelona
               </span>
@@ -362,12 +362,12 @@ function ContactPage() {
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   <circle cx="12" cy="10" r="3" />
                 </svg>
-                Como llegar
+                Cómo llegar
                 <span className="location-address-arrow" aria-hidden="true">→</span>
               </span>
             </a>
           </address>
-          <p>Lun - Vie: 09:30 - 20:30 hs.<br />Sab: 10:00 - 20:00 hs.</p>
+          <p>Lun - Vie: 09:30 - 20:30 hs.<br />Sáb: 10:00 - 20:00 hs.</p>
         </div>
         <div className="map-panel" aria-label="Mapa de la oficina">
           <Map
@@ -407,7 +407,7 @@ function ContactPage() {
           <button className="drawer-backdrop" type="button" aria-label="Cerrar formulario" onClick={() => setIsPanelOpen(false)} />
           <aside>
             <div className="drawer-header">
-              <h2 id="contact-form-title">Cuentanos en que podemos ayudarte</h2>
+              <h2 id="contact-form-title">Cuéntanos en qué podemos ayudarte</h2>
               <button type="button" aria-label="Cerrar formulario" onClick={() => setIsPanelOpen(false)}>
                 x
               </button>
@@ -454,7 +454,7 @@ function ContactPage() {
                 <input name="email" type="email" placeholder="tu@email.com" required />
               </label>
               <label>
-                Telefono *
+                Teléfono *
                 <input name="phone" type="tel" placeholder="601 391 778" required />
               </label>
               <label>

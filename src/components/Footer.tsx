@@ -41,7 +41,7 @@ export function Footer() {
             <small>GROUP</small>
             <span>CASAS</span>
           </Link>
-          <p>Tu hogar empieza aqui.</p>
+          <p>Tu hogar empieza aquí.</p>
           <a
             className="footer-social"
             href="https://www.instagram.com/groupcasas/"

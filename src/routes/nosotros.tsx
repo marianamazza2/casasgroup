@@ -131,7 +131,7 @@ function NosotrosPage() {
       <section className="section team">
         <div className="section-heading section-heading--center">
           <h2>Nuestro equipo</h2>
-          <p>Conoce las personas detrás de Group Casas</p>
+          <p>Conoce a las personas detrás de Group Casas</p>
         </div>
         <TeamSlider members={TEAM} />
       </section>

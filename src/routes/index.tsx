@@ -21,7 +21,7 @@ const services = [
   {
     icon: 'CO',
     title: 'Comprar',
-    description: 'Encuentra tu proximo hogar o inversion. Te mostramos una seleccion de inmuebles en venta y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
+    description: 'Encuentra tu próximo hogar o inversión. Te mostramos una selección de inmuebles en venta y te acompañamos durante todo el proceso para que encuentres la opción que mejor se adapta a ti.',
     image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80',
     tag: 'Comprar',
     to: '/propiedades',
@@ -30,7 +30,7 @@ const services = [
   {
     icon: 'VE',
     title: 'Vender',
-    description: 'Vende tu vivienda con el mejor asesoramiento. Realizamos una valoracion profesional y gratuita, preparamos tu inmueble y gestionamos toda la operacion para conseguir las mejores condiciones con la maxima tranquilidad.',
+    description: 'Vende tu vivienda con el mejor asesoramiento. Realizamos una valoración profesional y gratuita, preparamos tu inmueble y gestionamos toda la operación para conseguir las mejores condiciones con la máxima tranquilidad.',
     image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80',
     tag: 'Vender',
     to: '/vender',
@@ -38,7 +38,7 @@ const services = [
   {
     icon: 'HI',
     title: 'Financiar',
-    description: 'Te conseguimos las mejores opciones de financiacion del mercado. Trabajamos con diferentes entidades financieras para encontrar las condiciones mas competitivas segun tu perfil y tus objetivos.',
+    description: 'Te conseguimos las mejores opciones de financiación del mercado. Trabajamos con diferentes entidades financieras para encontrar las condiciones más competitivas según tu perfil y tus objetivos.',
     image: '/home/financiar.webp',
     tag: 'Financiar',
     to: '/servicios/hipotecas',
@@ -46,7 +46,7 @@ const services = [
   {
     icon: 'RE',
     title: 'Reformar',
-    description: 'Reformamos tu vivienda de principio a fin: proyecto, obra y acabados con presupuesto cerrado, plazos comprometidos y un unico interlocutor que coordina a todos los gremios.',
+    description: 'Reformamos tu vivienda de principio a fin: proyecto, obra y acabados con presupuesto cerrado, plazos comprometidos y un único interlocutor que coordina a todos los gremios.',
     image: 'https://images.unsplash.com/photo-1613545325278-f24b0cae1224?auto=format&fit=crop&w=1200&q=80',
     tag: 'Obras',
     to: '/servicios/reformas',
@@ -54,7 +54,7 @@ const services = [
   {
     icon: 'AD',
     title: 'Administrar',
-    description: 'Ofrecemos una gestion integral de comunidades basada en la excelencia operativa: administracion, mantenimiento, atencion a propietarios y coordinacion de todos los servicios.',
+    description: 'Ofrecemos una gestión integral de comunidades basada en la excelencia operativa: administración, mantenimiento, atención a propietarios y coordinación de todos los servicios.',
     image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
     tag: 'Comunidades',
     to: '/servicios/administracion-de-comunidades',
@@ -62,15 +62,15 @@ const services = [
   {
     icon: 'SE',
     title: 'Seguros',
-    description: 'Colaboramos con las principales aseguradoras del mercado. Analizamos coberturas, condiciones y garantias para encontrar la proteccion mas adecuada para tu vivienda, tu inversion o tu comunidad.',
+    description: 'Colaboramos con las principales aseguradoras del mercado. Analizamos coberturas, condiciones y garantías para encontrar la protección más adecuada para tu vivienda, tu inversión o tu comunidad.',
     image: 'https://images.unsplash.com/photo-1448630360428-65456885c650?auto=format&fit=crop&w=1200&q=80',
-    tag: 'Proteccion',
+    tag: 'Protección',
     to: '/servicios/seguros',
   },
   {
     icon: 'AL',
     title: 'Alarmas',
-    description: 'Analizamos tu situacion y te ayudamos a encontrar la solucion de seguridad que mejor se adapte a tu vivienda, tu inversion, tu comunidad o tu negocio, ofreciendote proteccion, tranquilidad y confianza en todo momento.',
+    description: 'Analizamos tu situación y te ayudamos a encontrar la solución de seguridad que mejor se adapte a tu vivienda, tu inversión, tu comunidad o tu negocio, ofreciéndote protección, tranquilidad y confianza en todo momento.',
     image: 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=1200&q=80',
     tag: 'Seguridad',
     to: '/servicios/alarmas',
@@ -79,14 +79,14 @@ const services = [
     icon: 'SU',
     title: 'Suministros',
     to: '/servicios/cambio-de-suministros',
-    description: 'Analizamos tu perfil, comparamos las diferentes opciones disponibles en el mercado y encontramos la que mejor se adapta a tus necesidades. Ademas, gestionamos todos los tramites de principio a fin. El mejor servicio, al menor coste.',
+    description: 'Analizamos tu perfil, comparamos las diferentes opciones disponibles en el mercado y encontramos la que mejor se adapta a tus necesidades. Además, gestionamos todos los trámites de principio a fin. El mejor servicio, al menor coste.',
     image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
     tag: 'Suministros',
   },
   {
     icon: 'AQ',
     title: 'Alquilar',
-    description: 'Encuentra tu proximo hogar de alquiler. Te mostramos una seleccion de inmuebles disponibles y te acompanamos durante todo el proceso para que encuentres la opcion que mejor se adapta a ti.',
+    description: 'Encuentra tu próximo hogar de alquiler. Te mostramos una selección de inmuebles disponibles y te acompañamos durante todo el proceso para que encuentres la opción que mejor se adapta a ti.',
     image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80',
     tag: 'Alquilar',
     to: '/propiedades',
@@ -282,8 +282,8 @@ function Home() {
       action: 'Buscar',
     },
     vender: {
-      line: 'Descubre el valor real de tu vivienda con una valoracion gratuita.',
-      action: 'Solicitar valoracion',
+      line: 'Descubre el valor real de tu vivienda con una valoración gratuita.',
+      action: 'Solicitar valoración',
     },
   }
 
@@ -398,7 +398,7 @@ function Home() {
 
             {/* Tagline + tabs + search — appears after brand */}
             <div className="hero-ui" ref={heroUiRef}>
-              <p aria-hidden="true" style={{ visibility: 'hidden' }}>Tu hogar empieza aqui.</p>
+              <p aria-hidden="true" style={{ visibility: 'hidden' }}>Tu hogar empieza aquí.</p>
 
               <div className="hero-tabs" role="tablist" aria-label="Servicios destacados">
                 {(['comprar', 'vender'] as HeroTab[]).map((tab) => (
@@ -421,7 +421,7 @@ function Home() {
                     <LocationAutocomplete
                       className="hero-search-ac"
                       inputClassName="hero-search-input"
-                      ariaLabel="Buscar ubicacion"
+                      ariaLabel="Buscar ubicación"
                       placeholder={heroCopy[heroTab].line}
                       value={heroSearchQuery}
                       onChange={(v) => {
@@ -483,9 +483,9 @@ function Home() {
 
         <div className="stats">
           <Stat value="+1000" label="Operaciones" />
-          <Stat value="98%" label="Satisfaccion" />
-          <Stat value="45" label="Dias venta media" />
-          <Stat value="+10" label="Anos experiencia" />
+          <Stat value="98%" label="Satisfacción" />
+          <Stat value="45" label="Días de venta media" />
+          <Stat value="+10" label="Años de experiencia" />
         </div>
       </section>
 
@@ -516,15 +516,15 @@ function Home() {
       <section className="valuation" id="valoracion">
         <div className="valuation-content">
           <div className="valuation-body">
-            <span className="valuation-eyebrow">Valoracion gratuita</span>
+            <span className="valuation-eyebrow">Valoración gratuita</span>
             <h2 className="valuation-heading">
               Conoce el valor<br />de tu vivienda
             </h2>
             <p className="valuation-desc">
-              Valoracion profesional, gratuita y sin compromiso, basada en datos reales de tu zona.
+              Valoración profesional, gratuita y sin compromiso, basada en datos reales de tu zona.
             </p>
             <Link className="button-link" to="/vender">
-              Solicitar valoracion
+              Solicitar valoración
             </Link>
             <div className="valuation-microstats">
               <span>Sin compromiso</span>
@@ -539,10 +539,10 @@ function Home() {
       <section className="section about-strip" id="nosotros">
         <img src="/home/nosotros.webp" alt="" loading="lazy" />
         <div>
-          <blockquote>Porque comprendimos que el sector no necesitaba mas de lo mismo.</blockquote>
+          <blockquote>Porque comprendimos que el sector no necesitaba más de lo mismo.</blockquote>
           <p>Una marca pensada para superar expectativas, transformar la experiencia inmobiliaria y cuidar cada detalle con excelencia.</p>
           <Link className="button-link" to="/nosotros">
-            Conocenos
+            Conócenos
           </Link>
         </div>
       </section>
@@ -551,7 +551,7 @@ function Home() {
         <div className="section-top properties-top">
           <SectionHeading eyebrow="Inmuebles" title="Propiedades" />
           <div className="property-controls">
-            <div className="pills" aria-label="Tipo de operacion">
+            <div className="pills" aria-label="Tipo de operación">
               {(['Venta', 'Alquiler'] as const).map((mode) => (
                 <button
                   type="button"
@@ -611,7 +611,7 @@ function Home() {
                   <small>{property.zone}</small>
                   <h3>{property.title}</h3>
                   <p>
-                    {property.beds} hab · {property.baths} banos · {property.m2} m2
+                    {property.beds} hab · {property.baths} baños · {property.m2} m²
                   </p>
                   <strong>{property.priceLabel}</strong>
                 </div>

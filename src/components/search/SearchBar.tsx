@@ -28,7 +28,7 @@ export function SearchBar({ mode, query, onModeChange, onQueryChange }: SearchBa
           className="search-ac"
           inputClassName="search-input"
           placeholder="Ciudad, barrio, zona..."
-          ariaLabel="Buscar ubicacion"
+          ariaLabel="Buscar ubicación"
           value={query}
           onChange={onQueryChange}
           onSelect={(loc) => onQueryChange(loc.name)}

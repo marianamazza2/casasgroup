@@ -219,7 +219,7 @@ export function FiltersModal({ open, onClose, onApply, filters, availableMunicip
                   type="number"
                   min={0}
                   className="filters-input"
-                  placeholder="Min m²"
+                  placeholder="Mín. m²"
                   value={filters.surfaceMin ?? ''}
                   onChange={(e) =>
                     onChange('surfaceMin', e.target.value ? Number(e.target.value) : undefined)
@@ -233,7 +233,7 @@ export function FiltersModal({ open, onClose, onApply, filters, availableMunicip
                   type="number"
                   min={0}
                   className="filters-input"
-                  placeholder="Max m²"
+                  placeholder="Máx. m²"
                   value={filters.surfaceMax ?? ''}
                   onChange={(e) =>
                     onChange('surfaceMax', e.target.value ? Number(e.target.value) : undefined)

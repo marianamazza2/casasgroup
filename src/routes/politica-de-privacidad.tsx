@@ -178,8 +178,8 @@ function PoliticaPrivacidadPage() {
           <section>
             <h2>1. Nuestro compromiso</h2>
             <p>
-              En Group Casas tratamos datos personales todos los días: el de quien nos pide la
-              valoración de su piso, el de quien pregunta por un inmueble y el de quien nos deja su
+              En Group Casas tratamos datos personales todos los días: los de quien nos pide la
+              valoración de su piso, los de quien pregunta por un inmueble y los de quien nos deja su
               teléfono para que le llamemos. Esta política explica, sin letra pequeña, qué hacemos
               con esa información y qué puedes decidir tú sobre ella.
             </p>

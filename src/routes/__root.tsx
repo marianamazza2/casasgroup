@@ -138,7 +138,7 @@ function SiteNav() {
       <button
         type="button"
         className="nav-burger"
-        aria-label={menuOpen ? 'Cerrar menu' : 'Abrir menu'}
+        aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
         aria-expanded={menuOpen}
         aria-controls="site-nav-menu"
         onClick={() => setMenuOpen((v) => !v)}
@@ -156,7 +156,7 @@ function SiteNav() {
         tabIndex={-1}
         onClick={() => setMenuOpen(false)}
       />
-      <nav id="site-nav-menu" aria-label="Navegacion principal">
+      <nav id="site-nav-menu" aria-label="Navegación principal">
         <Link to="/propiedades" search={{ query: '', mode: 'compra' }}>Comprar</Link>
         <Link to="/vender" className="nav-link--quiet">Vender</Link>
         <div
